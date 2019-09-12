@@ -1,0 +1,7 @@
+image: alpine
+ci:
+  script:
+    - uname -a
+    - nproc
+    - free -m
+    - apk -U upgrade -a

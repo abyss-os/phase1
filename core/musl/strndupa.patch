@@ -1,0 +1,19 @@
+diff --git a/include/string.h b/include/string.h
+index 795a2ab..22d20c2 100644
+--- a/include/string.h
++++ b/include/string.h
+@@ -96,6 +96,14 @@ void *mempcpy(void *, const void *, size_t);
+ #ifndef __cplusplus
+ char *basename();
+ #endif
++#define strndupa(s, n)                                                  \
++        ({                                                              \
++                const char *__old = (s);                                \
++                size_t __len = strnlen(__old, (n));                     \
++                char *__new = alloca(__len + 1);                        \
++                __new[__len] = '\0';                                    \
++                memcpy(__new, __old, __len);                            \
++         })
+ #endif
+ 
+ #ifdef __cplusplus

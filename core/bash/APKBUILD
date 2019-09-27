@@ -1,0 +1,95 @@
+pkgname=bash
+pkgver=5.0.0
+_patchlevel=${pkgver##*.}
+_myver=${pkgver%.*}
+_patchbase=${_myver/./}
+pkgrel=0
+pkgdesc="The GNU Bourne Again shell"
+url="https://www.gnu.org/software/bash/bash.html"
+arch="all"
+license="GPL-3.0-or-later"
+makedepends_build="bison flex"
+makedepends_host="readline-dev>8 ncurses-dev"
+depends=""
+install="$pkgname.post-install"
+subpackages="$pkgname-dbg $pkgname-dev $pkgname-doc"
+options="!checkroot"
+source="https://ftp.gnu.org/gnu/bash/bash-${_myver}.tar.gz
+	bash-noinfo.patch
+	fix-jobs.patch
+	"
+
+# generate url's to patches. note: no forks allowed!
+_i=1
+_pad="00"
+while [ $_i -le $_patchlevel ]; do
+	[ $_i -ge 10 ] && _pad="0"
+	[ $_i -ge 100 ] && _pad=
+	source="$source https://ftp.gnu.org/gnu/bash/bash-$_myver-patches/bash$_patchbase-$_pad$_i"
+	_i=$(( $_i + 1))
+done
+
+builddir="$srcdir/$pkgname-$_myver"
+
+prepare() {
+	cd "$builddir"
+
+	# NOTE: This section is for applying the vendor patches, which are required to fix
+	# security holes.  `default_prepare` does *not* apply vendor patches in the format
+	# shipped with bash.  We also need to make sure vendor patches are applied before
+	# our own.
+	# If you disagree, please request an experimental rebuild with bash as /bin/sh,
+	# before removing this section.
+	for p in $source; do
+		case $p in
+		*/bash[0-9][0-9]-[0-9]*)
+			msg "$p (vendor)"
+			patch -p0 -i "$srcdir"/${p##*/} || return 1
+			;;
+		esac
+	done
+
+	default_prepare
+}
+
+build() {
+	cd "$builddir"
+	./configure \
+		--build=$CBUILD \
+		--host=$CHOST \
+		--prefix=/usr \
+		--bindir=/usr/bin \
+		--mandir=/usr/share/man \
+		--infodir=/usr/share/info \
+		--with-curses \
+		--disable-nls \
+		--enable-readline \
+		--without-bash-malloc \
+		--with-installed-readline
+	# parallel build workarounds
+	make y.tab.c && make builtins/libbuiltins.a && make
+}
+
+check() {
+	cd "$builddir"
+	return 0
+	make test
+}
+
+package() {
+	cd "$builddir"
+	make DESTDIR="$pkgdir" install
+
+	rm -rf "$pkgdir"/usr/share/locale
+}
+
+dev() {
+	default_dev
+	mkdir -p "$subpkgdir"/usr/bin "$subpkgdir"/usr/lib/$pkgname
+	mv "$pkgdir"/usr/bin/${pkgname}bug "$subpkgdir"/usr/bin
+	mv "$pkgdir"/usr/lib/$pkgname/Makefile* "$subpkgdir"/usr/lib/$pkgname
+}
+
+sha512sums="bb4519f06e278f271d08722b531e49d2e842cc3e0b02a6b3eee422e2efcb5b6226111af43f5e5eae56beb85ac8bfebcd6a4aacbabb8f609e529aa4d571890864  bash-5.0.tar.gz
+9d8845491d0fe335bdd8e9a2bd98bda54bfed2ae3c35b2196c6d5a38bdf96c4d97572ba7d6b19ab605ef4e8f001f64cf3312f87dedebb9e37a95ad2c44e33cdb  bash-noinfo.patch
+79473c41e620d78d25139b56c37d18adac5c03dc28939f218729dfcd3558d8cbac5e83db814ffd27aa833cd3e55f81aad26aaf62af3688c927d8ac2a4172eaa4  fix-jobs.patch"

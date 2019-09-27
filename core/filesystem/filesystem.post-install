@@ -1,0 +1,6 @@
+#!/bin/sh
+
+chown root:shadow /etc/shadow
+chmod 640 /etc/shadow
+
+exit 0

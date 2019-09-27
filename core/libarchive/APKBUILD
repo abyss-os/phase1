@@ -1,0 +1,49 @@
+pkgname=libarchive
+pkgver=3.3.3
+pkgrel=0
+pkgdesc="library that can create and read several streaming archive formats"
+url="https://libarchive.org/"
+arch="all"
+license="BSD-2-Clause BSD-3-Clause Apache-2.0"
+makedepends="acl-dev bzip2-dev expat-dev lz4-dev openssl-dev xz-dev zlib-dev"
+subpackages="$pkgname-dev $pkgname-doc bsdtar bsdcpio bsdcat"
+source="https://www.libarchive.org/downloads/$pkgname-$pkgver.tar.gz"
+builddir="$srcdir/$pkgname-$pkgver"
+
+build () {
+	cd "$builddir"
+	./configure \
+		--build=$CBUILD \
+		--host=$CHOST \
+		--prefix=/usr \
+		--without-xml2
+	make
+}
+
+package() {
+	cd "$builddir"
+	make DESTDIR="$pkgdir" install
+}
+
+bsdtar() {
+	pkgdesc="bsdtar from libarchive"
+
+	mkdir -p "$subpkgdir"/usr/bin
+	mv "$pkgdir"/usr/bin/bsdtar "$subpkgdir"/usr/bin/
+}
+
+bsdcpio() {
+	pkgdesc="bsdcpio from libarchive"
+
+	mkdir -p "$subpkgdir"/usr/bin
+	mv "$pkgdir"/usr/bin/bsdcpio "$subpkgdir"/usr/bin/
+}
+
+bsdcat() {
+	pkgdesc="bsdcat from libarchive"
+
+	mkdir -p "$subpkgdir"/usr/bin
+	mv "$pkgdir"/usr/bin/bsdcat "$subpkgdir"/usr/bin/
+}
+
+sha512sums="9d12b47d6976efa9f98e62c25d8b85fd745d4e9ca7b7e6d36bfe095dfe5c4db017d4e785d110f3758f5938dad6f1a1b009267fd7e82cb7212e93e1aea237bab7  libarchive-3.3.3.tar.gz"

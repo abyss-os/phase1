@@ -1,0 +1,185 @@
+pkgname=llvm
+pkgver=9.0.0
+#_hash=1931d3cb20a00da732c5210b123656632982fde0
+_hash=llvmorg-9.0.0
+pkgrel=3
+pkgdesc="$pkgname"
+source="https://github.com/llvm/llvm-project/archive/$_hash.tar.gz
+	musl.patch"
+arch="x86_64 aarch64"
+url=.
+license=.
+subpackages="$pkgname-dev $pkgname-doc libcxx clang lld llvm-binutils:binutils libunwind compiler-rt:compilerrt libomp"
+
+builddir="$srcdir/build"
+_projects="llvm;clang;libcxx;libcxxabi;compiler-rt;libunwind;lld;openmp"
+
+depends="elfutils-libelf libffi libedit ncurses"
+makedepends="cmake clang lld ncurses-dev libedit-dev swig ninja elfutils-libelf elfutils-dev libffi-dev perl python3-dev"
+
+prepare() {
+	patch -p1 -d $srcdir/llvm-project-$_hash -i $srcdir/musl.patch
+	mkdir -p $builddir && cd $builddir
+	echo CHOST: $CHOST
+	echo CFLAGS: $CFLAGS
+
+	echo CXXFLAGS: $CXXFLAGS
+	echo LDFLAGS: $LDFLAGS
+	echo Projects: $_projects
+
+	case $CARCH in
+		aarch64) _targets="Aarch64";;
+		x86_64) _targets="X86";;
+		*) echo "Unknown arch" ; return 1;;
+	esac
+
+	cmake -G Ninja -Wno-dev \
+			-DCMAKE_INSTALL_PREFIX=/usr \
+			-DCMAKE_BUILD_TYPE=Release \
+			-DCLANG_VENDOR="Abyss OS" \
+			-DLLVM_VERSION_SUFFIX="" \
+			-DLLVM_APPEND_VC_REV=OFF \
+			-DLLVM_ENABLE_PROJECTS="$_projects" \
+			-DCLANG_INCLUDE_TESTS=OFF \
+			-DCLANG_INCLUDE_DOCS=OFF \
+			-DCLANG_BUILD_EXAMPLES=OFF \
+			-DCLANG_DEFAULT_LINKER=lld \
+			-DCLANG_DEFAULT_CXX_STDLIB='libc++' \
+			-DCLANG_DEFAULT_RTLIB=compiler-rt \
+			-DCLANG_DEFAULT_UNWINDLIB=libunwind \
+			-DCOMPILER_RT_USE_BUILTINS_LIBRARY=ON \
+			-DLIBCXX_USE_COMPILER_RT=ON \
+			-DLIBCXX_HAS_MUSL_LIBC=ON \
+			-DLIBCXX_INCLUDE_BENCHMARKS=OFF \
+			-DLIBCXX_CXX_ABI=libcxxabi \
+			-DLIBCXX_CXX_ABI_INCLUDE_PATHS=$srcdir/llvm-project-$_hash/libcxxabi/include \
+			-DLIBCXXABI_USE_LLVM_UNWINDER=ON \
+			-DLIBUNWIND_USE_COMPILER_RT=ON \
+			-DLIBUNWIND_WEAK_PTHREAD_LIB=ON \
+			-DLLVM_TARGETS_TO_BUILD="$_targets" \
+			-DLLVM_INSTALL_BINUTILS_SYMLINKS=OFF \
+			-DLLVM_INCLUDE_EXAMPLES=OFF \
+			-DLLVM_ENABLE_PIC=ON \
+			-DLLVM_ENABLE_LTO=OFF \
+			-DLLVM_ENABLE_LLD=ON \
+			-DLLVM_INCLUDE_GO_TESTS=OFF \
+			-DLLVM_INCLUDE_TESTS=OFF \
+			-DLLVM_DEFAULT_TARGET_TRIPLE=${CARCH}-abyss-linux-musl \
+			-DLLVM_ENABLE_LIBXML2=OFF \
+			-DLLVM_ENABLE_ZLIB=OFF \
+			-DLLVM_BUILD_LLVM_DYLIB=ON \
+			-DLLVM_LINK_LLVM_DYLIB=ON \
+			-DLLVM_OPTIMIZED_TABLEGEN=OFF \
+			-DLLVM_INCLUDE_BENCHMARKS=OFF \
+			-DLLVM_INCLUDE_DOCS=OFF \
+			-DCOMPILER_RT_BUILD_LIBFUZZER=OFF \
+			-DCOMPILER_RT_BUILD_PROFILE=OFF \
+			-DCOMPILER_RT_BUILD_SANITIZERS=OFF \
+			-DCOMPILER_RT_BUILD_XRAY=OFF \
+			-DLLVM_TOOL_LLVM_ITANIUM_DEMANGLE_FUZZER_BUILD=OFF \
+			-DLLVM_TOOL_LLVM_MC_ASSEMBLE_FUZZER_BUILD=OFF \
+			-DLLVM_TOOL_LLVM_MICROSOFT_DEMANGLE_FUZZER_BUILD=OFF \
+			-DCMAKE_C_COMPILER=clang \
+			-DCMAKE_CXX_COMPILER=clang++ \
+			-DCMAKE_C_COMPILER_TARGET=$CTARGET \
+			-DCMAKE_CXX_COMPILER_TARGET=$CTARGET \
+			$srcdir/llvm-project-$_hash/llvm
+}
+
+build() {
+	cd $builddir
+#	CFLAGS="$CFLAGS -lucontext"
+	cmake --build .
+}
+
+package() {
+	cd $builddir
+	DESTDIR="$pkgdir" ninja install
+}
+
+binutils() {
+	depends="llvm"
+	provides="binutils"
+	mkdir -p ${subpkgdir}/usr/bin
+	for t in addr2line ar as mt nm objcopy objdump ranlib readelf readobj size split strings strip dlltool lib; do
+		mv -v ${pkgdir}/usr/bin/llvm-${t} ${subpkgdir}/usr/bin/llvm-${t}
+	done
+}
+
+clang() {
+	pkgdesc="$pkgname $pkgver"
+	depends="llvm compiler-rt"
+	mkdir -p ${subpkgdir}/usr/bin ${subpkgdir}/usr/lib ${subpkgdir}/usr/share ${subpkgdir}/usr/libexec
+	mv -v ${pkgdir}/usr/bin/clang* ${subpkgdir}/usr/bin/
+	mv -v ${pkgdir}/usr/bin/c-index-test ${subpkgdir}/usr/bin/
+	mv -v ${pkgdir}/usr/bin/diagtool ${subpkgdir}/usr/bin/
+	mv -v ${pkgdir}/usr/lib/libclang* ${subpkgdir}/usr/lib/
+	mv -v ${pkgdir}/usr/lib/CheckerDependencyHandlingAnalyzerPlugin.so ${subpkgdir}/usr/lib/
+	mv -v ${pkgdir}/usr/lib/CheckerOptionHandlingAnalyzerPlugin.so ${subpkgdir}/usr/lib/
+	mv -v ${pkgdir}/usr/lib/SampleAnalyzerPlugin.so ${subpkgdir}/usr/lib/
+	mv -v ${pkgdir}/usr/share/clang ${subpkgdir}/usr/share/clang
+	mv -v ${pkgdir}/usr/share/scan-view ${subpkgdir}/usr/share/scan-view
+	mv -v ${pkgdir}/usr/share/scan-build ${subpkgdir}/usr/share/scan-build
+	mv -v ${pkgdir}/usr/libexec/ccc-analyzer ${subpkgdir}/usr/libexec/
+	mv -v ${pkgdir}/usr/libexec/c++-analyzer ${subpkgdir}/usr/libexec/
+	mv -v ${pkgdir}/usr/bin/hmaptool ${subpkgdir}/usr/bin/
+	mv -v ${pkgdir}/usr/bin/scan-build ${subpkgdir}/usr/bin/
+	mv -v ${pkgdir}/usr/bin/scan-view ${subpkgdir}/usr/bin/
+	mv -v ${pkgdir}/usr/bin/git-clang-format ${subpkgdir}/usr/bin/
+}
+
+libcxx() {
+	pkgdesc="$pkgname $pkgver"
+	replaces="libcxxabi"
+	mkdir -p ${subpkgdir}/usr/lib
+	mv -v ${pkgdir}/usr/lib/libc++* ${subpkgdir}/usr/lib/
+}
+
+libomp() {
+	pkgdesc="$pkgname $pkgver"
+	mkdir -p ${subpkgdir}/usr/lib
+	mv -v ${pkgdir}/usr/lib/libomp* ${subpkgdir}/usr/lib/
+}
+
+libunwind() {
+	pkgdesc="$pkgname $pkgver"
+	depends="compiler-rt"
+	mkdir -p ${subpkgdir}/usr/lib
+	mv -v ${pkgdir}/usr/lib/libunwind* ${subpkgdir}/usr/lib/
+}
+
+lld() {
+	pkgdesc="$pkgname $pkgver"
+	depends="llvm"
+	mkdir -p ${subpkgdir}/usr/bin ${subpkgdir}/usr/lib
+	for t in ld.lld lld ld64.lld lld-link wasm-ld; do
+		mv -v ${pkgdir}/usr/bin/${t} ${subpkgdir}/usr/bin/${t}
+	done
+	mv -v ${pkgdir}/usr/lib/libLTO* ${subpkgdir}/usr/lib/
+}
+
+lldb() {
+	pkgdesc="$pkgname $pkgver"
+	depends="llvm-dev python3 python3-dev"
+	mkdir -p ${subpkgdir}/usr/bin ${subpkgdir}/usr/lib/python3.7
+	mv -v ${pkgdir}/usr/lib/liblldb* ${subpkgdir}/usr/lib/
+	mv -v ${pkgdir}/usr/bin/lldb* ${subpkgdir}/usr/bin/
+	mv -v ${pkgdir}/usr/lib/python3.7/* ${subpkgdir}/usr/lib/python3.7
+	rm -rf ${pkgdir}/usr/lib/python3.7 ${subpkgdir}/usr/lib/python3.7/site-packages/six.py
+}
+
+llgo() {
+	pkgdesc="$pkgname $pkgver"
+	depends="llvm"
+	mkdir -p ${subpkgdir}/usr/bin
+	mv -v ${builddir}/bin/llvm-go ${subpkgdir}/usr/bin/
+}
+
+compilerrt() {
+	pkgdesc="$pkgname $pkgver"
+	mkdir -p ${subpkgdir}/usr/lib
+	mv -v ${pkgdir}-dev/usr/lib/clang ${subpkgdir}/usr/lib/
+}
+
+sha512sums="2ad844f2d85d6734178a4ad746975a03ea9cda1454f7ea436f0ef8cc3199edec15130e322b4372b28a3178a8033af72d0a907662706cbd282ef57359235225a5  llvmorg-9.0.0.tar.gz
+db9cc7bd3ecd09fffc64a4e1e33fcd4c9bff20936b8b005d3818c505ec3b509c91cc1aababa82af4c8b00e6d0c9c957dcf9dd195e74be17973de90d2b3ec0d6c  musl.patch"

@@ -1,0 +1,41 @@
+pkgname=coreutils
+pkgver=8.31
+pkgrel=0
+pkgdesc="The basic file, shell and text manipulation utilities"
+url="https://www.gnu.org/software/coreutils/"
+arch="all"
+license="GPL-3.0-or-later"
+makedepends="bash acl-dev attr-dev perl"
+source="https://ftp.gnu.org/gnu/coreutils/$pkgname-$pkgver.tar.xz"
+options="!check"
+builddir="$srcdir"/$pkgname-$pkgver
+
+build() {
+	cd "$builddir"
+	LIBS="-lrt" ./configure \
+		--build=$CBUILD \
+		--host=$CHOST \
+		--prefix=/usr \
+		--sysconfdir=/etc \
+		--mandir=/usr/share/man \
+		--infodir=/usr/share/info \
+		--disable-nls \
+		--without-gmp \
+		--with-linux-crypto \
+		--with-openssl=auto \
+		--enable-single-binary=symlinks
+	make
+}
+
+package() {
+	cd "$builddir"
+	install -Dm755 ${builddir}/src/coreutils ${pkgdir}/usr/bin/coreutils
+}
+
+# XXX - some gnulib tests broken, find a way to patch out gnulib tests
+check() {
+	cd "$builddir"
+	make check
+}
+
+sha512sums="ef8941dae845bbf5ae5838bc49e44554a766302930601aada6fa594e8088f0fbad74e481ee392ff89633e68b99e4da3f761fcb5d31ee3b233d540fe2a2d4e1af  coreutils-8.31.tar.xz"

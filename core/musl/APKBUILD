@@ -5,7 +5,7 @@ pkgdesc="the musl c library (libc) implementation"
 url="http://www.musl-libc.org/"
 arch="all"
 license="MIT"
-subpackages="$pkgname-dev $pkgname-dbg libc6-compat:compat:noarch"
+subpackages="$pkgname-dev $pkgname-dbg libc6-compat:compat:noarch $pkgname-utils"
 source="http://www.musl-libc.org/releases/musl-$pkgver.tar.gz
 	handle-aux-at_base.patch
 	ldconfig
@@ -14,7 +14,6 @@ source="http://www.musl-libc.org/releases/musl-$pkgver.tar.gz
 	getent.c
 	iconv.c
 	secure_getenv.patch
-	strndupa.patch
 	"
 
 builddir="$srcdir"/musl-$pkgver
@@ -22,8 +21,7 @@ builddir="$srcdir"/musl-$pkgver
 build() {
 	cd "$builddir"
 
-	clang --target=$CTARGET_ARCH $CPPFLAGS $CFLAGS -c "$srcdir"/__stack_chk_fail_local.c -o __stack_chk_fail_local.o
-	ar r libssp_nonshared.a __stack_chk_fail_local.o
+	[ "$BOOTSTRAP" = "nocc" ] && return 0
 
 	# getconf/getent/iconv
 	local i
@@ -34,7 +32,7 @@ build() {
 	# note: not autotools
 	LDFLAGS="$LDFLAGS -Wl,-soname,libc.musl-${CARCH}.so.1" \
 	CFLAGS="--target=$CTARGET_ARCH" \
-	./configure \
+	CC=clang ./configure \
 		--build=$CBUILD \
 		--host=$CHOST \
 		--target=$CTARGET \
@@ -43,6 +41,7 @@ build() {
 		--mandir=/usr/share/man \
 		--infodir=/usr/share/info \
 		--localstatedir=/var
+	sed -i -- 's/--noexecstack//g' $srcdir/$pkgname-$pkgver/config.mak
 	make
 }
 
@@ -51,27 +50,23 @@ package() {
 
 	case "$CARCH" in
 	aarch64*)	ARCH="aarch64" ;;
-	arm*)		ARCH="arm" ;;
-	x86)		ARCH="i386" ;;
 	x86_64)		ARCH="x86_64" ;;
-	ppc)		ARCH="powerpc" ;;
 	ppc64*)		ARCH="powerpc64" ;;
-	s390*)		ARCH="s390x" ;;
 	mips64*)	ARCH="mips64" ;;
-	mips*)		ARCH="mips" ;;
 	esac
 
-	make DESTDIR="$pkgdir" install
-	cp libssp_nonshared.a "$pkgdir"/usr/lib
+	if [ "$BOOTSTRAP" = "nocc" ]; then
+		make ARCH="$ARCH" prefix=/usr DESTDIR="$pkgdir" install-headers
+	else
+		make DESTDIR="$pkgdir" install
 
-	# make LDSO the be the real file, and libc the symlink
-	local LDSO=$(make -f Makefile --eval "$(echo -e 'print-ldso:\n\t@echo $$(basename $(LDSO_PATHNAME))')" print-ldso)
-	mv -f "$pkgdir"/usr/lib/libc.so "$pkgdir"/lib/"$LDSO"
-	ln -sf "$LDSO" "$pkgdir"/lib/libc.musl-${CARCH}.so.1
-	ln -sf ../../lib/"$LDSO" "$pkgdir"/usr/lib/libc.so
-	mkdir -p "$pkgdir"/usr/bin
-
-	ln -sv /lib/ld-musl-${CARCH}.so.1 $pkgdir/usr/bin/ldd
+		# make LDSO the be the real file, and libc the symlink
+		local LDSO=$(make -f Makefile --eval "$(echo -e 'print-ldso:\n\t@echo $$(basename $(LDSO_PATHNAME))')" print-ldso)
+		mv -f "$pkgdir"/usr/lib/libc.so "$pkgdir"/usr/lib/"$LDSO"
+		ln -sf "$LDSO" "$pkgdir"/usr/lib/libc.musl-${CARCH}.so.1
+		mkdir -p "$pkgdir"/usr/bin
+		ln -sv /usr/lib/ld-musl-${CARCH}.so.1 $pkgdir/usr/bin/ldd
+	fi
 }
 
 utils() {
@@ -79,7 +74,7 @@ utils() {
 	replaces="libiconv"
 	license="MIT BSD GPL2+"
 
-	mkdir -p "$subpkgdir"/usr "$subpkgdir"/sbin
+	mkdir -p "$subpkgdir"/usr "$subpkgdir"/usr/sbin
 	mv "$pkgdir"/usr/bin "$subpkgdir"/usr/
 
 	install -D \
@@ -88,35 +83,25 @@ utils() {
 		"$builddir"/iconv \
 		"$subpkgdir"/usr/bin
 
-	install -D -m755 "$srcdir"/ldconfig "$subpkgdir"/sbin
+	install -D -m755 "$srcdir"/ldconfig "$subpkgdir"/usr/sbin
 }
 
 compat() {
 	pkgdesc="compatibility libraries for glibc"
 
-	mkdir -p "$subpkgdir"/lib
+	mkdir -p "$subpkgdir"/usr/lib
 	# definitive source is https://sourceware.org/glibc/wiki/ABIList
 	case "$CARCH" in
-	aarch64)	_ld="lib/ld-linux-aarch64.so.1" ;;
-	armel)		_ld="lib/ld-linux.so.3" ;;
-	armhf)		_ld="lib/ld-linux-armhf.so.3" ;;
-	armv7)		_ld="lib/ld-linux-armhf.so.3" ;;
-	mips)		_ld="lib/ld.so.1" ;;
-	mips64)		_ld="lib64/ld.so.1" ;;
-	mipsel)		_ld="lib/ld.so.1" ;;
-	mips64el)	_ld="lib64/ld.so.1" ;;
-	ppc)		_ld="lib/ld.so.1" ;;
-	ppc64)		_ld="lib64/ld64.so.1" ;;
-	ppc64le)	_ld="lib64/ld64.so.2" ;;
-	s390x)		_ld="lib/ld64.so.1" ;;
-	x86)		_ld="lib/ld-linux.so.2" ;;
-	x86_64)		_ld="lib64/ld-linux-x86-64.so.2";;
+	aarch64)	_ld="usr/lib/ld-linux-aarch64.so.1" ;;
+	mips64)		_ld="usr/lib64/ld.so.1" ;;
+	ppc64le)	_ld="usr/lib64/ld64.so.2" ;;
+	x86_64)		_ld="usr/lib64/ld-linux-x86-64.so.2";;
 	esac
 	mkdir -p "$subpkgdir/${_ld%/*}"
-	ln -sf "/lib/libc.musl-${CARCH}.so.1" "$subpkgdir/$_ld"
+	ln -sf "/usr/lib/libc.musl-${CARCH}.so.1" "$subpkgdir/$_ld"
 
 	for i in libc.so.6 libcrypt.so.1 libm.so.6 libpthread.so.0 librt.so.1 libutil.so.1; do
-		ln -sf "/lib/libc.musl-${CARCH}.so.1" "$subpkgdir/lib/$i"
+		ln -sf "/usr/lib/libc.musl-${CARCH}.so.1" "$subpkgdir/usr/lib/$i"
 	done
 }
 
@@ -127,5 +112,4 @@ sha512sums="a2278de9903852b08352d3e734a39d4616caa602496997ba843e8fea0e1c48176177
 0d80f37b34a35e3d14b012257c50862dfeb9d2c81139ea2dfa101d981d093b009b9fa450ba27a708ac59377a48626971dfc58e20a3799084a65777a0c32cbc7d  getconf.c
 378d70e65bcc65bb4e1415354cecfa54b0c1146dfb24474b69e418cdbf7ad730472cd09f6f103e1c99ba6c324c9560bccdf287f5889bbc3ef0bdf0e08da47413  getent.c
 9d42d66fb1facce2b85dad919be5be819ee290bd26ca2db00982b2f8e055a0196290a008711cbe2b18ec9eee8d2270e3b3a4692c5a1b807013baa5c2b70a2bbf  iconv.c
-05a3d8a1ac1fefdf3722c8d7f68d3915013a08cde49b16a7cfbc998eceb506ddf95df2fae9f556cafb03c8a1e8fd5216d935a8efac8a80acac066a89892d65a4  secure_getenv.patch
-fffce654891d354767f2b58cf1fe74911995e270e5d861fbebd20304612280f4f6e0bd07fea4c72a7fa01021f536b4e491cefc97792f710acaacb6b73fc38313  strndupa.patch"
+05a3d8a1ac1fefdf3722c8d7f68d3915013a08cde49b16a7cfbc998eceb506ddf95df2fae9f556cafb03c8a1e8fd5216d935a8efac8a80acac066a89892d65a4  secure_getenv.patch"

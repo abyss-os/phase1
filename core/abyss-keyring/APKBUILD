@@ -1,0 +1,20 @@
+pkgname="abyss-keyring"
+pkgver="1"
+pkgrel=0
+pkgdesc="Abyss OS keys"
+url="https://getabyss.com"
+arch="all"
+license="custom"
+#depends="filesystem"
+source="https://mirror.getabyss.com/abyss/jwh-x86_64.rsa.pub
+		https://mirror.getabyss.com/abyss/jwh-aarch64.rsa.pub"
+
+builddir="$srcdir/"
+
+package() {
+	mkdir -p $pkgdir
+	cp -v $srcdir/*.pub $pkgdir/
+}
+
+sha512sums="7dca9af32e86c572cc0a298936f041f9f48962a71f8983bf7b770d3627069ba66bf63c322b4e82ef0ddbd195b50a79f48b36aa5f4cfa23afee6e53365c33ed27  jwh-x86_64.rsa.pub
+ea2e5b4ab87dd284de2eeee3d742d6b13b482cc860b024a26f37415b754445ebccbe3b3d5746c4d531fe6a4d02b8bf8b577bc9fca4f034a37aee00f4119e7f92  jwh-aarch64.rsa.pub"

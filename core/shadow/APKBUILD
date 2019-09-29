@@ -7,7 +7,7 @@ arch="all"
 license="GPL"
 depends=""
 makedepends="linux-pam-dev"
-subpackages="$pkgname-doc $pkgname-dbg $pkgname-uidmap"
+subpackages="$pkgname-doc $pkgname-uidmap"
 source="https://github.com/shadow-maint/shadow/releases/download/$pkgver/shadow-$pkgver.tar.xz
 	chpasswd.pamd
 	login.pamd

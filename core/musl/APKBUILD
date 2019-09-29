@@ -5,7 +5,7 @@ pkgdesc="the musl c library (libc) implementation"
 url="http://www.musl-libc.org/"
 arch="all"
 license="MIT"
-subpackages="$pkgname-dev $pkgname-dbg libc6-compat:compat:noarch $pkgname-utils"
+subpackages="$pkgname-dev libc6-compat:compat:noarch $pkgname-utils"
 source="http://www.musl-libc.org/releases/musl-$pkgver.tar.gz
 	handle-aux-at_base.patch
 	ldconfig

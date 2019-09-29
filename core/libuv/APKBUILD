@@ -10,7 +10,7 @@ arch="all"
 license="MIT BSD ISC"
 makedepends_build="automake autoconf libtool"
 makedepends_host="linux-headers"
-subpackages="$pkgname-static $pkgname-dev $pkgname-dbg"
+subpackages="$pkgname-static $pkgname-dev"
 source="https://dist.libuv.org/dist/v$pkgver/$pkgname-v$pkgver.tar.gz"
 builddir="$srcdir/$pkgname-v$pkgver"
 

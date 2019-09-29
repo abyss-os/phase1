@@ -53,6 +53,9 @@ check() {
 package() {
 	cd "$builddir"
 	make CC=clang DESTDIR="$pkgdir" install
+	mkdir -p $pkgdir/usr/bin
+	mv -v $pkgdir/sbin/* $pkgdir/usr/bin/
+	rmdir -v $pkgdir/sbin
 	install -d "$pkgdir"/var/lib/apk \
 		"$pkgdir"/var/cache/misc \
 		"$pkgdir"/etc/apk/keys \
@@ -60,6 +63,20 @@ package() {
 		|| return 1
 	# the shipped README is empty
 	rm -r "$pkgdir"/usr/share/
+
+	# lets sign the binary so it can be vefified from distros
+	# that does not have apk-tools
+	local abuild_conf=${ABUILD_CONF:-"/etc/abuild.conf"}
+	local abuild_home=${ABUILD_USERDIR:-"$HOME/.abuild"}
+	local abuild_userconf=${ABUILD_USERCONF:-"$abuild_home/abuild.conf"}
+	[ -f "$abuild_userconf" ] && . "$abuild_userconf"
+	local privkey="$PACKAGER_PRIVKEY"
+	local pubkey=${PACKAGER_PUBKEY:-"${privkey}.pub"}
+	local keyname=${pubkey##*/}
+	${CROSS_COMPILE}strip "$pkgdir"/usr/bin/apk
+	openssl dgst -sha1 -sign "$privkey" \
+		-out "$pkgdir"/usr/bin/apk.SIGN.RSA.$keyname \
+		"$pkgdir"/usr/bin/apk || return 1
 }
 
 static() {

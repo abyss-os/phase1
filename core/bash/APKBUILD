@@ -14,6 +14,7 @@ depends=""
 install="$pkgname.post-install"
 subpackages="$pkgname-dbg $pkgname-dev $pkgname-doc"
 options="!checkroot"
+provides="/bin/sh"
 source="https://ftp.gnu.org/gnu/bash/bash-${_myver}.tar.gz
 	bash-noinfo.patch
 	fix-jobs.patch

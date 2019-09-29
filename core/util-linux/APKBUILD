@@ -1,0 +1,176 @@
+pkgname=util-linux
+pkgver=2.33.2
+
+case $pkgver in
+	*.*.*) _v=${pkgver%.*};;
+	*.*) _v=$pkgver;;
+esac
+
+pkgrel=0
+pkgdesc="Random collection of Linux utilities"
+url="https://git.kernel.org/cgit/utils/util-linux/util-linux.git"
+arch="all"
+license="GPL-2.0 GPL-2.0-or-later LGPL-2.0-or-later BSD Public-Domain"
+depends="findmnt"
+makedepends_build="autoconf automake libtool"
+makedepends_host="zlib-dev ncurses-dev linux-headers libcap-ng-dev"
+options="suid"
+source="https://www.kernel.org/pub/linux/utils/$pkgname/v${_v}/$pkgname-$pkgver.tar.xz
+	ttydefaults.h
+	"
+subpackages="$pkgname-doc $pkgname-dev $pkgname-bash-completion:bashcomp:noarch
+	libuuid libblkid libmount libsmartcols libfdisk sfdisk cfdisk
+	findmnt:_findmnt mcookie blkid setpriv"
+if [ -z "$BOOTSTRAP" ]; then
+	makedepends_host="$makedepends_host ncurses-dev python3-dev"
+	subpackages="$subpackages py-libmount:_py"
+else
+	_bootstrap_config="--without-python"
+fi
+makedepends="$makedepends_build $makedepends_host"
+replaces="e2fsprogs util-linux-ng"
+
+builddir="$srcdir/$pkgname-$pkgver"
+prepare() {
+	default_prepare
+
+	cd "$builddir"
+	cp "$srcdir"/ttydefaults.h include/
+	libtoolize --force && aclocal -I m4 && autoconf \
+		&& automake --add-missing
+}
+
+build() {
+	cd "$builddir"
+
+	# login utils are provided by shadow (with PAM) or busybox (no PAM) --nenolod
+		./configure \
+		--build=$CBUILD \
+		--host=$CHOST \
+		--with-sysroot=$CBUILDROOT \
+		--prefix=/usr \
+		--bindir=/usr/bin \
+		--sbindir=/usr/bin \
+		--libdir=/usr/lib \
+		--enable-raw \
+		--disable-uuidd \
+		--disable-nls \
+		--disable-tls \
+		--disable-kill \
+		--disable-login \
+		--disable-last \
+		--disable-sulogin \
+		--disable-su \
+		--without-systemd \
+		--without-btrfs \
+		$_bootstrap_config
+	make
+}
+
+package() {
+	make -j1 DESTDIR="$pkgdir" -C "$builddir" install
+	# use pkg-config
+}
+
+dev() {
+	default_dev
+	replaces="e2fsprogs-dev util-linux-ng-dev"
+}
+
+bashcomp() {
+	pkgdesc="Bash completions for $pkgname"
+	depends=""
+	install_if="$pkgname=$pkgver-r$pkgrel bash-completion"
+
+	mkdir -p "$subpkgdir"/usr/share/
+	mv "$pkgdir"/usr/share/bash-completion \
+		"$subpkgdir"/usr/share/
+}
+
+blkid() {
+	pkgdesc="block device identification tool"
+	depends=""
+	replaces="util-linux-ng"
+	mkdir -p "$subpkgdir"/usr/bin
+	mv "$pkgdir"/usr/bin/blkid "$subpkgdir"/usr/bin/
+}
+
+libuuid() {
+	pkgdesc="DCE compatible Universally Unique Identifier library"
+	depends=""
+	mkdir -p "$subpkgdir"/usr/lib
+	mv "$pkgdir"/usr/lib/libuuid* "$subpkgdir"/usr/lib/
+}
+
+libblkid() {
+	pkgdesc="Block device identification library from util-linux"
+	depends=""
+	mkdir -p "$subpkgdir"/usr/lib
+	mv "$pkgdir"/usr/lib/libblkid* "$subpkgdir"/usr/lib/
+}
+
+libmount() {
+	pkgdesc="Block device identification library from util-linux"
+	depends=""
+	mkdir -p "$subpkgdir"/usr/lib
+	mv "$pkgdir"/usr/lib/libmount.so.* "$subpkgdir"/usr/lib/
+}
+
+libsmartcols() {
+	pkgdesc="Formatting library for ls-like programs."
+	depends=""
+	mkdir -p "$subpkgdir"/usr/lib
+	mv "$pkgdir"/usr/lib/libsmartcols.so.* "$subpkgdir"/usr/lib/
+}
+
+libfdisk() {
+	pkgdesc="Partitioning library for fdisk-like programs"
+	depends=""
+	mkdir -p "$subpkgdir"/usr/lib
+	mv "$pkgdir"/usr/lib/libfdisk.so.* "$subpkgdir"/usr/lib/
+}
+
+sfdisk() {
+	pkgdesc="Partition table manipulator from util-linux"
+	depends=""
+	mkdir -p "$subpkgdir"/usr/bin
+	mv "$pkgdir"/usr/bin/sfdisk "$subpkgdir"/usr/bin/
+}
+
+cfdisk() {
+	pkgdesc="Curses based partition table manipulator from util-linux"
+	depends=""
+	mkdir -p "$subpkgdir"/usr/bin
+	mv "$pkgdir"/usr/bin/cfdisk "$subpkgdir"/usr/bin/
+}
+
+mcookie() {
+	pkgdesc="mcookie from util-linux"
+	replaces="util-linux-ng"
+	mkdir -p "$subpkgdir"/usr/bin
+	mv "$pkgdir"/usr/bin/mcookie "$subpkgdir"/usr/bin/
+}
+
+setpriv() {
+	pkgdesc="Run a program with different Linux privilege settings"
+	replaces="util-linux-ng"
+	mkdir -p "$subpkgdir"/usr/bin
+	mv "$pkgdir"/usr/bin/setpriv "$subpkgdir"/usr/bin/
+}
+
+_findmnt() {
+	pkgdesc="findmnt from util-linux"
+	depends=""
+	replaces=""
+	mkdir -p "$subpkgdir"/usr/bin
+	mv "$pkgdir"/usr/bin/findmnt "$subpkgdir"/usr/bin
+}
+
+_py() {
+	pkgdesc="python bindings to libmount"
+	mkdir -p "$subpkgdir"/usr/lib
+	mv "$pkgdir"/usr/lib/python* "$subpkgdir"/usr/lib/
+}
+
+sha512sums="ac88790a0272366b384b54df19cb28318014d98819d5d96aa05528ff17ab57a8c66d012a2f1b59caca4c5d4ea669e8c041e1123517c1f1c2d9960ef701aaf749  util-linux-2.33.2.tar.xz
+876bb9041eca1b2cca1e9aac898f282db576f7860aba690a95c0ac629d7c5b2cdeccba504dda87ff55c2a10b67165985ce16ca41a0694a267507e1e0cafd46d9  ttydefaults.h"

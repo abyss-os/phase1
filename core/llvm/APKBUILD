@@ -28,8 +28,8 @@ prepare() {
 	echo Projects: $_projects
 
 	case $CARCH in
-		aarch64) _targets="Aarch64";;
-		x86_64) _targets="X86";;
+		aarch64) _targets="AArch64";;
+		x86_64) _targets="X86;AArch64;Mips;PowerPC;RISCV";;
 		*) echo "Unknown arch" ; return 1;;
 	esac
 
@@ -89,7 +89,7 @@ prepare() {
 build() {
 	cd $builddir
 #	CFLAGS="$CFLAGS -lucontext"
-	cmake --build .
+	ninja -j${JOBS}
 }
 
 package() {

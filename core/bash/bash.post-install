@@ -1,3 +1,6 @@
-#!/bin/sh
+#!/bin/bash
 echo '/bin/bash' >> /etc/shells
+if [ ! -f /bin/sh ]; then
+	ln -sfv /bin/bash /bin/sh
+fi
 exit 0

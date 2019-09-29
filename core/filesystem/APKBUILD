@@ -1,14 +1,11 @@
 pkgname=filesystem
 pkgver=1
-pkgrel=0
+pkgrel=1
 pkgdesc="Basic filesystem layout"
 url="."
 arch="all"
 license="GPL-2.0-only"
-pkggroups="shadow"
 options="!fhs !check"
-install="$pkgname.pre-install $pkgname.pre-upgrade $pkgname.post-upgrade
-	$pkgname.post-install"
 source="mkmntdirs.c
 	crontab
 	color_prompt
@@ -33,8 +30,8 @@ prepare() {
 
 build() {
 	cd "$builddir"
-	${CC:-${CROSS_COMPILE}gcc} $CPPFLAGS $CFLAGS $LDFLAGS \
-		"$srcdir"/mkmntdirs.c -o "$builddir"/mkmntdirs
+#	${CC:-${CROSS_COMPILE}gcc} $CPPFLAGS $CFLAGS $LDFLAGS \
+#		"$srcdir"/mkmntdirs.c -o "$builddir"/mkmntdirs
 
 	# generate shadow
 	awk -F: '{
@@ -101,7 +98,7 @@ package() {
 	install -d -m 0555 var/empty
 	install -d -m 0700 "$pkgdir"/root
 	install -d -m 1777 "$pkgdir"/tmp "$pkgdir"/var/tmp
-	install -m755 "$builddir"/mkmntdirs "$pkgdir"/usr/bin/mkmntdirs
+#	install -m755 "$builddir"/mkmntdirs "$pkgdir"/usr/bin/mkmntdirs
 
 	install -m600 "$srcdir"/crontab "$pkgdir"/etc/crontabs/root
 	install -m655 "$srcdir"/color_prompt "$pkgdir"/etc/profile.d/color_prompt.sh
@@ -170,10 +167,6 @@ package() {
 		fs.protected_hardlinks = 1
 		fs.protected_symlinks = 1
 	EOF
-	cat > "$pkgdir"/etc/fstab <<-EOF
-		/dev/cdrom	/media/cdrom	iso9660	noauto,ro 0 0
-		/dev/usbdisk	/media/usb	vfat	noauto,ro 0 0
-	EOF
 
 	install -m644 \
 		"$srcdir"/group \
@@ -191,10 +184,12 @@ package() {
 	ln -s /etc/crontabs "$pkgdir"/var/spool/cron/crontabs
 	ln -s /proc/mounts "$pkgdir"/etc/mtab
 
-	ln -sv $pkgdir/usr/bin $pkgdir/bin
-	ln -sv $pkgdir/usr/bin $pkgdir/sbin
-	ln -sv $pkgdir/usr/bin $pkgdir/usr/sbin
-	ln -sv $pkgdir/usr/lib $pkgdir/lib
+	# add lib symlinks
+	ln -vs usr/lib lib
+	# add bin symlinks
+	ln -vs usr/bin bin
+	ln -vs usr/bin sbin
+	ln -vs bin usr/sbin
 }
 
 sha512sums="199a34716b1f029407b08679fed4fda58384a1ccefbbec9abe1c64f4a3f7ad2a89bc7c02fc19a7f791f7c6bb87f9f0c708cb3f18c027cb7f54f25976eba4b839  mkmntdirs.c

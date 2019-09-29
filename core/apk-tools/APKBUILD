@@ -1,0 +1,96 @@
+# Maintainer: Natanael Copa <ncopa@alpinelinux.org>
+pkgname=apk-tools
+pkgver=2.10.4
+pkgrel=3
+pkgdesc="Alpine Package Keeper - package manager for alpine"
+subpackages="$pkgname-static"
+depends=
+makedepends_build="openssl"
+makedepends_host="zlib-dev openssl-dev linux-headers"
+makedepends="$makedepends_build $makedepends_host"
+if [ "$CBUILD" = "$CHOST" ]; then
+	subpackages="$subpackages lua5.2-apk:luaapk"
+	makedepends="$makedepends lua5.2-dev"
+fi
+source="https://dev.alpinelinux.org/archive/$pkgname/$pkgname-$pkgver.tar.xz
+	0001-add-fix-virtual-package-id-generation.patch
+	lua-apk_time.patch
+	what.patch
+	dbpath.patch
+	mkdirat.patch
+	"
+
+url="https://git.alpinelinux.org/cgit/apk-tools/"
+arch="all"
+license=GPL2
+
+builddir="$srcdir/$pkgname-$pkgver"
+prepare() {
+	default_prepare || return 1
+	cd "$builddir"
+	sed -i -e 's:-Werror::' Make.rules
+	echo "FULL_VERSION=$pkgver-r$pkgrel" > config.mk || return 1
+	if [ "$CBUILD" = "$CHOST" ]; then
+		echo "LUAAPK=YesPlease" >> config.mk
+	else
+		echo "LUAAPK=" >> config.mk
+	fi
+	echo "export LUAAPK" >> config.mk
+}
+
+build() {
+	cd "$builddir"
+	make CC=clang || return 1
+	make CC=clang static || return 1
+}
+
+check() {
+	cd "$builddir"
+	return 0
+	make CC=clang check
+}
+
+package() {
+	cd "$builddir"
+	make CC=clang DESTDIR="$pkgdir" install
+	install -d "$pkgdir"/var/lib/apk \
+		"$pkgdir"/var/cache/misc \
+		"$pkgdir"/etc/apk/keys \
+		"$pkgdir"/etc/apk/protected_paths.d \
+		|| return 1
+	# the shipped README is empty
+	rm -r "$pkgdir"/usr/share/
+}
+
+static() {
+	pkgdesc="Alpine Package Keeper - static binary"
+	install -Dm755 "$srcdir"/$pkgname-$pkgver/src/apk.static \
+		"$subpkgdir"/sbin/apk.static
+
+	# lets sign the static binary so it can be vefified from distros
+	# that does not have apk-tools
+	local abuild_conf=${ABUILD_CONF:-"/etc/abuild.conf"}
+	local abuild_home=${ABUILD_USERDIR:-"$HOME/.abuild"}
+	local abuild_userconf=${ABUILD_USERCONF:-"$abuild_home/abuild.conf"}
+	[ -f "$abuild_userconf" ] && . "$abuild_userconf"
+	local privkey="$PACKAGER_PRIVKEY"
+	local pubkey=${PACKAGER_PUBKEY:-"${privkey}.pub"}
+	local keyname=${pubkey##*/}
+	${CROSS_COMPILE}strip "$subpkgdir"/sbin/apk.static
+	openssl dgst -sha1 -sign "$privkey" \
+		-out "$subpkgdir"/sbin/apk.static.SIGN.RSA.$keyname \
+		"$subpkgdir"/sbin/apk.static || return 1
+}
+
+luaapk() {
+	pkgdesc="Lua module for apk-tools"
+	mkdir -p "$subpkgdir"/usr/
+	mv "$pkgdir"/usr/lib "$subpkgdir"/usr/lib/
+}
+
+sha512sums="d2d9fde0aae9059236f68a3fc2f2186104bb9a099b15d296a6202a20ab2912638f10bb3b9edb70f359d060c5839573c3d50ef37d13095fa01c66dc3219ab6e39  apk-tools-2.10.4.tar.xz
+3cf1ae421e136ebe8c037a468fbeb3bca11668eb04dd4b8b9346c4089306002c891d6c2544d22522550f37a4fad0dfcecabceb4c8872165ea6827dcce46d9f2b  0001-add-fix-virtual-package-id-generation.patch
+7751f4ddbf3f1b14f5d70ea0f8c2f78168d6138272f883fe1c0137ed135c3f3639f4bf2860dbf6b6de0d4321c93ec9c150edaf5f496c4dc0fedd0a201f399599  lua-apk_time.patch
+fd0f4129927aebb5a38b6eab5838036325a504821fbe93c13bf54fab859112802b88c40ce35eb39040f4eb24eba99152500f4304f7640e3e54d96983d9551cc0  what.patch
+5f3ca09413684fb318963539c02ae3bbd64d80f848ac1eb0c5af8bff84d3167504fd6a321cfdeeffb03d63dc691fedc79c497c53126f24342462a38acc6ec682  dbpath.patch
+0961a35ebef5289a737369583210bc8a992117e295bbc7558e2f52995fd97d4d5177f1b0349eccff5b083c42d749bb67445360332cf01507ef9fdb5d4e92f9a5  mkdirat.patch"

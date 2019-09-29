@@ -65,7 +65,7 @@ package() {
 static() {
 	pkgdesc="Alpine Package Keeper - static binary"
 	install -Dm755 "$srcdir"/$pkgname-$pkgver/src/apk.static \
-		"$subpkgdir"/sbin/apk.static
+		"$subpkgdir"/usr/sbin/apk.static
 
 	# lets sign the static binary so it can be vefified from distros
 	# that does not have apk-tools
@@ -76,10 +76,10 @@ static() {
 	local privkey="$PACKAGER_PRIVKEY"
 	local pubkey=${PACKAGER_PUBKEY:-"${privkey}.pub"}
 	local keyname=${pubkey##*/}
-	${CROSS_COMPILE}strip "$subpkgdir"/sbin/apk.static
+	${CROSS_COMPILE}strip "$subpkgdir"/usr/sbin/apk.static
 	openssl dgst -sha1 -sign "$privkey" \
-		-out "$subpkgdir"/sbin/apk.static.SIGN.RSA.$keyname \
-		"$subpkgdir"/sbin/apk.static || return 1
+		-out "$subpkgdir"/usr/sbin/apk.static.SIGN.RSA.$keyname \
+		"$subpkgdir"/usr/sbin/apk.static || return 1
 }
 
 luaapk() {

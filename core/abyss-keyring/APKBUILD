@@ -12,8 +12,8 @@ source="https://mirror.getabyss.com/abyss/jwh-x86_64.rsa.pub
 builddir="$srcdir/"
 
 package() {
-	mkdir -p $pkgdir
-	cp -v $srcdir/*.pub $pkgdir/
+	mkdir -p $pkgdir/etc/apk/keys/
+	cp -v $srcdir/*.pub $pkgdir/etc/apk/keys/
 }
 
 sha512sums="7dca9af32e86c572cc0a298936f041f9f48962a71f8983bf7b770d3627069ba66bf63c322b4e82ef0ddbd195b50a79f48b36aa5f4cfa23afee6e53365c33ed27  jwh-x86_64.rsa.pub

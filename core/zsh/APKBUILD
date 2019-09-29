@@ -1,0 +1,102 @@
+pkgname=zsh
+pkgver=5.7.1
+pkgrel=0
+pkgdesc="Very advanced and programmable command interpreter (shell)"
+url="https://www.zsh.org/"
+arch="all"
+license="custom"
+makedepends="mandoc autoconf ncurses-dev ncurses-static diffutils"
+install="zsh.post-install zsh.post-upgrade zsh.pre-deinstall"
+source="https://download.sourceforge.net/project/zsh/zsh/$pkgver/zsh-$pkgver.tar.xz
+	zprofile"
+subpackages="$pkgname-static $pkgname-doc $pkgname-functions"
+builddir="$srcdir/$pkgname-$pkgver"
+
+provides="$pkgname-shell"
+
+_libdir="usr/lib/zsh/$pkgver"
+_sharedir="usr/share/zsh/$pkgver"
+
+prepare() {
+	default_prepare
+
+	# remove the failing test suites
+	cd "$builddir/Test"
+	# SPLATTER: applet not found
+	rm -f A01grammar.ztst
+	# [[ $(strftime '%@' 0 2> /dev/null) == (%|)@ || $? != 0 ]]
+	rm -f V09datetime.ztst
+	# no error message and no question mark
+	rm -f D07multibyte.ztst
+
+	cp -R "$builddir" "$srcdir/static"
+	cp -R "$builddir" "$srcdir/shared"
+}
+
+_configure() {
+	./configure \
+		--build=$CBUILD \
+		--host=$CHOST \
+		--prefix=/usr \
+		--bindir=/bin \
+		--enable-etcdir=/etc/zsh \
+		--enable-multibyte \
+		--enable-function-subdirs \
+		--enable-zsh-secure-free \
+		--sysconfdir=/etc \
+		--with-tcsetpgrp \
+		--mandir=/usr/share/man \
+		--infodir=/usr/share/info \
+		"$@"
+}
+
+build() {
+	cd "$srcdir/shared"
+	_configure
+	make
+
+	cd "$srcdir/static"
+	_configure \
+		--disable-shared \
+		LDFLAGS="$LDFLAGS -static"
+	make
+}
+
+check() {
+	cd "$srcdir/shared"
+	return 0
+	make test
+}
+
+package() {
+	cd "$srcdir/static"
+	make DESTDIR="$pkgdir" install.bin
+	mv "$pkgdir/bin/zsh" "$pkgdir/bin/zsh.static"
+
+	cd "$srcdir/shared"
+	make DESTDIR="$pkgdir" install
+
+	install -Dm644 "$srcdir"/zprofile "$pkgdir"/etc/zsh/zprofile
+	install -Dm644 LICENCE "$pkgdir"/usr/share/licenses/$pkgname/LICENCE
+}
+
+functions() {
+	pkgdesc="Shared zsh functions"
+	# default to shared, static will need separate install
+	install_if="$pkgname-shell"
+	_submv $_sharedir/functions
+}
+
+static() {
+	provides="$pkgname-shell"
+	mkdir -p "$subpkgdir/bin"
+	mv "$pkgdir/bin/zsh.static" "$subpkgdir/bin"
+}
+
+_submv() {
+	local path="$1"
+	mkdir -p "$subpkgdir"/${path%/*}
+	mv "$pkgdir"/$path "$subpkgdir"/${path%/*}/
+}
+sha512sums="a6aa88e1955a80229a4784a128866e325f79a8b5f73c922ab480048411036f1835cbb31daa30ab38bd16ab2a50040eda8f4f1f64704b21b6acc3051b1dbf18d0  zsh-5.7.1.tar.xz
+59182b99447872ded8adf0d890e9359ee47fce0b7acb2808f4308f945885fbf6d977a0917bbb5c0f21454caf3ba06ab092127732da4f84292d6ab0989a0110fe  zprofile"

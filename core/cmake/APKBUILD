@@ -1,0 +1,70 @@
+pkgname=cmake
+pkgver=3.14.5
+pkgrel=0
+pkgdesc="Cross-platform, open-source make system"
+url="https://www.cmake.org"
+arch="all"
+license="BSD-3-Clause"
+makedepends="bzip2-dev curl-dev expat-dev libarchive-dev linux-headers
+	libuv-dev ncurses-dev rhash-dev xz-dev zlib-dev"
+options="!checkroot !check"
+checkdepends="file musl-utils"
+subpackages="$pkgname-doc $pkgname-bash-completion:bashcomp:noarch
+	"
+case $pkgver in
+*.*.*.*) _v=v${pkgver%.*.*};;
+*.*.*) _v=v${pkgver%.*};;
+esac
+
+source="https://www.cmake.org/files/$_v/cmake-${pkgver}.tar.gz
+	"
+
+_parallel_opt() {
+	local i n
+	for i in $MAKEOPTS; do
+		case "$i" in
+			-j*) n=${i#-j};;
+		esac;
+	done
+	[ -n "$n" ] && echo "--parallel $n"
+}
+
+build() {
+	cd "$builddir"
+	# jsoncpp needs cmake to build so to avoid recursive build
+	# dependency, we use the bundled version of jsoncpp.
+	# Do NOT remove --no-system-jsoncpp unless you consulted
+	# maintainer
+	mkdir build && cd build
+	../bootstrap \
+		--prefix=/usr \
+		--mandir=/share/man \
+		--datadir=/share/$pkgname \
+		--docdir=/share/doc/$pkgname \
+		--system-libs \
+		--no-system-jsoncpp \
+		$(_parallel_opt)
+	make
+}
+
+check() {
+	cd "$builddir/build"
+	CTEST_OUTPUT_ON_FAILURE=TRUE bin/ctest
+}
+
+package() {
+	cd $startdir/src/$pkgname-$pkgver/build
+	make DESTDIR="$pkgdir" install
+}
+
+bashcomp() {
+	depends=""
+	pkgdesc="Bash completions for $pkgname"
+	install_if="$pkgname=$pkgver-r$pkgrel bash"
+
+	mkdir -p "$subpkgdir"/usr/share/bash-completion
+	mv "$pkgdir"/usr/share/cmake/completions \
+		"$subpkgdir"/usr/share/bash-completion/
+}
+
+sha512sums="9acd2de17db86052801194cac570bfc104320c249b83058aa59554b42c3d5af9c9293d1c069f3fe8512a80103d511186d840168cbc190ce9584ca99cb9b11e46  cmake-3.14.5.tar.gz"

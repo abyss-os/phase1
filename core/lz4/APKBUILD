@@ -1,0 +1,37 @@
+# Contributor: Stuart Cardall <developer@it-offshore.co.uk>
+# Maintainer: Stuart Cardall <developer@it-offshore.co.uk>
+pkgname=lz4
+pkgver=1.9.1
+pkgrel=0
+pkgdesc="LZ4 is lossless compression algorithm with fast decoder @ multiple GB/s per core."
+url="https://github.com/lz4/lz4"
+arch="all"
+license="BSD-2-Clause GPL-2.0-only"
+checkdepends="diffutils"
+subpackages="$pkgname-dev $pkgname-doc $pkgname-libs $pkgname-tests:tests"
+source="$pkgname-$pkgver.tar.gz::https://github.com/$pkgname/$pkgname/archive/v$pkgver.tar.gz"
+builddir="$srcdir"/$pkgname-$pkgver
+
+build() {
+	cd "$builddir"
+	make PREFIX="/usr"
+}
+
+check() {
+	cd "$builddir"
+	make check
+}
+
+tests() {
+	cd "$builddir"/tests
+	mkdir -p "$subpkgdir"/usr/share/$pkgname
+	rm -f *.c COPYING Makefile .gitignore
+	cp -rf "$builddir"/tests "$subpkgdir"/usr/share/$pkgname
+}
+
+package() {
+	cd "$builddir"
+	make PREFIX="/usr" DESTDIR="$pkgdir" install
+}
+
+sha512sums="536cdeb6dd73b4769cf9501ad312b004ab01699758534b47ca2eddbc815fd374a3caba40cde36f73a7a70e134065836b733e2b0c023c31740b877ef9317ccf3e  lz4-1.9.1.tar.gz"

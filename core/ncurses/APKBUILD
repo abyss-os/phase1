@@ -8,7 +8,7 @@ arch="all"
 options="!check" # "tests" are actual demo programs, not a test suite.
 license="MIT"
 makedepends_build="ncurses"
-subpackages="$pkgname-static $pkgname-dev $pkgname-doc $pkgname-libs
+subpackages="$pkgname-dev $pkgname-doc $pkgname-libs
 	$pkgname-terminfo-base:base:noarch $pkgname-terminfo:terminfo:noarch"
 source="https://invisible-mirror.net/archives/ncurses/current/ncurses-${_ver}.tgz"
 builddir="$srcdir"/ncurses-$_ver
@@ -86,12 +86,6 @@ base() {
 	pkgdesc="Descriptions of common terminals"
 	mkdir -p "$subpkgdir"/etc
 	mv "$pkgdir"/etc/terminfo "$subpkgdir"/etc/
-}
-
-static() {
-	pkgdesc="Static libraries for the ncurses library"
-	mkdir -p "$subpkgdir"/usr/lib
-	mv "$pkgdir"/usr/lib/*.a "$subpkgdir"/usr/lib/
 }
 
 sha512sums="af4851397be501c429b5681e144d83b9cf535567fda81e5bf8f098bd64e3b11c22c3f3cbc81d2ab08f9363a4ef3120d8d5a8db0e6525b5713f47df252ea584bd  ncurses-6.1-20190914.tgz"

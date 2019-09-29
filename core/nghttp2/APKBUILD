@@ -9,7 +9,7 @@ arch="all"
 license="MIT"
 makedepends_build="autoconf automake libtool"
 makedepends_host="libev-dev openssl-dev zlib-dev c-ares-dev"
-subpackages="$pkgname-static $pkgname-doc $pkgname-dev $pkgname-libs"
+subpackages="$pkgname-doc $pkgname-dev $pkgname-libs"
 source="https://github.com/tatsuhiro-t/$pkgname/releases/download/v$pkgver/nghttp2-$pkgver.tar.xz
 remove-mruby-tests.patch"
 builddir="$srcdir"/$pkgname-$pkgver
@@ -49,16 +49,6 @@ build() {
 package() {
 	cd "$builddir"
 	make DESTDIR="$pkgdir" install
-}
-
-static() {
-	pkgdesc="$pkgname static libraries"
-	mkdir -p "$subpkgdir"/usr/lib
-	cd "$pkgdir"
-	for _lib in  $(find . -name '*.a'); do
-		mkdir -p "$subpkgdir"/${_lib%/*}
-		mv "$_lib" "$subpkgdir"/${_lib%/*}/
-	done
 }
 
 sha512sums="36558ed03c59086086abbf144ec7c54c60de3fea00a9ea594feea7186a779781cbb66a08c9b34265892dea382b42b875f551e85331cfa0086e357f9b27b919fa  nghttp2-1.39.1.tar.xz

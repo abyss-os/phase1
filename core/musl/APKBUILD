@@ -68,11 +68,12 @@ package() {
 		mv -v $pkgdir/lib/* $pkgdir/usr/lib/
 		rmdir -v $pkgdir/lib
 
-		# make LDSO the be the real file, and libc the symlink
-		local LDSO=$(make -f Makefile --eval "$(echo -e 'print-ldso:\n\t@echo $$(basename $(LDSO_PATHNAME))')" print-ldso)
-		ln -sf /usr/lib/libc.so "$pkgdir"/usr/lib/ld-musl-${CARCH}.so.1
+		ln -sfv /usr/lib/libc.so "$pkgdir"/usr/lib/ld-musl-${CARCH}.so.1
+
 		mkdir -p "$pkgdir"/usr/bin
-		ln -sv /usr/lib/ld-musl-${CARCH}.so.1 $pkgdir/usr/bin/ldd
+		ln -sv /usr/lib/libc.so $pkgdir/usr/bin/ldd
+
+		rm -v $pkgdir/usr/include/libintl.h
 	fi
 }
 
@@ -108,7 +109,7 @@ compat() {
 	ln -sf "/usr/lib/libc.musl-${CARCH}.so.1" "$subpkgdir/$_ld"
 
 	for i in libc.so.6 libcrypt.so.1 libm.so.6 libpthread.so.0 librt.so.1 libutil.so.1; do
-		ln -sf "/usr/lib/libc.musl-${CARCH}.so.1" "$subpkgdir/usr/lib/$i"
+		ln -sf "/usr/lib/libc.so" "$subpkgdir/usr/lib/$i"
 	done
 }
 

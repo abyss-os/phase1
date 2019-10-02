@@ -33,6 +33,7 @@ source="$pkgname-$pkgver.tar.gz::https://github.com/OpenRC/openrc/archive/$pkgve
 	sysfsconf.initd
 	firstboot.initd
 	reboot.sh
+	networking.initd
 	"
 builddir="$srcdir/$pkgname-$_ver"
 
@@ -67,16 +68,16 @@ package() {
 	#rm -f "$pkgdir"/etc/runlevels/*/*
 
 	# we override some of the scripts
-	#for i in "$srcdir"/*.initd; do
-	#	j=${i##*/}
-	#	install -Dm755 $i "$pkgdir"/etc/init.d/${j%.initd}
-	#done
+	for i in "$srcdir"/*.initd; do
+		j=${i##*/}
+		install -Dm755 $i "$pkgdir"/etc/init.d/${j%.initd}
+	done
 
 	# we override some of the conf.d files
-	#for i in "$srcdir"/*.confd; do
-	#	j=${i##*/}
-	#	install -Dm644 $i "$pkgdir"/etc/conf.d/${j%.confd}
-	#done
+	for i in "$srcdir"/*.confd; do
+		j=${i##*/}
+		install -Dm644 $i "$pkgdir"/etc/conf.d/${j%.confd}
+	done
 
 	# additional documentation considered useful
 	mkdir -p "$pkgdir"/usr/share/doc/$pkgname/
@@ -136,4 +137,5 @@ b04058ec630e19de0bafefe06198dc1bff8c8d5d2c89e4660dd83dda8bb82a76cdb1d8661cce88e4
 80e43ded522e2d48b876131c7c9997debd43f3790e0985801a8c1dd60bc6e09f625b35a127bf225eb45a65eec7808a50d1c08a5e8abceafc61726211e061e0a2  modloop.confd
 d76c75c58e6f4b0801edac4e081b725ef3d50a9a8c9bbb5692bf4d0f804af7d383bf71a73d5d03ed348a89741ef0b2427eb6a7cbf5a9b9ff60a240639fa6ec88  sysfsconf.initd
 f65b061b4272463071022e88a7392d5573f2d95f91e42c8b4f3ef69171604460ddd3d426dfbab382f73a3fac68d4b4ff3a923fdc49fb6fd9f27ebd3ab24e0d0e  firstboot.initd
-14427bdba284270bf3727215823f5f928a351d0205820c6797b5ecffee4f4d6b22156c2078fe562a1e9bc5767726f7a29b56dd8b2765d2b5ca7080ac0021749f  reboot.sh"
+14427bdba284270bf3727215823f5f928a351d0205820c6797b5ecffee4f4d6b22156c2078fe562a1e9bc5767726f7a29b56dd8b2765d2b5ca7080ac0021749f  reboot.sh
+55df0ac13dac1f215f0c573ac07b150d31232a5204eccfc8941d5af73f91b4535a85d79b7f6514217038ecbe6bffa28cb83fd8d46fd4c596e07103deb8bc8a57  networking.initd"

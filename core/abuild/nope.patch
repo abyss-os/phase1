@@ -646,7 +646,7 @@ index 1ce3a88..adcaaac 100644
  # abuild-sign - sign indexes
  # Copyright (c) 2009 Natanael Copa <ncopa@alpinelinux.org>
 diff --git a/abuild.in b/abuild.in
-index 61f1265..045c6c6 100644
+index 61f1265..78e64af 100644
 --- a/abuild.in
 +++ b/abuild.in
 @@ -1,4 +1,5 @@
@@ -656,7 +656,7 @@ index 61f1265..045c6c6 100644
  
  # abuild - build apk packages (light version of makepkg)
  # Copyright (c) 2008-2015 Natanael Copa <ncopa@alpinelinux.org>
-@@ -971,7 +971,7 @@ prepare_metafiles() {
+@@ -971,7 +972,7 @@ prepare_metafiles() {
  	EOF
  	local i deps
  	deps="$depends"
@@ -665,7 +665,7 @@ index 61f1265..045c6c6 100644
  		for i in $install $triggers; do
  			local s=${i%=*}
  			[ "$name" != "${s%.*}" ] && continue
-@@ -1225,14 +1225,6 @@ trace_apk_deps() {
+@@ -1225,14 +1226,6 @@ trace_apk_deps() {
  		autodeps="$autodeps pkgconfig"
  	fi
  
@@ -680,7 +680,7 @@ index 61f1265..045c6c6 100644
  	[ -f "$dir"/.needs-so ] && for i in $(cat "$dir"/.needs-so); do
  		# first check if its provided by same apkbuild
  		grep -q -w "^$sonameprefix$i" "$dir"/.provides-so 2>/dev/null && continue
-@@ -2081,15 +2073,7 @@ builddeps() {
+@@ -2081,15 +2074,7 @@ builddeps() {
  	[ -n "$nodeps" ] && return 0
  
  	msg "Analyzing dependencies..."
@@ -697,7 +697,7 @@ index 61f1265..045c6c6 100644
  
  	# find which deps are missing
  	local mbd mhd missing
-@@ -2261,7 +2245,10 @@ rootbld() {
+@@ -2261,7 +2246,10 @@ rootbld() {
  
  	calcdeps
  	$SUDO_APK add --initdb --root "$BUILD_ROOT" --update \
@@ -709,7 +709,7 @@ index 61f1265..045c6c6 100644
  
  	local bwrap_opts=""
  	options_has "net" || bwrap_opts="$bwrap_opts --unshare-net"
-@@ -2277,7 +2264,7 @@ rootbld() {
+@@ -2277,7 +2265,7 @@ rootbld() {
  		--bind "$BUILD_ROOT/tmp/src" "$srcdir" \
  		--bind "$BUILD_ROOT/tmp/pkg" "$pkgbasedir" \
  		--bind "$REPODEST" "$REPODEST" \
@@ -718,7 +718,7 @@ index 61f1265..045c6c6 100644
  		--chdir "$startdir" \
  		--setenv PATH /bin:/usr/bin:/sbin:/usr/sbin \
  		/usr/bin/abuild $force rootbld_actions
-@@ -2606,7 +2593,8 @@ SRCDEST=${SRCDEST:-$startdir}
+@@ -2606,7 +2594,8 @@ SRCDEST=${SRCDEST:-$startdir}
  BUILD_ROOT=
  
  # set a default CC
@@ -993,7 +993,7 @@ index 9feb73b..a69690d 100644
  #   Copyright 1992-2016 Free Software Foundation, Inc.
  
 diff --git a/functions.sh.in b/functions.sh.in
-index 22c2c49..3b22265 100644
+index 22c2c49..7142785 100644
 --- a/functions.sh.in
 +++ b/functions.sh.in
 @@ -6,18 +6,8 @@ program=${0##*/}
@@ -1015,7 +1015,7 @@ index 22c2c49..3b22265 100644
  	x86_64)		echo "x86_64-alpine-linux-musl" ;;
  	*)		echo "unknown" ;;
  	esac
-@@ -26,29 +16,15 @@ arch_to_hostspec() {
+@@ -26,30 +16,15 @@ arch_to_hostspec() {
  hostspec_to_arch() {
  	case "$1" in
  	aarch64*-*-*-*)		echo "aarch64" ;;
@@ -1042,11 +1042,12 @@ index 22c2c49..3b22265 100644
 -	*-*-*-musl*)	echo "musl" ;;
 -	*-*-*-gnu*)	echo "glibc" ;;
 -	*)		echo "unknown" ;;
+-	esac
 +	echo musl
- 	esac
  }
  
-@@ -114,7 +90,7 @@ readconfig() {
+ readconfig() {
+@@ -114,7 +89,7 @@ readconfig() {
  	PACKAGER=${_PACKAGER-$PACKAGER}
  	USE_COLORS=${_USE_COLORS-$USE_COLORS}
  
@@ -1055,7 +1056,7 @@ index 22c2c49..3b22265 100644
  	[ -z "$CHOST" ] && CHOST="$CBUILD"
  	[ -z "$CTARGET" ] && CTARGET="$CHOST"
  	[ "$(arch_to_hostspec $CBUILD)" != "unknown" ] && CBUILD="$(arch_to_hostspec $CBUILD)"
-@@ -149,9 +125,9 @@ readconfig() {
+@@ -149,9 +124,9 @@ readconfig() {
  			export HOSTCXXFLAGS="$CXXFLAGS"
  			export HOSTCFLAGS="$CFLAGS"
  			export HOSTLDFLAGS="$LDFLAGS"

@@ -1,0 +1,98 @@
+pkgname=libxml2
+pkgver=2.9.9
+pkgrel=0
+pkgdesc="XML parsing library, version 2"
+url="http://www.xmlsoft.org/"
+arch="all"
+license="MIT"
+depends_dev="zlib"
+checkdepends="perl tar"
+makedepends="$depends_dev python3-dev zlib-dev"
+subpackages="$pkgname-doc $pkgname-dev $pkgname-utils
+	py-$pkgname:_py"
+options="!strip"
+source="http://xmlsoft.org/sources/$pkgname-$pkgver.tar.gz
+	fix-null-pointer-dereference.patch
+	"
+builddir="$srcdir/$pkgname-$pkgver"
+
+# secfixes:
+#   2.9.8-r1:
+#   - CVE-2018-9251
+#   - CVE-2018-14404
+#   - CVE-2018-14567
+#   2.9.4-r4:
+#   - CVE-2017-5969
+#   2.9.4-r2:
+#   - CVE-2016-9318
+#   2.9.4-r1:
+#   - CVE-2016-5131
+
+
+
+prepare() {
+	default_prepare
+
+	# setup.py is generated
+	rm python/setup.py
+
+	# We don't build libxml2 with icu.
+	rm test/icu_parse_test.xml
+
+#	cp -ra "$builddir" "$builddir"-python2
+}
+
+libxml2_configure() {
+	./configure \
+		--build=$CBUILD \
+		--host=$CHOST \
+		--prefix=/usr \
+		--sysconfdir=/etc \
+		--mandir=/usr/share/man \
+		--infodir=/usr/share/info \
+		"$@"
+}
+
+build() {
+	cd "$builddir"
+	libxml2_configure \
+		--with-python=/usr/bin/python3
+	make
+}
+
+package() {
+	cd "$builddir"
+
+	make -j1 DESTDIR="$pkgdir" install
+
+	# We don't need static lib for python bindings.
+	rm "$pkgdir"/usr/lib/python*/site-packages/*.a
+}
+
+dev() {
+	default_dev
+	mv "$pkgdir"/usr/lib/*.sh "$subpkgdir"/usr/lib/
+}
+
+_py() {
+	local python
+	cd "$builddir"
+	case $subpkgname in
+	py-*) python=python3;;
+	esac
+
+	pkgdesc="$pkgname $python bindings"
+	install_if="py-libxml2=$pkgver-r$pkgrel $python"
+	install -d "$subpkgdir"/usr/lib
+	mv "$pkgdir"/usr/lib/$python* "$subpkgdir"/usr/lib/
+}
+
+utils() {
+	pkgdesc="XML utilities"
+	replaces="libxml2"
+	mkdir -p "$subpkgdir"/usr
+	mv "$pkgdir"/usr/bin "$subpkgdir"/usr/
+}
+
+sha512sums="cb7784ba4e72e942614e12e4f83f4ceb275f3d738b30e3b5c1f25edf8e9fa6789e854685974eed95b362049dbf6c8e7357e0327d64c681ed390534ac154e6810  libxml2-2.9.9.tar.gz
+83074e582cdba8bedff40fc653731ad18ca357bde8f1420e2e8a2a38998b951aebcb73ca5d51859be3b4d9bc1a0308836ca2bb612269edbc61b9dd6ebc7fdb2a  fix-null-pointer-dereference.patch"

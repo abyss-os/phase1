@@ -6,17 +6,10 @@ url="."
 arch="all"
 license="GPL-2.0-only"
 options="!fhs !check"
-source="mkmntdirs.c
-	crontab
+source="crontab
 	color_prompt
 
-	aliases.conf
-	blacklist.conf
-	i386.conf
-	kms.conf
-
 	group
-	inittab
 	passwd
 	profile
 	protocols
@@ -30,8 +23,6 @@ prepare() {
 
 build() {
 	cd "$builddir"
-#	${CC:-${CROSS_COMPILE}gcc} $CPPFLAGS $CFLAGS $LDFLAGS \
-#		"$srcdir"/mkmntdirs.c -o "$builddir"/mkmntdirs
 
 	# generate shadow
 	awk -F: '{
@@ -59,7 +50,6 @@ package() {
 		etc/network/if-post-down.d \
 		etc/network/if-pre-up.d \
 		etc/network/if-up.d \
-		etc/opt \
 		etc/periodic/15min \
 		etc/periodic/daily \
 		etc/periodic/hourly \
@@ -70,14 +60,9 @@ package() {
 		home \
 		usr/lib/firmware \
 		usr/lib/mdev \
-		media/cdrom \
-		media/floppy \
-		media/usb \
 		mnt \
 		proc \
-		opt \
 		run \
-		srv \
 		sys \
 		usr/bin \
 		usr/share \
@@ -102,12 +87,6 @@ package() {
 
 	install -m600 "$srcdir"/crontab "$pkgdir"/etc/crontabs/root
 	install -m655 "$srcdir"/color_prompt "$pkgdir"/etc/profile.d/color_prompt.sh
-	install -m644 \
-		"$srcdir"/aliases.conf \
-		"$srcdir"/blacklist.conf \
-		"$srcdir"/i386.conf \
-		"$srcdir"/kms.conf \
-		"$pkgdir"/etc/modprobe.d/
 
 	echo "localhost" > "$pkgdir"/etc/hostname
 	cat > "$pkgdir"/etc/hosts <<-EOF
@@ -131,33 +110,6 @@ package() {
 		# content of this file will override /etc/sysctl.d/*
 	EOF
 	cat > "$pkgdir"/etc/sysctl.d/00-abyss.conf <<-EOF
-		# Prevents SYN DOS attacks. Applies to ipv6 as well, despite name.
-		net.ipv4.tcp_syncookies = 1
-
-		# Prevents ip spoofing.
-		net.ipv4.conf.default.rp_filter = 0
-		net.ipv4.conf.all.rp_filter = 0
-
-		# Only groups within this id range can use ping.
-		net.ipv4.ping_group_range=999 59999
-
-		# Redirects can potentially be used to maliciously alter hosts
-		# routing tables.
-		net.ipv4.conf.all.accept_redirects = 0
-		net.ipv4.conf.all.secure_redirects = 1
-		net.ipv6.conf.all.accept_redirects = 0
-
-		# The source routing feature includes some known vulnerabilities.
-		net.ipv4.conf.all.accept_source_route = 0
-		net.ipv6.conf.all.accept_source_route = 0
-
-		# See RFC 1337
-		net.ipv4.tcp_rfc1337 = 1
-
-		## Enable IPv6 Privacy Extensions (see RFC4941 and RFC3041)
-		net.ipv6.conf.default.use_tempaddr = 2
-		net.ipv6.conf.all.use_tempaddr = 2
-
 		# Restarts computer after 120 seconds after kernel panic
 		kernel.panic = 120
 
@@ -171,7 +123,6 @@ package() {
 	install -m644 \
 		"$srcdir"/group \
 		"$srcdir"/passwd \
-		"$srcdir"/inittab \
 		"$srcdir"/profile \
 		"$srcdir"/protocols \
 		"$srcdir"/services \
@@ -192,16 +143,10 @@ package() {
 	ln -vs bin usr/sbin
 }
 
-sha512sums="199a34716b1f029407b08679fed4fda58384a1ccefbbec9abe1c64f4a3f7ad2a89bc7c02fc19a7f791f7c6bb87f9f0c708cb3f18c027cb7f54f25976eba4b839  mkmntdirs.c
-6e169c0975a1ad1ad871a863e8ee83f053de9ad0b58d94952efa4c28a8c221445d9e9732ad8b52832a50919c2f39aa965a929b3d5b3f9e62f169e2b2e0813d82  crontab
+sha512sums="6e169c0975a1ad1ad871a863e8ee83f053de9ad0b58d94952efa4c28a8c221445d9e9732ad8b52832a50919c2f39aa965a929b3d5b3f9e62f169e2b2e0813d82  crontab
 7fcb5df98b0f19e609cb9444b2e6ca5ee97f5f308eb407436acdd0115781623fd89768a9285e9816e36778e565b6f27055f2a586a58f19d6d880de5446d263c4  color_prompt
-bfe947bdd69e7d93b32c8cb4e2cabe5717cb6c1e1f49a74015ac2cfb13e96d1f12c4be23ae93a1d61aaa3760d33a032fa9bd99f227fb21223a76b5f5908acc65  aliases.conf
-ec8be56952c7965d51dfe635cd60a77e646fb852e12b7b877034d7fe26e53da967499dec7e1146f0bea3b25237e031804b38128471de88bd04ce6d95e5e488e1  blacklist.conf
-49109d434b577563849c43dd8141961ca798dada74d4d3f49003dac1911f522c43438b8241fa254e4faacdd90058f4d39a7d69b1f493f6d57422c1f706547c95  i386.conf
-9dda8c9d1896baf1217aa05ae2936e909300a22a98da9f4c3ba29136852477bf4764321b6a1abb15e93ee58f4a6e77ddfc42cbb12cbbb53cf0f431ace444f72f  kms.conf
 6b5517eddfb5a810ea9db7a6c345c476f7a2e1f2ba8614989fb8c960348696911213daf52a94dd18626e83d1f1c3491eb7320faedf8920e2d38f7265f61218b4  group
-fdab6f8fec2a556ab817d90a73635a927ea04dbc4e0470ed59ee6a62c87393f9534c9b746b09a776d938c25b8af9c9fb1686578e24f8307d1d074921ade1bdc7  inittab
 a175688a249acf623476dde533b01d5cbb626b65a63a2f9c2320ee3751266755ef5ff7e8739271eb662d43461f7ba46ea4e16c6ef7a293d22c0f6da771eee266  passwd
-b0c2adfae99a949b6a2d06c8a9b2296283af07e793961bf18be1256612e6ba5af61e82154f7654c4dbd02b6f4bfb9009c779b863913d0dae52db9a3b9a32635e  profile
+0a96684be8edf42686157ee5d41a327028ed5566ee2c38e282a01e1557b1eac17aed614a844d72ff9a43e4b59f35285beae32529ef6514d4e5dec353c4870cc1  profile
 f1548a2b5a107479446f15905f0f2fbf8762815b2215188d49d905c803786d35de6d98005dc0828fb2486b04aaa356f1216a964befddf1e72cb169656e23b6ac  protocols
 cecfc06b1f455d65b0c54a5651e601298b455771333e39d0109eeffd7ebd8d81b7738738eb647e6d3076230b6f3707782b83662ea3764ec33dc5e0b3453d3965  services"

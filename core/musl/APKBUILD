@@ -6,6 +6,7 @@ url="http://www.musl-libc.org/"
 arch="all"
 license="MIT"
 subpackages="$pkgname-dev libc6-compat:compat:noarch $pkgname-utils"
+makedepends="musl-dev"
 source="http://www.musl-libc.org/releases/musl-$pkgver.tar.gz
 	handle-aux-at_base.patch
 	ldconfig

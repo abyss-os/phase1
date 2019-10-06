@@ -1,0 +1,38 @@
+pkgname=ed
+pkgver=1.15
+pkgrel=0
+pkgdesc="GNU ed is a line-oriented text editor. It is used to create, display, modify and otherwise manipulate text files"
+url="https://www.gnu.org/software/ed/"
+arch="all"
+license="GPL"
+depends=""
+makedepends=""
+subpackages="$pkgname-doc"
+source="https://ftp.gnu.org/gnu/$pkgname/$pkgname-$pkgver.tar.lz"
+
+builddir=$srcdir/$pkgname-$pkgver
+
+build() {
+	cd "$builddir"
+	# bindir needs correspond with busybox location
+	./configure \
+		--build=$CBUILD \
+		--host=$CHOST \
+		--prefix=/usr \
+		--bindir=/usr/bin \
+		--sbindir=/usr/bin \
+		--mandir=/usr/share/man
+	make all
+}
+
+check() {
+	cd "$builddir"
+	make check
+}
+
+package() {
+	cd "$builddir"
+	make DESTDIR="$pkgdir" install
+}
+
+sha512sums="27a16db41e88626b9718b1868f2fc629b609e436aca2450846f87492c61bf60cec3db0c54ff9a421d9bcbf59fe91a8c672aee5772e1b1eec8a365f227c30ecba  ed-1.15.tar.lz"

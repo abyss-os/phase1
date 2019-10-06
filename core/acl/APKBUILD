@@ -38,6 +38,7 @@ build() {
 		--build=$CBUILD \
 		--host=$CHOST \
 		--prefix=/usr \
+		--sbindir=/usr/bin \
 		--libexecdir=/usr/lib \
 		--disable-gettext
 	make
@@ -46,7 +47,6 @@ build() {
 package() {
 	cd "$builddir"
 	make DIST_ROOT="$pkgdir" install install-lib install-dev
-	chown -R root:root "$pkgdir"/*
 }
 
 libacl() {

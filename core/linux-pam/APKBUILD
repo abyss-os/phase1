@@ -67,9 +67,6 @@ package() {
 		esac
 	done
 
-	# delete pointless libtool archives.
-	chgrp shadow "$pkgdir"/sbin/unix_chkpwd \
-		&& chmod g+s "$pkgdir"/sbin/unix_chkpwd
 }
 
 sha512sums="6bc8e2a5b64686f0a23846221c5228c88418ba485b17c53b3a12f91262b5bb73566d6b6a5daa1f63bbae54310aee918b987e44a72ce809b4e7c668f0fadfe08e  Linux-PAM-1.3.1.tar.xz

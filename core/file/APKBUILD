@@ -1,0 +1,38 @@
+pkgname=file
+pkgver=5.37
+pkgrel=0
+pkgdesc="File type identification utility"
+url="https://www.darwinsys.com/file"
+arch="all"
+license="BSD-2-Clause"
+makedepends="autoconf libtool automake"
+subpackages="$pkgname-dev $pkgname-doc libmagic"
+source=$pkgname-$pkgver.tar.gz::https://github.com/file/file/archive/FILE${pkgver/./_}.tar.gz
+builddir="$srcdir/$pkgname-FILE${pkgver/./_}"
+
+build() {
+	SH_LIBTOOL='/usr/share/build-1/libtool' autoreconf -f -i
+	./configure \
+		--build=$CBUILD \
+		--host=$CHOST \
+		--prefix=/usr \
+		--sbindir=/usr/bin \
+		--datadir=/usr/share
+	make
+}
+
+check() {
+	make check
+}
+
+package() {
+	make DESTDIR="$pkgdir" install
+}
+
+libmagic() {
+	pkgdesc="File type identification library"
+	mkdir -p "$subpkgdir"/usr
+	mv "$pkgdir"/usr/lib "$pkgdir"/usr/share "$subpkgdir"/usr
+}
+
+sha512sums="9b6ae3dd910a03d2161c91ebc75ac91eb7dbd279563462b77daf902d9ae9f0a70de12c37a498b20c6357d6594059d01841bfd104592107b65c08d8343fca19d2  file-5.37.tar.gz"

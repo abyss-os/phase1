@@ -1,0 +1,18 @@
+pkgname=paxmark
+pkgver=0.11
+pkgrel=0
+pkgdesc="Manage PaX marking of executables"
+url="https://alpinelinux.org"
+arch="noarch"
+options="!check"
+license="GPL-2.0-or-later"
+depends="attr"
+source="paxmark"
+
+package() {
+	mkdir -p "$pkgdir"/usr/bin
+	install -m755 "$srcdir"/paxmark "$pkgdir"/usr/bin
+	ln -s paxmark "$pkgdir"/usr/bin/paxmark.sh
+}
+
+sha512sums="c43b5a48a8ac14b027114f712820b1fb8b0e209fcfe1a69eb64b4c68289a3bb3f26c3ea40350cbfdaa97329b4a8e1de2582025e5221c3016aff85bb75118e665  paxmark"

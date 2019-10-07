@@ -11,6 +11,7 @@ makedepends="$makedepends_host"
 checkdepends="bash python3 py-elftools"
 source="https://dev.gentoo.org/~slyfox/distfiles/pax-utils-$pkgver.tar.xz"
 subpackages="$pkgname-doc scanelf:_scanelf"
+options="!check"
 
 build() {
 	cd "$builddir"

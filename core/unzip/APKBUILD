@@ -40,7 +40,7 @@ build() {
 	cd "$builddir"
 
 	make -f unix/Makefile \
-		LOCAL_ZIP="${CFLAGS} ${CPPFLAGS}" \
+		LOCAL_ZIP="${CFLAGS} ${CPPFLAGS}" CC=$CC CXX=$CXX \
 		prefix=/usr sbindir=/usr/bin generic
 }
 

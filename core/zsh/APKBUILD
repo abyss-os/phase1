@@ -5,7 +5,7 @@ pkgdesc="Very advanced and programmable command interpreter (shell)"
 url="https://www.zsh.org/"
 arch="all"
 license="custom"
-makedepends="mandoc autoconf ncurses-dev ncurses-static diffutils"
+makedepends="mandoc autoconf ncurses-dev diffutils"
 install="zsh.post-install zsh.post-upgrade zsh.pre-deinstall"
 source="https://download.sourceforge.net/project/zsh/zsh/$pkgver/zsh-$pkgver.tar.xz
 	zprofile"

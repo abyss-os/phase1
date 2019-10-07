@@ -1,0 +1,46 @@
+pkgname=ninja
+pkgver=1.9.0
+pkgrel=0
+pkgdesc="Small build system with a focus on speed"
+url="https://ninja-build.org/"
+arch="all"
+license="Apache-2.0"
+checkdepends="gtest"
+makedepends="python3 re2c"
+source="
+	$pkgname-$pkgver.tar.gz::https://github.com/martine/ninja/archive/v$pkgver.tar.gz
+	fix-musl.patch
+	"
+builddir="$srcdir"/${pkgname}-${pkgver}
+
+_py3_sitelib() {
+    python3 -c 'import sysconfig; print(sysconfig.get_path("platlib"))'
+}
+
+build() {
+	cd "$builddir"
+	python3 ./configure.py --bootstrap
+}
+
+check() {
+	cd "$builddir"
+	return 0
+	./ninja ninja_test
+	./ninja_test --gtest_filter=-SubprocessTest.SetWithLots
+}
+
+package() {
+	cd "$builddir"
+	install -m755 -D ninja "$pkgdir/usr/bin/ninja"
+#	install -m644 -D doc/manual.html \
+#		"$pkgdir/usr/share/doc/ninja/manual.html"
+
+	install -m644 -D misc/bash-completion \
+		"$pkgdir/usr/share/bash-completion/completions/ninja"
+
+	install -m644 -D misc/ninja_syntax.py \
+		"${pkgdir}$(_py3_sitelib)/ninja_syntax.py"
+}
+
+sha512sums="a8b5ad00b60bddbdb8439a6092c91a65d093f9bcd6241f69088eb35bea2847efe673c3107a130dc754c747c7712b839d8f88e88d8389520cf7143668ee053feb  ninja-1.9.0.tar.gz
+09159f24a0446eff7e1d0b306911fd1a1e96257f02a32d6b241c5d60e3350126a7859f0edf0a2f858214c5c5af23f886289ce2e9c77f0e8e2257fab931933de2  fix-musl.patch"

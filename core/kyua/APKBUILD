@@ -16,7 +16,7 @@ builddir="$srcdir/kyua-$pkgver"
 
 build() {
 	cd "$builddir"
-	./configure \
+	CC=$CC CXX=$CXX ./configure \
 		--build=$CBUILD \
 		--host=$CHOST \
 		--prefix=/usr \

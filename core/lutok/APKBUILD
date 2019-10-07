@@ -22,7 +22,7 @@ build() {
 
 	LUA_CFLAGS=$(pkg-config --cflags lua5.2) \
 		LUA_LIBS=$(pkg-config --libs lua5.2) \
-		./configure \
+		CC=$CC CXX=$CXX ./configure \
 			--build=$CBUILD \
 			--host=$CHOST \
 			--prefix=/usr \

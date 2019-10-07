@@ -18,6 +18,7 @@ source="http://ftp.debian.org/debian/pool/main/f/fakeroot/${pkgname}_${pkgver}.o
 	fakeroot-no64.patch
 	fakeroot-stdint.patch
 	fakeroot-no-ldlibrarypath.patch
+	fakeroot-uclibc.patch
 	xstatjunk.patch
 	"
 builddir="$srcdir"/$pkgname-$pkgver

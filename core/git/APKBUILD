@@ -51,7 +51,7 @@ prepare() {
 
 build() {
 	cd "$builddir"
-	make prefix=/usr DESTDIR="$pkgdir" perllibdir=$(_perl_config vendorlib)
+	make CC=$CC CXX=$CXX prefix=/usr DESTDIR="$pkgdir" perllibdir=$(_perl_config vendorlib)
 }
 
 package() {

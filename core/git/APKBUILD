@@ -6,9 +6,8 @@ url="https://www.git-scm.com/"
 arch="all"
 license="GPL-2.0-or-later"
 depends=""
-# we need tcl and tk to be built before git due to git-gui and gitk
 makedepends="zlib-dev openssl-dev curl-dev expat-dev perl-dev python3-dev
-	pcre2-dev asciidoc xmlto perl-error tcl tk"
+	pcre2-dev asciidoc xmlto perl-error"
 options="!check" # Check is currently failing on t3900-i18n-commit.sh ISO-2022-JP.txt
 # note that order matters
 subpackages="$pkgname-doc
@@ -26,8 +25,6 @@ subpackages="$pkgname-doc
 	$pkgname-subtree::noarch
 	$pkgname-subtree-doc:subtree_doc:noarch
 	$pkgname-perl:_git_perl:noarch
-	$pkgname-gui::noarch
-	$pkgname-gitk::noarch
 	$pkgname-diff-highlight:diff_highlight:noarch
 	"
 source="https://www.kernel.org/pub/software/scm/git/git-$pkgver.tar.xz

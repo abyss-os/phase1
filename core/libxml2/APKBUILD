@@ -6,7 +6,7 @@ url="http://www.xmlsoft.org/"
 arch="all"
 license="MIT"
 depends_dev="zlib"
-checkdepends="perl tar"
+checkdepends="perl"
 makedepends="$depends_dev python3-dev zlib-dev"
 subpackages="$pkgname-doc $pkgname-dev $pkgname-utils
 	py-$pkgname:_py"

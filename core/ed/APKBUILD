@@ -15,7 +15,7 @@ builddir=$srcdir/$pkgname-$pkgver
 build() {
 	cd "$builddir"
 	# bindir needs correspond with busybox location
-	./configure \
+	CC=$CC CXX=$CXX ./configure \
 		--build=$CBUILD \
 		--host=$CHOST \
 		--prefix=/usr \

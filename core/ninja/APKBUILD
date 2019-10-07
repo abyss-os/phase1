@@ -19,7 +19,7 @@ _py3_sitelib() {
 
 build() {
 	cd "$builddir"
-	python3 ./configure.py --bootstrap
+	CC=$CC CXX=$CXX python3 ./configure.py --bootstrap
 }
 
 check() {

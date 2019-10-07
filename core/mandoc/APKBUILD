@@ -1,0 +1,56 @@
+pkgname=mandoc
+pkgver=1.14.5
+pkgrel=0
+pkgdesc="mdoc/man compiler"
+url="http://mdocml.bsd.lv/"
+arch="all"
+license="BSD"
+depends=""
+makedepends="zlib-dev"
+checkdepends="perl"
+install="$pkgname.post-deinstall"
+triggers="$pkgname.trigger=/usr/share/man/*"
+subpackages="$pkgname-doc $pkgname-dev man::noarch"
+source="http://mdocml.bsd.lv/snapshots/$pkgname-$pkgver.tar.gz
+	outdated-warn-disable.patch
+	"
+provides="groff mldocml"
+replaces="groff mldocml"
+
+prepare() {
+	default_prepare
+
+	cat >configure.local<<EOF
+PREFIX=/usr
+MANDIR=/usr/share/man
+LIBDIR=/usr/lib
+CFLAGS="$CFLAGS"
+UTF8_LOCALE="en_US.UTF-8"
+MANPATH_DEFAULT="/usr/share/man:/usr/local/man"
+LN="ln -sf"
+EOF
+}
+
+build() {
+	MANPATH_BASE="/usr/share/man" ./configure
+	make
+}
+
+check() {
+	LD_LIBRARY_PATH="$builddir" make regress
+}
+
+package() {
+	make -j1 DESTDIR="$pkgdir" base-install lib-install
+	ln -sv /usr/bin/mandoc $pkgdir/usr/bin/groff
+	ln -sv /usr/bin/mandoc $pkgdir/usr/bin/nroff
+}
+
+man() {
+	pkgdesc="dummy package for upgrade compatibility.  this can safely be removed"
+	depends="mdocml"
+	mkdir -p "$subpkgdir"
+}
+
+sha512sums="848f290847f3095757f25647e6d73eb7044018b145bf6f9dc8b5db164b1421911efdc5b3b9022ec3a2c5af9687a84d5acedee810f2bd2f7caaa9242dadb2cc52  mandoc-1.14.5.tar.gz
+ced05e8b57fb9705c6d8d8570cd6b06ad187511a4c243ac2dbc34064aa164ca49e0c877160134161dcb98ebd5e61a5c23d5741f03ef95903ff56193dd07f36a1  outdated-warn-disable.patch"

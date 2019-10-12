@@ -32,22 +32,23 @@ build() {
 	done
 
 	# note: not autotools
-	LDFLAGS="$LDFLAGS -Wl,-soname,libc.musl-${CARCH}.so.1" \
-	CFLAGS="--target=$CTARGET_ARCH" \
+	LDFLAGS="$LDFLAGS -Wl,-soname,libc.musl-${CARCH}.so.1 -fuse-ld=lld" \
+	CFLAGS="--target=$CTARGET_ARCH -fuse-ld=lld" \
 	CC=clang ./configure \
 		--build=$CBUILD \
 		--host=$CHOST \
 		--target=$CTARGET \
 		--prefix=/usr \
 		--libdir=/usr/lib \
+		--syslibdir=/usr/lib \
 		--bindir=/usr/bin \
 		--sbindir=/usr/bin \
 		--sysconfdir=/etc \
 		--mandir=/usr/share/man \
 		--infodir=/usr/share/info \
 		--localstatedir=/var
-	sed -i -- 's/--noexecstack//g' $srcdir/$pkgname-$pkgver/config.mak
-	make
+#	sed -i -- 's/--noexecstack/-z noexecstack/g' $srcdir/$pkgname-$pkgver/config.mak
+	make -j${JOBS}
 }
 
 package() {
@@ -65,14 +66,14 @@ package() {
 	else
 		make DESTDIR="$pkgdir" install
 
-		# move to /usr/lib
-		mv -v $pkgdir/lib/* $pkgdir/usr/lib/
-		rmdir -v $pkgdir/lib
-
-		ln -sfv /usr/lib/libc.so "$pkgdir"/usr/lib/ld-musl-${CARCH}.so.1
+		# make LDSO the be the real file, and libc the symlink
+		local LDSO=$(make -f Makefile --eval "$(echo -e 'print-ldso:\n\t@echo $$(basename $(LDSO_PATHNAME))')" print-ldso)
+		mv -f "$pkgdir"/usr/lib/libc.so "$pkgdir"/usr/lib/"$LDSO"
+		ln -sf "$LDSO" "$pkgdir"/usr/lib/libc.musl-${CARCH}.so.1
+		ln -sf "$LDSO" "$pkgdir"/usr/lib/libc.so
 
 		mkdir -p "$pkgdir"/usr/bin
-		ln -sv /usr/lib/libc.so $pkgdir/usr/bin/ldd
+		ln -sv /usr/lib/"$LDSO" $pkgdir/usr/bin/ldd
 
 		rm -v $pkgdir/usr/include/libintl.h
 	fi

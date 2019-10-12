@@ -7,7 +7,6 @@ url="https://www.openssh.com/portable.html"
 arch="all"
 license="BSD"
 options="!check suid" # FIXME: tests fails. disable for now
-depends="openssh-client openssh-sftp-server openssh-server"
 makedepends_build="linux-pam-dev"
 makedepends_host="openssl-dev zlib-dev libedit-dev linux-headers"
 makedepends="$makedepends_build $makedepends_host"

@@ -17,7 +17,7 @@ build() {
 	DEBUG=-DNDEBUG \
 	INSTALL_USER=root \
 	INSTALL_GROUP=root \
-	./configure \
+	CC=$CC CXX=$CXX ./configure \
 		--build=$CBUILD \
 		--host=$CHOST \
 		--prefix=/usr \

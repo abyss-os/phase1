@@ -18,7 +18,7 @@ depends="elfutils-libelf libffi libedit ncurses"
 makedepends="cmake clang lld ncurses-dev libedit-dev swig ninja elfutils-libelf elfutils-dev libffi-dev perl python3-dev"
 
 prepare() {
-	patch -p1 -d $srcdir/llvm-project-$_hash -i $srcdir/musl.patch
+#	patch -p1 -d $srcdir/llvm-project-$_hash -i $srcdir/musl.patch
 	mkdir -p $builddir && cd $builddir
 	echo CHOST: $CHOST
 	echo CFLAGS: $CFLAGS
@@ -182,4 +182,4 @@ compilerrt() {
 }
 
 sha512sums="2ad844f2d85d6734178a4ad746975a03ea9cda1454f7ea436f0ef8cc3199edec15130e322b4372b28a3178a8033af72d0a907662706cbd282ef57359235225a5  llvmorg-9.0.0.tar.gz
-db9cc7bd3ecd09fffc64a4e1e33fcd4c9bff20936b8b005d3818c505ec3b509c91cc1aababa82af4c8b00e6d0c9c957dcf9dd195e74be17973de90d2b3ec0d6c  musl.patch"
+00cdc74a1756a8badb1397987c5a2baa2dbe635b351c8f094b4a7839d07a06faf50b7fa8bb4d6a7d708000a885b36ae72e273edff0e1789d666461f143009c28  musl.patch"

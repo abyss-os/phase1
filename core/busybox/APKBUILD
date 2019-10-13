@@ -17,8 +17,12 @@ source="https://busybox.net/downloads/$pkgname-$pkgver.tar.bz2
 
 builddir="$srcdir"/$pkgname-$pkgver
 
-build() {
+prepare() {
+	default_prepare
 	cp -v $srcdir/busyboxconfig .config
+}
+
+build() {
 	make
 }
 
@@ -28,5 +32,5 @@ package() {
 }
 
 sha512sums="cd58f0b2b6e3bb1b771fcf3d15f420518fb9b10086a45cfb1d7f136ac035be89eec28f9350e42b3fc38454d8bef9190eae0376497487c73785e8fde44c793730  busybox-1.31.0.tar.bz2
-b7f1c5eb74248add4dff62a44f87bb62f3b3c62b0047a1f15f2ba959361e855bcea24fc444ec49e9a34449d9f2bae9ad829fa9030f246480d76b2c6d541dcf01  busyboxconfig
+f77199a166fedae29134dc45930c8a7cd1bae7c8dd45d7acda031c807bc6d81fa7177b44fef4531a306fcbb6aca83f6b99940aa62658404869d24e978b3295bf  busyboxconfig
 91834325fd9b516606a48d0c4fb65bdff6f47ade33440e57523d83577b9b44356bd84937b1606068fe144e5ce9d8c2d1ea240fffee18cf6e3b11054c193ba34f  clang.patch"

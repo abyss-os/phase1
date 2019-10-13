@@ -128,7 +128,7 @@ package() {
 		"$srcdir"/services \
 		"$pkgdir"/etc/
 
-	install -m640 -g shadow "$builddir"/shadow \
+	install -m744 "$builddir"/shadow \
 		"$pkgdir"/etc/
 
 	# symlinks

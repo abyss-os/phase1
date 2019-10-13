@@ -7,7 +7,7 @@ url="http://sources.redhat.com/bzip2"
 arch="all"
 license="BSD"
 depends=""
-subpackages="$pkgname-dev $pkgname-doc libbz2"
+subpackages="$pkgname-dev $pkgname-doc"
 source="https://sourceware.org/pub/bzip2/bzip2-$pkgver.tar.gz
 	bzip2-1.0.4-makefile-CFLAGS.patch
 	bzip2-1.0.6-saneso.patch
@@ -42,8 +42,8 @@ prepare() {
 
 build () {
 	cd "$builddir"
-	make -f Makefile-libbz2_so all
-	make all
+	make -f Makefile-libbz2_so CC=$CC CXX=$CXX all
+	make CC=$CC CXX=$CXX all
 }
 
 check() {
@@ -57,12 +57,6 @@ package() {
 	install -D libbz2.so.$pkgver "$pkgdir"/usr/lib/libbz2.so.$pkgver
 	ln -s libbz2.so.$pkgver "$pkgdir"/usr/lib/libbz2.so
 	ln -s libbz2.so.$pkgver "$pkgdir"/usr/lib/libbz2.so.${pkgver%%.*}
-}
-
-libbz2() {
-	pkgdesc="Shared library for bz2"
-	mkdir -p "$subpkgdir"/usr/lib
-	mv "$pkgdir"/usr/lib/*.so.* "$subpkgdir"/usr/lib/
 }
 
 sha512sums="e0e19b493e6b1f7beeb0eeb0be8a6358c24202173f28acb1e902a768835be9e24f2cb966452fbc90fc3e4e692532ce0c7e86d06aef2d52c0d2a9ac16e12ec8c8  bzip2-1.0.7.tar.gz

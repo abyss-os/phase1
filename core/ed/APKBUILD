@@ -8,7 +8,7 @@ license="GPL"
 depends=""
 makedepends=""
 subpackages="$pkgname-doc"
-source="https://ftp.gnu.org/gnu/$pkgname/$pkgname-$pkgver.tar.lz"
+source="http://ftp.gnu.org/gnu/$pkgname/$pkgname-$pkgver.tar.lz"
 
 builddir=$srcdir/$pkgname-$pkgver
 

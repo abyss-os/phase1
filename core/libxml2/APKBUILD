@@ -7,9 +7,8 @@ arch="all"
 license="MIT"
 depends_dev="zlib"
 checkdepends="perl"
-makedepends="$depends_dev python3-dev zlib-dev"
-subpackages="$pkgname-doc $pkgname-dev $pkgname-utils
-	py-$pkgname:_py"
+makedepends="$depends_dev zlib-dev"
+subpackages="$pkgname-doc $pkgname-dev $pkgname-utils"
 options="!strip"
 source="http://xmlsoft.org/sources/$pkgname-$pkgver.tar.gz
 	fix-null-pointer-dereference.patch
@@ -55,8 +54,7 @@ libxml2_configure() {
 
 build() {
 	cd "$builddir"
-	libxml2_configure \
-		--with-python=/usr/bin/python3
+	libxml2_configure
 	make
 }
 
@@ -66,7 +64,7 @@ package() {
 	make -j1 DESTDIR="$pkgdir" install
 
 	# We don't need static lib for python bindings.
-	rm "$pkgdir"/usr/lib/python*/site-packages/*.a
+	rm -fv "$pkgdir"/usr/lib/python*/site-packages/*.a
 }
 
 dev() {

@@ -46,7 +46,7 @@ package() {
 
 	cd "$srcdir"/linux-$_kernver
 	mkdir -p "$pkgdir/usr"
-	make headers_install ARCH="${_carch}" INSTALL_HDR_PATH="$pkgdir/usr" || return 1
+	make headers_install CC=$CC HOSTCC=$CC ARCH="${_carch}" INSTALL_HDR_PATH="$pkgdir/usr" || return 1
 
 	find "$pkgdir/usr" \( -name .install -o -name ..install.cmd \) -exec \
 		rm -f {} \;

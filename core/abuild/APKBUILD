@@ -1,5 +1,5 @@
 pkgname=abuild
-pkgver=3.4.0
+pkgver=4.0.0
 _ver=${pkgver%_git*}
 pkgrel=0
 pkgdesc="Script to build Alpine Packages"
@@ -7,7 +7,7 @@ url="https://git.alpinelinux.org/cgit/abuild/"
 arch="all"
 license="GPL-2.0"
 depends="fakeroot sudo pax-utils openssl apk-tools>=2.0.7-r1 libc-utils
-	attr pkgconf patch bzip2 xz gzip zlib lzip diffutils flex bison"
+	attr pkgconf patch bzip2 xz gzip zlib lzip diffutils flex bison gtar"
 if [ "$CBUILD" = "$CHOST" ]; then
 	depends="$depends curl"
 fi
@@ -19,8 +19,7 @@ subpackages="apkbuild-cpan:cpan:noarch apkbuild-gem-resolver:gems:noarch
              abuild-rootbld:_rootbld:noarch"
 options="suid !check"
 pkggroups="abuild"
-source="https://dev.alpinelinux.org/archive/abuild/abuild-$_ver.tar.xz
-		nope.patch"
+source="https://gitlab.com/abyssos/$pkgname/-/archive/$pkgver/$pkgname-$pkgver.tar.gz"
 
 builddir="$srcdir/$pkgname-$_ver"
 
@@ -67,5 +66,4 @@ _rootbld() {
 	mkdir -p "$subpkgdir"
 }
 
-sha512sums="0ddf1cef2e79628a4de06015ba217432711ee76751ccc487fd3b1af9cae37ed1b8c5afdc0b916322472314ccee8a6d1c17ccb5b55f6eebfb54444199d2281d3e  abuild-3.4.0.tar.xz
-dbec35da035ff55bfdb4494e3472c321286d60682c516766954169afd1b48bd920689ded412c822d7015751a4bd12875d4b932aa7491b318f739e2f44ea75f05  nope.patch"
+sha512sums="c4dfab9ecf7d5a78fbc7014abe49342bfe670fa3a7afdae36c5bc3a7ce58cdeca59f78042d7c68b57fdc0761e46fd6de395b2dd0171a975f909af5bd246966b2  abuild-4.0.0.tar.gz"

@@ -33,10 +33,11 @@ prepare() {
 		*) echo "Unknown arch" ; return 1;;
 	esac
 
+	export CTARGET=${CARCH}-pc-linux-musl
+#	-DCLANG_VENDOR="Abyss OS" \
 	cmake -G Ninja -Wno-dev \
 			-DCMAKE_INSTALL_PREFIX=/usr \
-			-DCMAKE_BUILD_TYPE=Release \
-			-DCLANG_VENDOR="Abyss OS" \
+			-DCMAKE_BUILD_TYPE=MinSizeRel \
 			-DLLVM_VERSION_SUFFIX="" \
 			-DLLVM_APPEND_VC_REV=OFF \
 			-DLLVM_ENABLE_PROJECTS="$_projects" \
@@ -64,12 +65,13 @@ prepare() {
 			-DLLVM_ENABLE_LLD=ON \
 			-DLLVM_INCLUDE_GO_TESTS=OFF \
 			-DLLVM_INCLUDE_TESTS=OFF \
-			-DLLVM_DEFAULT_TARGET_TRIPLE=${CARCH}-abyss-linux-musl \
+			-DLLVM_HOST_TRIPLE=${CARCH}-pc-linux-musl \
+			-DLLVM_DEFAULT_TARGET_TRIPLE=${CARCH}-pc-linux-musl \
 			-DLLVM_ENABLE_LIBXML2=OFF \
 			-DLLVM_ENABLE_ZLIB=OFF \
 			-DLLVM_BUILD_LLVM_DYLIB=ON \
 			-DLLVM_LINK_LLVM_DYLIB=ON \
-			-DLLVM_OPTIMIZED_TABLEGEN=OFF \
+			-DLLVM_OPTIMIZED_TABLEGEN=ON \
 			-DLLVM_INCLUDE_BENCHMARKS=OFF \
 			-DLLVM_INCLUDE_DOCS=OFF \
 			-DCOMPILER_RT_BUILD_LIBFUZZER=OFF \
@@ -88,7 +90,6 @@ prepare() {
 
 build() {
 	cd $builddir
-#	CFLAGS="$CFLAGS -lucontext"
 	ninja -j${JOBS}
 }
 

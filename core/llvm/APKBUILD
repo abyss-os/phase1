@@ -5,7 +5,8 @@ _hash=llvmorg-9.0.0
 pkgrel=3
 pkgdesc="$pkgname"
 source="https://github.com/llvm/llvm-project/archive/$_hash.tar.gz
-	musl.patch"
+	musl.patch
+	1.patch"
 arch="x86_64 aarch64"
 url=.
 license=.
@@ -18,7 +19,7 @@ depends="elfutils-libelf libffi libedit ncurses"
 makedepends="cmake clang lld ncurses-dev libedit-dev swig ninja elfutils-libelf elfutils-dev libffi-dev perl python3-dev"
 
 prepare() {
-#	patch -p1 -d $srcdir/llvm-project-$_hash -i $srcdir/musl.patch
+	patch -p1 -d $srcdir/llvm-project-$_hash -i $srcdir/1.patch
 	mkdir -p $builddir && cd $builddir
 	echo CHOST: $CHOST
 	echo CFLAGS: $CFLAGS
@@ -27,18 +28,19 @@ prepare() {
 	echo LDFLAGS: $LDFLAGS
 	echo Projects: $_projects
 
+#		x86_64) _targets="X86;AArch64;Mips;PowerPC;RISCV";;
 	case $CARCH in
 		aarch64) _targets="AArch64";;
-		x86_64) _targets="X86;AArch64;Mips;PowerPC;RISCV";;
+		x86_64) _targets="X86";;
 		*) echo "Unknown arch" ; return 1;;
 	esac
 
 	export CTARGET=${CARCH}-pc-linux-musl
-#	-DCLANG_VENDOR="Abyss OS" \
 	cmake -G Ninja -Wno-dev \
 			-DCMAKE_INSTALL_PREFIX=/usr \
 			-DCMAKE_BUILD_TYPE=MinSizeRel \
 			-DLLVM_VERSION_SUFFIX="" \
+			-DCLANG_VENDOR="Abyss OS" \
 			-DLLVM_APPEND_VC_REV=OFF \
 			-DLLVM_ENABLE_PROJECTS="$_projects" \
 			-DCLANG_INCLUDE_TESTS=OFF \
@@ -183,4 +185,5 @@ compilerrt() {
 }
 
 sha512sums="2ad844f2d85d6734178a4ad746975a03ea9cda1454f7ea436f0ef8cc3199edec15130e322b4372b28a3178a8033af72d0a907662706cbd282ef57359235225a5  llvmorg-9.0.0.tar.gz
-00cdc74a1756a8badb1397987c5a2baa2dbe635b351c8f094b4a7839d07a06faf50b7fa8bb4d6a7d708000a885b36ae72e273edff0e1789d666461f143009c28  musl.patch"
+00cdc74a1756a8badb1397987c5a2baa2dbe635b351c8f094b4a7839d07a06faf50b7fa8bb4d6a7d708000a885b36ae72e273edff0e1789d666461f143009c28  musl.patch
+bb1c024e55d6b401b82402d811e9d506614b6695b3c0179eccbc6f92fb68a4e022575620aaaea9a472e5cdd738a5b05ccb919810ac985cee2ec7c6e3654b70fc  1.patch"

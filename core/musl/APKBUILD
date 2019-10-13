@@ -10,12 +10,9 @@ makedepends="musl-dev"
 source="http://www.musl-libc.org/releases/musl-$pkgver.tar.gz
 	handle-aux-at_base.patch
 	ldconfig
-	__stack_chk_fail_local.c
 	getconf.c
 	getent.c
 	iconv.c
-	secure_getenv.patch
-	strndupa.patch
 	"
 
 builddir="$srcdir"/musl-$pkgver
@@ -31,10 +28,11 @@ build() {
 		clang $CPPFLAGS $CFLAGS "$srcdir"/$i.c -o $i
 	done
 
+#	CFLAGS="--target=$CTARGET_ARCH" \
+
 	# note: not autotools
-	LDFLAGS="$LDFLAGS -Wl,-soname,libc.musl-${CARCH}.so.1 -fuse-ld=lld" \
-	CFLAGS="--target=$CTARGET_ARCH -fuse-ld=lld" \
-	CC=clang ./configure \
+	LDFLAGS="$LDFLAGS -Wl,-soname,libc.musl-${CARCH}.so.1" \
+	CC=$CC CXX=$CXX ./configure \
 		--build=$CBUILD \
 		--host=$CHOST \
 		--target=$CTARGET \
@@ -118,9 +116,6 @@ compat() {
 sha512sums="a2278de9903852b08352d3e734a39d4616caa602496997ba843e8fea0e1c481761776745faf04536a149d1c4af416b68df681b6fbc9ae2de8794e18c2e853b09  musl-1.1.23.tar.gz
 6a7ff16d95b5d1be77e0a0fbb245491817db192176496a57b22ab037637d97a185ea0b0d19da687da66c2a2f5578e4343d230f399d49fe377d8f008410974238  handle-aux-at_base.patch
 8d3a2d5315fc56fee7da9abb8b89bb38c6046c33d154c10d168fb35bfde6b0cf9f13042a3bceee34daf091bc409d699223735dcf19f382eeee1f6be34154f26f  ldconfig
-062bb49fa54839010acd4af113e20f7263dde1c8a2ca359b5fb2661ef9ed9d84a0f7c3bc10c25dcfa10bb3c5a4874588dff636ac43d5dbb3d748d75400756d0b  __stack_chk_fail_local.c
 0d80f37b34a35e3d14b012257c50862dfeb9d2c81139ea2dfa101d981d093b009b9fa450ba27a708ac59377a48626971dfc58e20a3799084a65777a0c32cbc7d  getconf.c
 378d70e65bcc65bb4e1415354cecfa54b0c1146dfb24474b69e418cdbf7ad730472cd09f6f103e1c99ba6c324c9560bccdf287f5889bbc3ef0bdf0e08da47413  getent.c
-9d42d66fb1facce2b85dad919be5be819ee290bd26ca2db00982b2f8e055a0196290a008711cbe2b18ec9eee8d2270e3b3a4692c5a1b807013baa5c2b70a2bbf  iconv.c
-05a3d8a1ac1fefdf3722c8d7f68d3915013a08cde49b16a7cfbc998eceb506ddf95df2fae9f556cafb03c8a1e8fd5216d935a8efac8a80acac066a89892d65a4  secure_getenv.patch
-fffce654891d354767f2b58cf1fe74911995e270e5d861fbebd20304612280f4f6e0bd07fea4c72a7fa01021f536b4e491cefc97792f710acaacb6b73fc38313  strndupa.patch"
+9d42d66fb1facce2b85dad919be5be819ee290bd26ca2db00982b2f8e055a0196290a008711cbe2b18ec9eee8d2270e3b3a4692c5a1b807013baa5c2b70a2bbf  iconv.c"

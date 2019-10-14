@@ -1,6 +1,6 @@
 export CHARSET=UTF-8
 export LANG=C.UTF-8
-export PATH=/usr/local/sbin:/usr/local/bin:/usr/bin
+export PATH=/usr/bin
 export PAGER=less
 export PS1='\h:\w\$ '
 umask 022

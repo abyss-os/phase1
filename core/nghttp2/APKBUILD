@@ -36,12 +36,10 @@ build() {
 		--infodir=/usr/share/info \
 		--localstatedir=/var \
 		--without-libxml2 \
-		--without-spdylay \
 		--without-neverbleed \
 		--without-jemalloc \
 		--disable-python-bindings \
-		--enable-static \
-		--enable-app
+		--enable-static
 	make
 }
 

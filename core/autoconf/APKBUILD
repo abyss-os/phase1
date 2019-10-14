@@ -1,7 +1,6 @@
-# Maintainer: Natanael Copa <ncopa@alpinelinux.org>
 pkgname=autoconf
 pkgver=2.69
-pkgrel=2
+pkgrel=0
 pkgdesc="A GNU tool for automatically configuring source code"
 arch="noarch"
 license="GPL-2.0-or-later"
@@ -15,14 +14,10 @@ source="ftp://ftp.gnu.org/pub/gnu/$pkgname/$pkgname-$pkgver.tar.gz
 	"
 
 builddir="$srcdir"/$pkgname-$pkgver
-prepare() {
-	update_config_sub
-	default_prepare
-}
 
 build() {
 	cd "$builddir"
-	M4=/usr/bin/m4 ./configure \
+	./configure \
 		--build=$CBUILD \
 		--host=$CHOST \
 		--prefix=/usr \

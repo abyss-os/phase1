@@ -1,0 +1,48 @@
+pkgname=fontconfig
+pkgver=2.13.92
+pkgrel=0
+pkgdesc="Library for configuring and customizing font access"
+url="http://fontconfig.org"
+arch="all"
+license="GPL"
+depends=""
+depends_dev=""
+makedepends="$depends_dev freetype-dev expat-dev python3-dev gperf util-linux-dev"
+triggers="$pkgname.trigger=/usr/share/fonts/*"
+subpackages="$pkgname-doc $pkgname-dev"
+source="http://fontconfig.org/release/${pkgname}-${pkgver}.tar.gz"
+
+builddir="$srcdir/$pkgname-$pkgver"
+
+build() {
+	cd "$builddir"
+	# regenerate hash functions
+	rm -f src/fcobjshash.h
+
+	./configure \
+		--build=$CBUILD \
+		--host=$CHOST \
+		--prefix=/usr \
+		--sbindir=/usr/bin \
+		--sysconfdir=/etc \
+		--localstatedir=/var \
+		--enable-static \
+		--disable-nls \
+		--disable-docs
+	rm -f src/fcobjhash.h
+	make
+}
+
+check() {
+	cd "$builddir"
+	make check
+}
+
+package() {
+	cd "$builddir"
+	make -j1 DESTDIR="$pkgdir" install
+
+	install -m644 -D COPYING "$pkgdir"/usr/share/licenses/"${pkgname}"/COPYING
+}
+
+sha512sums="bc6719c04489c3baba9c59ee722a2fce2707f92f95432ab2c00d3f13353c603ccd1c43f751231a42c22fac7908561f7efe734718142061934e9809cac9b6071d  fontconfig-2.13.92.tar.gz"

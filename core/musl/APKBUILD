@@ -1,5 +1,5 @@
 pkgname=musl
-pkgver=1.1.23
+pkgver=1.1.24
 pkgrel=0
 pkgdesc="the musl c library (libc) implementation"
 url="http://www.musl-libc.org/"
@@ -13,6 +13,7 @@ source="http://www.musl-libc.org/releases/musl-$pkgver.tar.gz
 	getconf.c
 	getent.c
 	iconv.c
+	strndupa.patch
 	"
 
 builddir="$srcdir"/musl-$pkgver
@@ -45,7 +46,6 @@ build() {
 		--mandir=/usr/share/man \
 		--infodir=/usr/share/info \
 		--localstatedir=/var
-#	sed -i -- 's/--noexecstack/-z noexecstack/g' $srcdir/$pkgname-$pkgver/config.mak
 	make -j${JOBS}
 }
 
@@ -67,8 +67,8 @@ package() {
 		# make LDSO the be the real file, and libc the symlink
 		local LDSO=$(make -f Makefile --eval "$(echo -e 'print-ldso:\n\t@echo $$(basename $(LDSO_PATHNAME))')" print-ldso)
 		mv -f "$pkgdir"/usr/lib/libc.so "$pkgdir"/usr/lib/"$LDSO"
-		ln -sf "$LDSO" "$pkgdir"/usr/lib/libc.musl-${CARCH}.so.1
-		ln -sf "$LDSO" "$pkgdir"/usr/lib/libc.so
+		ln -svf "$LDSO" "$pkgdir"/usr/lib/libc.musl-${CARCH}.so.1
+		ln -svf "$LDSO" "$pkgdir"/usr/lib/libc.so
 
 		mkdir -p "$pkgdir"/usr/bin
 		ln -sv /usr/lib/"$LDSO" $pkgdir/usr/bin/ldd
@@ -113,9 +113,10 @@ compat() {
 	done
 }
 
-sha512sums="a2278de9903852b08352d3e734a39d4616caa602496997ba843e8fea0e1c481761776745faf04536a149d1c4af416b68df681b6fbc9ae2de8794e18c2e853b09  musl-1.1.23.tar.gz
+sha512sums="8987f1e194ea616f34f4f21fe9def28fb7f81d7060e38619206c6349f79db3bbb76bae8b711f5f9b8ed038799c9aea1a4cbec69e0bc4131e246203e133149e77  musl-1.1.24.tar.gz
 6a7ff16d95b5d1be77e0a0fbb245491817db192176496a57b22ab037637d97a185ea0b0d19da687da66c2a2f5578e4343d230f399d49fe377d8f008410974238  handle-aux-at_base.patch
 8d3a2d5315fc56fee7da9abb8b89bb38c6046c33d154c10d168fb35bfde6b0cf9f13042a3bceee34daf091bc409d699223735dcf19f382eeee1f6be34154f26f  ldconfig
 0d80f37b34a35e3d14b012257c50862dfeb9d2c81139ea2dfa101d981d093b009b9fa450ba27a708ac59377a48626971dfc58e20a3799084a65777a0c32cbc7d  getconf.c
 378d70e65bcc65bb4e1415354cecfa54b0c1146dfb24474b69e418cdbf7ad730472cd09f6f103e1c99ba6c324c9560bccdf287f5889bbc3ef0bdf0e08da47413  getent.c
-9d42d66fb1facce2b85dad919be5be819ee290bd26ca2db00982b2f8e055a0196290a008711cbe2b18ec9eee8d2270e3b3a4692c5a1b807013baa5c2b70a2bbf  iconv.c"
+9d42d66fb1facce2b85dad919be5be819ee290bd26ca2db00982b2f8e055a0196290a008711cbe2b18ec9eee8d2270e3b3a4692c5a1b807013baa5c2b70a2bbf  iconv.c
+fffce654891d354767f2b58cf1fe74911995e270e5d861fbebd20304612280f4f6e0bd07fea4c72a7fa01021f536b4e491cefc97792f710acaacb6b73fc38313  strndupa.patch"

@@ -14,7 +14,7 @@ source="https://downloads.sourceforge.net/$pkgname/$pkgname-$pkgver.tar.gz
 
 build() {
 	cd "$builddir"
-	CFLAGS="-I/usr/include/c++/v1" ./configure \
+	CC=$CC CXX=$GCC CFLAGS="-I/usr/include/c++/v1" ./configure \
 		--build=$CBUILD \
 		--host=$CHOST \
 		--target=$CTARGET \

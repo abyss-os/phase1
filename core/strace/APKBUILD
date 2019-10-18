@@ -8,7 +8,7 @@ arch="all"
 options="!check"
 license="BSD-3-Clause"
 depends=""
-makedepends="linux-headers autoconf automake gawk"
+makedepends="linux-dev autoconf automake gawk"
 subpackages="$pkgname-doc"
 source="https://github.com/strace/strace/releases/download/v$pkgver/$pkgname-$pkgver.tar.xz
 	disable-fortify.patch

@@ -1,42 +1,44 @@
 pkgname=fakeroot
-pkgver=0.18
+pkgver=1.24
 pkgrel=0
 pkgdesc="Gives a fake root environment, useful for building packages as a non-privileged user"
 arch="all"
 license="GPL-3.0-or-later"
 url="https://packages.debian.org/fakeroot"
-depends=acl
-options="!checkroot"
+depends="libcap acl attr"
+options="!checkroot !check"
 checkdepends="bash"
-depends="libacl libattr"
-makedepends_build="libtool autoconf automake po4a acl-dev attr-dev"
-makedepends_host="libcap-dev acl-dev linux-headers attr-dev"
+makedepends_build="libtool autoconf automake po4a"
+makedepends_host="libcap-dev acl-dev attr-dev linux-dev"
 makedepends="$makedepends_build $makedepends_host"
 subpackages="$pkgname-doc"
-source="https://downloads.sourceforge.net/project/fakerootng/fakeroot-ng/fakeroot-ng-0.18.tar.gz"
-builddir="$srcdir"/$pkgname-ng-$pkgver
+source="http://ftp.debian.org/debian/pool/main/f/fakeroot/fakeroot_$pkgver.orig.tar.gz
+	fakeroot-no64.patch
+	fakeroot-stdint.patch
+	fakeroot-no-ldlibrarypath.patch
+	xstatjunk.patch
+	fix-shell-in-fakeroot.patch
+	"
+builddir="$srcdir"/$pkgname-$pkgver
 
 check() {
 	cd "$builddir"
-	return 0
 	make check
 }
 
 build() {
 	cd "$builddir"
 
-	if [ "$CLIBC" = "musl" ]; then
-		# musl does not have _STAT_VER, it's really not used for
-		# anything, so define it as zero (just like uclibc does)
-		export CFLAGS="-D_STAT_VER=0 $CFLAGS"
-	fi
-
-	CC=$CC CXX=$CXX ./bootstrap
-	CC=$CC CXX=$CXX ./configure \
+	CC=$CC CXX=$CXX CFLAGS="-D_STAT_VER=0 -lacl -lattr -lcap" CONFIG_SHELL=/bin/sh ./bootstrap
+	CC=$CC CXX=$CXX CFLAGS="-D_STAT_VER=0 -lacl -lattr -lcap" CONFIG_SHELL=/bin/sh ./configure \
+		--build=$CBUILD \
+		--host=$CHOST \
 		--prefix=/usr \
 		--sbindir=/usr/bin
 
 	make
+	cd doc
+	po4a -k 0 --rm-backups --variable "srcdir=../doc/" po4a/po4a.cfg
 }
 
 package() {
@@ -44,4 +46,9 @@ package() {
 	make DESTDIR="$pkgdir" install
 }
 
-sha512sums="8ece6830d229b92537d9c0a2eb42cb9ec4ae6b83453303004dded5eab0707b9ae8eaa2c71aac6ea68226c43cf08db6b0939a9422aab32948f5ecb185ee01d854  fakeroot-ng-0.18.tar.gz"
+sha512sums="b15db7bbfb03264f294fb3b42813e17758b43ef7f121e55a24af9ec30ff3f4ec8eb0392db88133e56f9728b3828f6c1432d1e5d2e881a69d083ad444b9177487  fakeroot_1.24.orig.tar.gz
+7a832e6bed3838c7c488e0e12ba84b8d256e84bbb06d6020247452a991de505fa5c6bd7bcb84dce8753eb242e0fcab863b5461301cd56695f2b003fe8d6ff209  fakeroot-no64.patch
+ed7a58b0d201139545420f9e5429f503c00e00f36dea84473e77ea99b23bb8d421da1a8a8ce98ff90e72e378dff4cb9ea3c1a863a969899a5f50dfac3b9c5fac  fakeroot-stdint.patch
+acfc1e5efce132279adddf9e11c28d65602059d5cd723ad98b67cb9183e1de68445f3bba7ac54ee60265b85f25141fcc9b2156f551aa5c624a92631320f5b743  fakeroot-no-ldlibrarypath.patch
+2d613cecf162faff684cd4df96ec5019bcf05e2e93fc9dd2d6b472bea5842811806c2c6c57c9eb7f96bac997b8202603efe300cfda4d792f6021fdcdf521eddf  xstatjunk.patch
+47593b3d86a66bab832c50a1d967cdc70e42bbd9ef4436f18140067ccefdd6418516e5157102c67e604f3623ed1b9f4fe1423fc5dad4dfe5356fc250c12818a7  fix-shell-in-fakeroot.patch"

@@ -11,7 +11,7 @@ makedepends=""
 subpackages="$pkgname-doc"
 source="https://ftp.gnu.org/gnu/tar/tar-$pkgver.tar.xz
 	ignore-apk-tools-checksums.patch"
-makedepends="linux-headers"
+makedepends="linux-dev"
 
 builddir="$srcdir/tar-$pkgver"
 build() {

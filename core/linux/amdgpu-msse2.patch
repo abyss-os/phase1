@@ -1,0 +1,28 @@
+diff --git a/drivers/gpu/drm/amd/display/dc/calcs/Makefile b/drivers/gpu/drm/amd/display/dc/calcs/Makefile
+index 95f332ee3e7e..dc85a3c088af 100644
+--- a/drivers/gpu/drm/amd/display/dc/calcs/Makefile
++++ b/drivers/gpu/drm/amd/display/dc/calcs/Makefile
+@@ -30,7 +30,7 @@ else ifneq ($(call cc-option, -mstack-alignment=16),)
+ 	cc_stack_align := -mstack-alignment=16
+ endif
+ 
+-calcs_ccflags := -mhard-float -msse $(cc_stack_align)
++calcs_ccflags := -mhard-float -msse -msse2 $(cc_stack_align)
+ 
+ CFLAGS_dcn_calcs.o := $(calcs_ccflags)
+ CFLAGS_dcn_calc_auto.o := $(calcs_ccflags)
+diff --git a/drivers/gpu/drm/amd/display/dc/dml/Makefile b/drivers/gpu/drm/amd/display/dc/dml/Makefile
+index d97ca6528f9d..33c7d7588712 100644
+--- a/drivers/gpu/drm/amd/display/dc/dml/Makefile
++++ b/drivers/gpu/drm/amd/display/dc/dml/Makefile
+@@ -30,7 +30,7 @@ else ifneq ($(call cc-option, -mstack-alignment=16),)
+ 	cc_stack_align := -mstack-alignment=16
+ endif
+ 
+-dml_ccflags := -mhard-float -msse $(cc_stack_align)
++dml_ccflags := -mhard-float -msse -msse2 $(cc_stack_align)
+ 
+ CFLAGS_display_mode_lib.o := $(dml_ccflags)
+ CFLAGS_display_pipe_clocks.o := $(dml_ccflags)
+-- 
+2.20.1.321.g9e740568ce-goog

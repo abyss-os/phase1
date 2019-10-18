@@ -5,7 +5,7 @@ pkgdesc="Cross-platform, open-source make system"
 url="https://www.cmake.org"
 arch="all"
 license="BSD-3-Clause"
-makedepends="bzip2-dev curl-dev expat-dev libarchive-dev linux-headers
+makedepends="bzip2-dev curl-dev expat-dev libarchive-dev linux-dev
 	libuv-dev ncurses-dev rhash-dev xz-dev zlib-dev"
 options="!checkroot !check"
 checkdepends="file musl-utils"

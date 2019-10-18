@@ -1,5 +1,5 @@
 pkgname=icu
-pkgver=64.2
+pkgver=65.1
 
 # convert x.y.z to x_y_z
 _ver=${pkgver//./_}
@@ -9,28 +9,14 @@ pkgdesc="International Components for Unicode library"
 url="http://www.icu-project.org/"
 arch="all"
 license="MIT ICU Unicode-TOU"
-subpackages="$pkgname-static $pkgname-dev $pkgname-doc $pkgname-libs"
+subpackages="$pkgname-dev $pkgname-doc $pkgname-libs"
 depends=
 depends_dev="$pkgname=$pkgver-r$pkgrel"
 checkdepends="diffutils python3"
 makedepends=
-source="http://download.icu-project.org/files/icu4c/${pkgver}/${pkgname}4c-$_ver-src.tgz
-	"
+source="https://github.com/unicode-org/icu/releases/download/release-${pkgver//./-}/${pkgname}4c-$_ver-src.tgz"
 
-# secfixes:
-#   57.1-r1:
-#     - CVE-2016-6293
-#   58.1-r1:
-#     - CVE-2016-7415
-#   58.2-r2:
-#     - CVE-2017-7867
-#     - CVE-2017-7868
 builddir="$srcdir"/icu/source
-
-# Failing tests on ARMv7
-case "$CARCH" in
-	armv7) options="!check";;
-esac
 
 prepare() {
 	cd "$builddir"
@@ -81,15 +67,4 @@ package() {
 		"$pkgdir"/usr/share/licenses/icu/license.html
 }
 
-static() {
-	pkgdesc="$pkgname static libraries"
-	mkdir -p "$subpkgdir"/usr/lib
-	mv "$pkgdir"/usr/lib/*.a "$subpkgdir"/usr/lib/
-}
-
-libs() {
-	default_libs
-	replaces="icu"
-}
-
-sha512sums="5ecb4c230ba45918747a1cf9aef86f555aa07d5b29b1d07ab674e8013f46dfb907a0e9d6945db41155f9dc3012fd94e1152ffc19f61a68b6dfcbabdcb8ae9d78  icu4c-64_2-src.tgz"
+sha512sums="8f1ef33e1f4abc9a8ee870331c59f01b473d6da1251a19ce403f822f3e3871096f0791855d39c8f20c612fc49cda2c62c06864aa32ddab2dbd186d2b21ce9139  icu4c-65_1-src.tgz"

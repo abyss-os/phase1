@@ -6,7 +6,7 @@ url="http://matt.ucc.asn.au/dropbear/dropbear.html"
 arch="all"
 license="MIT"
 options="!check"
-makedepends="zlib-dev linux-headers"
+makedepends="zlib-dev linux-dev"
 subpackages="$pkgname-doc
 	$pkgname-openrc
 	$pkgname-convert:_convert

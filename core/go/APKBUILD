@@ -1,12 +1,11 @@
 pkgname=go
-# go binaries are statically linked, security updates require rebuilds
 pkgver=1.13
 pkgrel=0
 pkgdesc="Go programming language compiler"
 url="https://golang.org/"
 arch="all"
 license="BSD-3-Clause"
-makedepends="bash clang llvm-binutils"
+makedepends="bash clang llvm-binutils go"
 subpackages="$pkgname-doc"
 source="https://golang.org/dl/go${pkgver/_/}.src.tar.gz
 	default-buildmode-pie.patch
@@ -16,20 +15,6 @@ source="https://golang.org/dl/go${pkgver/_/}.src.tar.gz
 # The following tests fail currently, most of them fail due to linking
 # errors likely related to 'default-buildmode-pie.patch' or musl libc.
 _brokentests="runtime debug/gosym cmd/.* cgo.* go_test:os/exec ^test.*"
-
-if [ "$CBUILD" = "$CTARGET" ]; then
-	makedepends="go-bootstrap $makedepends"
-	provides="go-bootstrap=$pkgver-r$pkgrel"
-	subpackages="$subpackages"
-else
-	pkgname="go-bootstrap"
-	makedepends="go $makedepends"
-	# Go expect host linker instead of the cross-compiler
-	export CC_FOR_TARGET="$CC"
-	export CC="${HOSTLD:-clang}"
-	export CXX="${HOSTLD:-clang++}"
-	export LD="${HOSTLD:-ld.lld}"
-fi
 
 case "$CTARGET_ARCH" in
 aarch64)export GOARCH="arm64" ;;

@@ -1,0 +1,125 @@
+pkgname=linux
+pkgver=5.3.7
+pkgrel=0
+pkgdesc="Linux kernel"
+url="http://kernel.org"
+#depends="mkinitfs"
+_depends_dev="perl elfutils-dev bash flex bison"
+makedepends="$_depends_dev gsed bc linux-dev openssl-dev"
+options="!strip"
+_config=${config:-config-vanilla.${CARCH}}
+install=
+source="https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/linux-$pkgver.tar.xz
+	config.aarch64
+	config.x86_64
+	amdgpu-msse2.patch
+	"
+subpackages="$pkgname-dev"
+
+arch="all"
+license="GPL-2.0"
+
+_carch=${CARCH}
+case "$_carch" in
+aarch64*) _carch="arm64" ;;
+arm*) _carch="arm" ;;
+mips*) _carch="mips" ;;
+ppc*) _carch="powerpc" ;;
+s390*) _carch="s390" ;;
+x86*) _carch="x86" ;;
+esac
+
+export HOSTCC="clang"
+export CC="clang"
+HOSTCC="${HOSTCC#${CROSS_COMPILE}}"
+
+prepare() {
+	default_prepare
+	mkdir -p ${srcdir}/build && cd ${srcdir}/build
+	cp -v ${srcdir}/config.${CARCH} ${srcdir}/build/.config
+	make -C ${srcdir}/linux-${pkgver} O=${srcdir}/build \
+		ARCH="$_carch" HOSTCC="$HOSTCC" CC="$CC" AS=clang HOSTAS=clang HOSTLD=ld.lld LD=ld.lld \
+		listnewconfig oldconfig
+		
+}
+
+build() {
+	cd ${srcdir}/build
+	make -C ${srcdir}/linux-${pkgver} O=${srcdir}/build \
+		ARCH="$_carch" HOSTCC="$HOSTCC" CC="$CC" AS=clang HOSTAS=clang HOSTLD=ld.lld LD=ld.lld \
+		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-abyss"
+}
+
+package() {
+	cd ${srcdir}/build
+	mkdir -p ${pkgdir}/boot ${pkgdir}/lib/modules
+
+	case "$CARCH" in
+		arm*)
+			mkdir -p ${pkgdir}/boot/dtb
+			for i in arch/arm/boot/dts/*.dtb; do
+				install -m644 "$i" ${pkgdir}/boot/dtb/
+			done
+			;;
+		*)
+			;;
+	esac
+
+	make ARCH="$_carch" HOSTCC=clang CC=clang AS=clang HOSTAS=clang HOSTLD=ld.lld LD=ld.lld \
+		INSTALL_MOD_PATH="$pkgdir" INSTALL_PATH="$pkgdir/boot" INSTALL_HDR_PATH="$pkgdir/usr" install modules_install headers_install
+}
+
+_dev() {
+	local _flavor=$(echo $subpkgname | sed -E 's/(^linux-|-dev$)//g')
+	local _abi_release=${pkgver}-${pkgrel}-$_flavor
+	# copy the only the parts that we really need for build 3rd party
+	# kernel modules and install those as /usr/src/linux-dev,
+	# simlar to what ubuntu does
+	#
+	# this way you dont need to install the 300-400 kernel sources to
+	# build a tiny kernel module
+	#
+	pkgdesc="Headers and script for third party modules for $_flavor kernel"
+	depends="$_depends_dev"
+	local dir="$subpkgdir"/usr/src/linux-dev-${_abi_release}
+
+	# first we import config, run prepare to set up for building
+	# external modules, and create the scripts
+	mkdir -p "$dir"
+	cp "$srcdir"/config-$_flavor.${CARCH} "$dir"/.config
+	echo "-$pkgrel-$_flavor" > "$dir"/localversion-alpine \
+		|| return 1
+	make -j1 -C "$srcdir"/linux-$_kernver O="$dir" ARCH="$_carch" AS=clang HOSTAS=clang HOSTLD=ld.lld LD=ld.lld HOSTCC="$HOSTCC" CC=clang \
+		silentoldconfig prepare modules_prepare scripts
+
+	# remove the stuff that points to real sources. we want 3rd party
+	# modules to believe this is the soruces
+	rm "$dir"/Makefile "$dir"/source
+
+	# copy the needed stuff from real sources
+	#
+	# this is taken from ubuntu kernel build script
+	# http://kernel.ubuntu.com/git/ubuntu/ubuntu-zesty.git/tree/debian/rules.d/3-binary-indep.mk
+	cd "$srcdir"/linux-$_kernver
+	find .  -path './include/*' -prune \
+		-o -path './scripts/*' -prune -o -type f \
+		\( -name 'Makefile*' -o -name 'Kconfig*' -o -name 'Kbuild*' -o \
+		   -name '*.sh' -o -name '*.pl' -o -name '*.lds' \) \
+		-print | cpio -pdm "$dir" || return 1
+
+	cp -a scripts include "$dir" || return 1
+	find $(find arch -name include -type d -print) -type f \
+		| cpio -pdm "$dir"
+
+	install -Dm644 "$srcdir"/build-$_flavor.$CARCH/Module.symvers \
+		"$dir"/Module.symvers
+
+	mkdir -p "$subpkgdir"/lib/modules/${_abi_release}
+	ln -sf /usr/src/linux-dev-${_abi_release} \
+		"$subpkgdir"/lib/modules/${_abi_release}/build
+}
+
+sha512sums="ed4a7eb2345106e94f93e0bf1731f1d6588f172d01d3a39a38415ec777202a3f31838ab2f63b560b9349c2623a74c78d989c3907d3e29ac705f3cfb6527ebed0  linux-5.3.7.tar.xz
+a1413ba0be9503bc2ba6f699c7eec002c7632ca7336216977cae9636b1d3eb6d1fb4148db20ecb99231c9350bd94197664bc0d53dbb7940a952845ba80a63a3a  config.aarch64
+9c41c83d0ad95419e52023117080d5423317827477f1d57b34fe8a2bf0373a2f9ef511db2d2a7b90f7a6242e55b29825c8f68653d834faf4d9c12897a384f7fe  config.x86_64
+8cb80ceee27ec1515c535db36b86bddf1bc76ab137f83ff6356a289ed57e17b1450e5e9f93d5e99934108cc2bd923ddcf8585e635323cfa248ee36801e639b6b  amdgpu-msse2.patch"

@@ -10,8 +10,7 @@ license="AFL-2.1 OR GPL-2.0-or-later"
 subpackages="$pkgname-dev $pkgname-doc $pkgname-libs $pkgname-openrc"
 triggers="$pkgname.trigger=/etc/dbus-1/system.d"
 depends_dev="util-linux-dev"
-makedepends="$depends_dev expat-dev autoconf automake libtool xmlto
-	libsm-dev"
+makedepends="$depends_dev expat-dev autoconf automake libtool xmlto"
 install="$pkgname.pre-install $pkgname.post-install"
 source="https://dbus.freedesktop.org/releases/dbus/dbus-$pkgver.tar.gz
 	$pkgname.initd

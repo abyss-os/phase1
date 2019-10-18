@@ -13,7 +13,7 @@ arch="all"
 license="GPL-2.0 GPL-2.0-or-later LGPL-2.0-or-later BSD Public-Domain"
 depends="findmnt"
 makedepends_build="autoconf automake libtool"
-makedepends_host="zlib-dev ncurses-dev linux-headers libcap-ng-dev acl-dev attr-dev"
+makedepends_host="zlib-dev ncurses-dev linux-dev libcap-ng-dev acl-dev attr-dev"
 options="suid"
 source="https://www.kernel.org/pub/linux/utils/$pkgname/v${_v}/$pkgname-$pkgver.tar.xz
 	ttydefaults.h

@@ -1,5 +1,5 @@
 pkgname=libgcrypt
-pkgver=1.8.4
+pkgver=1.8.5
 pkgrel=0
 pkgdesc="general purpose crypto library based on the code used in GnuPG"
 url="http://www.gnupg.org"
@@ -7,14 +7,10 @@ arch="all"
 license="LGPL-2.1-or-later"
 depends_dev="libgpg-error-dev"
 makedepends="$depends_dev texinfo"
-subpackages="$pkgname-static $pkgname-dev $pkgname-doc"
+subpackages="$pkgname-dev $pkgname-doc"
 source="https://www.gnupg.org/ftp/gcrypt/libgcrypt/$pkgname-$pkgver.tar.bz2"
 builddir="$srcdir"/$pkgname-$pkgver
 options="!checkroot"
-
-# secfixes:
-#   1.8.3-r0:
-#   - CVE-2018-0495
 
 build () {
 	cd "$builddir"
@@ -48,7 +44,6 @@ check() {
 	# t-secmem fails on ppc64le, see https://dev.gnupg.org/T3375
 	[ "$CARCH" != ppc64le ] || return 0
 	cd "$builddir"
-	return 0
 	make check
 }
 
@@ -58,10 +53,4 @@ package() {
 	rm -f ${pkgdir}/usr/share/info/dir
 }
 
-static() {
-	pkgdesc="$pkgnanme static libraries"
-	mkdir -p "$subpkgdir"/usr/lib
-	mv "$pkgdir"/usr/lib/*.a "$subpkgdir"/usr/lib/
-}
-
-sha512sums="b831fc337eb14806897e224b0d1e78d1f8e9db91dffa818a015a4aa104144e2d971e5a855904907ee2bb9990a9d526de32d6787e1cae98e28a65c3258b2b1ea1  libgcrypt-1.8.4.tar.bz2"
+sha512sums="b55e16e838d1b1208e7673366971ae7c0f9c1c79e042f41c03d14ed74c5e387fa69ea81d5414ffda3d2b4f82ea5467fe13b00115727e257db22808cf351bde89  libgcrypt-1.8.5.tar.bz2"

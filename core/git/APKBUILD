@@ -57,7 +57,7 @@ build() {
 package() {
 	cd "$builddir"
 
-	make prefix=/usr DESTDIR="$pkgdir" INSTALLDIRS=vendor \
+	make CC=$CC CXX=$CXX prefix=/usr DESTDIR="$pkgdir" INSTALLDIRS=vendor \
 		perllibdir=$(_perl_config vendorlib) \
 		install install-man
 

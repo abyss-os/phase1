@@ -9,7 +9,7 @@ pkgdesc="International Components for Unicode library"
 url="http://www.icu-project.org/"
 arch="all"
 license="MIT ICU Unicode-TOU"
-subpackages="$pkgname-dev $pkgname-doc $pkgname-libs"
+subpackages="$pkgname-dev $pkgname-doc"
 depends=
 depends_dev="$pkgname=$pkgver-r$pkgrel"
 checkdepends="diffutils python3"

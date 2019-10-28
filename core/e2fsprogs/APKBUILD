@@ -8,8 +8,9 @@ license="GPL-2.0-or-later AND LGPL-2.0-or-later AND BSD-3-Clause AND MIT"
 depends_dev="util-linux-dev"
 makedepends="$depends_dev linux-dev"
 checkdepends="diffutils perl"
-subpackages="$pkgname-dev $pkgname-doc $pkgname-libs"
+subpackages="$pkgname-dev $pkgname-doc"
 source="https://www.kernel.org/pub/linux/kernel/people/tytso/$pkgname/v$pkgver/$pkgname-$pkgver.tar.xz"
+options="!check"
 
 build() {
 	cd "$builddir"

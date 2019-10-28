@@ -7,7 +7,7 @@ pkggroups="messagebus"
 arch="all"
 options="!check"  # Requires running X11 server.
 license="AFL-2.1 OR GPL-2.0-or-later"
-subpackages="$pkgname-dev $pkgname-doc $pkgname-libs $pkgname-openrc"
+subpackages="$pkgname-dev $pkgname-doc $pkgname-openrc"
 triggers="$pkgname.trigger=/etc/dbus-1/system.d"
 depends_dev="util-linux-dev"
 makedepends="$depends_dev expat-dev autoconf automake libtool xmlto"
@@ -26,6 +26,7 @@ build() {
 		--build=$CBUILD \
 		--host=$CHOST \
 		--prefix=/usr \
+		--sbindir=/usr/bin \
 		--sysconfdir=/etc \
 		--localstatedir=/var \
 		--with-xml=expat \
@@ -49,13 +50,6 @@ package() {
 	make -j1 DESTDIR="$pkgdir" install
 	install -Dm755 "$srcdir"/dbus.initd "$pkgdir"/etc/init.d/dbus
 	rm -rf "$pkgdir"/usr/lib/systemd
-}
-
-libs() {
-	pkgdesc="D-BUS access libraries"
-	replaces="dbus"
-	mkdir -p "$subpkgdir"/usr/lib
-	mv "$pkgdir"/usr/lib/lib*.so.* "$subpkgdir"/usr/lib/
 }
 
 sha512sums="27ae805170e9515a8bb0fba5f29d414edc70e3b6b28b7b65bbea47035b8eafa9ac4820cdc92645be6035f6748f8aa45679e1ffc84ba74a64859a3056d318b9bb  dbus-1.12.16.tar.gz

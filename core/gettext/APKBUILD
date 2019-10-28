@@ -11,7 +11,7 @@ depends=""
 makedepends="perl ncurses-dev libxml2-dev libunistring-dev"
 checkdepends="coreutils"
 source="https://ftp.gnu.org/gnu/$pkgname/$pkgname-$pkgver.tar.xz"
-subpackages="$pkgname-doc $pkgname-dev $pkgname-lang libintl $pkgname-libs"
+subpackages="$pkgname-doc $pkgname-dev"
 
 build() {
 	cd "$builddir"
@@ -41,21 +41,6 @@ check() {
 package() {
 	cd "$builddir"
 	make DESTDIR="$pkgdir" install
-}
-
-libintl() {
-	pkgdesc="GNU gettext runtime library"
-	license="LGPL-2.1+"
-	mkdir -p "$subpkgdir"/usr/lib
-	mv "$pkgdir"/usr/lib/libintl.so.* "$subpkgdir"/usr/lib
-	chmod +x "$subpkgdir"/usr/lib/libintl.so.*
-}
-
-asprintf() {
-	pkgdesc="GNU gettext asprintf library"
-	license="LGPL-2.1+"
-	mkdir -p "$subpkgdir"/usr/lib
-	mv "$pkgdir"/usr/lib/libasprintf.so.* "$subpkgdir"/usr/lib
 }
 
 sha512sums="82ffa5a28068272d0587262f8d9269f9629c601da5d122b6645c9c4cf98bfe4149df01bb58522ccf8fe25b931672e18551d7fb34de1cbf6a0463a87f9f8ee221  gettext-0.20.1.tar.xz"

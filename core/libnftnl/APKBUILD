@@ -7,7 +7,7 @@ arch="all"
 license="GPL-2.0-or-later"
 depends_dev="libmnl-dev"
 makedepends="$depends_dev bash jansson-dev"
-subpackages="$pkgname-dev $pkgname-libs"
+subpackages="$pkgname-dev"
 source="https://netfilter.org/projects/libnftnl/files/$pkgname-$pkgver.tar.bz2"
 builddir="$srcdir/$pkgname-$pkgver"
 

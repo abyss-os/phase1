@@ -6,11 +6,9 @@ arch="all"
 license="GPL-3.0-or-later"
 url="https://packages.debian.org/fakeroot"
 depends="libcap acl attr"
-options="!checkroot !check"
+options="!checkroot"
 checkdepends="bash"
-makedepends_build="libtool autoconf automake po4a"
-makedepends_host="libcap-dev acl-dev attr-dev linux-dev"
-makedepends="$makedepends_build $makedepends_host"
+makedepends="libcap-dev acl-dev attr-dev linux-dev libtool autoconf automake po4a"
 subpackages="$pkgname-doc"
 source="http://ftp.debian.org/debian/pool/main/f/fakeroot/fakeroot_$pkgver.orig.tar.gz
 	fakeroot-hide-dlsym-errors.patch

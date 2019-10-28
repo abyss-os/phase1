@@ -8,7 +8,7 @@ url="https://github.com/lz4/lz4"
 arch="all"
 license="BSD-2-Clause GPL-2.0-only"
 checkdepends="diffutils"
-subpackages="$pkgname-dev $pkgname-doc $pkgname-libs $pkgname-tests:tests"
+subpackages="$pkgname-dev $pkgname-doc"
 source="$pkgname-$pkgver.tar.gz::https://github.com/$pkgname/$pkgname/archive/v$pkgver.tar.gz"
 builddir="$srcdir"/$pkgname-$pkgver
 
@@ -20,13 +20,6 @@ build() {
 check() {
 	cd "$builddir"
 	make check
-}
-
-tests() {
-	cd "$builddir"/tests
-	mkdir -p "$subpkgdir"/usr/share/$pkgname
-	rm -f *.c COPYING Makefile .gitignore
-	cp -rf "$builddir"/tests "$subpkgdir"/usr/share/$pkgname
 }
 
 package() {

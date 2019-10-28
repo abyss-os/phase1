@@ -16,6 +16,8 @@ build () {
 		--build=$CBUILD \
 		--host=$CHOST \
 		--prefix=/usr \
+		--libdir=/usr/lib \
+		--sbindir=/usr/bin \
 		--without-xml2
 	make
 }

@@ -7,7 +7,7 @@ arch="all"
 license="MIT"
 makedepends_build="autoconf automake libtool"
 makedepends_host="libev-dev openssl-dev zlib-dev c-ares-dev"
-subpackages="$pkgname-doc $pkgname-dev $pkgname-libs"
+subpackages="$pkgname-doc $pkgname-dev"
 source="https://github.com/tatsuhiro-t/$pkgname/releases/download/v$pkgver/nghttp2-$pkgver.tar.xz
 remove-mruby-tests.patch"
 builddir="$srcdir"/$pkgname-$pkgver

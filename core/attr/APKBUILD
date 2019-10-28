@@ -7,10 +7,11 @@ url="https://savannah.nongnu.org/projects/attr"
 arch="all"
 license="GPL-2.0-or-later"
 checkdepends="perl"
-subpackages="$pkgname-dev $pkgname-doc lib$pkgname:libs"
+subpackages="$pkgname-dev $pkgname-doc"
 source="https://download.savannah.nongnu.org/releases/attr/attr-$pkgver.tar.gz
 	fix-tests.patch
 	"
+replaces="${pkgname}-libs"
 
 build() {
 	OPTIMIZER="${CFLAGS}" \
@@ -40,16 +41,6 @@ check() {
 
 package() {
 	make DESTDIR="$pkgdir" install
-}
-
-dev() {
-	license="LGPL-2.1-or-later"
-	default_dev
-}
-
-libs() {
-	license="LGPL-2.1-or-later"
-	default_libs
 }
 
 sha512sums="75f870a0e6e19b8975f3fdceee786fbaff3eadaa9ab9af01996ffa8e50fe5b2bba6e4c22c44a6722d11b55feb9e89895d0151d6811c1d2b475ef4ed145f0c923  attr-2.4.48.tar.gz

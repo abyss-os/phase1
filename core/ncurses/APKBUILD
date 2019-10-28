@@ -8,10 +8,10 @@ arch="all"
 options="!check" # "tests" are actual demo programs, not a test suite.
 license="MIT"
 makedepends_build="ncurses"
-subpackages="$pkgname-dev $pkgname-doc $pkgname-libs
-	$pkgname-terminfo-base:base:noarch $pkgname-terminfo:terminfo:noarch"
+subpackages="$pkgname-dev $pkgname-doc"
 source="https://invisible-mirror.net/archives/ncurses/current/ncurses-${_ver}.tgz"
 builddir="$srcdir"/ncurses-$_ver
+replaces="$pkgname-libs"
 
 build() {
 	cd "$builddir"
@@ -19,6 +19,9 @@ build() {
 	./configure \
 		--build=$CBUILD \
 		--host=$CHOST \
+		--sbindir=/usr/bin \
+		--prefix=/usr \
+		--libdir=/usr/lib \
 		--mandir=/usr/share/man \
 		--without-ada \
 		--without-tests \
@@ -63,29 +66,6 @@ dev() {
 	# link curses -> ncurses
 	echo "INPUT(-lncursesw)" > "$subpkgdir"/usr/lib/libcursesw.so
 	ln -s libncurses.so "$subpkgdir"/usr/lib/libcurses.so
-}
-
-terminfo() {
-	pkgdesc="$pkgdesc (other terminfo files)"
-	depends="$pkgname-terminfo-base"
-	rm -rf $subpkgdir
-	mkdir -p $subpkgdir/usr/share
-	mv $pkgdir/usr/share/terminfo $subpkgdir/usr/share
-}
-
-libs() {
-	pkgdesc="Ncurses libraries"
-	depends="$pkgname-terminfo-base"
-	provides="ncurses-widec-libs=$pkgver-r$pkgrel"
-
-	mkdir -p "$subpkgdir"/usr/
-	mv "$pkgdir"/usr/lib "$subpkgdir"/usr/
-}
-
-base() {
-	pkgdesc="Descriptions of common terminals"
-	mkdir -p "$subpkgdir"/etc
-	mv "$pkgdir"/etc/terminfo "$subpkgdir"/etc/
 }
 
 sha512sums="af4851397be501c429b5681e144d83b9cf535567fda81e5bf8f098bd64e3b11c22c3f3cbc81d2ab08f9363a4ef3120d8d5a8db0e6525b5713f47df252ea584bd  ncurses-6.1-20190914.tgz"

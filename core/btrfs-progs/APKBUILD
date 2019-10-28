@@ -8,10 +8,10 @@ license="GPL-2.0-or-later LGPL-3.0-or-later"
 depends=""
 depends_dev="linux-dev"
 makedepends="$depends_dev acl-dev asciidoc attr-dev autoconf automake e2fsprogs-dev
-	libtool lzo-dev py-setuptools python3-dev util-linux-dev xmlto zlib-dev"
+	libtool lzo-dev python3-dev util-linux-dev xmlto zlib-dev"
 subpackages="$pkgname-doc $pkgname-dev
 	$pkgname-bash-completion:bashcomp:noarch
-	py-$pkgname:py $pkgname-libs"
+	py-$pkgname:py"
 source="https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/$pkgname-v$pkgver.tar.xz"
 builddir="$srcdir/$pkgname-v$pkgver"
 

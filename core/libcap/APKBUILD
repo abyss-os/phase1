@@ -11,6 +11,7 @@ makedepends_build="linux-dev perl"
 makedepends_host="$depends_dev attr-dev"
 makedepends="$makedepends_build $makedepends_host"
 checkdepends="bash"
+options="!check"
 source="https://kernel.org/pub/linux/libs/security/linux-privs/libcap2/libcap-$pkgver.tar.xz"
 subpackages="$pkgname-doc $pkgname-dev"
 builddir="$srcdir"/$pkgname-$pkgver

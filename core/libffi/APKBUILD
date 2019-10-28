@@ -1,4 +1,3 @@
-# Maintainer: Natanael Copa <ncopa@alpinelinux.org>
 pkgname=libffi
 pkgver=3.2.1
 pkgrel=0
@@ -7,11 +6,7 @@ url="http://sourceware.org/libffi"
 arch="all"
 license="MIT"
 depends=
-depends_dev="linux-dev"
-makedepends_build="texinfo"
-# on mips* ffitarget.h wants <asm/sgidefs.h>
-makedepends_host="linux-dev"
-install=
+makedepends="linux-dev texinfo"
 subpackages="$pkgname-dev $pkgname-doc"
 source="ftp://sourceware.org/pub/$pkgname/$pkgname-$pkgver.tar.gz
 	gnu-linux-define.patch

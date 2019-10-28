@@ -14,8 +14,12 @@ source="http://www.musl-libc.org/releases/musl-$pkgver.tar.gz
 	getent.c
 	iconv.c
 	strndupa.patch
+	sys-cdefs.h
+	sys-queue.h
+	sys-tree.h
 	"
-
+provides="bsd-compat-headers"
+replaces="libc-dev"
 builddir="$srcdir"/musl-$pkgver
 
 build() {
@@ -75,6 +79,11 @@ package() {
 
 		rm -v $pkgdir/usr/include/libintl.h
 	fi
+
+	install -m644 $srcdir/sys-cdefs.h $pkgdir/usr/include/sys/cdefs.h
+	install -m644 $srcdir/sys-queue.h $pkgdir/usr/include/sys/queue.h
+	install -m644 $srcdir/sys-tree.h $pkgdir/usr/include/sys/tree.h
+
 }
 
 utils() {
@@ -119,4 +128,7 @@ sha512sums="8987f1e194ea616f34f4f21fe9def28fb7f81d7060e38619206c6349f79db3bbb76b
 0d80f37b34a35e3d14b012257c50862dfeb9d2c81139ea2dfa101d981d093b009b9fa450ba27a708ac59377a48626971dfc58e20a3799084a65777a0c32cbc7d  getconf.c
 378d70e65bcc65bb4e1415354cecfa54b0c1146dfb24474b69e418cdbf7ad730472cd09f6f103e1c99ba6c324c9560bccdf287f5889bbc3ef0bdf0e08da47413  getent.c
 9d42d66fb1facce2b85dad919be5be819ee290bd26ca2db00982b2f8e055a0196290a008711cbe2b18ec9eee8d2270e3b3a4692c5a1b807013baa5c2b70a2bbf  iconv.c
-fffce654891d354767f2b58cf1fe74911995e270e5d861fbebd20304612280f4f6e0bd07fea4c72a7fa01021f536b4e491cefc97792f710acaacb6b73fc38313  strndupa.patch"
+fffce654891d354767f2b58cf1fe74911995e270e5d861fbebd20304612280f4f6e0bd07fea4c72a7fa01021f536b4e491cefc97792f710acaacb6b73fc38313  strndupa.patch
+8c3fddd73b696a38e633953715c79c47703739be27ee085fc6c960a57b6746ca05bf6406f7e6126cc1a13204254fd5830afb566624e1f298f4d6b58216013c28  sys-cdefs.h
+2f0d5e6e4dc3350285cf17009265dddcbe12431c111868eea39bc8cb038ab7c1f2acacbb21735c4e9d4a1fd106a8fc0f8611ea33987d4faba37dde5ce6da0750  sys-queue.h
+07cb70f2f0ddb31e23dd913c6f561fc9885667c5803fdf3a559676c99d08834b4104589bacb5d17b4a0b379c68c81a1cf3173832b3da33a7b936fa7b93706844  sys-tree.h"

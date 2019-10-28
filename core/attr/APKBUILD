@@ -14,7 +14,6 @@ source="https://download.savannah.nongnu.org/releases/attr/attr-$pkgver.tar.gz
 replaces="${pkgname}-libs"
 
 build() {
-	OPTIMIZER="${CFLAGS}" \
 	DEBUG=-DNDEBUG \
 	INSTALL_USER=root \
 	INSTALL_GROUP=root \

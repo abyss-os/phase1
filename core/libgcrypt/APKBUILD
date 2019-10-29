@@ -10,7 +10,7 @@ makedepends="$depends_dev texinfo"
 subpackages="$pkgname-dev $pkgname-doc"
 source="https://www.gnupg.org/ftp/gcrypt/libgcrypt/$pkgname-$pkgver.tar.bz2"
 builddir="$srcdir"/$pkgname-$pkgver
-options="!checkroot"
+options="!checkroot !check"
 
 build () {
 	cd "$builddir"

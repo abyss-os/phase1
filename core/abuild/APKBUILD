@@ -1,6 +1,5 @@
 pkgname=abuild
-pkgver=4.0.9
-_ver=${pkgver%_git*}
+pkgver=4.0.0
 pkgrel=0
 pkgdesc="Script to build Alpine Packages"
 url="https://git.alpinelinux.org/cgit/abuild/"
@@ -16,12 +15,12 @@ makedepends_host="openssl-dev zlib-dev"
 makedepends="$makedepends_host $makedepends_build"
 install="$pkgname.pre-install $pkgname.pre-upgrade"
 subpackages="apkbuild-cpan:cpan:noarch apkbuild-gem-resolver:gems:noarch
-             abuild-rootbld:_rootbld:noarch"
+             abuild-rootbld:_rootbld:noarch $pkgname-doc"
 options="suid !check"
 pkggroups="abuild"
-source="https://gitlab.com/abyssos/$pkgname/-/archive/$pkgver/$pkgname-$pkgver.tar.gz"
+source="https://gitlab.com/abyssos/abuild/-/archive/v$pkgver/abuild-v$pkgver.tar.gz"
 
-builddir="$srcdir/$pkgname-$_ver"
+builddir="$srcdir/$pkgname-v$pkgver"
 
 prepare() {
 	default_prepare
@@ -66,4 +65,4 @@ _rootbld() {
 	mkdir -p "$subpkgdir"
 }
 
-sha512sums="ebdc8b3a30eb31606ecadabb1ccc1c7c62e0e5c5684bc1e193ce238d2eaf4697e4d8a76d5a772ea6d46e67bfa8c8f015c5ad8bee119ccf8f7a64a6f51cba6abf  abuild-4.0.9.tar.gz"
+sha512sums="488964ddaadaff4135ed86470f659bc5318a33c847fc3c12d189777191c0078acc4426bc095ff13f155b583c81fe5ec59e92939e01ebcbb14815f23f66e921df  abuild-v4.0.0.tar.gz"

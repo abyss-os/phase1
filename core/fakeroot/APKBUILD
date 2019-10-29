@@ -21,14 +21,13 @@ check() {
 
 build() {
 	cd "$builddir"
-
-	CC=$CC CXX=$CXX CFLAGS="-D_STAT_VER=0 -lacl -lattr -lcap" CONFIG_SHELL=/bin/sh ./bootstrap
-	CC=$CC CXX=$CXX CFLAGS="-D_STAT_VER=0 -lacl -lattr -lcap" CONFIG_SHELL=/bin/sh ./configure \
+	
+	autoreconf -iv
+	CC=$CC CXX=$CXX CFLAGS="-D_STAT_VER=0 -lacl -lcap -lattr" ./configure \
 		--prefix=/usr \
 		--sbindir=/usr/bin \
-		--libdir=/usr/lib/libfakeroot \
-		--disable-static \
-		--with-ipc=sysv
+		--libdir=/usr/lib \
+		ac_cv_header_sys_capability_h=no ac_cv_func_capset=no ac_cv_use_ipc=sysv
 	make
 	cd doc
 	po4a -k 0 --rm-backups --variable "srcdir=../doc/" po4a/po4a.cfg

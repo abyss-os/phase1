@@ -13,7 +13,7 @@ source="https://c-ares.haxx.se/download/$pkgname-$pkgver.tar.gz"
 
 build() {
 	cd "$builddir"
-	./configure \
+	PATH_SEPARATOR=: ./configure \
 		--build=$CBUILD \
 		--host=$CHOST \
 		--prefix=/usr \

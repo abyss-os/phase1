@@ -13,13 +13,12 @@ builddir="$srcdir/$pkgname-$pkgver"
 
 build() {
 	cd "$builddir"
-	export CXXFLAGS="$CXXFLAGS -std=gnu++98"
-	make
+	make CXXFLAGS="$CXXFLAGS -std=gnu++98" CC=$CC CXX=$CXX
 }
 
 check() {
 	cd "$builddir"
-	make tests
+	make CXXFLAGS="$CXXFLAGS -std=gnu++98" CC=$CC CXX=$CXX tests
 }
 
 package() {

@@ -18,7 +18,7 @@ build() {
 	cd "$builddir"
 	gl_cv_func_gettimeofday_clobber=no \
 	gl_cv_func_tzset_clobber=no \
-	./configure \
+	FORCE_UNSAFE_CONFIGURE=1 ./configure \
 		--build=$CBUILD \
 		--host=$CHOST \
 		--prefix=/usr \

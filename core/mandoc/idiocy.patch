@@ -1,0 +1,12 @@
+diff --git a/configure b/configure
+index 5507de7..91f877b 100755
+--- a/configure
++++ b/configure
+@@ -41,7 +41,6 @@ OSENUM=
+ OSNAME=
+ UTF8_LOCALE=
+ 
+-CC=`printf "all:\\n\\t@echo \\\$(CC)\\n" | env -i make -sf -`
+ CFLAGS=
+ LDADD=
+ LDFLAGS=

@@ -70,7 +70,7 @@ build() {
 		-Dcf_by='Abyss' \
 		-Ud_csh \
 		-Dusenm \
-		-Dcc=clang
+		-Dcc=$CC
 	make libperl.so && make || return 1
 }
 

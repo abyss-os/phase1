@@ -29,8 +29,8 @@ builddir="$srcdir/elfutils-$pkgver"
 
 prepare() {
 	cd "$builddir"
-	default_prepare || return 1
-	autoreconf -vif || return 1
+	default_prepare
+	autoreconf -vif
 
 	cat > src/error.h <<-EOF
 	#ifndef _ERROR_H_
@@ -72,7 +72,7 @@ EOF
 }
 build() {
 	cd "$builddir"
-	CC=clang CXX=clang++ ./configure \
+	CC=$CC CXX=$CXX ./configure \
 		--build=$CBUILD \
 		--host=$CHOST \
 		--prefix=/usr \

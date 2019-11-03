@@ -7,7 +7,7 @@ pkgdesc="$pkgname"
 source="https://github.com/llvm/llvm-project/archive/$_hash.tar.gz
 	musl.patch
 	1.patch"
-arch="x86_64 aarch64"
+arch="all"
 url=.
 license=.
 subpackages="$pkgname-dev $pkgname-doc libcxx clang lld llvm-binutils:binutils libunwind compiler-rt:compilerrt libomp"
@@ -23,7 +23,7 @@ prepare() {
 	mkdir -p $builddir && cd $builddir
 	echo CHOST: $CHOST
 	echo CFLAGS: $CFLAGS
-
+	echo CTARGET: $CTARGET
 	echo CXXFLAGS: $CXXFLAGS
 	echo LDFLAGS: $LDFLAGS
 	echo Projects: $_projects
@@ -32,10 +32,10 @@ prepare() {
 	case $CARCH in
 		aarch64) _targets="AArch64";;
 		x86_64) _targets="X86";;
+		mips64) _targets="Mips";;
 		*) echo "Unknown arch" ; return 1;;
 	esac
 
-	export CTARGET=${CARCH}-pc-linux-musl
 	cmake -G Ninja -Wno-dev \
 			-DCMAKE_INSTALL_PREFIX=/usr \
 			-DCMAKE_BUILD_TYPE=MinSizeRel \

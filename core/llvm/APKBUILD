@@ -39,7 +39,13 @@ prepare() {
 	if [ "$CC" = "gcc" ]; then
 		_bootstrap="-DLLVM_ENABLE_LLD=OFF"
 	else
-		_bootstrap="-DLLVM_ENABLE_LLD=ON"
+		_bootstrap="
+			-DLLVM_ENABLE_LLD=ON
+			-DCLANG_DEFAULT_LINKER=lld
+			-DCLANG_DEFAULT_CXX_STDLIB='libc++'
+			-DCLANG_DEFAULT_RTLIB=compiler-rt
+			-DCLANG_DEFAULT_UNWINDLIB=libunwind
+		"
 	fi
 
 	cmake -G Ninja -Wno-dev \
@@ -52,10 +58,6 @@ prepare() {
 			-DCLANG_INCLUDE_TESTS=OFF \
 			-DCLANG_INCLUDE_DOCS=OFF \
 			-DCLANG_BUILD_EXAMPLES=OFF \
-			-DCLANG_DEFAULT_LINKER=lld \
-			-DCLANG_DEFAULT_CXX_STDLIB='libc++' \
-			-DCLANG_DEFAULT_RTLIB=compiler-rt \
-			-DCLANG_DEFAULT_UNWINDLIB=libunwind \
 			-DCOMPILER_RT_USE_BUILTINS_LIBRARY=ON \
 			-DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON \
 			-DCOMPILER_RT_INCLUDE_TESTS=OFF \

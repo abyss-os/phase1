@@ -36,6 +36,12 @@ prepare() {
 		*) echo "Unknown arch" ; return 1;;
 	esac
 
+	if [ "$CC" = "gcc" ]; then
+		_bootstrap="-DLLVM_ENABLE_LLD=OFF"
+	else
+		_bootstrap="-DLLVM_ENABLE_LLD=ON"
+	fi
+
 	cmake -G Ninja -Wno-dev \
 			-DCMAKE_INSTALL_PREFIX=/usr \
 			-DCMAKE_BUILD_TYPE=MinSizeRel \
@@ -66,7 +72,6 @@ prepare() {
 			-DLLVM_INCLUDE_EXAMPLES=OFF \
 			-DLLVM_ENABLE_PIC=ON \
 			-DLLVM_ENABLE_LTO=OFF \
-			-DLLVM_ENABLE_LLD=ON \
 			-DLLVM_INCLUDE_GO_TESTS=OFF \
 			-DLLVM_INCLUDE_TESTS=OFF \
 			-DLLVM_HOST_TRIPLE=$CTARGET \
@@ -91,6 +96,7 @@ prepare() {
 			-DCMAKE_CXX_COMPILER_TARGET=$CTARGET \
 			-DCMAKE_C_FLAGS="$CFLAGS" \
 			-DCMAKE_CXX_FLAGS="$CXXFLAGS" \
+			$_bootstrap \
 			$srcdir/llvm-project-$_hash/llvm
 }
 

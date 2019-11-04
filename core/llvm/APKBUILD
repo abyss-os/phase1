@@ -20,6 +20,7 @@ makedepends="cmake clang lld ncurses-dev libedit-dev swig ninja elfutils-libelf 
 
 prepare() {
 	patch -p1 -d $srcdir/llvm-project-$_hash -i $srcdir/1.patch
+	patch -p1 -d $srcdir/llvm-project-$_hash -i $srcdir/musl.patch
 	mkdir -p $builddir && cd $builddir
 	echo CHOST: $CHOST
 	echo CFLAGS: $CFLAGS

@@ -9,6 +9,7 @@ depends="filesystem"
 subpackages="$pkgname-dev libc6-compat:compat:noarch $pkgname-utils"
 makedepends="musl-dev filesystem"
 source="http://www.musl-libc.org/releases/musl-$pkgver.tar.gz
+	__stack_chk_fail_local.c
 	handle-aux-at_base.patch
 	ldconfig
 	getconf.c

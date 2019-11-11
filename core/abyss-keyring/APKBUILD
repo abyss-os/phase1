@@ -7,7 +7,9 @@ arch="all"
 license="custom"
 #depends="filesystem"
 source="https://mirror.getabyss.com/abyss/jwh-x86_64.rsa.pub
-		https://mirror.getabyss.com/abyss/jwh-aarch64.rsa.pub"
+	https://mirror.getabyss.com/abyss/jwh-aarch64.rsa.pub
+	https://mirror.getabyss.com/abyss/jwh-riscv64.rsa.pub
+	https://mirror.getabyss.com/abyss/jwh-ppc64le.rsa.pub"
 
 builddir="$srcdir/"
 
@@ -15,7 +17,11 @@ package() {
 	mkdir -p $pkgdir/etc/apk/keys
 	cp -v $srcdir/jwh-x86_64.rsa.pub $pkgdir/etc/apk/keys/build-5d1e9522.rsa.pub
 	cp -v $srcdir/jwh-aarch64.rsa.pub $pkgdir/etc/apk/keys/jwh-5d75a035.rsa.pub
+	cp -v $srcdir/jwh-riscv64.rsa.pub $pkgdir/etc/apk/keys/jwh-5dc9abc0.rsa.pub
+	cp -v $srcdir/jwh-ppc64le.rsa.pub $pkgdir/etc/apk/keys/jwh-5dc9ac32.rsa.pub
 }
 
 sha512sums="7dca9af32e86c572cc0a298936f041f9f48962a71f8983bf7b770d3627069ba66bf63c322b4e82ef0ddbd195b50a79f48b36aa5f4cfa23afee6e53365c33ed27  jwh-x86_64.rsa.pub
-ea2e5b4ab87dd284de2eeee3d742d6b13b482cc860b024a26f37415b754445ebccbe3b3d5746c4d531fe6a4d02b8bf8b577bc9fca4f034a37aee00f4119e7f92  jwh-aarch64.rsa.pub"
+ea2e5b4ab87dd284de2eeee3d742d6b13b482cc860b024a26f37415b754445ebccbe3b3d5746c4d531fe6a4d02b8bf8b577bc9fca4f034a37aee00f4119e7f92  jwh-aarch64.rsa.pub
+9466a6061c56a9cf5cad99a9f35791bf91326c10246638886da44398f3fab5c6251ebe58dc589ea1f448b382b9adff599fcfb5760128f4034168875a4e1ef244  jwh-riscv64.rsa.pub
+a9d56d8cec31ea456b8d8f77ef19cb913f151393d1a74dcfa26bc8d64e2d8ad2854616d9c41a4df1c82faec6443fd91b8df75ccc4fcdc7e4a538b3715e932de0  jwh-ppc64le.rsa.pub"

@@ -10,7 +10,7 @@ source="https://github.com/llvm/llvm-project/archive/$_hash.tar.gz
 arch="all"
 url=.
 license=.
-subpackages="$pkgname-dev $pkgname-doc libcxx clang lld llvm-binutils:binutils libunwind compiler-rt:compilerrt libomp"
+subpackages="libcxx clang lld llvm-binutils:binutils libunwind compiler-rt:compilerrt libomp $pkgname-doc $pkgname-dev"
 
 builddir="$srcdir/build"
 _projects="llvm;clang;libcxx;libcxxabi;compiler-rt;libunwind;lld;openmp"
@@ -194,7 +194,7 @@ llgo() {
 compilerrt() {
 	pkgdesc="$pkgname $pkgver"
 	mkdir -p ${subpkgdir}/usr/lib
-	mv -v ${pkgdir}-dev/usr/lib/clang ${subpkgdir}/usr/lib/
+	mv -v ${pkgdir}/usr/lib/clang ${subpkgdir}/usr/lib/
 }
 
 sha512sums="2ad844f2d85d6734178a4ad746975a03ea9cda1454f7ea436f0ef8cc3199edec15130e322b4372b28a3178a8033af72d0a907662706cbd282ef57359235225a5  llvmorg-9.0.0.tar.gz

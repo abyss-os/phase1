@@ -1,7 +1,7 @@
 pkgname=llvm
 pkgver=9.0.0
 #_hash=1931d3cb20a00da732c5210b123656632982fde0
-_hash=llvmorg-9.0.0
+_hash=llvmorg-${pkgver}
 pkgrel=3
 pkgdesc="$pkgname"
 source="https://github.com/llvm/llvm-project/archive/$_hash.tar.gz
@@ -34,6 +34,8 @@ prepare() {
 		aarch64) _targets="AArch64";;
 		x86_64) _targets="X86";;
 		mips64) _targets="Mips";;
+		riscv64) _targets="RISCV";;
+		ppc64le) _targets="PowerPC";;
 		*) echo "Unknown arch" ; return 1;;
 	esac
 
@@ -51,7 +53,7 @@ prepare() {
 
 	cmake -G Ninja -Wno-dev \
 			-DCMAKE_INSTALL_PREFIX=/usr \
-			-DCMAKE_BUILD_TYPE=MinSizeRel \
+			-DCMAKE_BUILD_TYPE=Release \
 			-DLLVM_VERSION_SUFFIX="" \
 			-DCLANG_VENDOR="Abyss OS" \
 			-DLLVM_APPEND_VC_REV=OFF \
@@ -90,6 +92,7 @@ prepare() {
 			-DCOMPILER_RT_BUILD_PROFILE=OFF \
 			-DCOMPILER_RT_BUILD_SANITIZERS=OFF \
 			-DCOMPILER_RT_BUILD_XRAY=OFF \
+			-DCOMPILER_RT_INCLUDE_TESTS=OFF \
 			-DLLVM_TOOL_LLVM_ITANIUM_DEMANGLE_FUZZER_BUILD=OFF \
 			-DLLVM_TOOL_LLVM_MC_ASSEMBLE_FUZZER_BUILD=OFF \
 			-DLLVM_TOOL_LLVM_MICROSOFT_DEMANGLE_FUZZER_BUILD=OFF \

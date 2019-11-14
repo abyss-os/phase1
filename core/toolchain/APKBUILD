@@ -13,4 +13,4 @@ package() {
 	install -m755 $srcdir/toolchain.sh $pkgdir/usr/bin/toolchain
 }
 
-sha512sums="a8eea06d20c23219f3ee03ae9800c1d09491f9f88ff43abb11faaad299085729dd2d814f9fbd105362e0d06b31c12d41392b6f39731b4d26240298b6b706e1cf  toolchain.sh"
+sha512sums="84f242a65f2c0a6caa90cc4879771d1edb94dfa6fa206a600acdbd073111efd1bc3b56d6675cafa8caf60c5ccf25a0b9bd0ec1940046a48de3c3a51422c040a5  toolchain.sh"

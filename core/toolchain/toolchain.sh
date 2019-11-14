@@ -5,7 +5,6 @@ usage() {
 	echo "$0 [show|<compiler> <binutils>] [<target triple>]"
 	echo
 	echo "Possible values: llvm, gnu, none"
-	echo "Experimental: elftoolchain for <binutils>"
 	exit 1
 }
 
@@ -40,7 +39,7 @@ if [ $UID -gt 0 ]; then
 	exit 1
 fi
 
-CTARGET=$(apk --print-arch)-abyss-linux-musl
+CTARGET=$(apk --print-arch)-pc-linux-musl
 
 # some things
 compiler_links="gcc g++ cc c++ cpp"
@@ -59,7 +58,7 @@ case $1 in
 esac
 
 case $2 in
-	llvm|gnu|elftoolchain|none) binutils=${2};;
+	llvm|gnu|none) binutils=${2};;
 	*) usage;;
 esac
 

@@ -9,8 +9,7 @@ depends="boost"
 makedepends="zlib-dev pcre-dev bison boost-dev"
 checkdepends="boost-dev perl-dev python3-dev diffutils"
 subpackages="$pkgname-doc"
-source="https://downloads.sourceforge.net/$pkgname/$pkgname-$pkgver.tar.gz
-	"
+source="${distfilesm}/$pkgname-$pkgver.tar.gz"
 
 build() {
 	cd "$builddir"

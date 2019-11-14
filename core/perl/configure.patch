@@ -1,0 +1,13 @@
+diff --git a/Configure b/Configure
+index 08ffcdd..b432352 100755
+--- a/Configure
++++ b/Configure
+@@ -5500,7 +5500,7 @@ default|recommended)
+ 	# thing. (NWC)
+ 	case "$osname" in
+ 	amigaos) ;; # -fstack-protector builds but doesn't work
+-	*)	case "$gccversion" in
++	nothing)	case "$gccversion" in
+ 		?*)	set stack-protector-strong -fstack-protector-strong
+ 			eval $checkccflag
+ 			case "$dflt" in

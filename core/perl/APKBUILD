@@ -12,6 +12,7 @@ makedepends="bzip2-dev zlib-dev"
 subpackages="$pkgname-doc $pkgname-dev $pkgname-utils::noarch miniperl"
 source="http://www.cpan.org/src/5.0/perl-$pkgver.tar.gz
 	musl-locale.patch
+	configure.patch
 	"
 
 builddir="$srcdir/$pkgname-$pkgver"
@@ -142,4 +143,5 @@ utils() {
 }
 
 sha512sums="b0db58699dfbe1bab10a7b0472cc377ed215668c89d13c7ca693e6b75ab6a6593a9cf137adbd6096063ee8200d83b389e745bb96b7c6bf4cf4588ac587a446ae  perl-5.30.0.tar.gz
-a78b5fb1a2b6f60b401329cfd2d8349d4fdcc19628cde0e9b840b82e1a02e705f7d7413fe206aa13ed714ab93a65b62ac3d85dfd526ca8048621d5d89b22f0ef  musl-locale.patch"
+a78b5fb1a2b6f60b401329cfd2d8349d4fdcc19628cde0e9b840b82e1a02e705f7d7413fe206aa13ed714ab93a65b62ac3d85dfd526ca8048621d5d89b22f0ef  musl-locale.patch
+d512d9713e60bb485be3edab123711eab4ac50a9216ed3c32447c1dda0d21f5ed3f8ccdf2793b5fe06fd8b9ef26eef86eb8910f3d19a75eb192df23e39e41d24  configure.patch"

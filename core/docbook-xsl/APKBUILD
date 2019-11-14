@@ -9,7 +9,7 @@ depends="libxml2 libxslt docbook-xml"
 makedepends=""
 options="!check"
 install="$pkgname.post-install $pkgname.post-upgrade $pkgname.post-deinstall"
-source="https://downloads.sourceforge.net/sourceforge/docbook/$pkgname-$pkgver.tar.bz2
+source="${distfilesm}/$pkgname-$pkgver.tar.bz2
 	765567_non-recursive_string_subst.patch
 	"
 

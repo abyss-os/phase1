@@ -7,7 +7,7 @@ arch="all"
 license="custom"
 makedepends="mandoc autoconf ncurses-dev diffutils"
 install="zsh.post-install zsh.post-upgrade zsh.pre-deinstall"
-source="https://download.sourceforge.net/project/zsh/zsh/$pkgver/zsh-$pkgver.tar.xz
+source="${distfilesm}/$pkgname-$pkgver.tar.xz
 	zprofile"
 subpackages="$pkgname-doc"
 builddir="$srcdir/$pkgname-$pkgver"

@@ -9,7 +9,7 @@ depends=""
 makedepends="cmake nasm"
 replaces="libjpeg"
 subpackages="$pkgname-doc $pkgname-dev $pkgname-utils"
-source="https://downloads.sourceforge.net/libjpeg-turbo/libjpeg-turbo-$pkgver.tar.gz"
+source="${distfilesm}/$pkgname-$pkgver.tar.gz"
 
 builddir="$srcdir"/libjpeg-turbo-$pkgver
 

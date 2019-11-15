@@ -17,6 +17,7 @@ makedepends="$makedepends_host $makedepends_build"
 install="$pkgname.pre-install $pkgname.pre-upgrade"
 subpackages="apkbuild-cpan:cpan:noarch apkbuild-gem-resolver:gems:noarch
              abuild-rootbld:_rootbld:noarch $pkgname-doc"
+# tests in abuild aren't released yet
 options="suid !check"
 pkggroups="abuild"
 source="https://gitlab.com/abyssos/abuild/-/archive/v$pkgver/abuild-v$pkgver.tar.gz"

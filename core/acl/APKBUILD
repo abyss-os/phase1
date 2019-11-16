@@ -5,15 +5,12 @@ pkgdesc="Access control list utilities"
 url="https://savannah.nongnu.org/projects/acl"
 arch="all"
 license="LGPL-2.1-or-later AND GPL-2.0-or-later"
-depends="attr"
-makedepends_build=""
-makedepends_host="attr-dev"
-makedepends="$makedepends_build $makedepends_host"
+depends="attr gettext"
+makedepends="attr-dev gettext-dev"
 subpackages="$pkgname-dev $pkgname-doc"
-# depends on order of nftw, and requires test machine to have ACLs enabled on FS
-options="!check"
+checkdepends="perl bash"
+#options="!check"
 source="http://download.savannah.nongnu.org/releases/acl/acl-$pkgver.tar.gz"
-replaces="libacl"
 
 build() {
 	cd "$builddir"
@@ -27,6 +24,11 @@ build() {
 		--sbindir=/usr/bin \
 		--libexecdir=/usr/lib
 	make
+}
+
+check() {
+	cd "$builddir"
+	make check
 }
 
 package() {

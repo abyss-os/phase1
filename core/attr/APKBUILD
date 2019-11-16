@@ -2,7 +2,7 @@ pkgname=attr
 pkgver=2.4.48
 pkgrel=0
 pkgdesc="Utilities for managing filesystem extended attributes"
-options="checkroot !check" # attr.test fails with no error message
+options="checkroot"
 url="https://savannah.nongnu.org/projects/attr"
 arch="all"
 license="GPL-2.0-or-later"
@@ -12,6 +12,12 @@ source="https://download.savannah.nongnu.org/releases/attr/attr-$pkgver.tar.gz
 	fix-tests.patch
 	"
 replaces="${pkgname}-libs"
+
+prepare() {
+	default_prepare
+
+	sed -i 's/setfattr: f: Operation not supported/setfattr: f: Not supported/g' ./test/attr.test
+}
 
 build() {
 	DEBUG=-DNDEBUG \

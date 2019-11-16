@@ -1,0 +1,20 @@
+diff --git a/package.c b/package.c
+index baa8a90..3b5a1fe 100644
+--- a/src/package.c
++++ b/src/package.c
+@@ -615,6 +615,15 @@ int apk_sign_ctx_parse_pkginfo_line(void *ctx, apk_blob_t line)
+ 		return 0;
+ 
+ 	if (sctx->data_started == 0 &&
++	    apk_blob_compare(APK_BLOB_STR("b2sum"), l) == 0) {
++		/* printf("using blake2\n"); */
++		sctx->has_data_checksum = 1;
++		sctx->md = EVP_blake2b512();
++		apk_blob_pull_hexdump(
++			&r, APK_BLOB_PTR_LEN(sctx->data_checksum,
++					     EVP_MD_size(sctx->md)));
++	}
++	else if (sctx->data_started == 0 &&
+ 	    apk_blob_compare(APK_BLOB_STR("datahash"), l) == 0) {
+ 		sctx->has_data_checksum = 1;
+ 		sctx->md = EVP_sha256();

@@ -1,0 +1,36 @@
+# Contributor: Carlo Landmeter <clandmeter@gmail.com>
+# Maintainer: Haelwenn (lanodan) Monnier <contact+abyss@hacktivis.me>
+pkgname=zip
+pkgver=3.0
+_pkgver=${pkgver%.*}${pkgver##*.}
+pkgrel=7
+pkgdesc="Creates PKZIP-compatible .zip files"
+url="http://www.info-zip.org/pub/infozip/Zip.html"
+arch="all"
+options="!check"  # No test suite.
+license="Info-ZIP"
+depends="unzip" #unzip is needed for `zip -T`
+makedepends=""
+subpackages="$pkgname-doc"
+source="https://downloads.sourceforge.net/infozip/${pkgname}${_pkgver}.tar.gz
+	10-zip-3.0-build.patch
+	20-zip-3.0-exec-stack.patch
+	30-zip-3.0-pic.patch"
+
+builddir="$srcdir"/${pkgname}${_pkgver}
+
+build() {
+	cd "$builddir"
+	make -f unix/Makefile CC=${CC} LOCAL_ZIP="${CFLAGS} ${CPPFLAGS}" prefix=/usr generic
+}
+
+package() {
+	cd "$builddir"
+	make -f unix/Makefile prefix=${pkgdir}/usr MANDIR=${pkgdir}/usr/share/man/man1 install
+	install -Dm644 LICENSE "$pkgdir"/usr/share/licenses/$pkgname/LICENSE
+}
+
+b2sums="4f78ab75214e4a339ab96c2b0e6e1037596368a5ad7d2839e3568d0eb7491de2ffa7dbed6ae354417cff438005f5b7af7223ed889b616e265df54f05c1f6276e  zip30.tar.gz
+9b43ff286fadbee1c4657d73ebf0f1cf9207d37d02f19510fd36fc043e955f72fca4be004f7cfcc8130c19e86337a1d972f7f8e37aba468c845ca88fa276ec56  10-zip-3.0-build.patch
+d40b3b617a3db0410da8bbd389a7cb1399f539074ad5348a4b2dc30972cc05885f8b9e2eaa6b926fd44898a4b12d9bc6c4f2b622ee4d0af00e973dd6c71d5583  20-zip-3.0-exec-stack.patch
+f4980b19e61855699e99af19e3a803ed085e09b99dcc57c3ad798f64fc5a9e4f95d6cb6ca3d5c5382728381179ce42e017d905dc2a55b364834c5754d4a95709  30-zip-3.0-pic.patch"

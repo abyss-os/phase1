@@ -12,10 +12,8 @@ makedepends_build="perl"
 makedepends_host="linux-dev"
 makedepends="$makedepends_host $makedepends_build"
 subpackages="$pkgname-dev $pkgname-doc libcrypto$_abiver:_libcrypto libssl$_abiver:_libssl"
-source="https://www.openssl.org/source/openssl-$pkgver.tar.gz"
-case "$CARCH" in
-s390x) options="$options !check";; # FIXME: test hangs
-esac
+source="https://www.openssl.org/source/openssl-$pkgver.tar.gz
+	dgst.patch"
 
 builddir="$srcdir/openssl-$pkgver"
 
@@ -98,4 +96,5 @@ _libssl() {
 	mv "$pkgdir"/usr/lib/libssl* "$subpkgdir"/usr/lib/
 }
 
-sha512sums="8e2c5cc11c120efbb7d7850980cb6eaa782d29b4996b3f3378d37613c1679f852d7cc08a90d62e78fcec3439f06bdbee70064579a8c2adaffd91532a97f646ff  openssl-1.1.1c.tar.gz"
+b2sums="bd157b244bedcefb8e646a743732945119b267236789ac69c38856570318aca09299bdaaea3f20294863b633e6fd4dfe124820597185b3b7461cfdf094daadb0  openssl-1.1.1c.tar.gz
+fcf4f2180fff2f3472d642377bbcb9c881511e6efcc3b65311d8a3c6d232ce0c85681d1c102b1ff971e23352ea3179c094f1cb2d1ca538f831ec4142ec298fbb  dgst.patch"

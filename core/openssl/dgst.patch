@@ -1,0 +1,13 @@
+diff --git a/apps/dgst.c b/apps/dgst.c
+index d158a0c..f9c3849 100644
+--- a/apps/dgst.c
++++ b/apps/dgst.c
+@@ -469,7 +469,7 @@ int do_fp(BIO *out, unsigned char *buf, BIO *bp, int sep, int binout,
+     } else if (sep == 2) {
+         for (i = 0; i < (int)len; i++)
+             BIO_printf(out, "%02x", buf[i]);
+-        BIO_printf(out, " *%s\n", file);
++        BIO_printf(out, "  %s\n", file);
+     } else {
+         if (sig_name != NULL) {
+             BIO_puts(out, sig_name);

@@ -1,5 +1,5 @@
 pkgname=busybox
-pkgver=1.31.0
+pkgver=1.31.1
 pkgrel=1
 pkgdesc="Size optimized toolbox of many common UNIX utilities"
 url="https://busybox.net/"
@@ -31,6 +31,6 @@ package() {
 	install -m755 $builddir/busybox "$pkgdir"/usr/bin/busybox
 }
 
-sha512sums="cd58f0b2b6e3bb1b771fcf3d15f420518fb9b10086a45cfb1d7f136ac035be89eec28f9350e42b3fc38454d8bef9190eae0376497487c73785e8fde44c793730  busybox-1.31.0.tar.bz2
-833161f6b60c4161f3d02280da7ec23eeb19786855cf41b54a9795f8f043fabca5a721f9167b81e93051ffa553e47b4e979b495b31cdf10197bff238f3633da4  busyboxconfig
-91834325fd9b516606a48d0c4fb65bdff6f47ade33440e57523d83577b9b44356bd84937b1606068fe144e5ce9d8c2d1ea240fffee18cf6e3b11054c193ba34f  clang.patch"
+b2sums="95c2345bc715eb7a1f08816a40add9b7a6176ef509a84069343ec2caddec58d8d57a07676ca2b03c209734169321433e27ba963b4c8b98dbfda4e409dcc347b4  busybox-1.31.1.tar.bz2
+dff30657994fdce3ba9f36dfd700c9cc64e6a5673739d2300d5c8b3b4307f3a461eb7cead201d2ac0ec7d6371fc23b8d3fd02beb43fe8d977cbc759b453f31ba  busyboxconfig
+c27d0f975988ea8b8ba57ba4c98fa0d73c9c0b333b270e5320fcfff298cb0bc61a82a1e6673de72fcd0d8d24b653bbb204a2e95facdc9a3995720a1d2b465083  clang.patch"

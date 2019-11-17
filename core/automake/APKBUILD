@@ -8,11 +8,43 @@ arch="noarch"
 license="GPL-2.0-or-later MIT Public-Domain"
 depends="perl"
 makedepends="autoconf"
+checkdepends_opt="libtool flex gettext" # compress expect emacs rst2html
+checkdepends="bash $checkdepends_opt"
 subpackages="$pkgname-doc"
 source="https://ftp.gnu.org/gnu/$pkgname/$pkgname-$pkgver.tar.gz"
 
-# many tests have bashisms
-options="!check"
+prepare() {
+	cd "$builddir"
+
+	# Test were `python` is assumed to be Python2
+	sed -i \
+		-e '/^t\/nobase-python.sh \\$/d' \
+		-e '/^t\/py-compile-basic.sh \\$/d' \
+		-e '/^t\/py-compile-basedir.sh \\$/d' \
+		-e '/^t\/py-compile-destdir.sh \\$/d' \
+		-e '/^t\/py-compile-option-terminate.sh \\$/d' \
+		-e '/^t\/python3.sh \\$/d' \
+		-e '/^t\/python10.sh \\$/d' \
+		-e '/^t\/python12.sh \\$/d' \
+		Makefile.in
+
+	# Supposed to detect GNU make but fails
+	sed -i '/^t\/self-check-shell-no-trail-bslash.sh \\/d' Makefile.in
+
+	# strip: error: unknown argument '--verbose'
+	sed -i \
+		-e '/^t\/strip2.sh \\/d' \
+		-e '/^t\/strip3.sh \\/d' \
+		Makefile.in
+
+	# failing weird sub-testsuite
+	sed -i \
+		-e '/^t\/tap-numbers-leading-zero.sh \\$/d' \
+		-e '/^t\/tap-plan-leading-zero.sh \\$/d' \
+		Makefile.in
+
+	default_prepare
+}
 
 build() {
 	cd "$builddir"

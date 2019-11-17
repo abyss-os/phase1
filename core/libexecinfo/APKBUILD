@@ -1,0 +1,39 @@
+pkgname=libexecinfo
+pkgver=1.1
+pkgrel=1
+pkgdesc="A quick-n-dirty BSD licensed clone of the GNU libc backtrace facility."
+options="!check" # No testsuite
+url="https://www.freshports.org/devel/libexecinfo"
+arch="all"
+license="BSD-2-Clause"
+subpackages="${pkgname}-dev"
+source="http://distcache.freebsd.org/local-distfiles/itetcu/$pkgname-$pkgver.tar.bz2
+	10-execinfo.patch
+	20-define-gnu-source.patch
+	30-linux-makefile.patch
+	"
+
+build() {
+	cd "$builddir"
+	make CC=$CC CXX=$CXX
+}
+
+package() {
+	cd "$builddir"
+
+	install -D -m755 "$builddir"/execinfo.h \
+		"$pkgdir"/usr/include/execinfo.h
+	install -D -m755 "$builddir"/stacktraverse.h \
+		"$pkgdir"/usr/include/stacktraverse.h
+	install -D -m755 "$builddir"/libexecinfo.a \
+		"$pkgdir"/usr/lib/libexecinfo.a
+	install -D -m755 "$builddir"/libexecinfo.so.1 \
+		"$pkgdir"/usr/lib/libexecinfo.so.1
+	ln -s /usr/lib/libexecinfo.so.1 \
+		"$pkgdir"/usr/lib/libexecinfo.so
+}
+
+b2sums="c17bf0c0188c951f0cc2b8f902b5aac018cd6f7fa9666de261995605ce6b48c1692320a0f0e03ff0eb9e2b449a03b625ab88eb4a57ba5e87ed33df03838964ac  libexecinfo-1.1.tar.bz2
+2301bee7a4cd976226534f8e330682c6b4432be3807c823f03e0f5e94ea175ad003ea822f25439edc523c8cba06a2fee1c8065b82fc09211db20b2e8ce90853a  10-execinfo.patch
+0cb2f071c802e2b4044a27ca1899d8410d9789fc1cf57d094cba2dd214e2b60dc41944d0d65847f13c7d1afdc58ee878da8e093435a500a7e43b09a2193fd63a  20-define-gnu-source.patch
+2f89bd29edd35e4925a6a49b5b542b6eeb744c005a626c9e073cb5976d544dcecb79eb6316a5d8f2bf88e25d0bc6ed97420f171a32ad13a9d1ae594950ca9f29  30-linux-makefile.patch"

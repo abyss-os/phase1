@@ -1,7 +1,7 @@
 #
 # Automatically generated make config: don't edit
-# Busybox version: 1.31.0
-# Tue Oct 29 17:37:13 2019
+# Busybox version: 1.31.1
+# Sun Nov 17 11:02:14 2019
 #
 CONFIG_HAVE_DOT_CONFIG=y
 
@@ -395,7 +395,7 @@ CONFIG_SHOWKEY=y
 # CONFIG_START_STOP_DAEMON is not set
 # CONFIG_FEATURE_START_STOP_DAEMON_LONG_OPTIONS is not set
 # CONFIG_FEATURE_START_STOP_DAEMON_FANCY is not set
-# CONFIG_WHICH is not set
+CONFIG_WHICH=y
 
 #
 # klibc-utils

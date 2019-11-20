@@ -5,8 +5,11 @@ pkgdesc="Unprivileged sandboxing tool"
 url="https://github.com/projectatomic/bubblewrap"
 arch="all"
 license="LGPL-2.0-or-later"
-options="!check suid" # Testsuite with suid requires sudo binary and some socket operations fail
+# testuite has a weird error: "too few tests run (expected 46, got 6)", skips FUSE
+# and needs an unreadable file (so non-root build)
+options="suid !check"
 makedepends="autoconf automake libcap-dev docbook-xsl"
+checkdepends="bash"
 subpackages="$pkgname-doc $pkgname-bash-completion:bashcomp:noarch"
 source="bubblewrap-$pkgver.tar.gz::https://github.com/projectatomic/bubblewrap/archive/v$pkgver.tar.gz
 	realpath-workaround.patch
@@ -30,6 +33,10 @@ build() {
 		--localstatedir=/var \
 		--with-priv-mode=setuid
 	make
+}
+
+check() {
+	make check
 }
 
 package() {

@@ -1,0 +1,546 @@
+pkgname=gcc
+pkgver=9.2.0
+pkgname="$pkgname$_target"
+pkgrel=2
+pkgdesc="The GNU Compiler Collection"
+url="http://gcc.gnu.org"
+arch="all"
+license="GPL LGPL"
+_gccrel=$pkgver-r$pkgrel
+_gmp=6.1.2
+_mpfr=4.0.2
+_isl=0.22
+_mpc=1.1.0
+#depends="binutils$_target isl"
+makedepends="gcc g++ paxmark bison flex texinfo gawk zip zlib-dev linux-dev !gettext-dev"
+subpackages="$pkgname-doc"
+
+export CC=gnu-gcc CXX=gnu-g++ AS=gnu-as LD=gnu-ld GNATBIND=gnu-gnatbind GNATMAKE=gnu-gnatmake
+
+: ${LANG_CXX:=true}
+: ${LANG_GO:=false}
+: ${LANG_OBJC:=true}
+: ${LANG_FORTRAN:=true}
+: ${LANG_ADA:=true}
+
+LIBGOMP=true
+LIBGCC=true
+LIBATOMIC=true
+LIBITM=true
+
+# libitm has TEXTRELs in ARM build, so disable for now
+case "$CTARGET_ARCH" in
+arm*)		LIBITM=false ;;
+mips*)		LIBITM=false ;;
+esac
+
+# Fortran uses libquadmath if toolchain has __float128
+# currently on x86, x86_64 and ia64
+LIBQUADMATH=$LANG_FORTRAN
+case "$CTARGET_ARCH" in
+x86 | x86_64)	LIBQUADMATH=$LANG_FORTRAN ;;
+*)		LIBQUADMATH=false ;;
+esac
+
+# libatomic is a dependency for openvswitch
+$LIBATOMIC && subpackages="$subpackages libatomic::$CTARGET_ARCH"
+$LIBGCC && subpackages="$subpackages libgcc::$CTARGET_ARCH"
+$LIBQUADMATH && subpackages="$subpackages libquadmath::$CTARGET_ARCH"
+if $LIBGOMP; then
+	depends="$depends libgomp=$_gccrel"
+	subpackages="$subpackages libgomp::$CTARGET_ARCH"
+fi
+
+_languages=c
+if $LANG_CXX; then
+	subpackages="$subpackages libstdc++:libcxx:$CTARGET_ARCH g++$_target:gpp"
+	_languages="$_languages,c++"
+fi
+if $LANG_OBJC; then
+	subpackages="$subpackages libobjc::$CTARGET_ARCH gcc-objc$_target:objc"
+	_languages="$_languages,objc"
+fi
+if $LANG_GO; then
+	subpackages="$subpackages libgo::$CTARGET_ARCH gcc-go$_target:go"
+	_languages="$_languages,go"
+fi
+if $LANG_FORTRAN; then
+	subpackages="$subpackages libgfortran::$CTARGET_ARCH gfortran$_target:gfortran"
+	_languages="$_languages,fortran"
+fi
+if $LANG_ADA; then
+	subpackages="$subpackages libgnat::$CTARGET_ARCH gcc-gnat$_target:gnat"
+	_languages="$_languages,ada"
+	makedepends_build="$makedepends_build gcc-gnat gcc-gnat$_cross"
+fi
+makedepends="$makedepends_build $makedepends_host"
+
+source="https://gcc.gnu.org/pub/gcc/releases/gcc-${_pkgbase:-$pkgver}/gcc-${_pkgbase:-$pkgver}.tar.xz
+	002_all_default-relro.patch
+	003_all_default-fortify-source.patch
+	005_all_default-as-needed.patch
+	gcc-as-needed-gold.patch
+	011_all_default-warn-format-security.patch
+	012_all_default-warn-trampolines.patch
+	013_all_default-ssp-fix.patch
+	020_all_msgfmt-libstdc++-link.patch
+	050_all_libiberty-asprintf.patch
+	051_all_libiberty-pic.patch
+	053_all_libitm-no-fortify-source.patch
+	090_all_pr55930-dependency-tracking.patch
+	0003-gcc-poison-system-directories.patch
+
+	203-libgcc_s.patch
+	205-nopie.patch
+	0002-posix_memalign.patch
+	0008-s390x-muslldso.patch
+	0010-ldbl128-config.patch
+	0012-static-pie.patch
+
+	libgcc-always-build-gcceh.a.patch
+	gcc-4.9-musl-fortify.patch
+	gcc-6.1-musl-libssp.patch
+	gcc-pure64.patch
+
+	fix-cxxflags-passing.patch
+	ada-shared.patch
+	ada-musl.patch
+	libgnarl-musl.patch
+
+	320-libffi-gnulinux.patch
+
+	gcc-pure64-mips.patch
+	0016-invalid_tls_model.patch
+
+	https://ftp.gnu.org/gnu/mpc/mpc-$_mpc.tar.gz
+	https://ftp.gnu.org/gnu/gmp/gmp-$_gmp.tar.xz
+	https://ftp.gnu.org/gnu/mpfr/mpfr-$_mpfr.tar.xz
+	http://isl.gforge.inria.fr/isl-$_isl.tar.gz
+	"
+
+#	gcc-4.8-build-args.patch
+
+# we build out-of-tree
+_gccdir="$srcdir"/gcc-${_pkgbase:-$pkgver}
+_gcclibdir=/usr/lib/gcc/${CTARGET}/$pkgver
+_gcclibexec=/usr/libexec/gcc/${CTARGET}/$pkgver
+
+_builddir="$srcdir/build"
+
+prepare() {
+	cd "$_gccdir"
+
+	_err=
+	for i in $source; do
+		case "$i" in
+		*.patch)
+			msg "Applying $i"
+			patch -p1 -i "$srcdir"/$i || _err="$_err $i"
+			;;
+		esac
+	done
+
+	if [ -n "$_err" ]; then
+		error "The following patches failed:"
+		for i in $_err; do
+			echo "  $i"
+		done
+		return 1
+	fi
+
+	echo ${pkgver} > gcc/BASE-VER
+
+	msg "Linking sources..."
+	for i in gmp mpfr mpc; do
+		rm -f $srcdir/$i
+		ln -sfv $srcdir/$i-$(eval echo "\$_$i") $srcdir/gcc-$pkgver/$i
+	done
+}
+
+build() {
+	local _arch_configure=
+	local _libc_configure=
+	local _cross_configure=
+	local _bootstrap_configure=
+	local _symvers=
+
+	cd "$_gccdir"
+
+	case "$CTARGET" in
+	aarch64-*-*-*)		_arch_configure="--with-arch=armv8-a --with-abi=lp64";;
+	armv5-*-*-*eabi)	_arch_configure="--with-arch=armv5te --with-tune=arm926ej-s --with-float=soft --with-abi=aapcs-linux";;
+	armv6-*-*-*eabihf)	_arch_configure="--with-arch=armv6zk --with-tune=arm1176jzf-s --with-fpu=vfp --with-float=hard --with-abi=aapcs-linux";;
+	armv7-*-*-*eabihf)	_arch_configure="--with-arch=armv7-a --with-tune=generic-armv7-a --with-fpu=vfpv3-d16 --with-float=hard --with-abi=aapcs-linux --with-mode=thumb";;
+	mips-*-*-*)		_arch_configure="--with-arch=mips32 --with-mips-plt --with-float=soft --with-abi=32";;
+	mips64-*-*-*)		_arch_configure="--with-arch=mips3 --with-tune=mips64 --with-mips-plt --with-float=soft --with-abi=64";;
+	mips64el-*-*-*)		_arch_configure="--with-arch=mips3 --with-tune=mips64 --with-mips-plt --with-float=soft --with-abi=64";;
+	mipsel-*-*-*)		_arch_configure="--with-arch=mips32 --with-mips-plt --with-float=soft --with-abi=32";;
+	powerpc-*-*-*)		_arch_configure="--enable-secureplt --enable-decimal-float=no";;
+	powerpc64*-*-*-*)	_arch_configure="--with-abi=elfv2 --enable-secureplt --enable-decimal-float=no --enable-targets=powerpcle-linux";;
+	i486-*-*-*)		_arch_configure="--with-arch=i486 --with-tune=generic --enable-cld";;
+	i586-*-*-*)		_arch_configure="--with-arch=i586 --with-tune=generic --enable-cld";;
+	s390x-*-*-*)		_arch_configure="--with-arch=z196 --with-tune=zEC12 --with-zarch --with-long-double-128 --enable-decimal-float";;
+	esac
+
+	case "$CTARGET_ARCH" in
+	mips*)	_hash_style_configure="--with-linker-hash-style=sysv" ;;
+	*)	_hash_style_configure="--with-linker-hash-style=gnu" ;;
+	esac
+
+	case "$CTARGET_LIBC" in
+	musl)
+		# musl does not support mudflap, or libsanitizer
+		# libmpx uses struct _libc_fpstate not present in musl
+		_libc_configure="--disable-libmpx --disable-libmudflap --disable-libsanitizer"
+		_symvers="--disable-symvers"
+		export libat_cv_have_ifunc=no
+		;;
+	esac
+
+	[ "$CBUILD" != "$CHOST"   ] && _cross_configure="--disable-bootstrap"
+	[ "$CHOST"  != "$CTARGET" ] && _cross_configure="--disable-bootstrap --with-sysroot=$CBUILDROOT"
+
+	case "$BOOTSTRAP" in
+	nolibc)	_bootstrap_configure="--with-newlib --disable-shared --enable-threads=no" ;;
+	*)	_bootstrap_configure="--enable-shared --enable-threads --enable-tls" ;;
+	esac
+
+	$LIBGOMP	|| _bootstrap_configure="$_bootstrap_configure --disable-libgomp"
+	$LIBATOMIC	|| _bootstrap_configure="$_bootstrap_configure --disable-libatomic"
+	$LIBITM		|| _bootstrap_configure="$_bootstrap_configure --disable-libitm"
+	$LIBQUADMATH	|| _arch_configure="$_arch_configure --disable-libquadmath"
+
+	msg "Building the following:"
+	echo ""
+	echo "  CBUILD=$CBUILD"
+	echo "  CHOST=$CHOST"
+	echo "  CTARGET=$CTARGET"
+	echo "  CTARGET_ARCH=$CTARGET_ARCH"
+	echo "  CTARGET_LIBC=$CTARGET_LIBC"
+	echo "  languages=$_languages"
+	echo "  arch_configure=$_arch_configure"
+	echo "  libc_configure=$_libc_configure"
+	echo "  cross_configure=$_cross_configure"
+	echo "  bootstrap_configure=$_bootstrap_configure"
+	echo "	hash_style_configure=$_hash_style_configure"
+	echo ""
+
+#		--enable-default-ssp \
+#		--enable-checking=release \
+
+	mkdir -p "$_builddir"
+	cd "$_builddir"
+ 	env CC=$CC CXX=$CXX CC_FOR_TARGET=$CC CXX_FOR_TARGET=$CXX \
+		"$_gccdir"/configure CC=$CC CXX=$CXX --prefix=/usr \
+		--mandir=/usr/share/man \
+		--infodir=/usr/share/info \
+		--program-prefix=gnu- \
+		--build=${CBUILD} \
+		--host=${CHOST} \
+		--target=${CTARGET} \
+		--with-pkgversion="Abyss OS" \
+		--disable-fixed-point \
+		--disable-libstdcxx-pch \
+		--disable-multilib \
+		--disable-nls \
+		--disable-werror \
+		$_symvers \
+		--enable-__cxa_atexit \
+		--enable-default-pie \
+		--enable-cloog-backend \
+		--enable-languages=$_languages \
+		$_arch_configure \
+		$_libc_configure \
+		$_cross_configure \
+		$_bootstrap_configure \
+		--with-system-zlib \
+		$_hash_style_configure
+	make
+}
+
+package() {
+	cd "$_builddir"
+	make -j1 DESTDIR="${pkgdir}" install
+
+	ln -s gcc "$pkgdir"/usr/bin/cc
+
+	# we dont support gcj -static
+	# and saving 35MB is not bad.
+	find "$pkgdir" -name libgtkpeer.a \
+		-o -name libgjsmalsa.a \
+		-o -name libgij.a \
+		| xargs rm -f
+
+	# strip debug info from some static libs
+	strip -g `find "$pkgdir" \( -name libgfortran.a -o -name libobjc.a -o -name libgomp.a \
+		-o -name libmudflap.a -o -name libmudflapth.a \
+		-o -name libgcc.a -o -name libgcov.a -o -name libquadmath.a \
+		-o -name libitm.a -o -name libgo.a -o -name libcaf\*.a \
+		-o -name libatomic.a -o -name libasan.a -o -name libtsan.a \) \
+		-a -type f`
+
+	if $LIBGOMP; then
+		mv "$pkgdir"/usr/lib/libgomp.spec "$pkgdir"/$_gcclibdir
+	fi
+	if $LIBITM; then
+		mv "$pkgdir"/usr/lib/libitm.spec "$pkgdir"/$_gcclibdir
+	fi
+
+	# remove ffi
+	rm -f "$pkgdir"/usr/lib/libffi* "$pkgdir"/usr/share/man/man3/ffi*
+	find "$pkgdir" -name 'ffi*.h' | xargs rm -f
+
+	local gdblib=${_target:+$CTARGET/}lib
+	if [ -d "$pkgdir"/usr/$gdblib/ ]; then
+		for i in $(find "$pkgdir"/usr/$gdblib/ -type f -maxdepth 1 -name "*-gdb.py"); do
+			mkdir -p "$pkgdir"/usr/share/gdb/python/auto-load/usr/$gdblib
+			mv "$i" "$pkgdir"/usr/share/gdb/python/auto-load/usr/$gdblib/
+		done
+	fi
+
+	paxmark -pmrs "$pkgdir"/$_gcclibexec/cc1
+
+	# move ada runtime libs
+	if $LANG_ADA; then
+		for i in $(find "$pkgdir"/$_gcclibdir/adalib/ -type f -maxdepth 1 -name "libgna*.so"); do
+			mv "$i" "$pkgdir"/usr/lib/
+			ln -s ../../../../${i##*/} $i
+		done
+	fi
+
+	if [ "$CHOST" != "$CTARGET" ]; then
+		# cross-gcc: remove any files that would conflict with the
+		# native gcc package
+		rm -rf "$pkgdir"/usr/bin/cc "$pkgdir"/usr/include "$pkgdir"/usr/share
+		# libcc1 does not depend on target, don't ship it
+		rm -rf "$pkgdir"/usr/lib/libcc1.so*
+
+		# fixup gcc library symlinks to be linker scripts so
+		# linker finds the libs from relocated sysroot
+		for so in "$pkgdir"/usr/$CTARGET/lib/*.so; do
+			if [ -h "$so" ]; then
+				local _real=$(basename $(readlink "$so"))
+				rm -f "$so"
+				echo "GROUP ($_real)" > "$so"
+			fi
+		done
+	else
+		# add c89/c99 wrapper scripts
+		cat >"$pkgdir"/usr/bin/c89 <<'EOF'
+#!/bin/sh
+fl="-std=c89"
+for opt; do
+	case "$opt" in
+	-ansi|-std=c89|-std=iso9899:1990) fl="";;
+	-std=*) echo "$(basename $0) called with non ANSI/ISO C option $opt" >&2
+		exit 1;;
+	esac
+done
+exec gcc $fl ${1+"$@"}
+EOF
+		cat >"$pkgdir"/usr/bin/c99 <<'EOF'
+#!/bin/sh
+fl="-std=c99"
+for opt; do
+	case "$opt" in
+	-std=c99|-std=iso9899:1999) fl="";;
+	-std=*) echo "$(basename $0) called with non ISO C99 option $opt" >&2
+		exit 1;;
+	esac
+done
+exec gcc $fl ${1+"$@"}
+EOF
+		chmod 755 "$pkgdir"/usr/bin/c?9
+	fi
+}
+
+libatomic() {
+	pkgdesc="GCC Atomic library"
+	depends=
+	replaces="gcc"
+
+	mkdir -p "$subpkgdir"/usr/lib
+	mv "$pkgdir"/usr/${_target:+$CTARGET/}lib/libatomic.so.* "$subpkgdir"/usr/lib/
+}
+
+libcxx() {
+	pkgdesc="GNU C++ standard runtime library"
+	depends=
+
+	mkdir -p "$subpkgdir"/usr/lib
+	mv "$pkgdir"/usr/${_target:+$CTARGET/}lib/libstdc++.so.* "$subpkgdir"/usr/lib/
+}
+
+gpp() {
+	pkgdesc="GNU C++ standard library and compiler"
+	depends="libstdc++=$_gccrel gcc=$_gccrel musl-dev"
+	mkdir -p "$subpkgdir/$_gcclibexec" \
+		"$subpkgdir"/usr/bin \
+		"$subpkgdir"/usr/${_target:+$CTARGET/}include \
+		"$subpkgdir"/usr/${_target:+$CTARGET/}lib \
+
+	mv "$pkgdir/$_gcclibexec/cc1plus" "$subpkgdir/$_gcclibexec/"
+	paxmark -pmrs "$subpkgdir/$_gcclibexec/cc1plus"
+
+	mv "$pkgdir"/usr/${_target:+$CTARGET/}lib/*++* "$subpkgdir"/usr/${_target:+$CTARGET/}lib/
+	mv "$pkgdir"/usr/${_target:+$CTARGET/}include/c++ "$subpkgdir"/usr/${_target:+$CTARGET/}include/
+	mv "$pkgdir"/usr/bin/*++ "$subpkgdir"/usr/bin/
+}
+
+libobjc() {
+	pkgdesc="GNU Objective-C runtime"
+	replaces="objc"
+	depends=
+	mkdir -p "$subpkgdir"/usr/lib
+	mv "$pkgdir"/usr/${_target:+$CTARGET/}lib/libobjc.so.* "$subpkgdir"/usr/lib/
+}
+
+objc() {
+	pkgdesc="GNU Objective-C"
+	replaces="gcc"
+	depends="musl-dev gcc=$_gccrel libobjc=$_gccrel"
+
+	mkdir -p "$subpkgdir"/$_gcclibdir/include \
+		"$subpkgdir"/usr/lib
+	mv "$pkgdir"/$_gcclibdir/include/objc "$subpkgdir"/$_gcclibdir/include/
+	mv "$pkgdir"/usr/lib/libobjc.so "$pkgdir"/usr/lib/libobjc.a \
+		"$subpkgdir"/usr/lib/
+}
+
+libgcc() {
+	pkgdesc="GNU C compiler runtime libraries"
+	depends=
+
+	mkdir -p "$subpkgdir"/usr/lib
+	mv "$pkgdir"/usr/${_target:+$CTARGET/}lib/libgcc_s.so.* "$subpkgdir"/usr/lib/
+}
+
+libgomp() {
+	pkgdesc="GCC shared-memory parallel programming API library"
+	depends=
+	replaces="gcc"
+
+	mkdir -p "$subpkgdir"/usr/lib
+	mv "$pkgdir"/usr/${_target:+$CTARGET/}lib/libgomp.so.* "$subpkgdir"/usr/lib/
+}
+
+libgo() {
+	pkgdesc="Go runtime library for GCC"
+	depends=
+
+	mkdir -p "$subpkgdir"/usr/lib
+	mv "$pkgdir"/usr/lib/libgo.so.* "$subpkgdir"/usr/lib/
+}
+
+go() {
+	pkgdesc="Go support for GCC"
+	depends="gcc=$_gccrel libgo=$_gccrel"
+
+	mkdir -p "$subpkgdir"/$_gcclibexec \
+		"$subpkgdir"/usr/lib \
+		"$subpkgdir"/usr/bin
+	mv "$pkgdir"/usr/lib/go "$subpkgdir"/usr/lib/
+	mv "$pkgdir"/usr/bin/*gccgo "$subpkgdir"/usr/bin/
+	mv "$pkgdir"/$_gcclibexec/go1 "$subpkgdir"/$_gcclibexec/
+	mv "$pkgdir"/usr/lib/libgo.a \
+		"$pkgdir"/usr/lib/libgo.so \
+		"$pkgdir"/usr/lib/libgobegin.a \
+		"$subpkgdir"/usr/lib/
+}
+
+libgfortran() {
+	pkgdesc="Fortran runtime library for GCC"
+	depends=
+
+	mkdir -p "$subpkgdir"/usr/lib
+	mv "$pkgdir"/usr/lib/libgfortran.so.* "$subpkgdir"/usr/lib/
+}
+
+libquadmath() {
+	replaces="gcc"
+	pkgdesc="128-bit math library for GCC"
+	depends=
+
+	mkdir -p "$subpkgdir"/usr/lib
+	mv "$pkgdir"/usr/lib/libquadmath.so.* "$subpkgdir"/usr/lib/
+}
+
+gfortran() {
+	pkgdesc="GNU Fortran Compiler"
+	depends="gcc=$_gccrel libgfortran=$_gccrel"
+	$LIBQUADMATH && depends="$depends libquadmath=$_gccrel"
+	replaces="gcc"
+
+	mkdir -p "$subpkgdir"/$_gcclibexec \
+		"$subpkgdir"/$_gcclibdir \
+		"$subpkgdir"/usr/lib \
+		"$subpkgdir"/usr/bin
+	mv "$pkgdir"/usr/bin/*gfortran "$subpkgdir"/usr/bin/
+	mv "$pkgdir"/usr/lib/libgfortran.a \
+		"$pkgdir"/usr/lib/libgfortran.so \
+		"$subpkgdir"/usr/lib/
+	if $LIBQUADMATH; then
+		mv "$pkgdir"/usr/lib/libquadmath.a \
+			"$pkgdir"/usr/lib/libquadmath.so \
+			"$subpkgdir"/usr/lib/
+	fi
+	mv "$pkgdir"/$_gcclibexec/f951 "$subpkgdir"/$_gcclibexec
+	mv "$pkgdir"/usr/lib/libgfortran.spec "$subpkgdir"/$_gcclibdir
+}
+
+libgnat() {
+	pkgdesc="GNU Ada runtime shared libraries"
+	depends=
+
+	mkdir -p "$subpkgdir"/usr/lib
+	mv "$pkgdir"/usr/lib/libgna*.so "$subpkgdir"/usr/lib/
+}
+
+gnat() {
+	pkgdesc="Ada support for GCC"
+	depends="gcc=$_gccrel"
+	[ "$CHOST" = "$CTARGET" ] && depends="$depends libgnat=$_gccrel"
+
+	mkdir -p "$subpkgdir"/$_gcclibexec \
+		"$subpkgdir"/$_gcclibdir \
+		"$subpkgdir"/usr/bin
+	mv "$pkgdir"/$_gcclibexec/*gnat* "$subpkgdir"/$_gcclibexec/
+	mv "$pkgdir"/$_gcclibdir/*ada* "$subpkgdir"/$_gcclibdir/
+	mv "$pkgdir"/usr/bin/*gnat* "$subpkgdir"/usr/bin/
+}
+
+b2sums="41a5e148f9a6857d6599679964c203533f76f330ad527fbe7c5e746d78f6f6f6d6d0f330a67cb1e794e155be8d1cd6e986bcc8a116d620dca410b78f0bcdd453  gcc-9.2.0.tar.xz
+2a0a7b8a36a74e2d093ec34e93640b486a656d1e8b5d5408751799fab3359283d9e934f3a00deeb8e02e97f1d5cd7a47a30f2bcedf2a8da9b64b2c5717018126  002_all_default-relro.patch
+f375f417bfdaa96aeafe327bf35bf26bf1d350ecc4b5db2ad735bb4e9b636d6f9d06c6a9c1359ccd1c1f6113db8ae3ab2f06ea9f0c72f292d8d5cfbb18c9d4da  003_all_default-fortify-source.patch
+c54506ca5b06c7417ba4db30a413d82baa60b6f992598bd5a6bb49aa767a66bd7f32d5030c643be3a478ee0983a19a0eef866107f52c5dfed2cb4b2dfeb111ac  005_all_default-as-needed.patch
+2b9a82adb1658209742fa259435fae9528c2643a60892278959ba6b6d94de481ebdf2ca6db7bce5bae161eeac3dc0205a2ca6d2d950e1b4d0b9766cd6b6a06bb  gcc-as-needed-gold.patch
+f02d654db021e4a647ac2526ec7d487f5c73ba687066b188601e99f46f6053d7a3515da3fb8d6fc73d5c31c676c21d5aba8619630bffb96a0143de16df73ed35  011_all_default-warn-format-security.patch
+3773fe7d55a5cb2746324277dc27340fdf316f8b797e7d144c44bfd95b46a72e81bf497398533bb891f4990b4785b8991f03cc33b40cfa6113bc17eb33a3d09a  012_all_default-warn-trampolines.patch
+c1fc0be7b44d19f8443c09fabceeb0002ad622cb4581f8b98e99080027d561f9760035c141699cb1cb7eeb1981e88c72f350f0ea6f7d4f8f1face95eaccb2fc6  013_all_default-ssp-fix.patch
+70978cdc9d161365b881a827bc9eb2602037858bbde6072832f6827611c64b5d2f51e049cdee138703b92e49598a170db736f65cd2b836729194cb415ae05f8f  020_all_msgfmt-libstdc++-link.patch
+71763a85ba2ccec603e44e895cef4fff1a12f53941b37a9e64b108e66f24de3995c9eba5071053de207a77ac71efa528d8bdf714e3f1a84abbb423994b673552  050_all_libiberty-asprintf.patch
+284f01e91907506e65d5267d158341e3f439a57086d9f6b2ff59e94047afd2fd7818469a526d13802f45ddeef65d908ca31723a8dbe0bb268be7d200e56c88e9  051_all_libiberty-pic.patch
+8f8f35d28a4f511f23b7ae3276d6519255f2e8651ba35563c465133e053e7001d7568821cb235491eb2c1a2bd5771a9cea5325e880b35363127f05efd5feaf7b  053_all_libitm-no-fortify-source.patch
+c808c7a70662a498a8a45a54e0167dadb750cff6b891881934c3174811d16b2785427c2d1c301c9432c198c5083a1e5d1549068251d78a1dfd34cbda19b4b083  090_all_pr55930-dependency-tracking.patch
+33aa2662ed65e63794ed806cfa0f9bfad96f17ac3d6bdc47e9c3abfd0f1331237c5a57f6d3626b61b11b5ca8f541c7bb4a984a4d3cf8c1df6732aa941a32a24b  0003-gcc-poison-system-directories.patch
+0015ef05a5bb50a24dbea217242fb3408836f9d8b871fcaeb1f6685856e080e9e35f5e94e69c5fef4ecccfa0d43217b2f855a68c901f1ed4145caee1818ae37b  203-libgcc_s.patch
+d5c73a0466635f26e26c6e2572199cb7d818441fb6bb874ed141bbfcec6784559e4e8cb0240b0decf04ef18a32e252fbd14589351d489178fc7215277a90c6a2  205-nopie.patch
+c28b7d17b7bcd0ef74ddecc9b2e0d20de28a0077e068aca7efb75eaba645e05e8b322a247f3c53c6604400af8e78135f7c18400deb18e80b7cf7325eeceaf13f  0002-posix_memalign.patch
+98859068abf09f772556e7760a09854e8cd27f183d54f8343d89557803cd1db4590ec945f95fe6a970c6f0d4c029dc462b597689614405147a5ee8a44628bbfd  0008-s390x-muslldso.patch
+eb16ede7ffed7f64128ce28190a09ac61ce6252a5a11a35dab5f89a218132c8e6d8a218ba9c6b9dd3a9314644b66535cdbe6dab0f4acefb0f3a9338f69a4dedd  0010-ldbl128-config.patch
+1e6a6f0af6c32144d211bfc28dcda98fd6469af4d072409d0c6a3a49ac8b9ab4d6c2d2a1581d7e76562db12893ca67a6db2aafec138ace0e75dc2007959d7210  0012-static-pie.patch
+61028ae55879a7304b7f5c5aae51874a44eaf66d6350436136c5e22d4069cb8c6cd200634da0cb6c857f345e170fbdc212ff02a10e8c0c805e4ed1d278d2d4cf  libgcc-always-build-gcceh.a.patch
+00289d9b6efd40d32c9a8008b5695cfbb7b38e84cf9549d77cb69753ce65ac7c0a0ad8dcc37fe43bd1c1a5ee8de7b4ea645835cd0dfa5442e823a02ef1567554  gcc-4.9-musl-fortify.patch
+40d339c61c437f9485a85e175e2c529f7a8d11477a7bb1ffee16b68a0d83187a665f9a6280979883afaedacb684bb4366b69efaa76c755d9582c34c063976606  gcc-6.1-musl-libssp.patch
+abc92215e54acac596ae835914edd64c25bb1df967b22678b10700a999080afaea711135eb73a33f2bd14d003cf3a7faacd94e914a91d47ddd642d9b31132d31  gcc-pure64.patch
+46f8cb8e5815a84a42d4aa4446a098fb6df4b3e5ef2458a323fd48d17963c30627e41fdb28e787b6d61a58e059b6f7f5a179382e4dcbbbd52d84fee6dcc2407b  fix-cxxflags-passing.patch
+a9dc1b4085a3779e1e37e616321e1d727b13d032e8ce3e893420854e37a27efd89477ffb79c0d799c4483bbe5bfb6f517c326a86ae989cae6fb468924d0416ab  ada-shared.patch
+cb426359267544796cc950b72cb0571d8e69e0927677d4a0996467fec7dda7c1f926e9a5374eb49aa529892e4f5764a7fff33820f7d0f3ad62d497f1b8ae0e24  ada-musl.patch
+a7458adba9d1a8a3537d0a0e3335ac7ee65081a364f95be1f144d2a2aaba3317412ae05a484c1412da57c55affd67c951f38df1cf8577b9d7121f076ad5a6030  libgnarl-musl.patch
+31788bf24ffa306914306c9f1cce0b4a0e6b65824c3129208bdccde5846d9eb47de5ef2a6efb7a11108c8b5fa48a2fa9bb53c1967cbe9a8a3f1002b60f3081b0  320-libffi-gnulinux.patch
+c2e8e33eb88bba6453f0645092cc2a6b3adfb07788d7f71a3f97e4f09f95934b6dfac929b72f34c7e515d8d07b1f6db2a2bee2bb1158c85e9c41e4246bdafd41  gcc-pure64-mips.patch
+16514a213270411737a6ae1fa6bff7a4b6637b99fc20a9ca9a2ce202c8342d15766c51abb25b163e984604a9044cc006e3609a6a2682e67cfbfb7aea40f455c2  0016-invalid_tls_model.patch
+afd9fefe687b7cd3c3a483e183f366348e34f58f5d713e2f6b38da16e2e382248b446d9da01ea89fe7202b795b08929b7c42c89c2c1e9a57482faf01ee697beb  mpc-1.1.0.tar.gz
+2a864e80799471037a71c10d871f9782c37fe3a0a1734872e90f14a874ecd6551099d67b2ebd07f82a43b0522249a6b46e79952db11a278f87ca8013198f7604  gmp-6.1.2.tar.xz
+4c1a15208c2dc3dcc1424974de506198e9cc479c70255149876c7f541133499ada5c89f07393b120b7079e6bbaf8ea03e5e496e1350b295e687392a6e0341c1c  mpfr-4.0.2.tar.xz
+71b6d7e3239b37b7f9c5a8b602b8809b9f92f89bc9bc349e24d309fde37471515a0a32862ed731d8f839683e4170fa074ab73e3bd36a2eeab90475a6d2529240  isl-0.22.tar.gz"

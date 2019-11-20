@@ -7,7 +7,7 @@ arch="all"
 license="BSD-3-Clause"
 makedepends="bzip2-dev curl-dev expat-dev libarchive-dev linux-dev
 	libuv-dev ncurses-dev rhash-dev xz-dev zlib-dev"
-options="!checkroot !check"
+options="!checkroot"
 checkdepends="file musl-utils"
 subpackages="$pkgname-doc $pkgname-bash-completion:bashcomp:noarch
 	"
@@ -49,7 +49,16 @@ build() {
 
 check() {
 	cd "$builddir/build"
-	CTEST_OUTPUT_ON_FAILURE=TRUE bin/ctest
+	# Excluded tests:
+	#	BootstrapTest: we actualy bootstrap it every time so why test it.
+	#	CMakeOnly.MajorVersionSelection-PythonInterp_2: we have no Python2
+	#	kwsys.testSystemTools: "TestFileAccess incorrectly indicated that this is a writable file:
+	#	BundleUtilities: Fails in CI
+	# $builddir/build/Source/kwsys/testSystemToolsNewDir/testNewFile.txt"
+	bin/ctest \
+		-j "$JOBS" \
+		--output-on-failure \
+		-E "(BootstrapTest|CMakeOnly.MajorVersionSelection-PythonInterp_2|kwsys.testSystemTools|BundleUtilities)"
 }
 
 package() {

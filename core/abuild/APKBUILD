@@ -6,8 +6,8 @@ url="https://git.alpinelinux.org/cgit/abuild/"
 arch="all"
 license="GPL-2.0"
 depends="fakeroot sudo pax-utils openssl apk-tools>=2.0.7-r1 bsdtar
-	 attr pkgconf patch bzip2 xz gzip zlib lzip diffutils flex 
-	 bison gtar unzip gmake file musl-utils"
+	 attr pkgconf patch bzip2 xz zlib lzip diffutils flex 
+	 bison gtar unzip gmake file musl-utils pigz"
 if [ "$CBUILD" = "$CHOST" ]; then
 	depends="$depends curl"
 fi

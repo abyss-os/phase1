@@ -1,0 +1,175 @@
+pkgname=docker
+pkgver=19.03.5
+_gitcommit=633a0ea838f10e000b7c6d6eed1623e6e988b5bb	# https://github.com/docker/docker-ce/commits/v$pkgver
+pkgrel=0
+pkgdesc="Pack, ship and run any application as a lightweight container"
+url="https://www.docker.io/"
+arch="all"
+license="Apache-2.0"
+depends="docker-engine docker-cli"
+makedepends="go go-md2man btrfs-progs-dev bash linux-headers coreutils lvm2-dev lvm2 libtool
+	libseccomp-dev libseccomp"
+install="$pkgname.pre-install"
+
+# from components/engine/vendor.conf:
+#    grep libnetwork components/engine/vendor.conf
+#    grep cobra components/engine/vendor.conf
+_libnetwork_ver=3eb39382bfa6a3c42f83674ab080ae13b0e34e5d
+_cobra_ver="0.0.3"
+
+# secfixes:
+#   19.03.1:
+#     - CVE-2019-14271
+#   18.09.8:
+#     - CVE-2019-13509
+#   18.09.7:
+#     - CVE-2018-15664
+
+subpackages="
+	$pkgname-engine:engine
+	$pkgname-openrc:engine_openrc:noarch
+	$pkgname-cli:cli
+	$pkgname-doc:cli_doc:noarch
+	$pkgname-bash-completion:cli_bashcomp:noarch
+	$pkgname-zsh-completion:cli_zshcomp:noarch
+	"
+
+source="
+	docker-$pkgver.tar.gz::https://github.com/docker/docker-ce/archive/v$pkgver.tar.gz
+	libnetwork-$_libnetwork_ver.tar.gz::https://github.com/docker/libnetwork/archive/$_libnetwork_ver.tar.gz
+	cobra-$_cobra_ver.tar.gz::https://github.com/spf13/cobra/archive/v$_cobra_ver.tar.gz
+	docker-openrc-fixes.patch
+	"
+
+builddir="$srcdir"/docker-ce-$pkgver
+_cli_builddir="$builddir"/components/cli
+_daemon_builddir="$builddir"/components/engine
+_buildtags="seccomp"
+
+_libnetwork_builddir="$srcdir"/libnetwork-$_libnetwork_ver
+
+build() {
+	export AUTO_GOPATH=1
+	export GITCOMMIT=$_gitcommit		# for cli
+	export DOCKER_GITCOMMIT=$_gitcommit	# for engine
+	export DOCKER_BUILDTAGS=$_buildtags
+	unset CC # prevent possible ccache issues
+
+	# libnetwork (docker-proxy)
+	msg "building docker-proxy"
+	cd "$_libnetwork_builddir"
+	mkdir -p src/github.com/docker/
+	ln -fvs "$_libnetwork_builddir" src/github.com/docker/libnetwork
+	GOPATH="$PWD" go build -v -ldflags="-linkmode=external" -o docker-proxy github.com/docker/libnetwork/cmd/proxy
+
+	# daemon
+	msg "building daemon"
+	cd "$_daemon_builddir"
+	mkdir -p src/github.com/docker/
+	ln -fvs "$_daemon_builddir" src/github.com/docker/docker
+	GOPATH="$PWD" VERSION="$pkgver" hack/make.sh dynbinary
+
+	# Required for building man-pages
+	export GOPATH="$_cli_builddir"
+	export GOBIN="$GOPATH/bin"
+	export PATH="$GOBIN:$PATH"
+
+	# cli
+	msg "building cli"
+	cd "$_cli_builddir"
+	mkdir -p "$GOPATH"/src/github.com/docker/
+	rm -fv "$GOPATH"/src/github.com/docker/cli
+	ln -fvs "$_cli_builddir" "$GOPATH"/src/github.com/docker/cli
+	DISABLE_WARN_OUTSIDE_CONTAINER=1 LDFLAGS="" make VERSION="$pkgver" dynbinary
+
+	# docker man
+	msg "building docker man pages"
+	cd "$srcdir"
+	# cobra
+	mkdir -p "$GOPATH"/src/github.com/spf13/
+	ln -vsf "$PWD"/cobra-$_cobra_ver "$GOPATH"/src/github.com/spf13/cobra
+
+	# convert md to man pages
+	msg "generating man pages"
+	cd "$_cli_builddir"
+	# make manpages (from cli/Makefile, but using installed go-md2man)
+	mkdir -p ./man/man1
+	# Generate man pages from cobra commands
+	go build -o /tmp/gen-manpages github.com/docker/cli/man
+	/tmp/gen-manpages --root "$(pwd)" --target "$(pwd)/man/man1"
+	# generate legacy manpages from markdown
+	./man/md2man-all.sh -q
+}
+
+# docker itself is a meta package
+package() {
+	mkdir -p "$pkgdir"
+}
+
+engine() {
+	pkgdesc="Docker Engine (dockerd)"
+	depends="ca-certificates containerd iptables tini-static"
+
+	install -Dm755 "$_daemon_builddir"/bundles/dynbinary-daemon/dockerd \
+		"$subpkgdir"/usr/bin/dockerd
+
+	install -Dm755 "$_libnetwork_builddir"/docker-proxy \
+		"$subpkgdir"/usr/bin/docker-proxy
+
+	# symlink externally provided tini-static binary
+	ln -sfv /sbin/tini-static "$subpkgdir"/usr/bin/docker-init
+}
+
+engine_openrc() {
+	pkgdesc="OpenRC init scripts for Docker"
+	depends=""
+	install_if="openrc $pkgname-engine=$pkgver-r$pkgrel"
+
+	install -Dm755 "$_daemon_builddir"/contrib/init/openrc/docker.initd \
+		"$subpkgdir"/etc/init.d/docker
+	install -Dm644 "$_daemon_builddir"/contrib/init/openrc/docker.confd \
+		"$subpkgdir"/etc/conf.d/docker
+}
+
+cli() {
+	pkgdesc="Docker CLI"
+	depends="ca-certificates"
+
+	# 'build/docker' is a symlink to 'docker-linux-$arch' e.g. 'docker-linux-amd64'
+	install -Dm755 "$_cli_builddir"/build/docker \
+		"$subpkgdir"/usr/bin/docker
+}
+
+cli_doc() {
+	pkgdesc="Documentation for Docker"
+	depends=""
+	install_if="docs $pkgname-cli=$pkgver-r$pkgrel"
+
+	mkdir -p "$subpkgdir"/usr/share/man/man1
+	gzip -9 "$_cli_builddir"/man/man1/*
+	install -Dm644 "$_cli_builddir"/man/man1/* \
+		"$subpkgdir"/usr/share/man/man1
+}
+
+cli_bashcomp() {
+	pkgdesc="Bash completion for Docker"
+	depends=""
+	install_if="bash-completion $pkgname-cli=$pkgver-r$pkgrel"
+
+	install -Dm644 "$_cli_builddir"/contrib/completion/bash/$pkgname \
+		"$subpkgdir"/usr/share/bash-completion/completions/$pkgname
+}
+
+cli_zshcomp() {
+	pkgdesc="Zsh completion for Docker"
+	depends=""
+	install_if="zsh $pkgname-cli=$pkgver-r$pkgrel"
+
+	install -Dm644 "$_cli_builddir"/contrib/completion/zsh/_$pkgname \
+		"$subpkgdir"/usr/share/zsh/site-functions/_$pkgname
+}
+
+sha512sums="1afe41e740ae0e32a8210aac3c4b24ddb1ae00ff19e8ec435de2e61cfc25494d38129fd619bacf964e3e7a96e12dd44a0c57f6e2c36aa7c3bb67a3df0c237648  docker-19.03.5.tar.gz
+a21b9b5883056cf75dda9f229ff199e6daad63d94dcf75ebe3e21204bdeef89c41ddd5730bb6bb4387af9a84a8a81e7adfaf726b2fdd299d8aa9d6d35a096ce2  libnetwork-3eb39382bfa6a3c42f83674ab080ae13b0e34e5d.tar.gz
+c38db9432a168f913b41a1e1b11d84bedfade82ff70791be9d343a6cc86b8a05b18bae344d67ebd8bae4c98662db7ac664a9dc86fa9b9ad4aa5c96cbf0178efb  cobra-0.0.3.tar.gz
+6d3f1e71910a717d52820fbfe81663baadf3f5aa5ab39071d15c02ef49b51fe1978033e1cafc8482a468983bf872ab39d37759b82221778cbb2392a9eac41d65  docker-openrc-fixes.patch"

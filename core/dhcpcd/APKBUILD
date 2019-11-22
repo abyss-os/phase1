@@ -1,5 +1,5 @@
 pkgname=dhcpcd
-pkgver=7.2.2
+pkgver=8.1.2
 pkgrel=0
 pkgdesc="RFC2131 compliant DHCP client"
 url="https://roy.marples.name/projects/dhcpcd"
@@ -8,7 +8,7 @@ license="BSD-2-Clause"
 makedepends="linux-dev bsd-compat-headers dbus-dev"
 install="$pkgname.post-upgrade"
 subpackages="$pkgname-doc $pkgname-openrc"
-source="https://roy.marples.name/downloads/dhcpcd/$pkgname-$pkgver.tar.xz
+source="${distfilesm}/$pkgname-$pkgver.tar.xz
 	busybox-logger.patch
 	fix-chrony-conf-location.patch
 	dhcpcd.initd
@@ -43,7 +43,7 @@ package() {
 		"$pkgdir"/etc/init.d/dhcpcd
 }
 
-b2sums="ae36cc44d32c034b41f9c970fdb154ef2935b53ae9a81d76dfe8143882170cb8f4ea9c2048ebbfc2d94096061626e93d5890565192115d2953506a7d1e4ee6f2  dhcpcd-7.2.2.tar.xz
+b2sums="905829d2a0066729afa884f48049066e7fd802525f5ea436f02379845c848ac84b739394dfa90c1aebd74d87842b281121503815a31d05dcaa8b48c3026e357f  dhcpcd-8.1.2.tar.xz
 5805107f747302eddedc456df8b24669510931f5a0a8d84444e81d714238fe783a5ce118e42569a1debbe4eddb621d2e7d948fe8e03070a5bb2f8af7d7d798c6  busybox-logger.patch
 28afd72488bfd59bd62fd9ed51544a7439472a040cd9f225af34b342d5040b9bfef5eb9f1dc812f88d51fb2e97ddd2c75cc00f97decfc8f2163f10511949c5be  fix-chrony-conf-location.patch
 79052ccc6a585df4c7c9139235a5718183ad86cee9c2a4314853fc902660717a1155d60398cb5e1f0ff6f07d1acbe5cb3246d6c75758cabccc6f830b33613c09  dhcpcd.initd"

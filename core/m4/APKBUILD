@@ -22,7 +22,8 @@ build() {
 		--host=$CHOST \
 		--prefix=/usr \
 		--bindir=/usr/bin \
-		--sbindir=/usr/bin
+		--sbindir=/usr/bin \
+		gl_cv_func_printf_enomem=no
 	make
 }
 

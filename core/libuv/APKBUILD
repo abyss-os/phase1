@@ -54,4 +54,4 @@ package() {
 		"$pkgdir"/usr/share/licenses/$pkgname/LICENSE
 }
 
-sha512sums="0813a57d7da28c1665824be69321f133050656171d294bb0cb5a83bab7b7c8eef2d6690bdcff2f44727a6f6d6b9b977a66586efb5d59ed280f78be72c71110d3  libuv-v1.29.1.tar.gz"
+b2sums="d654a4c57aa840441bc9e97481708366be3736de790a5553ff7bca123c1c70d8c54a0faaf7c6b993b414044d5a1d22f16292b19f81b5d5f89df29f1d76bdf390  libuv-v1.29.1.tar.gz"

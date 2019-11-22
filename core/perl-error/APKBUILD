@@ -36,4 +36,4 @@ package() {
         find "$pkgdir" \( -name perllocal.pod -o -name .packlist \) -delete
 }
 
-sha512sums="f7a649254bd2a5228a0baaa7bb286872dcbcf373134446176ff63a5ec0159e7472e0ea930aaff78f7f7961f797ae0a8e5c8725bdc06d2bab177ce469a4ede4b9  Error-0.17027.tar.gz"
+b2sums="a0026654cccd3debd09281fdc66c56f1c656ea34078c1b61465cea1a792b464954eb03e5d1496c1962c83a462d079b4b0323d781381cbcb7a29914d35b66a057  Error-0.17027.tar.gz"

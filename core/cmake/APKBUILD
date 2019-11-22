@@ -67,4 +67,4 @@ bashcomp() {
 		"$subpkgdir"/usr/share/bash-completion/
 }
 
-sha512sums="9acd2de17db86052801194cac570bfc104320c249b83058aa59554b42c3d5af9c9293d1c069f3fe8512a80103d511186d840168cbc190ce9584ca99cb9b11e46  cmake-3.14.5.tar.gz"
+b2sums="3e783de1ce541039c80228a56fed4fd28e9ef2ea48f274995f6f26f8b149f1684aab6da518f27106f364a4f0a6f370334f3a85dd61f1bcce22c34337ef4afdaa  cmake-3.14.5.tar.gz"

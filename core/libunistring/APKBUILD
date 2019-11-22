@@ -35,4 +35,4 @@ package() {
 	rm -f "$pkgdir"/usr/lib/charset.alias
 }
 
-sha512sums="01dcab6e05ea4c33572bf96cc0558bcffbfc0e62fc86410cef06c1597a0073d5750525fe2dee4fdb39c9bd704557fcbab864f9645958108a2e07950bc539fe54  libunistring-0.9.10.tar.xz"
+b2sums="25d162d9d510cc35ad4209acceb9b06bcc0553b8ce56e94f8df12c4df64d91abfc4a9e15b50b5c8d5b9672939305a394a7e83f1892258defb7ae5ac2ccf79dfb  libunistring-0.9.10.tar.xz"

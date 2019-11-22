@@ -67,4 +67,4 @@ package() {
 	make DESTDIR=$pkgdir install
 }
 
-sha512sums="47b0120a59e3e020529a6ce750297d7de1156fd2be38db5d101e50120f11b40c28741ecd5eacf2790a9e25386713dcf7717339cfa5d7943d0dbf47c417383448  automake-1.16.1.tar.gz"
+b2sums="02bd3fee32f606eebd5bb62beda029cadce43540fcf7c28dc402d8a1bf7c001d09aa9cdc7334f944166ff77579f89d7b0a2c1a941cad61fb975d42a4207ae0c8  automake-1.16.1.tar.gz"

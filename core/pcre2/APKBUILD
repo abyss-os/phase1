@@ -85,4 +85,4 @@ tools() {
 	mv "$pkgdir"/usr/bin "$subpkgdir"/usr/
 }
 
-sha512sums="649983c7725e2fd2451ba89243b4c08c408fc279b7be3b2d225045cced3b0667ff6da4c9dd37510eb9e5aed6478aff54c2dbd1d92f4d0f1174579df9ec2c1882  pcre2-10.33.tar.gz"
+b2sums="8c68819c0f763cf9e02cb58a8ae373acc8dcf3c687dd29c8be10330dacbab1a03d7c76223d769597da3beb2bd4543ac51ab74adea380cca85ec9274c98672019  pcre2-10.33.tar.gz"

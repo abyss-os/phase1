@@ -37,4 +37,4 @@ package() {
 	rmdir -p "$pkgdir"/usr/lib 2>/dev/null || true
 }
 
-sha512sums="63c67291ea1bd00f4412fc589ffb891ede3e2577253016a9a185e00fb2d702371f3862486639a8f52f8a887f340a639575ff3b7ba93c152170cbfd8c9585c1dc  bison-3.3.2.tar.xz"
+b2sums="84cf59c02ff4ba34c052ef2539cde8d5932145ab21b63c879eeb32d183cadba6cb6209278090e38f3f03085e58ad1fff71248e5729513d8dffdcc14e8f924dfc  bison-3.3.2.tar.xz"

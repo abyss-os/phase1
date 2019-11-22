@@ -51,4 +51,4 @@ dev() {
 	mv "$subpkgdir"/usr/share/aclocal/pkg.m4 "$pkgdir"/usr/share/aclocal/
 }
 
-sha512sums="d7314da008ca90858be2ad2599a1bc017da465ef3eae5ab8f18893539ffd557fff3316ae2f2ecf97d34550de6f7a3a3ab3f82ec5eb45e4f0a239b89fe3877835  pkgconf-1.6.1.tar.xz"
+b2sums="ec370782736f8dcc0ecd407c580ba6c1c4452fe8639fe2a66fa11194a77ddab6f6bfd8ad9026bd35ab5d9d916b2445ed104841a53eadf9d9f190dc77cf1a6427  pkgconf-1.6.1.tar.xz"

@@ -29,4 +29,4 @@ package() {
 	find ${pkgdir} -name .packlist -o -name perllocal.pod -delete
 }
 
-sha512sums="28feafc1f014781d94114490cda946369d9d694ee21fbe8648b6a874eb51ec1a3bc314c18334d04efca09a6658324afeb6cad8764e5f1a6ac92b5f75c3eedceb  po4a-0.56.tar.gz"
+b2sums="dfdf2ef4ef97e41eaa37f141305fab394af2177ec78a3db84e9ab67adda16aa14655c96711343d60245e762616ac09764c61118c1d96f9b0dc990e43fe3e670d  po4a-0.56.tar.gz"

@@ -50,4 +50,4 @@ package() {
 	install -Dm644 "$builddir"/man/*.5 "$pkgdir"/usr/share/man/man5/
 }
 
-sha512sums="cff9f0189b9fdc2b5492c92129af284aa8cd099e48de94cafd90aed191e2d20060c96008111b05fe081de0d4fc41d35f8cba5a3dc2d8cc0a5c37f695fd3cedc1  containerd-1.3.0.tar.gz"
+b2sums="c334cfd2aa11dd430c74bc9f3fe6f31d83faf752b9794da26021033bb6af492c48ed1665fc76ddfe5b858f04d45e9b77505f331e3c3da556af2d75e3cca3bb12  containerd-1.3.0.tar.gz"

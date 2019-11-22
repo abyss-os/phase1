@@ -33,5 +33,5 @@ package() {
 	make DESTDIR="$pkgdir" install
 }
 
-sha512sums="6ed665a441c789cdf7eb22b6e69d02575746c81b00e0a81ced90d30aaf2badc93fac32e5841fd4e07751a27726a327a63fe28bb0689c6bef5b6164b435bbc30d  jansson-2.12.tar.bz2"
 
+b2sums="c1e1332383d3fe81f3db6b8b742a30f622a3e78656c6ef92636eb5e956f5844cc8531805a35800d204891953a0adf2fe6f3d30aebcd0f7f2a92ff485fe2ccc56  jansson-2.12.tar.bz2"

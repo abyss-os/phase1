@@ -32,4 +32,4 @@ package() {
 	rm -fv $pkgdir/usr/bin/awk
 }
 
-sha512sums="ff9842a91035f843482d93eac8a35cddf2ce16acaa43a0112c1efff08802aebf705ee70d47eff74a190dca7be330c31f7204ad27cb63bdee65333f9b9c984212  gawk-5.0.1.tar.xz"
+b2sums="1dd8a9bca2488f2d3c946406b01fcbdce0487922ece49fe2121c39d6d10bcfcb6a056edbbf88ba6c22772ef88a250fc8ffcba33ead399c0d7c8f5d19d0e896d3  gawk-5.0.1.tar.xz"

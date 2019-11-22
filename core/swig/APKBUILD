@@ -36,4 +36,4 @@ package() {
 	install -D -m644 LICENSE-UNIVERSITIES "$pkgdir"/usr/share/licenses/$pkgname/LICENSE-UNIVERSITIES
 }
 
-sha512sums="595ef01cb83adfa960ceed9c325a9429192549e8d1e9aa3ab35a4301512a61d82e2e89a8c7939c2a5a0811254ea1832a443bd387e11459eb2b0bafc563ad1308  swig-4.0.1.tar.gz"
+b2sums="c21a8d493d4a4e021a5a60460fb58546ee89c744b08696fa1a9346d01521d037fc2a3c10e0a917b5216758ed04f34aceae8d99315462c51ca74191084cb22e4a  swig-4.0.1.tar.gz"

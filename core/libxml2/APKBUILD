@@ -85,5 +85,5 @@ _py() {
 	mv "$pkgdir"/usr/lib/$python* "$subpkgdir"/usr/lib/
 }
 
-sha512sums="cb7784ba4e72e942614e12e4f83f4ceb275f3d738b30e3b5c1f25edf8e9fa6789e854685974eed95b362049dbf6c8e7357e0327d64c681ed390534ac154e6810  libxml2-2.9.9.tar.gz
-83074e582cdba8bedff40fc653731ad18ca357bde8f1420e2e8a2a38998b951aebcb73ca5d51859be3b4d9bc1a0308836ca2bb612269edbc61b9dd6ebc7fdb2a  fix-null-pointer-dereference.patch"
+b2sums="00a67c38084f2effd5d68d7d3e68f0c96cf4f52eab6d8d9b96dc91f03a84baa132abeaf303a836ff9bbf04f832432a036077316c464398e433c9779d8519074b  libxml2-2.9.9.tar.gz
+5aa3bef4955edb7f1a20e2942f77daef413945ecd2cdd38699db213a8a0ca9b52c1e14df3b6a86dcfb870dc5f8862e988807892304bb4916a5105f9fcbe5a246  fix-null-pointer-dereference.patch"

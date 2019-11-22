@@ -48,4 +48,4 @@ bsdcat() {
 	mv "$pkgdir"/usr/bin/bsdcat "$subpkgdir"/usr/bin/
 }
 
-sha512sums="2f9e2a551a6bcab56fb1a030b5d656df7299a3d151465aa02f0420d344d2fada49dee4755b3abff9095f62519e14dc9af8afa1695ecc6d5fdb4f0b28e6ede852  libarchive-3.4.0.tar.gz"
+b2sums="6da5798ceabb542d8b877b3d672f6e6431ed7340ec0160a5d8cef28591b516b55d426002379eddc632a478bfd2f034a358f8552f55c9f066fd7f5c31c218b462  libarchive-3.4.0.tar.gz"

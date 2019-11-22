@@ -32,4 +32,4 @@ package() {
 		"$pkgdir"/usr/share/doc/$pkgname/
 }
 
-sha512sums="84fbff3a8abc1d0d47e2113d14f509a6a0e8fb97d09c6abf91cefb416b7237d31f53945627e3958901b2a5229f57d5d2ffc9e0b7b4cd271f61689781dc6871bc  py-elftools-0.25.tar.gz"
+b2sums="b16d43a6c5d1773aef2117f831b84a9788c8385300cdfaf115048495c6493a8518b03da1ed7fc17546d90e5c7f5ab1ca093a5526758670e6bda0c49882b951c9  py-elftools-0.25.tar.gz"

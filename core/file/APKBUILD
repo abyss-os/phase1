@@ -35,4 +35,4 @@ libmagic() {
 	mv "$pkgdir"/usr/lib "$pkgdir"/usr/share "$subpkgdir"/usr
 }
 
-sha512sums="9b6ae3dd910a03d2161c91ebc75ac91eb7dbd279563462b77daf902d9ae9f0a70de12c37a498b20c6357d6594059d01841bfd104592107b65c08d8343fca19d2  file-5.37.tar.gz"
+b2sums="0a9be418d11c3e31e3ec6a77970d806c12c04cd2d0f7ebe2bf6a9802719f71e89baa6fc55fcc197e9ef19338038f68deb067cc5f50ff927bd91294efaabe0384  file-5.37.tar.gz"

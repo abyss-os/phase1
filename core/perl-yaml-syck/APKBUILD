@@ -42,4 +42,4 @@ check() {
 	make test
 }
 
-sha512sums="5177f415f1f3f0d46b9fc51e43478da627edc3d7e89d9baf095fdda2cd9f93eb46784429f1665fead2b3377a2749c6fb937a91136bbe713d79000c12206a83f5  YAML-Syck-1.31.tar.gz"
+b2sums="8e3c19026856707187fe5f90cfde598ec9d9b2a3e22c9ad106bde26aa5b62dff5ebf34cc0a61e4d9f1d8352f9f3cc06c96eccb8c572be8bc3650fe30ffe8b177  YAML-Syck-1.31.tar.gz"

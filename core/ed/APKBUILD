@@ -36,4 +36,4 @@ package() {
 	make DESTDIR="$pkgdir" install
 }
 
-sha512sums="27a16db41e88626b9718b1868f2fc629b609e436aca2450846f87492c61bf60cec3db0c54ff9a421d9bcbf59fe91a8c672aee5772e1b1eec8a365f227c30ecba  ed-1.15.tar.lz"
+b2sums="d395bf0d85db7c9bcc6a63dbef485e1e30ce3649f4f401905160e746d0cf916e19fed95aa0c56536d64b4cdaafcddc990615a9279100e669c7e512836aa93734  ed-1.15.tar.lz"

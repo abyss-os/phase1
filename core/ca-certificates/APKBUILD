@@ -50,4 +50,4 @@ package() {
 	chmod +x "$pkgdir"/etc/ca-certificates/update.d/certhash
 }
 
-sha512sums="7b022c3b3319ac4ebbf13f551626f3d60a5552014d564166165030ee799c2fd470c593fb7171732100089b17ad3d309abc73f2429967222676915cad46f95a8e  ca-certificates-20190108.tar.xz"
+b2sums="fa49610d32d01b2619cdb883bd1d80dea78478bcc9f6f61a5a668827928f3a1b1f189542aaa16042d0334128efe7ac205ead06271d20b1a0cf72118de235cb5d  ca-certificates-20190108.tar.xz"

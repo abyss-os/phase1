@@ -43,4 +43,4 @@ vim() {
 		"$subpkgdir"/usr/share/vim/vimfiles/syntax/$pkgname.vim
 }
 
-sha512sums="b151239b23a63bee52df2dffd35a690f89e8327ba9312382478a2cef2de6fcbc2c74604f6da3a9c879452aa22326a9d9e8ea69c66315a5b344b7fa24f2398ad2  asciidoc-8.6.10.tar.gz"
+b2sums="fc317f05a0bf32cfd1da5a8712be43284c26e51650ebec1a351194be7ff5f221c3a5553ac05924f9e470f55ff3ad1c1065c119ab0a5dc048754234d1674d383e  asciidoc-8.6.10.tar.gz"

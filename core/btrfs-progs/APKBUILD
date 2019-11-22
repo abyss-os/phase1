@@ -57,4 +57,4 @@ py() {
 	mv "$pkgdir"/usr/lib/python* "$subpkgdir"/usr/lib/
 }
 
-sha512sums="0f7582893e76d73ac7c0061dd43f65c465ca6308d3447a4e12f95397edcf3b74cc4dd3fad4a139739322650a0d228c4b2d43eb6eb9a09eb92f8fa2a5ef1519cd  btrfs-progs-v5.1.1.tar.xz"
+b2sums="ca032cf17e78e5892788b677b5a0fead7cf1108fd464facb48e713b259c8c75f8b7714377f75e7b9e595c7c8fa5927fa37d11f43f51e4d898698f9fc5d26a808  btrfs-progs-v5.1.1.tar.xz"

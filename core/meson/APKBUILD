@@ -24,4 +24,4 @@ package() {
 	python3 setup.py install --prefix=/usr --root="$pkgdir"
 }
 
-sha512sums="9efe962c60e21bf4159ce0b113caba0119751a5f6217cd116f6e43b0b4150af0eb7ab484a74d8e9438d78a5d0458dda4215e9b6b9c96bfc0d07e23d709d2929f  meson-0.52.0.tar.gz"
+b2sums="8d907f50bba5069ced7c0103347049025e1fa6f3d034c18dc882fe84ab06c4024d138006a2a17b5dc8f13b9c1b88f64d481b44b69243441f06f06b72604fcb5f  meson-0.52.0.tar.gz"

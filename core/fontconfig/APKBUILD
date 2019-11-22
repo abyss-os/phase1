@@ -45,4 +45,4 @@ package() {
 	install -m644 -D COPYING "$pkgdir"/usr/share/licenses/"${pkgname}"/COPYING
 }
 
-sha512sums="bc6719c04489c3baba9c59ee722a2fce2707f92f95432ab2c00d3f13353c603ccd1c43f751231a42c22fac7908561f7efe734718142061934e9809cac9b6071d  fontconfig-2.13.92.tar.gz"
+b2sums="7c1b9e0d4dafee1c43d96e59e82e842cf624f1d3674c88e4a659c271f6705535125f0f5ebfe167a20f3102a7e8dc1f7b6e7be39a11f251672a7e702221f9c0ca  fontconfig-2.13.92.tar.gz"

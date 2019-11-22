@@ -40,4 +40,4 @@ package() {
 	make DESTDIR="$pkgdir" install
 }
 
-sha512sums="3fb96ea1a8bc9eb00fa2cf79f64cc9613250e8b97de6e90e440c7c44e92789e7c7fd603b7347bb02d9d74af725cf8fde5d2e435c5ffdcb784316c67b83ddf0fe  libnftnl-1.1.3.tar.bz2"
+b2sums="9a46a46b68fd6d3e0ffc3d28713ee9a70017dd4d05763a49a655f172ae77928d9b54554e7609851f3a18e9465c53f53c1828311162013bc067493e4e02ff3fb8  libnftnl-1.1.3.tar.bz2"

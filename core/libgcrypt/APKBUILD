@@ -53,4 +53,4 @@ package() {
 	rm -f ${pkgdir}/usr/share/info/dir
 }
 
-sha512sums="b55e16e838d1b1208e7673366971ae7c0f9c1c79e042f41c03d14ed74c5e387fa69ea81d5414ffda3d2b4f82ea5467fe13b00115727e257db22808cf351bde89  libgcrypt-1.8.5.tar.bz2"
+b2sums="93276b4536f71c07bb103e10607592e02add413f633d96cc95513daa6e6b0e098fe803bb6a0e405a241fddc5ce0cfad61658d57c27bd724eecd32fd862af4c99  libgcrypt-1.8.5.tar.bz2"

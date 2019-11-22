@@ -41,4 +41,4 @@ package() {
 	install -Dm644 "$builddir"/man/man8/* "$pkgdir"/usr/share/man/man8/
 }
 
-sha512sums="e7608e3a3360ec19dea33be4aac69b2f263f9d561699aad5b165927eaf0bd45bd68649e9e115aa978928d88f33fc3448b87601a4d34c4e60afd690c41c03c81f  runc-v1.0.0-rc9.tar.gz"
+b2sums="c54c2e88f75d2552eee551c20cca84554391f82b878fb5ddc22d5265496387feecb4f00826804effb29161fa735d22e1472dffa3df813a82130a76f5602aa27e  runc-v1.0.0-rc9.tar.gz"

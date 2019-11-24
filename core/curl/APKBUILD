@@ -52,4 +52,4 @@ libcurl() {
 	mv "$pkgdir"/usr/lib "$subpkgdir"/usr
 }
 
-b2sums="96519ad3b342944d2e6ae645a8435ba902e319830a95a2f873f4ab71cf2585daf98b5e44509dd394eaa6db71ac3d2cc6dd9e45deead7021e5d2e96db5de295ab  curl-7.65.1.tar.xz"
+b2sums="818b3d03ac8c4adb8a629147feccebcbd3d89164a77d7cb457924bd44c3069f1b03326861b73c51a6427d7169d40485a509f74edd89b99b760649e7adcdce693  curl-7.67.0.tar.xz"

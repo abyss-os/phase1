@@ -8,7 +8,7 @@ license="GPL-2.0-or-later LGPL-3.0-or-later"
 depends=""
 depends_dev="linux-dev"
 makedepends="$depends_dev acl-dev asciidoc attr-dev autoconf automake e2fsprogs-dev
-	libtool lzo-dev python3-dev util-linux-dev xmlto zlib-dev"
+	libtool lzo-dev python3-dev util-linux-dev xmlto zlib-dev py-setuptools"
 subpackages="$pkgname-doc $pkgname-dev
 	$pkgname-bash-completion:bashcomp:noarch
 	py-$pkgname:py"

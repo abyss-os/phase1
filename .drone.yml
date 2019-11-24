@@ -9,6 +9,7 @@ steps:
   - name: build
     image: abyssos/abyss:dev
     commands:
+      - env
       - apk update
       - apk upgrade -a
       - apk add git

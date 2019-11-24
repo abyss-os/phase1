@@ -18,4 +18,6 @@ steps:
     environment:
       GH_TOKEN:
         from_secret: github_token
+      MC_HOST_master:
+        from_secret: MC_HOST_master
     pull: always

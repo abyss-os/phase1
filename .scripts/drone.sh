@@ -4,9 +4,10 @@
 echo "trigger: ${DRONE_BUILD_EVENT}"
 echo "previous: ${DRONE_COMMIT_BEFORE}"
 echo "current: ${DRONE_COMMIT_SHA}"
-echo 
+
+OPWD=${PWD}
 
 for PKG in $(git log ...${DRONE_COMMIT_BEFORE} --format=format: --name-only | grep -e 'APKBUILD$' | tac); do
 	echo "${PKG}:"
-	cd ${PKG%APKBUILD} && abuild -ri
+	cd ${OPWD}/${PKG%APKBUILD} && abuild -ri
 done

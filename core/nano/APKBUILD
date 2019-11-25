@@ -1,5 +1,5 @@
 pkgname=nano
-pkgver=4.3
+pkgver=4.5
 pkgrel=0
 pkgdesc="Enhanced clone of the Pico text editor"
 url="https://www.nano-editor.org"
@@ -51,4 +51,4 @@ syntax() {
 		"$subpkgdir"/usr/share/$pkgname/
 }
 
-b2sums="5bf703943be0ec63d559772d64ff557d8478b88384487c4c9680748010d1f6e709101f1e12f0b8976514a96e39e64401a064c2e1018a98f60f6376c2b9b00006  nano-4.3.tar.xz"
+b2sums="708ea1e752f6ae4d584afca8ddbc31c031bc492b422ad1304c2e0d14c3e8b4aefc69ca259faa04294717bd022562fca14d2725bfa9b46949d6764ef067c633d8  nano-4.5.tar.xz"

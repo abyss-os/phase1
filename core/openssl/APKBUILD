@@ -1,6 +1,5 @@
-# Maintainer: Timo Teras <timo.teras@iki.fi>
 pkgname=openssl
-pkgver=1.1.1c
+pkgver=1.1.1d
 _abiver=${pkgver%.*}
 pkgrel=0
 pkgdesc="Toolkit for Transport Layer Security (TLS)"
@@ -17,13 +16,6 @@ source="https://www.openssl.org/source/openssl-$pkgver.tar.gz
 
 builddir="$srcdir/openssl-$pkgver"
 
-# secfixes:
-#   1.1.1b-r1:
-#     - CVE-2019-1543
-#   1.1.1a-r0:
-#     - CVE-2018-0734
-#     - CVE-2018-0735
-
 build() {
 	local _target _optflags
 	cd "$builddir"
@@ -36,20 +28,12 @@ build() {
 	# determine target OS for openssl
 	case "$CARCH" in
 	aarch64*) _target="linux-aarch64" ;;
-	arm*)   _target="linux-armv4" ;;
 	mips64*) _target="linux64-mips64" ;;
-	# explicit _optflags is needed to prevent automatic -mips3 addition
-	mips*) _target="linux-mips32"; _optflags="-mips32" ;;
 	ppc64le) _target="linux-ppc64le" ;;
-	x86)    _target="linux-elf" ;;
 	x86_64) _target="linux-x86_64"; _optflags="enable-ec_nistp_64_gcc_128" ;;
-	s390x)	_target="linux64-s390x";;
+	riscv64)	_target="linux64-generic";;
 	*)	msg "Unable to determine architecture from (CARCH=$CARCH)" ; return 1 ;;
 	esac
-
-	# Configure assumes --options are for it, so can't use
-	# gcc's --sysroot fake this by overriding CC
-	[ -n "$CBUILDROOT" ] && CC="$CC --sysroot=${CBUILDROOT}"
 
 	perl ./Configure $_target --prefix=/usr \
 		--libdir=lib \
@@ -96,5 +80,5 @@ _libssl() {
 	mv "$pkgdir"/usr/lib/libssl* "$subpkgdir"/usr/lib/
 }
 
-b2sums="bd157b244bedcefb8e646a743732945119b267236789ac69c38856570318aca09299bdaaea3f20294863b633e6fd4dfe124820597185b3b7461cfdf094daadb0  openssl-1.1.1c.tar.gz
+b2sums="d3155f07b487ebd8dd4fe25396c874f9af18b5cfd7e622298d29c4f2c8ce14ad4534609d321314a4bcd0d44414e1306190340daaacd3c8fca061c04498446244  openssl-1.1.1d.tar.gz
 fcf4f2180fff2f3472d642377bbcb9c881511e6efcc3b65311d8a3c6d232ce0c85681d1c102b1ff971e23352ea3179c094f1cb2d1ca538f831ec4142ec298fbb  dgst.patch"

@@ -53,8 +53,8 @@ check() {
 	#	BootstrapTest: we actualy bootstrap it every time so why test it.
 	#	CMakeOnly.MajorVersionSelection-PythonInterp_2: we have no Python2
 	#	kwsys.testSystemTools: "TestFileAccess incorrectly indicated that this is a writable file:
-	#	BundleUtilities: Fails in CI
 	# $builddir/build/Source/kwsys/testSystemToolsNewDir/testNewFile.txt"
+	#	BundleUtilities: Fails in CI
 	bin/ctest \
 		-j "$JOBS" \
 		--output-on-failure \

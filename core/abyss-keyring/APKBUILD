@@ -10,7 +10,8 @@ source="https://mirror.getabyss.com/abyss/jwh-x86_64.rsa.pub
 	https://mirror.getabyss.com/abyss/jwh-aarch64.rsa.pub
 	https://mirror.getabyss.com/abyss/jwh-riscv64.rsa.pub
 	https://mirror.getabyss.com/abyss/jwh-ppc64le.rsa.pub
-	https://mirror.getabyss.com/abyss/jwh-mips64.rsa.pub"
+	https://mirror.getabyss.com/abyss/jwh-mips64.rsa.pub
+	https://mirror.getabyss.com/abyss/phase1-master-20191127.rsa.pub"
 
 builddir="$srcdir/"
 
@@ -21,10 +22,12 @@ package() {
 	cp -v $srcdir/jwh-riscv64.rsa.pub $pkgdir/etc/apk/keys/jwh-5dc9abc0.rsa.pub
 	cp -v $srcdir/jwh-ppc64le.rsa.pub $pkgdir/etc/apk/keys/jwh-5dc9ac32.rsa.pub
 	cp -v $srcdir/jwh-mips64.rsa.pub $pkgdir/etc/apk/keys/jwh-5dc9adbe.rsa.pub
+	cp -v $srcdir/phase1-master-20191127.rsa.pub $pkgdir/etc/apk/keys/phase1-master-20191127.rsa.pub
 }
 
 b2sums="5a893c1c040579642868d8892b9294ce8c7080f2367d4affeb3ae9ad4f845c94f394cb2407f30e2d6e8c151074af8a480314b71a5a9d568186af6e0d0c05e881  jwh-x86_64.rsa.pub
 2fc5aff7a10675bca89030767e8a0ff35180a747a7e9e2b488896e902c6c17c6dd0e93d6acc4ea1b8d98c1bc30bfce7ddb6a695a9e1e4bc131fc03a08d1778a8  jwh-aarch64.rsa.pub
 12304d6115b84d17999f67faa0ffa2dde4062cfe328e160d48881144be09b411c68f37b4f779ac50d4a2a964f07b2f639c47fa09ada40dae3c41d55c969d8f1c  jwh-riscv64.rsa.pub
 c6ac267f5a15e257b3a7b87dd929ad45e8303e3be2a5f5d1366c1d55f6a8660c933ec87c5e91301e9ace186d1d816f14d6748ab78d68b3b7e27f000e5c5c0f95  jwh-ppc64le.rsa.pub
-88a3a298b2c4bfcc5c7dbf73e3ba848c4d6de7a06ca27c0c66a4480ff3a3f5d9e39da81699336340116c379a3f6f84793fc59299e015d4677cfb0756ef00f91c  jwh-mips64.rsa.pub"
+88a3a298b2c4bfcc5c7dbf73e3ba848c4d6de7a06ca27c0c66a4480ff3a3f5d9e39da81699336340116c379a3f6f84793fc59299e015d4677cfb0756ef00f91c  jwh-mips64.rsa.pub
+89ecde199711c3ef4216011df34fb0be5ee0abb336fab773cc88d3087c81e1c9cd2eaa7fbf3287dcdea2ee7064f42843fa99c19c44b07feab1ce21ca0770bfe8  phase1-master-20191127.rsa.pub"

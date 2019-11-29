@@ -1,0 +1,15 @@
+--- sed-4.7/gnulib-tests/dfa-match.sh.old	2019-11-29 21:30:28.695297638 +0000
++++ sed-4.7/gnulib-tests/dfa-match.sh	2019-11-29 21:31:38.994556076 +0000
+@@ -22,11 +22,7 @@
+ path_prepend_ .
+ 
+ if (type timeout) >/dev/null 2>&1; then
+-  if timeout --help 2>&1 | grep BusyBox; then
+-    timeout_10='timeout -t 10'
+-  else
+-    timeout_10='timeout 10'
+-  fi
++  timeout_10='timeout 10'
+ else
+   timeout_10=
+ fi

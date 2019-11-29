@@ -11,10 +11,17 @@ checkdepends="diffutils"
 install="$pkgname.post-deinstall"
 source="https://ftp.heanet.ie/mirrors/ftp.gnu.org/gnu/sed/sed-$pkgver.tar.xz
 	disable-mbrtowc-test.patch
+	busybox-timeout-test.patch
 	"
-# testsuite fails because busybox provides a /usr/bin/timeout
-options="!checkroot !check"
+options="!checkroot"
 builddir="$srcdir/sed-$pkgver"
+
+prepare() {
+	default_prepare
+
+	# Relies on unwrittable directory, which needs non-root
+	sed -i 's/testsuite\/panic-tests.sh//' Makefile.in
+}
 
 build() {
 	cd "$builddir"
@@ -44,4 +51,5 @@ package() {
 }
 
 b2sums="752bc2e942b6f041710c6811518147c5fa4b143b33ae842ec1f142ec914bfaf4d7e8a94a2b1a5b345789944e5426f7946997f2ccbc43ee5034351a95ce3a677e  sed-4.7.tar.xz
-fd6348778f065c19a3ddb2184ead06bcff47fc49f83bce052fc413616d9881525652e201265ae56618cfe6b8bb4a4f80c1ba31a249a1e28513830aaad209b925  disable-mbrtowc-test.patch"
+fd6348778f065c19a3ddb2184ead06bcff47fc49f83bce052fc413616d9881525652e201265ae56618cfe6b8bb4a4f80c1ba31a249a1e28513830aaad209b925  disable-mbrtowc-test.patch
+8d0d420fea4f635854d20b70fd94d43bcb0dd5cdeabb4a7e3c33dcf60829520f2e302292488bffd6e8fc04b1a0b04ba585f301798880f006cba8fd776996aa72  busybox-timeout-test.patch"

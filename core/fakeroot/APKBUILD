@@ -6,13 +6,25 @@ arch="all"
 license="GPL-3.0-or-later"
 url="https://packages.debian.org/fakeroot"
 depends="libcap acl attr"
-options="!checkroot !check"
+options="!checkroot"
 checkdepends="bash"
 makedepends="libcap-dev acl-dev attr-dev linux-dev libtool autoconf automake po4a"
 subpackages="$pkgname-doc"
 source="http://ftp.debian.org/debian/pool/main/f/fakeroot/fakeroot_$pkgver.orig.tar.gz
 	fakeroot-no64.patch"
 builddir="$srcdir"/$pkgname-$pkgver
+
+prepare() {
+	default_prepare
+
+	sed -i \
+		-e '/^  t.mknod					\\$/d' \
+		-e '/^  t.chmod_dev					\\$/d' \
+		-e '/^  t.tar						\\$/d' \
+		test/Makefile.am
+
+	autoreconf -iv
+}
 
 check() {
 	cd "$builddir"
@@ -21,8 +33,6 @@ check() {
 
 build() {
 	cd "$builddir"
-	
-	autoreconf -iv
 	CC=$CC CXX=$CXX CFLAGS="-D_STAT_VER=0 -lacl -lcap -lattr" ./configure \
 		--prefix=/usr \
 		--sbindir=/usr/bin \

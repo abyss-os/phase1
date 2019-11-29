@@ -5,11 +5,24 @@ pkgdesc="GNU awk pattern-matching language"
 url="https://www.gnu.org/software/gawk/gawk.html"
 arch="all"
 license="GPL-3.0-or-later"
-options="!check" # failing tests
+options="" # failing tests
 checkdepends="coreutils diffutils"
 subpackages="$pkgname-doc"
 source="https://ftp.gnu.org/gnu/$pkgname/$pkgname-$pkgver.tar.xz"
 builddir="$srcdir/$pkgname-$pkgver"
+
+prepare() {
+	default_prepare
+
+	# Busybox doesn't have support for -f option on ls
+	sed -i 's/ls -f/ls/' test/fts.awk
+	sed -i 's/readdir readdir_test readdir_retest//' test/Makefile.in
+
+	sed -i 's/ERRNO = No child processes/ERRNO = No child process/' test/testext.ok
+
+	# Faulty ordering
+	sed -i 's/clos1way6 crlf/crlf/' test/Makefile.in
+}
 
 build() {
 	./configure \

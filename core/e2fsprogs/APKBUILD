@@ -10,7 +10,7 @@ makedepends="$depends_dev linux-dev"
 checkdepends="diffutils perl"
 subpackages="$pkgname-dev $pkgname-doc"
 source="https://www.kernel.org/pub/linux/kernel/people/tytso/$pkgname/v$pkgver/$pkgname-$pkgver.tar.xz"
-options="!check"
+options=""
 
 build() {
 	cd "$builddir"

@@ -9,7 +9,14 @@ checkdepends="coreutils diffutils"
 subpackages="$pkgname-doc"
 source="https://ftp.gnu.org/pub/gnu/$pkgname/$pkgname-$pkgver.tar.xz
 	test-parse-datetime.patch"
-options="!checkroot !check"
+options="!checkroot"
+
+prepare() {
+	default_prepare
+
+	# Requires seq with -f (format) option
+	sed -i '/^  tests\/find\/exec-plus-last-file.sh \\$/d' Makefile.in
+}
 
 build() {
 	cd "$builddir"

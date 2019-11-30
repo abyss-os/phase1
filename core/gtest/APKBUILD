@@ -1,5 +1,5 @@
 pkgname=gtest
-pkgver=1.8.1
+pkgver=1.10.0
 pkgrel=0
 pkgdesc="Google Test - C++ testing utility based on the xUnit framework (like JUnit)"
 url="https://github.com/google/googletest"
@@ -55,6 +55,6 @@ gmock() {
 	mv "$pkgdir"/usr/lib/libgmock*.so "$subpkgdir"/usr/lib/
 }
 
-b2sums="40ef3417fe424205c0617f07207347ce671ac87605f8ac9b8a333b0b06e3fbef9f556041ee324c18f957f3258ab9fe06704f31cdd038355fb7890180eb77ced1  gtest-1.8.1.tar.gz
+b2sums="82740692a3e24e92401eb950d131e0da0ebc5e6ed5dbdadcd8d96281920cdcdaecbef439f8dba35826b9ef0e5d0e915a127f6c441fd14a86881cf9608714eec0  gtest-1.10.0.tar.gz
 a9068ce40887266ea01181ced59ce1450b9a85afe71936a7c2d57a7b8e8cd89fe0dfe7532dfba5c90fb4a6e54393448bf82fc567b386bd271c7de0791fda7ae0  gtest-1.8.1-libversion.patch
 46f754f4f1143b78be3bec43bff41df86b8a00e4d17c5ab6a368899d24600750e085e98b8b85e65a16fd911b43966ca690b912f8e0c30425c82bcc35d4b958d2  gtest-1.8.1-null-pointer.patch"

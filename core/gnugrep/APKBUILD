@@ -11,13 +11,14 @@ subpackages="$pkgname-doc"
 source="https://mirrors.kernel.org/gnu/grep/grep-$pkgver.tar.xz
 	fix-tests.patch"
 builddir="$srcdir/grep-$pkgver"
-# for whatever reason, all the builders locked up in the testsuite.  investigate later.
-options="!check"
 
 prepare() {
 	default_prepare
-	sed -i '/test-localename$(EXEEXT)/d' \
-		"$builddir"/gnulib-tests/Makefile.in
+	sed -i '/^  grep-dev-null-out				\\$/d' tests/Makefile.in
+	sed -i \
+		-e 's/test-localename$(EXEEXT) test-lseek.sh/test-lseek.sh/' \
+		-e 's/dfa-invalid-char-class.sh dfa-match.sh/dfa-invalid-char-class.sh/' \
+		gnulib-tests/Makefile.in
 }
 
 build() {
@@ -35,7 +36,7 @@ build() {
 }
 
 check() {
-	make -C "$builddir" check
+	make check
 }
 
 package() {

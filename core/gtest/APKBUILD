@@ -4,7 +4,7 @@ pkgrel=0
 pkgdesc="Google Test - C++ testing utility based on the xUnit framework (like JUnit)"
 url="https://github.com/google/googletest"
 arch="all"
-options="!check"  # googletest-death-test-test hangs
+options=""
 license="BSD-3-Clause"
 depends=""
 depends_dev="${pkgname}=${pkgver}-r${pkgrel} gmock=${pkgver}-r${pkgrel} cmake"
@@ -31,8 +31,9 @@ build() {
 	cmake -DCMAKE_INSTALL_PREFIX=/usr \
 	      -DCMAKE_INSTALL_LIBDIR=lib \
 	      -DBUILD_SHARED_LIBS=ON \
-	      -DPYTHON_EXECUTABLE=python3 \
+	      -Dgmock_build_tests=ON \
 	      -Dgtest_build_tests=ON \
+	      -DPYTHON_EXECUTABLE=/usr/bin/python \
 	      ..
 	make
 }

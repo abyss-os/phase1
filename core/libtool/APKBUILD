@@ -13,10 +13,7 @@ depends="libltdl"
 makedepends="m4 help2man file diffutils"
 checkdepends="gawk autoconf automake gzip"
 subpackages="libltdl $pkgname-doc"
-
-# 1 test presently fails on Alpine (need to investigate):
-#  69: shlibpath_overrides_runpath                     FAILED (shlibpath.at:68)
-options="libtool !check"
+options="libtool"
 
 builddir="$srcdir"/$pkgname-$pkgver
 
@@ -32,11 +29,13 @@ build() {
 	make
 }
 
+# Note: slow testsuite
 check() {
 	cd "$builddir"
 	# Test 70 and 117 are known to fail
 	# Test 170 repeats the entire test suite with shorter max_cmd_len
-	make check TESTSUITEFLAGS="1-69 71-116 118-169"
+	# Test 102 fails: cannot find the library 'ltdl/libltdlc.la'
+	make check TESTSUITEFLAGS="1-69 71-101 103-116 118-169"
 }
 
 package() {

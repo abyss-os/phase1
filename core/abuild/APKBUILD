@@ -33,7 +33,7 @@ prepare() {
 
 build() {
 	cd "$builddir"
-	make VERSION="$pkgver-r$pkgrel"
+	make VERSION="$pkgver-r$pkgrel" CC=$CC
 }
 
 package() {

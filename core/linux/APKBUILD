@@ -25,6 +25,8 @@ aarch64*) _carch="arm64" ;;
 mips*) _carch="mips" ;;
 ppc*) _carch="powerpc" ;;
 x86*) _carch="x86" ;;
+riscv64*) _carch="riscv" ;;
+*) error "Unsupported architecture" ;;
 esac
 
 prepare() {

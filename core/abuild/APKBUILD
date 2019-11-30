@@ -1,5 +1,5 @@
 pkgname=abuild
-pkgver=4.0.20
+pkgver=4.0.21
 pkgrel=1
 pkgdesc="Script to build Alpine Packages"
 url="https://git.alpinelinux.org/cgit/abuild/"
@@ -20,9 +20,9 @@ subpackages="apkbuild-cpan:cpan:noarch apkbuild-gem-resolver:gems:noarch
 # tests in abuild aren't released yet
 options="suid !check"
 pkggroups="abuild"
-source="https://gitlab.com/abyssos/abuild/-/archive/v$pkgver/abuild-v$pkgver.tar.gz"
+source="$pkgname-v$pkgver.tar.gz::https://github.com/abyss-os/abuild/archive/v$pkgver.tar.gz"
 
-builddir="$srcdir/$pkgname-v$pkgver"
+builddir="$srcdir/$pkgname-$pkgver"
 
 prepare() {
 	default_prepare
@@ -67,4 +67,4 @@ _rootbld() {
 	mkdir -p "$subpkgdir"
 }
 
-b2sums="d609659823eda90e1da8cfe4d27a84b58d7f30835a0a4e892512d8400203962f6a94d5c4657026c24681e4dff94902d83310df33a4b061e590ea4146a6a25a6e  abuild-v4.0.20.tar.gz"
+b2sums="3328833d1eb3350dcab4cdffc648c7012ebbfdf670d6d7db7a784e1fd5a990a4399a273aca85db4811184823714c90b8f930b128dac49c26fddcabb62d4dfb97  abuild-v4.0.21.tar.gz"

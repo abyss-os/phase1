@@ -15,7 +15,7 @@ _mpc=1.1.0
 makedepends="gcc g++ paxmark bison flex texinfo gawk zip zlib-dev linux-dev !gettext-dev"
 subpackages="$pkgname-doc"
 
-export CC=gnu-gcc CXX=gnu-g++ AS=gnu-as LD=gnu-ld GNATBIND=gnu-gnatbind GNATMAKE=gnu-gnatmake
+export CC=gcc CXX=g++ AS=gnu-as LD=gnu-ld GNATBIND=gnatbind GNATMAKE=gnatmake
 
 : ${LANG_CXX:=true}
 : ${LANG_GO:=false}
@@ -33,6 +33,11 @@ case "$CTARGET_ARCH" in
 arm*)		LIBITM=false ;;
 mips*)		LIBITM=false ;;
 esac
+
+if [ "$CTARGET_ARCH" = "riscv64" ]; then
+#	LANG_ADA=false
+	LIBITM=false
+fi
 
 # Fortran uses libquadmath if toolchain has __float128
 # currently on x86, x86_64 and ia64
@@ -168,18 +173,9 @@ build() {
 
 	case "$CTARGET" in
 	aarch64-*-*-*)		_arch_configure="--with-arch=armv8-a --with-abi=lp64";;
-	armv5-*-*-*eabi)	_arch_configure="--with-arch=armv5te --with-tune=arm926ej-s --with-float=soft --with-abi=aapcs-linux";;
-	armv6-*-*-*eabihf)	_arch_configure="--with-arch=armv6zk --with-tune=arm1176jzf-s --with-fpu=vfp --with-float=hard --with-abi=aapcs-linux";;
-	armv7-*-*-*eabihf)	_arch_configure="--with-arch=armv7-a --with-tune=generic-armv7-a --with-fpu=vfpv3-d16 --with-float=hard --with-abi=aapcs-linux --with-mode=thumb";;
-	mips-*-*-*)		_arch_configure="--with-arch=mips32 --with-mips-plt --with-float=soft --with-abi=32";;
-	mips64-*-*-*)		_arch_configure="--with-arch=mips3 --with-tune=mips64 --with-mips-plt --with-float=soft --with-abi=64";;
-	mips64el-*-*-*)		_arch_configure="--with-arch=mips3 --with-tune=mips64 --with-mips-plt --with-float=soft --with-abi=64";;
-	mipsel-*-*-*)		_arch_configure="--with-arch=mips32 --with-mips-plt --with-float=soft --with-abi=32";;
-	powerpc-*-*-*)		_arch_configure="--enable-secureplt --enable-decimal-float=no";;
+	mips64-*-*-*)		_arch_configure="--with-arch=mips64 --with-tune=mips64 --with-mips-plt --with-float=soft --with-abi=64";;
 	powerpc64*-*-*-*)	_arch_configure="--with-abi=elfv2 --enable-secureplt --enable-decimal-float=no --enable-targets=powerpcle-linux";;
-	i486-*-*-*)		_arch_configure="--with-arch=i486 --with-tune=generic --enable-cld";;
-	i586-*-*-*)		_arch_configure="--with-arch=i586 --with-tune=generic --enable-cld";;
-	s390x-*-*-*)		_arch_configure="--with-arch=z196 --with-tune=zEC12 --with-zarch --with-long-double-128 --enable-decimal-float";;
+	riscv64-*-*-*)		_arch_configure="--with-arch=rv64ima --with-abi=lp64";;
 	esac
 
 	case "$CTARGET_ARCH" in
@@ -234,7 +230,6 @@ build() {
 		"$_gccdir"/configure CC=$CC CXX=$CXX --prefix=/usr \
 		--mandir=/usr/share/man \
 		--infodir=/usr/share/info \
-		--program-prefix=gnu- \
 		--build=${CBUILD} \
 		--host=${CHOST} \
 		--target=${CTARGET} \

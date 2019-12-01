@@ -1,0 +1,27 @@
+pkgname=distrobuilder
+pkgver=1.0
+pkgrel=0
+pkgdesc="distrobuilder"
+url="https://github.com/lxc/distrobuilder"
+arch="all"
+license="custom"
+makedepends="go"
+#subpackages="$pkgname-doc"
+source="https://github.com/lxc/distrobuilder/archive/$pkgname-$pkgver.tar.gz"
+builddir="$srcdir/src/github.com/lxc/distrobuilder"
+
+build() {
+	cd "$srcdir"
+	export GOPATH="$PWD"
+	mkdir -p $(dirname "$builddir")
+	ln -s "$PWD/$pkgname-$pkgname-$pkgver" "$builddir"
+	cd "$builddir"
+	make VERSION="v$pkgver" REVISION="$_commit"
+}
+
+package() {
+	install -d "$pkgdir"/usr/bin/
+	install -Dsm755 "$srcdir"/bin/* "$pkgdir"/usr/bin/
+}
+
+b2sums="aa42f9ad89394a3bad4c0d9c0da48e890a7306bff38f8a7b3076da527a93588b66dfc564111bee79f66a161aa2d82872fd68db1d009d882172268cb5daa3a14a  distrobuilder-1.0.tar.gz"

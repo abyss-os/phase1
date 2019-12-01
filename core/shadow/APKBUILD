@@ -4,9 +4,9 @@ pkgrel=0
 pkgdesc="PAM-using login and passwd utilities (usermod, useradd, ...)"
 url="http://pkg-shadow.alioth.debian.org/"
 arch="all"
-license="GPL"
-depends=""
-makedepends="linux-pam-dev"
+license="BSD-3-Clause"
+depends="acl attr"
+makedepends="linux-pam-dev acl-dev attr-dev"
 subpackages="$pkgname-doc"
 source="https://github.com/shadow-maint/shadow/releases/download/$pkgver/shadow-$pkgver.tar.xz
 	chpasswd.pamd
@@ -16,19 +16,14 @@ source="https://github.com/shadow-maint/shadow/releases/download/$pkgver/shadow-
 	pam-useradd.patch
 	"
 options="suid"
-builddir="$srcdir/shadow-$pkgver"
 
 build() {
-	cd "$builddir"
-
 	./configure \
 		--build=$CBUILD \
 		--host=$CHOST \
 		--target=$CTARGET \
 		--prefix=/usr \
-		--bindir=/usr/bin \
 		--sbindir=/usr/bin \
-		--libdir=/usr/lib \
 		--sysconfdir=/etc \
 		--mandir=/usr/share/man \
 		--infodir=/usr/share/info \
@@ -37,8 +32,6 @@ build() {
 		--with-libpam \
 		--without-audit \
 		--without-selinux \
-		--without-acl \
-		--without-attr \
 		--without-tcb \
 		--without-nscd \
 		--without-group-name-max-length
@@ -46,17 +39,14 @@ build() {
 }
 
 check() {
-	cd "$builddir"
 	make check
 }
 
 package() {
-	cd "$builddir"
-
 	make DESTDIR="$pkgdir" install
 
 	# Do not install these pam.d files they are broken and outdated.
-	rm "$pkgdir"/etc/pam.d/*
+	rm -f "$pkgdir"/etc/pam.d/*
 
 	# install some pam.d files based on a patched useradd
 	for pamf in groupadd groupdel groupmems groupmod \
@@ -66,11 +56,11 @@ package() {
 			"$pkgdir/etc/pam.d/$pamf"
 	done
 	# nologin is provided by util-linux.
-	rm "$pkgdir"/usr/bin/nologin
-	rm "$pkgdir"/usr/share/man/man8/nologin.*
+	rm -f "$pkgdir"/sbin/nologin
+	rm -f "$pkgdir"/usr/share/man/man8/nologin.*
 
 	# avoid conlict with coreutils-doc
-	rm "$pkgdir"/usr/share/man/man1/groups.*
+	rm -f "$pkgdir"/usr/share/man/man1/groups.*
 
 	# However, install our own for login.
 	cp "$srcdir"/login.pamd "$pkgdir"/etc/pam.d/login
@@ -87,12 +77,7 @@ package() {
 		"$pkgdir"/usr/share/man/man5/passwd.5*
 
 	chmod 4711 $pkgdir/usr/bin/new*idmap
-
-	# Used e.g. for unprivileged LXC containers.
-	touch etc/subuid etc/subgid
-
-	mv $pkgdir/usr/sbin/* $pkgdir/usr/bin/
-	rm -rv $pkgdir/usr/sbin
+	touch $pkgdir/etc/subuid $pkgdir/etc/subgid
 }
 
 b2sums="83b926fd8136647b004bcb8afe252ad60e0f5820cba8ff0ff4bd9f7918b5e9996ffa51c05774e64e83aaf062b0fb826865492d237c0ff9abeb0927a9ff33bf7e  shadow-4.7.tar.xz

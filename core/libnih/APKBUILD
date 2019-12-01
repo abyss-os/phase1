@@ -1,0 +1,54 @@
+pkgname=libnih
+pkgver=1.0.3
+pkgrel=5
+pkgdesc="glib-like library for embedded use"
+url="https://launchpad.net/libnih"
+arch="all"
+# gettext tests are broken
+options="!check"
+license="GPL-2.0-only"
+depends=
+depends_dev="dbus-dev expat-dev"
+makedepends="$depends_dev"
+checkdepends="linux-headers"
+install=""
+subpackages="$pkgname-dev $pkgname-doc"
+source="https://launchpad.net/libnih/${pkgver%.*}/${pkgver}/+download/${pkgname}-${pkgver}.tar.gz
+	musl-fix-signals.patch
+	disable-broken-test.patch
+	musl-enomem-message.patch
+	"
+
+prepare() {
+	cd "$builddir"
+	update_config_sub
+	default_prepare
+}
+
+build() {
+	cd "$builddir"
+	./configure \
+		--build=$CBUILD \
+		--host=$CHOST \
+		--prefix=/usr \
+		--libdir=/lib \
+		--sysconfdir=/etc \
+		--localstatedir=/var \
+		--disable-nls
+	make
+}
+
+check() {
+	cd "$builddir"
+	make check
+}
+
+package() {
+	cd "$builddir"
+	make DESTDIR="$pkgdir" install
+}
+
+b2sums="f8f9fcdda86eabff39de0b0f92cd1f8c1c0eeb0c86ec4970e5bef1cc0dff0fda83db64975ece93d5d8ede5d0613d5f363dd7456c59fe966feb5e61e5b8913627  libnih-1.0.3.tar.gz
+6afadfd8291ddca47adb3d961abea92fc12051b3887802cc09dd4c9a880d3f3a99e999ce5c7dc193f4bb916302601fd3116ac773b818d084df8811e6d2e6d904  musl-fix-signals.patch
+262b57a79745a4898ddb043e56d93e1f5fd12ded19e846cb0491661adf2d1a1607ef898b73389cc5d268d5f7ba518e2951b811f227a49972cf1f868dff3eb4e1  disable-broken-test.patch
+e1a4cffe5bd9b198f38a93cb49e0809192c66043f5a5901d354b7392daa03f3cc47146abe53fc4663bdf8e07f58a1fffa565c4b03c36fb2d299ed558d9442bb0  musl-enomem-message.patch"

@@ -1,0 +1,38 @@
+pkgname=lua-lunix
+_pkgname=lunix
+pkgver=20150923
+pkgrel=1
+pkgdesc="Comprehensive Unix API Module for Lua"
+url="https://github.com/wahern/lunix"
+arch="all"
+license="MIT"
+depends=""
+makedepends=""
+subpackages=""
+makedepends="$makedepends lua5.2-dev"
+source="$pkgname-$pkgver.tar.gz::https://github.com/wahern/lunix/archive/tag-$pkgver.tar.gz
+	fix-musl-siglist.patch"
+builddir="$srcdir/$_pkgname-tag-$pkgver"
+
+build() {
+	cd "$builddir"
+
+	msg "Building for Lua 5.2..."
+	make all5.2 || return 1
+}
+
+package() {
+	mkdir -p "$pkgdir"
+	pkgdesc="$pkgdesc 5.2"
+	install_if="lua5.2 $pkgname=$pkgver-r$pkgrel"
+	local rockdir="$pkgdir/usr/lib/luarocks/rocks-5.2/$_pkgname/$pkgver-1"
+
+	cd "$builddir"
+	make prefix="/usr" DESTDIR="$pkgdir" install5.2
+
+	mkdir -p "$rockdir"
+	echo 'rock_manifest = {}' > "$rockdir"/rock_manifest
+}
+
+b2sums="f92e49815e2f0f0b987668386af85eb131f3947d9e2d0a32fb6dbebb390e1596a432b4105e22755a42e7aef1cec24ac9f5e991c0410341e7eccb0deadd3f7994  lua-lunix-20150923.tar.gz
+caf3782b7c2f287f4e759b5fd29beb6c568696f9f355e9ed5f5d01aca4dc68a88f839b341a518755abcfcaca0e78d5315964d6632022c6fccc13ee7aa369ab89  fix-musl-siglist.patch"

@@ -1,0 +1,29 @@
+pkgname=py-py
+_pkgname=py
+pkgver=1.8.0
+pkgrel=2
+pkgdesc="Python3 library with cross-python path, ini-parsing, io, code, log facilities"
+url="https://py.readthedocs.io"
+arch="noarch"
+license="MIT"
+depends="python3"
+makedepends="py-setuptools"
+source="https://files.pythonhosted.org/packages/source/${_pkgname:0:1}/$_pkgname/$_pkgname-$pkgver.tar.gz"
+builddir="$srcdir/$_pkgname-$pkgver"
+
+build() {
+	cd "$builddir"
+	python3 setup.py build
+}
+
+check() {
+	cd "$builddir"
+	python3 setup.py check
+}
+
+package() {
+	cd "$builddir"
+	python3 setup.py install --prefix=/usr --root="$pkgdir"
+}
+
+b2sums="e08554fc3e0bae2e2d4515f075991707af29aa5c39e1387e8f8a7dab25e78c7340d389c79936ddea27b1fb0438ebdee8b5e218bbb48c62089d7fb656b1b6dbe8  py-1.8.0.tar.gz"

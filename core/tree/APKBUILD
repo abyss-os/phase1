@@ -1,0 +1,26 @@
+pkgname=tree
+pkgver=1.8.0
+pkgrel=0
+pkgdesc="A recursive directory indented listing of files"
+url="http://mama.indstate.edu/users/ice/tree/"
+arch="all"
+license="GPL-2.0-or-later"
+depends=""
+depends_dev=""
+makedepends="$depends_dev"
+install=""
+options="!check"
+subpackages="$pkgname-doc"
+source="http://mama.indstate.edu/users/ice/tree/src/$pkgname-$pkgver.tgz"
+
+build() {
+	cd "$builddir"
+	make CC=$CC
+}
+
+package() {
+	cd "$builddir"
+	make prefix="$pkgdir/usr" MANDIR="${pkgdir}/usr/share/man/man1" install
+}
+
+b2sums="51a27500b89a46add6e792d446b465696d2b34339bbd06f03baff9ce589131b5d82c414849f891dbb79a3f3cfb23b89336e783ad23b84c1fb5415a13fb9488cd  tree-1.8.0.tgz"

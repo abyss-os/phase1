@@ -56,7 +56,7 @@ package() {
 			"$pkgdir/etc/pam.d/$pamf"
 	done
 	# nologin is provided by util-linux.
-	rm -f "$pkgdir"/sbin/nologin
+	rm -f "$pkgdir"/usr/bin/nologin
 	rm -f "$pkgdir"/usr/share/man/man8/nologin.*
 
 	# avoid conlict with coreutils-doc

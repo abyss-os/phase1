@@ -1,0 +1,160 @@
+pkgname=lxc
+pkgver=3.2.1
+_pkgver=${pkgver/_rc/.rc}
+pkgrel=0
+pkgdesc="Userspace interface for the Linux kernel containment features"
+url="https://linuxcontainers.org/lxc/"
+arch="all"
+license="GPL-2.0-only"
+makedepends="
+	libcap-dev
+	libseccomp-dev
+	linux-pam-dev
+	linux-headers
+
+	automake
+	autoconf
+	libtool
+	"
+
+options="suid"
+subpackages="
+	$pkgname-dev
+	$pkgname-doc
+	$pkgname-openrc
+	$pkgname-lvm::noarch
+	$pkgname-bridge::noarch
+	$pkgname-bash-completion:bashcomp:noarch
+	$pkgname-pam
+	$pkgname-download:_download:noarch
+	$pkgname-templates-oci:templates_oci:noarch
+	$pkgname-templates::noarch
+	"
+
+source="https://linuxcontainers.org/downloads/lxc/lxc-$_pkgver.tar.gz
+	cgroups-initialize-cpuset-properly.patch
+	network-restore-ability-to-move-nl80211-devices.patch
+	lxc.initd
+	lxc.confd
+	"
+
+_tmpldir="usr/share/lxc/templates"
+
+build() {
+	./configure \
+		--build=$CBUILD \
+		--host=$CHOST \
+		--prefix=/usr \
+		--sbindir=/usr/bin \
+		--sysconfdir=/etc \
+		--localstatedir=/var \
+		--disable-apparmor \
+		--enable-pam \
+		--with-distro=abyss \
+		--disable-werror
+	make
+}
+
+check() {
+	make check
+}
+
+package() {
+	make DESTDIR="$pkgdir" install
+
+	install -Dm755 "$srcdir"/lxc.initd "$pkgdir"/etc/init.d/lxc
+	install -Dm644 "$srcdir"/lxc.confd "$pkgdir"/etc/conf.d/lxc
+	install -d "$pkgdir"/var/lib/lxc
+
+	# Remove useless config for SysVinit.
+	rm -r "$pkgdir"/etc/default
+}
+
+lvm() {
+	pkgdesc="LVM support for LXC"
+	depends="$pkgname=$pkgver-r$pkgrel lvm2 util-linux"
+	install_if="$pkgname=$pkgver-r$pkgrel lvm2"
+	mkdir "$subpkgdir"
+}
+
+py() {
+	pkgdesc="Python3 module for LXC"
+	depends="python3"
+	mkdir -p "$subpkgdir"/usr/lib
+	mv "$pkgdir"/usr/lib/python3.* "$subpkgdir"/usr/lib
+}
+
+_download() {
+	pkgdesc="LXC container image downloader template"
+	depends="$pkgname gnupg1 tar wget"
+
+	mkdir -p "$subpkgdir"/$_tmpldir
+	mv "$pkgdir"/$_tmpldir/lxc-download "$subpkgdir"/$_tmpldir/
+}
+
+templates() {
+	pkgdesc="Templates for LXC (except alpine and download)"
+	depends="tar"
+	mkdir -p "$subpkgdir"/$_tmpldir
+	mv "$pkgdir"/$_tmpldir/* "$subpkgdir"/$_tmpldir/
+}
+
+templates_oci() {
+	pkgdesc="OCI Template for LXC"
+	depends="bash jq"
+	mkdir -p "$subpkgdir"/usr/share/lxc/templates
+	mv "$pkgdir"/usr/share/lxc/templates/lxc-oci \
+		"$subpkgdir"/usr/share/lxc/templates/
+}
+
+pam() {
+	pkgdesc="PAM module for LXC"
+	mkdir -p "$subpkgdir"/lib/security
+	mv "$pkgdir"/lib/security/pam_cgfs.so "$subpkgdir"/lib/security/
+}
+
+dev() {
+	default_dev
+	# fix abuild smartness
+	mv "$subpkgdir"/usr/bin/lxc-config "$pkgdir"/usr/bin/
+	mv "$subpkgdir"/usr/bin/lxc-update-config "$pkgdir"/usr/bin/
+}
+
+bridge() {
+	depends="dnsmasq"
+	pkgdesc="Bridge interface for LXC with dhcp"
+	mkdir -p "$subpkgdir"/etc/conf.d \
+		"$subpkgdir"/etc/init.d \
+		"$subpkgdir"/etc/lxc
+
+	ln -s dnsmasq "$subpkgdir"/etc/init.d/dnsmasq.lxcbr0
+	cat >>"$subpkgdir"/etc/conf.d/dnsmasq.lxcbr0 <<- EOF
+		rc_before="lxc"
+		BRIDGE_ADDR="10.0.3.1"
+		BRIDGE_NETMASK="255.255.255.0"
+		BRIDGE_NETWORK="10.0.3.0/24"
+		BRIDGE_DHCP_RANGE="10.0.3.2,10.0.3.254"
+		BRIDGE_DHCP_MAX="253"
+		BRIDGE_MAC="00:16:3e:00:00:00"
+		DNSMASQ_CONFFILE="/etc/lxc/dnsmasq.conf"
+	EOF
+	cat >>"$subpkgdir"/etc/lxc/dnsmasq.conf <<- EOF
+		#dhcp-host=somehost,10.0.3.3
+		#dhcp-host=otherhost,10.0.3.4
+	EOF
+}
+
+bashcomp() {
+	depends=""
+	pkgdesc="Bash completions for $pkgname"
+	install_if="$pkgname=$pkgver-r$pkgrel bash-completion"
+	mkdir -p "$subpkgdir"/usr/share/bash-completion/completions
+	mv "$pkgdir"/etc/bash_completion.d/$pkgname "$subpkgdir"/usr/share/bash-completion/completions
+	rmdir "$pkgdir"/etc/bash_completion.d
+}
+
+b2sums="bfa82306aa7fabbef7ab48c6996b213f45bfff88085c25bb356fd62f2600f5df474c26592a4c01c0c8850fce0b5fcb8baa2a7e3d59fe5fc6d70a7e1bb74729e4  lxc-3.2.1.tar.gz
+e4a270a1d8f8609cf1ce0466e50bcb1e989b7c635346fb83519f49cc46fc676c0d57432bb71d5a3956e56966fad6bbe95e4ac800e48c175641875be3491c2724  cgroups-initialize-cpuset-properly.patch
+bcb2c5ead633f5de760037a5463fbae0b848534f047779e9d63430a62787f048af9f8bf7c0ce84f4601a371ebee00ba8c705e7653a2be9aa5aedcb17b564e681  network-restore-ability-to-move-nl80211-devices.patch
+4e3382c79a203bb6d8dcf45ed77a583f0cb93f37ed04418aa060727ddd59b6038965c5a3b0355da4d10c2680e263121e808f5ae24cfbb6a08f640ee12e9729e9  lxc.initd
+279d1d9c71b273edf1ec40066e68a0c0ee7257d30f1728532a366aa0409013102dc9089680dcde5e8936710582759f9bffbb5026842f40b727ee67fcc4ef0784  lxc.confd"

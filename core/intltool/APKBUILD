@@ -1,0 +1,34 @@
+pkgname=intltool
+pkgver=0.51.0
+pkgrel=0
+pkgdesc="The internationalization tool collection"
+url="http://freedesktop.org/wiki/Software/intltool"
+arch="noarch"
+license="GPL-2.0"
+depends="perl gettext file perl-xml-parser"
+subpackages="$pkgname-doc"
+source="https://edge.launchpad.net/intltool/trunk/$pkgver/+download/$pkgname-$pkgver.tar.gz
+	intltool-perl-regexp.patch"
+builddir="$srcdir/$pkgname-$pkgver"
+
+build () {
+	cd "$builddir"
+	./configure \
+		--build=$CBUILD \
+		--host=$CHOST \
+		--prefix=/usr
+	make
+}
+
+check() {
+	cd "$builddir"
+	make check
+}
+
+package() {
+	cd "$builddir"
+	make DESTDIR="$pkgdir" install
+}
+
+b2sums="98fe40e4d669fdf65a777152ddee0a9656412b9cf5d1e682d1b4b7bd666f3e5aa623a50481b6df47e16a935550836c66c666229b0bb7ef143f7cde6893b97a69  intltool-0.51.0.tar.gz
+8c4459f54fa58c42622e8a2725ca0a5c7bf5391639c72dfadc2a3e03f1a29ed23729ad2a027431fe6aa307e95fc3f60b4ee186549d79785b8801be4ef4a45025  intltool-perl-regexp.patch"

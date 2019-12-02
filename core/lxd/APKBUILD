@@ -1,0 +1,163 @@
+pkgname=lxd
+pkgver=3.18
+pkgrel=1
+pkgdesc="a container hypervisor and a new user experience for LXC"
+url="https://linuxcontainers.org/lxd/"
+arch="all !aarch64"
+license="Apache-2.0"
+depends="
+	acl
+	netcat-openbsd
+	cgmanager
+	squashfs-tools
+	rsync
+	shadow
+	lxc
+	iptables
+	dnsmasq
+	ca-certificates
+	gtar
+	iproute2
+	"
+makedepends="
+	lxc-dev
+	gettext-dev
+	acl-dev
+	tcl-dev
+	libuv-dev
+	libcap-dev
+	linux-dev
+
+	rsync
+	go
+	intltool
+
+	libtool
+	autoconf
+	automake
+	patchelf
+	"
+subpackages="
+	$pkgname-scripts:scripts
+	$pkgname-bash-completion:bashcomp:noarch
+	$pkgname-openrc
+	"
+install="$pkgname.pre-install"
+options="!check"
+source="https://linuxcontainers.org/downloads/$pkgname/$pkgname-$pkgver.tar.gz
+	$pkgname.confd
+	$pkgname.initd
+	lxd-dont-go-get.patch
+	add-missing-includes.patch
+	"
+# avoid conflict with system libsqlite3.so.0 by adding a soname prefix.
+# this makes lxd-libs provide so:lxd:libsqlite3.so.0 and lxd depend on
+# so:lxd:libsqlite3.so.0.
+ldpath="/usr/lib/lxd"
+sonameprefix="$pkgname:"
+
+_project="github.com/lxc/lxd"
+
+prepare() {
+	export GOPATH="$builddir/_dist"
+	default_prepare
+	#update_config_guess
+	for p in raft sqlite dqlite; do
+		cd "$GOPATH"/deps/$p
+		autoreconf -i
+	done
+}
+
+build() {
+	export GOPATH="$builddir/_dist"
+	export CGO_CFLAGS="-I${GOPATH}/deps/sqlite/ -I${GOPATH}/deps/libco/ -I${GOPATH}/deps/raft/include/ -I${GOPATH}/deps/dqlite/include/"
+	export CGO_LDFLAGS="$CGO_LDFLAGS -L${GOPATH}/deps/sqlite/.libs/ -L${GOPATH}/deps/libco/ -L${GOPATH}/deps/raft/.libs -L${GOPATH}/deps/dqlite/.libs/ -lintl"
+	export LD_LIBRARY_PATH="$ldpath ${GOPATH}/deps/sqlite/.libs/:${GOPATH}/deps/libco/:${GOPATH}/deps/raft/.libs/:${GOPATH}/deps/dqlite/.libs/"
+
+	cd "$GOPATH"/deps/raft
+    PKG_CONFIG_PATH="${GOPATH}/deps/raft/" ./configure \
+        --prefix=/usr \
+        --libdir=/usr/lib/lxd
+	make
+
+	cd "$GOPATH"/deps/libco
+	make
+	
+	cd "$GOPATH"/deps/sqlite
+	./configure \
+		--prefix=/usr \
+		--enable-replication \
+		--disable-amalgamation \
+		--disable-tcl \
+		--libdir=/usr/lib/lxd
+	make
+
+	cd "$GOPATH"/deps/dqlite
+	PKG_CONFIG_PATH="${GOPATH}/deps/sqlite/:${GOPATH}/deps/libco/:${GOPATH}/deps/raft/" ./configure \
+		--prefix=/usr \
+		--libdir=/usr/lib/lxd
+
+	make CFLAGS="-I${GOPATH}/deps/sqlite/ -I${GOPATH}/deps/libco/ -I${GOPATH}/deps/raft/include/" LDFLAGS="-L${GOPATH}/deps/sqlite/.libs/ -L${GOPATH}/deps/libco/ -L${GOPATH}/deps/raft/.libs/"
+
+	cd "$builddir"
+	go install -v -x -tags libsqlite3 $_project/lxd
+	for bin in lxc fuidshift lxc-to-lxd lxd-benchmark lxd-p2c; do
+		go install -v -x $_project/$bin
+	done
+}
+
+package() {
+	for r in sqlite dqlite; do
+		cd "$GOPATH"/deps/$r
+		make DESTDIR="$pkgdir" install
+	done
+
+	cp ${GOPATH}/deps/libco/libco.so* "$pkgdir"/usr/lib/lxd
+	cp ${GOPATH}/deps/raft/.libs/libraft.so* "$pkgdir"/usr/lib/lxd
+
+	rm $pkgdir/usr/bin/sqlite3
+	rm -r $pkgdir/usr/include
+
+	cd ${GOPATH}
+	install -Dm755 bin/$pkgname "$pkgdir"/usr/sbin/$pkgname
+	install -Dm755 bin/lxc "$pkgdir"/usr/bin/lxc
+	
+	patchelf --set-rpath "/usr/lib/lxd" "${pkgdir}/usr/sbin/lxd"
+	
+	install -Dm755 "$srcdir"/lxd.initd \
+		"$pkgdir"/etc/init.d/lxd
+	install -Dm644 "$srcdir"/lxd.confd \
+		"$pkgdir"/etc/conf.d/lxd
+}
+
+bashcomp() {
+	depends="bash"
+	pkgdesc="Bash completions for $pkgname"
+	install_if="$pkgname=$pkgver-r$pkgrel bash-completion"
+
+	cd "$builddir"
+	mkdir -p "$subpkgdir"/usr/share/bash-completion/completions
+	cp scripts/bash/lxd-client "$subpkgdir"/usr/share/bash-completion/completions/lxd-client
+}
+
+scripts() {
+	pkgdesc="LXD scripts"
+	depends="$pkgname py3-lxc"
+
+	export GOPATH="$builddir/_dist"
+	cd $GOPATH
+
+	for tool in fuidshift lxc-to-lxd lxd-benchmark lxd-p2c; do
+		install -Dm755 bin/$tool "$subpkgdir"/usr/bin/$tool
+	done
+	install -Dm755 ../scripts/empty-lxd.sh "$subpkgdir"/usr/bin/empty-lxd.sh
+
+	patchelf --set-rpath "/usr/lib/lxd" "${pkgdir}/usr/lib/lxd/libdqlite.so"
+	patchelf --set-rpath "/usr/lib/lxd" "${pkgdir}/usr/lib/lxd/libsqlite3.so"
+}
+
+b2sums="e437efcbd71a3e795252b40c5eabae8c893a2322329e5799edefa4cecd90025ffb248408aba6637a7346b5f55dedcadbb840780f2c8ce25584cfa5287925c6d4  lxd-3.18.tar.gz
+0c53ad54c956fa067e83ae53467cfcdb8ace2e14972b762dcf8715493d89a74da376f37386626b8b96b27df163e3d8ce13b96858191b6d0000d90a0ce08cc137  lxd.confd
+b638fca189b270567f8077890d7820e3d9e82b0a29e9c665a4f4b1a5454d1df627d7849ae2e7e83800d5b4f6e62791a65742522cfaf422f12b67f4b359f4e79f  lxd.initd
+a1ff0a61b96373e615353e3eff8e52afb63825d77de31388a3f1cc27a5465621181285060d6d857f0c62a8e19fc4e224bb9cd18e76d338c6bb1c46c635176be5  lxd-dont-go-get.patch
+7e6d3bf71a4d5a4b7fa46fe2e45c815782bb6337528c2c3026c1619abcae9ca89fc073a62b5ffaa6f84fe46650028e74a98fd40ed7e68a31df9c97b4a73474a6  add-missing-includes.patch"

@@ -1,0 +1,37 @@
+pkgname=patchelf
+pkgver=0.10
+pkgrel=0
+pkgdesc="Small utility to modify the dynamic linker and RPATH of ELF executables"
+url="https://nixos.org/patchelf.html"
+arch="all"
+license="GPL-3.0-or-later"
+makedepends="autoconf automake libtool"
+subpackages="$pkgname-doc"
+source="$pkgname-$pkgver.tar.gz::https://github.com/NixOS/patchelf/archive/$pkgver.tar.gz
+	fix-tests.patch
+	"
+
+prepare() {
+	default_prepare
+	autoreconf -fiv
+}
+
+build() {
+	./configure --prefix=/usr
+	make
+}
+
+check() {
+	case "$CARCH" in
+		ppc64le) ;;
+		x86) ;;
+		*) make -C tests -j1 check ;;
+	esac
+}
+
+package() {
+	make DESTDIR="$pkgdir" install
+}
+
+b2sums="56f329ad9fcdda4f16bd76a463934b827a38d8535bafb373fd4de193412c20a704ab6b6a27e3e3cb45990c4aa0a26580934f455def01cf4ab93708167139c56d  patchelf-0.10.tar.gz
+f1411fb69fb13b8472aef69f44e8aa75b6c2f550fb211ba6c3438450e3c54b1ae6b861059b1db7c4638424252a7ba8c74302f671200f933c718c664c8c00a7c1  fix-tests.patch"

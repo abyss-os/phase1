@@ -1,0 +1,38 @@
+pkgname=perl-xml-parser
+_pkgreal=XML-Parser
+pkgver=2.46
+pkgrel=0
+pkgdesc="A perl module for parsing XML documents"
+url="https://metacpan.org/release/XML-Parser"
+arch="all"
+license="GPL-1.0-or-later OR Artistic-1.0-Perl"
+#cpandepends="perl-libwww"
+depends="$cpandepends"
+makedepends="perl-dev expat-dev"
+subpackages="$pkgname-doc"
+source="https://cpan.metacpan.org/authors/id/T/TO/TODDR/XML-Parser-$pkgver.tar.gz"
+
+builddir="$srcdir/$_pkgreal-$pkgver"
+
+prepare() {
+	cd "$builddir"
+	PERL_MM_USE_DEFAULT=1 perl Makefile.PL INSTALLDIRS=vendor
+}
+
+build() {
+	cd "$builddir"
+	make
+}
+
+check() {
+	cd "$builddir"
+	make test
+}
+
+package() {
+	cd "$builddir"
+	make DESTDIR="$pkgdir" install
+	find "$pkgdir" \( -name perllocal.pod -o -name .packlist \) -delete
+}
+
+b2sums="a815c8f517adb609a1690e6127660eb339649eacffb21d77664b4f9ea071fbaeb432f50bc6469cb36a6b9b4b4e037f778dd2289bed6d87f497713d1d8cab9d0e  XML-Parser-2.46.tar.gz"

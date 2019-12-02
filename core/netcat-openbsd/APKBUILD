@@ -1,0 +1,58 @@
+pkgname=netcat-openbsd
+pkgver=1.130
+pkgrel=1
+pkgdesc="The TCP/IP swiss army knife. OpenBSD variant."
+url="http://packages.debian.org/sid/netcat-openbsd"
+arch="all"
+license="GPL"
+makedepends="glib-dev libbsd-dev"
+subpackages="$pkgname-doc"
+options="!check"
+source="$pkgname-$pkgver.tar.gz::http://http.debian.net/debian/pool/main/n/netcat-openbsd/netcat-openbsd_${pkgver}.orig.tar.gz
+	base64.c
+
+	0001-port-to-linux-with-libsd.patch
+	0002-connect-timeout.patch
+	0003-get-sev-by-name.patch
+	0004-send-crlf.patch
+	0005-quit-timer.patch
+	0006-udp-scan-timeout.patch
+	0007-verbose-numeric-port.patch
+	0008-dccp-support.patch
+	0009-serialized-handling-multiple-clients.patch
+	0010-misc-failures-and-features.patch
+	"
+builddir="$srcdir"/$pkgname-$pkgver
+
+prepare() {
+	cd "$builddir"
+	cp "$srcdir"/base64.c .
+	default_prepare
+	sed -i Makefile -e "/SRCS=/s;\(.*\);& base64.c;"
+}
+
+build() {
+	cd "$builddir"
+	make CFLAGS="$CFLAGS -DDEBIAN_VERSION=\"\\\"${pkgver}\\\"\"" || return 1
+}
+
+package() {
+	cd "$builddir"
+	install -d $pkgdir/usr/bin/
+	install -d $pkgdir/usr/share/man/man1/
+	install nc $pkgdir/usr/bin/nc
+	install nc.1 $pkgdir/usr/share/man/man1/nc.openbsd.1
+}
+
+b2sums="43405b665b4f480f35f615cd8b8096aa4fce8098e8d2c7b666889a162a49ce8cb7efa4adacb14f4a8b98154c157a2d0d4cf40171f070a9453ff5ff1ecd2a0c01  netcat-openbsd-1.130.tar.gz
+1dc5056dff672bfd1206e8dcbc91a8ea77388e72ec40e5042ea9aa4c013292ffc86373b5a27837c83dc965c33bffbe8d0918162f7a78791a2ffcb00b6d571270  base64.c
+50d8925d2c0cfdbeaa42c0487dd14da1636adc1096b437668b82c7ae5a82ab9675f380c6e27b20444b33ae270e9686c06457ba081d4c22b924df1c42bebc12a6  0001-port-to-linux-with-libsd.patch
+73ba4f01dce608c0093794d50dc774e57aab09b3d9ae7cc424ea54f6ef9176800d51410925f752872d651b50c9803e3d6396529c3f3b7a7f6242e841cb76ed20  0002-connect-timeout.patch
+2c3d35deed6141cf1add650fa6cf9ca81647b20f27470fa531513d85bbb4ae61b79aefb25f1589a9a2e11971fe9fd91f6856ad26572dddb27a8553b4209bf00c  0003-get-sev-by-name.patch
+a484769c1b60bf030e98dee3df7038f1d281934422796809011d131711cb5701b65d3f45d66a42ad96ccedf877d640a7023948fe7813c8cdb60e3ed3404e9afe  0004-send-crlf.patch
+97ad80b25d96bc3a2b133b2db3fa3e8b2c8e43a82fc53e5f2b775a0e6402da8c9239c3b75f713cfde92036a280f25110085cdd6a1a5402d2d028c30addf6642b  0005-quit-timer.patch
+27d74f48eb184e82dec01c30864ee4ba0d547239bd80a492a14f462fd5bad23d40c6443d76c4a75813e4081bdfcf27a78ebf708889d02f067bf8a72d80c5687d  0006-udp-scan-timeout.patch
+03c387b0366f3d6dcfcd2b0ce7f8f7bc748d7ba3927ece9278459c5b1a41fbbd0e04d5f05c16383195b54eb37d90ec2a4def1bebb51a338028620ba2e68e06ff  0007-verbose-numeric-port.patch
+f84d54e20d53342b217e55f646f2bcad859674155396c5e3a83a6c92db10fab9f29284346a0f065ad7986f91a1628401d16378a7c3eb0d45197a26f6d20e5b77  0008-dccp-support.patch
+05de0185ad82e3573839df60789ab3b6e50407f903266f96485b47677e05befebfa3dbe76509b71bac2bf8241f4b1948755e4f59d9237ba5fc3cbd6883a5408d  0009-serialized-handling-multiple-clients.patch
+65356bd5503026021458225353d2ec1027f17d41e98feae197ecfed65a77f60d861d3eee87402095642df3343d4a9a1f39cabf17fa967c1dd3da48d1c45743c1  0010-misc-failures-and-features.patch"

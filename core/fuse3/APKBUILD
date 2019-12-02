@@ -1,0 +1,69 @@
+pkgname=fuse3
+_pkgname=fuse
+pkgver=3.8.0
+pkgrel=0
+pkgdesc="The reference implementation of the Linux FUSE (Filesystem in Userspace) interface"
+url="https://github.com/libfuse/libfuse"
+arch="all"
+license="GPL-2.0-only LGPL-2.1-only"
+depends="fuse-common"
+makedepends="gettext-dev linux-dev meson eudev-dev python3
+	py-six py-pluggy py-attrs py-py"
+checkdepends="py-pytest"
+subpackages="$pkgname-dev $pkgname-doc fuse-common:_common fuse-openrc:_openrc $pkgname-libs"
+source="https://github.com/libfuse/libfuse/releases/download/fuse-$pkgver/fuse-$pkgver.tar.xz
+	fix-realpath.patch
+	add-includes.patch
+	fuse.initd
+	dumbassery.patch"
+options="suid !check" # check is currently broken: https://github.com/libfuse/libfuse/issues/293
+
+builddir="$srcdir"/$_pkgname-$pkgver
+
+build() {
+	meson \
+		--prefix=/usr \
+		--sysconfdir=/etc \
+		--mandir=/usr/share/man \
+		--localstatedir=/var \
+		--buildtype=release \
+		. output
+	ninja -C output
+}
+
+package() {
+	DESTDIR="$pkgdir" ninja -C output install
+	rm -r "$pkgdir"/etc/init.d
+
+	install -Dm755 "$srcdir"/fuse.initd "$pkgdir"/etc/init.d/fuse
+	# create config
+	install -d "$pkgdir"/etc
+	cat >"$pkgdir"/etc/fuse.conf << _EOF_
+# Set the maximum number of FUSE mounts allowed to non-root users.
+# The default is 1000.
+#
+#mount_max = 1000
+
+# Allow non-root users to specify the 'allow_other' or 'allow_root'
+# mount options.
+#
+#user_allow_other
+_EOF_
+}
+
+_common() {
+	pkgdesc="Common files for fuse2 and fuse3"
+	mkdir -p "$subpkgdir"/etc/
+	mv "$pkgdir"/etc/fuse.conf "$subpkgdir"/etc/
+}
+
+_openrc() {
+	default_openrc
+	install_if="openrc fuse-common=$pkgver-r$pkgrel"
+}
+
+b2sums="f921b739489e8eb8b2a78b719c9761f330de839f151f787a6db37d8d004ef9b90022bfe3c5d24ceab333cde8741340ede0315a5b92cabdaf87fb1b291f72e292  fuse-3.8.0.tar.xz
+dc7953cea19eb7f9022acadbfa049ceffc31009dbbefe96f419d796d6488eae42a3badbb19962f96a47c77100abb237cb44cea5ed759d4ab98954dd630de3299  fix-realpath.patch
+81ad61a7fce781ede57b73c606691ae0a6bc9cbb664287dfc0ff4570d2856ab4ffe328b6c43dc3a68a8cc0ab95b1876ef81d96b5e358d9cdb278315ba375177e  add-includes.patch
+802821596154d3dabae5c56367656d46a714c22a284cadf8ca78b2ca01a68fce8cefc37576cd26a14551452ff910a5317544e39b8fc4bddf74d80879fb7a0334  fuse.initd
+f6995f89334f004349b0241e49be0dbd5871fb6ed6fe422be64e6011310250df228c3a31ad520c6fc11b161db27098c89d783aa4e674489dcd8f105f6eb8602f  dumbassery.patch"

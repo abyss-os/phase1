@@ -1,0 +1,27 @@
+pkgname=lua-optarg
+_rockname=optarg
+pkgver=0.2
+pkgrel=1
+pkgdesc="Simple command line option parser for Lua"
+url="https://github.com/ncopa/lua-optarg"
+arch="noarch"
+license="MIT"
+source="$pkgname-$pkgver.tar.gz::https://github.com/ncopa/$pkgname/archive/v$pkgver.tar.gz"
+builddir="$srcdir/$pkgname-$pkgver"
+
+package() {
+	mkdir -p "$pkgdir"
+
+	pkgdesc="$pkgdesc 5.2"
+	depends="lua5.2"
+	install_if="$pkgname=$pkgver-r$pkgrel lua5.2"
+	local rockdir="$pkgdir/usr/lib/luarocks/rocks-5.2/$_rockname/$pkgver-1"
+
+	install -Dm644 "$builddir"/optarg.lua \
+		"$pkgdir"/usr/share/lua/$lver/optarg.lua
+
+	mkdir -p "$rockdir"
+	echo 'rock_manifest = {}' > "$rockdir"/rock_manifest
+}
+
+b2sums="c7aead706cc69dad91015d2bd9f2720bbc75b33e812e55c04b225872b275ca334c31f0ff497f16867bf7d817033e8ce379609b206d33ef3dd92436becd78c3a0  lua-optarg-0.2.tar.gz"

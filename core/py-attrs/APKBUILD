@@ -1,0 +1,27 @@
+pkgname=py-attrs
+pkgver=19.3.0
+pkgrel=0
+pkgdesc="Python classes without boilerplate"
+url="http://www.attrs.org"
+arch="noarch"
+license="MIT"
+depends="python3"
+makedepends="py-setuptools"
+source="py-attrs-$pkgver.tar.gz::https://github.com/python-attrs/attrs/archive/$pkgver.tar.gz
+	check.py
+	"
+builddir="$srcdir/attrs-$pkgver"
+
+build() {
+	python3 setup.py build
+}
+
+check() {
+	PYTHONPATH="$builddir/src" python3 "$srcdir"/check.py
+}
+
+package() {
+	python3 setup.py install --prefix=/usr --root="$pkgdir"
+}
+b2sums="f5bd3f6652a83d99b769be9ae648a8b52ca60672448156e96462ba858b679672bf63341319fecc29f83ce2b07ff0e7d6f82059267a3f051438f07db368770bab  py-attrs-19.3.0.tar.gz
+4759ec5ac81fbc3614e7cb927d71e4d1b24ba00517bc3bc5d8c32d8efd7e5480b6d4903680a7e929ed4e53e74cf19ce1f594ccd74748df5df609ef3200f21136  check.py"

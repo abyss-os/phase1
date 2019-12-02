@@ -1,0 +1,45 @@
+pkgname=glib
+pkgver=2.62.3
+pkgrel=0
+pkgdesc="Common C routines used by Gtk+ and other libs"
+url="https://developer.gnome.org/glib/"
+arch="all"
+license="LGPL-2.1-or-later"
+triggers="$pkgname.trigger=/usr/share/glib-2.0/schemas:/usr/lib/gio/modules"
+depends_dev="python3 gettext-dev bzip2-dev libxml2 libxslt
+	docbook-xml docbook-xsl"
+makedepends="$depends_dev pcre-dev meson zlib-dev libffi-dev util-linux-dev"
+options="!check" # don't like to be run without first being installed
+source="https://download.gnome.org/sources/glib/${pkgver%.*}/glib-$pkgver.tar.xz
+	0001-gquark-fix-initialization-with-c-constructors.patch
+	deprecated-no-warn.patch
+	musl-libintl.patch
+	"
+subpackages="$pkgname-doc $pkgname-dev"
+
+build() {
+	meson \
+		--default-library=both \
+		--prefix=/usr \
+		--sbindir=/usr/bin \
+		--sysconfdir=/etc \
+		--mandir=/usr/share/man \
+		--localstatedir=/var \
+		--buildtype=release \
+		-Dman=true \
+		. output
+	ninja -C output
+
+	# FIXME: meson adds -lintl first in Libs: in the .pc file but it needs to be
+	#        last for static builds (e.g. qemu)
+	sed -i -e '/^Libs:/s/-lintl \(.*\)/\1 -lintl/' output/meson-private/glib-2.0.pc
+}
+
+package() {
+	DESTDIR="$pkgdir" ninja -C output install
+}
+
+b2sums="ab6d3da07433b44e231c66ea8a529be744c9c0ae79db453f6cd50cb125424daab9c716ff496c3595873b93811454d4b12a55ea3878d4c86384ebe4a14851b8b9  glib-2.62.3.tar.xz
+219162ba6402541d043fb06896b6169a18110a3e441cbacc42158e873184c8e51c3af3ba088ea0748b422a550ad2e6d3b05a1909e68aad2932d190dd4316db1e  0001-gquark-fix-initialization-with-c-constructors.patch
+665254dfca8422583b8980505a5aa6ef7b11c36cbc5fd522520783da89412e8a2bd71719487e8aad2200599d4dcc6612af3d512f6bc3b7eea378d924c5310dd6  deprecated-no-warn.patch
+6d6840fb33c0fef1bb61c7ab46dcb13c0d80d704bd1daaf12d7cabbd48a8cf7dcb43315d1ab96c2ff91e3696f4537379b2ffa7dba8d3c0ca16cddcd8258b195b  musl-libintl.patch"

@@ -1,0 +1,42 @@
+pkgname=fuse
+pkgver=2.9.8
+pkgrel=2
+pkgdesc="A library that makes it possible to implement a filesystem in a userspace program."
+url="https://github.com/libfuse/"
+arch="all"
+license="GPL-2.0-only LGPL-2.1-only"
+depends="fuse-common"
+makedepends="gettext-dev"
+install=
+subpackages="$pkgname-dev $pkgname-doc"
+source="https://github.com/libfuse/libfuse/releases/download/fuse-$pkgver/fuse-$pkgver.tar.gz
+	fix-realpath.patch
+	"
+options="suid !check"  # No test suite.
+builddir="$srcdir"/$pkgname-$pkgver
+
+build() {
+	config_helper
+	cd "$builddir"
+	UDEV_RULES_PATH='/usr/lib/udev/rules.d' ./configure \
+		--build=$CBUILD \
+		--host=$CHOST \
+		--target=$CTARGET \
+		--prefix=/usr \
+		--sbindir=/usr/bin \
+		--disable-static \
+		--enable-shared \
+		--disable-example \
+		--enable-lib \
+		--enable-util \
+	make
+}
+
+package() {
+	cd "$builddir"
+	make DESTDIR="$pkgdir" install
+	rm -r "$pkgdir"/dev "$pkgdir"/etc/init.d
+}
+
+b2sums="803eebea510834676379df8c9514050efcf47d83c06ba1f5b5756d27f5c32d3a0cc199d826b0c041118c5d2260ff023f58432a0d7b623807c0a4af4da7c34eff  fuse-2.9.8.tar.gz
+28b114d23d2b491dae00ef4cb35f4fb8af430ecba5cdeb4f078f6d5c6c39f3d1293dfb15c27a5429d06885343729e73f30e4548b0b31a4b5eeb986fc6c931179  fix-realpath.patch"

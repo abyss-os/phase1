@@ -1,0 +1,57 @@
+pkgname=kmod
+pkgver=26
+pkgrel=0
+pkgdesc="Linux kernel module management utilities"
+url="http://git.kernel.org/?p=utils/kernel/kmod/kmod.git;a=summary"
+arch="all"
+options="!check"  # https://bugs.gentoo.org/408915#c3
+license="GPL-2.0-or-later"
+depends=""
+depends_dev=""
+# gnu sed is needed for symlink
+makedepends_build="gsed libxslt"
+makedepends_host="$depends_dev zlib-dev xz-dev"
+makedepends="$makedepends_build $makedepends_host"
+install=""
+triggers="$pkgname.trigger=/usr/lib/modules/*"
+subpackages="$pkgname-dev $pkgname-doc $pkgname-openrc
+	$pkgname-bash-completion:bashcomp:noarch"
+source="https://kernel.org/pub/linux/utils/kernel/kmod/kmod-$pkgver.tar.xz
+	strndupa.patch
+	kmod-static-nodes.initd
+	"
+
+build() {
+	cd "$builddir"
+	./configure \
+		--build=$CBUILD \
+		--host=$CHOST \
+		--prefix=/usr \
+		--sbindir=/usr/bin \
+		--sysconfdir=/etc \
+		--with-rootlibdir=/usr/lib \
+		--with-zlib \
+		--with-xz
+	make
+}
+
+package() {
+	cd "$builddir"
+	make DESTDIR="$pkgdir" install
+	install -Dm755 "$srcdir"/kmod-static-nodes.initd \
+		"$pkgdir"/etc/init.d/kmod-static-nodes
+}
+
+bashcomp() {
+	pkgdesc="Bash completion for $pkgname"
+	depends=""
+	install_if="bash-completion $pkgname=$pkgver-r$pkgrel"
+
+	mkdir -p "$subpkgdir"/usr/share
+	mv "$pkgdir"/usr/share/bash-completion "$subpkgdir"/usr/share/
+}
+
+
+b2sums="3e596d06b48599bf4919346475a036b058fb18a7b19d39953e24fa943b95fdbe34a29a5062f6b4fe3510e667ae873d3b9ae03b72350fa85ddbb40ca6a7730b34  kmod-26.tar.xz
+e8ebad9025eb5593e9d66fee37305f3f21fe1db157b124bf4eb07de33191234e92538f94abe0d73747807a0badf27714c40b310b460a7a902e23a9a995689a9a  strndupa.patch
+85c30783180fd297d3c3f7bbc025bf4a8b5de947b1eb6f10a19a7c8a31c74c6af05b3991b7f1a94de20a08cb729c525b27c4fd64b3746b725f0ec5342989aa60  kmod-static-nodes.initd"

@@ -1,0 +1,49 @@
+pkgname=dnsmasq
+pkgver=2.80
+pkgrel=4
+pkgdesc="A lightweight DNS, DHCP, RA, TFTP and PXE server"
+url="http://www.thekelleys.org.uk/dnsmasq/"
+arch="all"
+license="GPL-2.0"
+makedepends="linux-dev nettle-dev"
+install="$pkgname.pre-install $pkgname.pre-upgrade"
+subpackages="$pkgname-doc"
+source="http://www.thekelleys.org.uk/dnsmasq/$pkgname-$pkgver.tar.gz
+	nettle-3.5.patch
+	$pkgname.initd
+	$pkgname.confd
+	uncomment-conf-dir.patch
+	"
+builddir="$srcdir/$pkgname-$pkgver"
+
+build() {
+	cd "$builddir"
+
+	make CFLAGS="$CFLAGS" COPTS="-DHAVE_DNSSEC" all
+}
+
+check() {
+	cd "$builddir"
+	./src/dnsmasq --help >/dev/null
+}
+
+package() {
+	cd "$builddir"
+
+	make PREFIX=/usr DESTDIR="$pkgdir" install
+
+	install -D -m755 "$srcdir"/$pkgname.initd "$pkgdir"/etc/init.d/$pkgname
+	install -D -m644 "$srcdir"/$pkgname.confd "$pkgdir"/etc/conf.d/$pkgname
+
+	install -m644 dnsmasq.conf.example "$pkgdir"/etc/dnsmasq.conf
+	install -d -m755 "$pkgdir"/etc/dnsmasq.d
+
+	install -D -m 644 trust-anchors.conf \
+		"$subpkgdir"/usr/share/$pkgname/trust-anchors.conf
+}
+
+b2sums="b13379d544dad3315a4e31fd5b511797699b069ebba5fc5facde41b9f05face99afe2bf0d101a4be8645ce270779ccfbc5308010c681c2be6b9075d889445c50  dnsmasq-2.80.tar.gz
+e65092e18f8fbaa3b0f8be637b18ec976da1a1752b621ce1e1337bdc85e529ccf4bb21988296cae6574e8ff26983c32731656a751631455713afd93c0f7ea41d  nettle-3.5.patch
+a30d441999b78b3c53f1e5129d0a2e6e5835bc548ad53ec172e3b5c63afa7efb0e5f8c57b5104a93c45da5d151570c3a30e109c4061ea75d05afab2be1f90a39  dnsmasq.initd
+84d5cdb15236c9e1c83fa53d0e401df90e86c6687cc88f9ebba3e2a0987cad2ccf9bb82ac7b1fcd77a81fa6058a3cd3276fb8a8a76e13983628e92be95b39af1  dnsmasq.confd
+7366b5749210539a1b5d3dff4de22e2c90c7c3bca031c09a04a2fc348d0c29da57ab1e7d16e4173c8925fb6a7588cae6c894556cd2e0b3d3061f4780df31bb60  uncomment-conf-dir.patch"

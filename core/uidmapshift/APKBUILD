@@ -1,0 +1,19 @@
+pkgname=uidmapshift
+pkgver=0.1.0
+pkgrel=0
+pkgdesc="Shift UIDs/GIDs of directory entries recursively by some offset"
+url="https://github.com/jirutka/uidmapshift"
+arch="noarch"
+license="MIT"
+depends="lua lua-lunix lua-optarg"
+makedepends=""
+source="$pkgname-$pkgver.tar.gz::https://github.com/jirutka/uidmapshift/archive/v$pkgver.tar.gz"
+builddir="$srcdir/$pkgname-$pkgver"
+
+package() {
+	cd "$builddir"
+
+	install -D -m 755 uidmapshift.lua "$pkgdir"/usr/bin/uidmapshift
+}
+
+b2sums="ef4e5f26746eef19ede9be4efff1b7db213711c19d1e63633e63573bc20784572afd632509eeb53ca1c2f2677189c598950c77369f6d66b869e236c87cc8d356  uidmapshift-0.1.0.tar.gz"

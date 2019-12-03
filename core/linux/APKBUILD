@@ -12,6 +12,7 @@ install=
 source="https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/linux-$pkgver.tar.xz
 	config.aarch64
 	config.x86_64
+	config.riscv64
 	amdgpu-msse2.patch
 	"
 subpackages="$pkgname-dev"
@@ -68,4 +69,5 @@ package() {
 b2sums="a5281f6d2f5a3e4a5442011cbc52022a6ce2f990af823fce3a20164ab8f30b923d1d97b23b2c95b72abf5823e33cf488cbcb5716611b39e17cd4da5523cfca04  linux-5.3.8.tar.xz
 f4ced3fbc0b7f68d268b808e669a8c2ab161f4bf0597f66eecacb4d7537faab8ce42df3456ec3eed1520674c381b67e136fa90cc4971b12cd801e72cffde1ded  config.aarch64
 64631903df5ee13ece81397b1f3aade7804c25f132a35738666623b66ffd9df20c9aa507c558353822b768eae262749b27e7c6ad0b94d4feac1d794c194c2081  config.x86_64
+d7c54880b8af226309cbcd2492ab2f2f3dd8b8facf9caad4eb7c097e7ff8c9c3c88802f65d7f5c738b3d173fe550a6662a56c68a024107ded1a8fcf11a17a572  config.riscv64
 7250559b76ef00d7d4a2297d4baea3cdef3d8c8e63581fb3699c1ffe94fe60e4c00dd79e1f7d7136daed6c025b99ab459e60fa3439ae61704fefc87eb124da7d  amdgpu-msse2.patch"

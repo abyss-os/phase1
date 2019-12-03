@@ -15,7 +15,7 @@ _mpc=1.1.0
 makedepends="gcc g++ paxmark bison flex texinfo gawk zip zlib-dev linux-dev !gettext-dev"
 subpackages="$pkgname-doc"
 
-export CC=gcc CXX=g++ AS=gnu-as LD=gnu-ld GNATBIND=gnatbind GNATMAKE=gnatmake
+export CC=gcc CXX=g++ AS=gnu-as LD=gnu-ld
 
 : ${LANG_CXX:=true}
 : ${LANG_GO:=false}
@@ -175,7 +175,7 @@ build() {
 	aarch64-*-*-*)		_arch_configure="--with-arch=armv8-a --with-abi=lp64";;
 	mips64-*-*-*)		_arch_configure="--with-arch=mips64 --with-tune=mips64 --with-mips-plt --with-float=soft --with-abi=64";;
 	powerpc64*-*-*-*)	_arch_configure="--with-abi=elfv2 --enable-secureplt --enable-decimal-float=no --enable-targets=powerpcle-linux";;
-	riscv64-*-*-*)		_arch_configure="--with-arch=rv64ima --with-abi=lp64";;
+	riscv64-*-*-*)		_arch_configure="--with-arch=rv64gc --with-abi=lp64d";;
 	esac
 
 	case "$CTARGET_ARCH" in
@@ -249,7 +249,8 @@ build() {
 		$_cross_configure \
 		$_bootstrap_configure \
 		--with-system-zlib \
-		$_hash_style_configure
+		$_hash_style_configure \
+		--disable-bootstrap
 	make
 }
 

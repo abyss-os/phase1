@@ -1,0 +1,38 @@
+From 800488a1ef171da1f9c178aa57e87b2aac68463b Mon Sep 17 00:00:00 2001
+From: Max Rees <maxcrees@me.com>
+Date: Tue, 9 Jul 2019 01:45:24 -0500
+Subject: add: always use UTC for virtual package versions
+
+---
+ src/add.c      | 2 +-
+ test/solver.sh | 1 -
+ 2 files changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/src/add.c b/src/add.c
+index 1fe2c7a..7e15f10 100644
+--- a/src/add.c
++++ b/src/add.c
+@@ -90,7 +90,7 @@ static struct apk_package *create_virtual_package(struct apk_database *db, struc
+ 	time_t now = apk_time();
+ 	pid_t pid = getpid();
+ 
+-	localtime_r(&now, &tm);
++	gmtime_r(&now, &tm);
+ 	strftime(ver, sizeof ver, "%Y%m%d.%H%M%S", &tm);
+ 
+ 	virtpkg = apk_pkg_new();
+diff --git a/test/solver.sh b/test/solver.sh
+index 4e22f88..bc230c6 100755
+--- a/test/solver.sh
++++ b/test/solver.sh
+@@ -4,7 +4,6 @@ get_block() {
+ 	awk '/^@'$1'/{p=1;next} /^@/{p=0} p{print}'
+ }
+ 
+-export TZ=UTC
+ APK_TEST="../src/apk-test"
+ TEST_TO_RUN="$@"
+ 
+-- 
+cgit v1.2.1
+

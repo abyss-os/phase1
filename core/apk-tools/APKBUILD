@@ -11,13 +11,15 @@ if [ "$CBUILD" = "$CHOST" ]; then
 	makedepends="$makedepends lua5.2-dev"
 fi
 source="https://dev.alpinelinux.org/archive/$pkgname/$pkgname-$pkgver.tar.xz
-	0001-add-fix-virtual-package-id-generation.patch
+	fix-virtual-package-id-generation.patch
 	lua-apk_time.patch
 	what.patch
 	dbpath.patch
 	mkdirat.patch
 	blake2.patch
-	0001-Add-riscv64-to-apk_defines.h.patch
+	add-riscv64-to-apk_defines.h.patch
+	use-utc-time.patch
+	dont-unpack-root.patch
 	"
 
 url="https://git.alpinelinux.org/cgit/apk-tools/"
@@ -88,10 +90,12 @@ luaapk() {
 }
 
 b2sums="58413e1fb6d58373a959f5be7a7130921dc82cebb78a38752f8e553d4799fbfbf94e034cac238c8687586801d2360586276d1f4485539221c962a60d95873a51  apk-tools-2.10.4.tar.xz
-c081a322928918f2dc701c12f015f95dcd83965eafa8b63143169f7acdff7d50cb90e918c0f13fe09c5066615badc632d04d3a8e5db26bbda95edd12c2e9a987  0001-add-fix-virtual-package-id-generation.patch
+c081a322928918f2dc701c12f015f95dcd83965eafa8b63143169f7acdff7d50cb90e918c0f13fe09c5066615badc632d04d3a8e5db26bbda95edd12c2e9a987  fix-virtual-package-id-generation.patch
 660783d13ea5d1d58e9da01f9e640a5614b13c1fe752261eb23acc957f642fe8b60cd6055be35fa2a2da80c32efab37211ffbcf7f76b3f9531594dbeab19216f  lua-apk_time.patch
 b73dc91bcc32c039eb5d1d7793bc4cc6368c6741149ec9b39dca301be685dce49aed2b7ded29c516b5970cab8882fd36e7a01c96a336713a0bc48b2799a2d892  what.patch
 e1e6ceababa90502a30a69b6e11fdc2cb7bc41bc234057b8ee0c517f64c5273d8c511772ba743189918834f95cb58c03c6903783d236bd8c684d40dac7620bf9  dbpath.patch
 f1b654c42b1aa4abb341c4d7358c22985fe5fa4fdb507ef902f7f2603cbdd8635b227814ccc17e5b1f4f77c380f9d2158c34af9103b8a41362959e6e198d1663  mkdirat.patch
 796e380fef107886d82ffa34711aceb7a8236ac8e4d1830f8615eb54c56b186b25e316f0e90632bcf6a5c260f3aa7bef79bff830264a96b873059d0f9be34cc3  blake2.patch
-31ab9ec77642da87185ab5852d8d1654b3302285252f73e4f8dae9f529c3e59d0d69e0dc4f8be9adf689b322f23ad9ccf5517820751e81587d6d7921f3f5dbaa  0001-Add-riscv64-to-apk_defines.h.patch"
+31ab9ec77642da87185ab5852d8d1654b3302285252f73e4f8dae9f529c3e59d0d69e0dc4f8be9adf689b322f23ad9ccf5517820751e81587d6d7921f3f5dbaa  add-riscv64-to-apk_defines.h.patch
+740c77fa1033536ac02778d44141faf46fc5d5de34b94b0e0dffabcbbd637c8487bcbd2bca3f67ebde4e771ccc22573336e8b599a35b37c8c7bc6cac6d7ac277  use-utc-time.patch
+38da5df36165f7ec7cec527911692fa6c45dc1bff1445fba326afdbe50e5668a01c7bb02eb17a54977060e396a9351ad5a635bea852b145483bdca9706a7ec80  dont-unpack-root.patch"

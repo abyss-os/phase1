@@ -19,7 +19,7 @@ build() {
 	# force using system posix complaint printf
 	# the test is broken and fails with ash
 	gt_cv_func_printf_posix=yes \
-	CC=clang CXX=clang++ ./configure \
+	CC=$CC CXX=$CXX ./configure \
 		--build=$CBUILD \
 		--host=$CHOST \
 		--prefix=/usr \

@@ -30,11 +30,9 @@ build() {
 
 	[ "$BOOTSTRAP" = "nocc" ] && return 0
 
-	if [ "$CC" = "gcc" ]; then
-		# provide minimal libssp_nonshared.a so we don't need libssp from gcc
-		$CC $CPPFLAGS $CFLAGS -c "$srcdir"/__stack_chk_fail_local.c -o __stack_chk_fail_local.o
-		ar r libssp_nonshared.a __stack_chk_fail_local.o
-	fi
+	# only needed for first stage bootstrap
+	#$CC $CPPFLAGS $CFLAGS -c "$srcdir"/__stack_chk_fail_local.c -o __stack_chk_fail_local.o
+	#ar r libssp_nonshared.a __stack_chk_fail_local.o
 
 	# getconf/getent/iconv
 	local i
@@ -75,9 +73,7 @@ package() {
 	else
 		make DESTDIR="$pkgdir" install
 
-		if [ "$CC" = "gcc" ]; then
-			cp libssp_nonshared.a "$pkgdir"/usr/lib
-		fi
+		#cp libssp_nonshared.a "$pkgdir"/usr/lib
 
 		# make LDSO the be the real file, and libc the symlink
 		local LDSO=$(make -f Makefile --eval "$(echo -e 'print-ldso:\n\t@echo $$(basename $(LDSO_PATHNAME))')" print-ldso)

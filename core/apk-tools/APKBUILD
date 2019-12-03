@@ -40,17 +40,17 @@ prepare() {
 
 build() {
 	cd "$builddir"
-	make CC=clang static
+	make CC=$CC static
 }
 
 check() {
 	cd "$builddir"
-	make CC=clang check
+	make CC=$CC check
 }
 
 package() {
 	cd "$builddir"
-	make CC=clang DESTDIR="$pkgdir" install
+	make CC=$CC DESTDIR="$pkgdir" install
 	mkdir -p $pkgdir/usr/bin
 	mv -v $pkgdir/sbin/* $pkgdir/usr/bin/
 	rmdir -v $pkgdir/sbin

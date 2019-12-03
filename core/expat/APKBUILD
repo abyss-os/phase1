@@ -11,7 +11,7 @@ subpackages="$pkgname-dev $pkgname-doc"
 
 build() {
 	cd "$builddir"
-	CC=clang CXX=clang++ ./configure \
+	CC=$CC CXX=$CXX ./configure \
 		--build=$CBUILD \
 		--host=$CHOST \
 		--prefix=/usr \

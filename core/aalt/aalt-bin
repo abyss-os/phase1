@@ -1,0 +1,9 @@
+#!/bin/zsh
+
+aalt_dest=/usr/bin
+aalt_prefix=/var/lib/aalt/bin
+
+fpath+=( /usr/share/aalt.zwc )
+autoload -w /usr/share/aalt.zwc
+
+aalt-main "$@"

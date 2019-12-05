@@ -1,0 +1,28 @@
+pkgname=aalt
+pkgver=0.0.1a
+_hash=b27909a80b161eb7f18a26db4dc68bad97946da6
+pkgrel=0
+pkgdesc="Abyss ALTernatives"
+url="https://github.com/5paceToast/aalt"
+source="
+    $pkgname-$pkgver.tar.gz::$url/archive/$_hash.tar.gz
+    aalt-bin"
+arch="noarch"
+license="Unlicense"
+builddir="$srcdir/$pkgname-$_hash"
+depends="zsh"
+options="!check"
+
+build() {
+    cd "$builddir"
+    make aalt.zwc
+}
+
+package() {
+    cd "$builddir"
+    install -Dm644 aalt.zwc "$pkgdir"/usr/share/aalt.zwc
+    install -Dm755 "$srcdir"/aalt-bin "$pkgdir"/usr/bin/aalt-bin
+}
+
+b2sums="4a227dde28733ceb460c0c708d42f1e2dc2175949c8930e8b40fd2ada19125e4268634929238ea228a30123d0edb280711bf944fefedc13bdd3d1d2922c19150  aalt-0.0.1a.tar.gz
+f6a3804880cc1d24396946f36ac0ee9835ff89a20aaf1c81081923c70bd3b10ee4a752d30f23d000b53d6b9597241ff1b11d00a3ae586406e8541e5dec53f1e3  aalt-bin"

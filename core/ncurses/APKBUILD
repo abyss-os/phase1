@@ -1,5 +1,5 @@
 pkgname=ncurses
-pkgver=6.1_p20190914
+pkgver=6.1_p20191207
 _ver=${pkgver/_p/-}
 pkgrel=0
 pkgdesc="Console display library"
@@ -9,7 +9,7 @@ options="!check" # "tests" are actual demo programs, not a test suite.
 license="MIT"
 makedepends_build="ncurses"
 subpackages="$pkgname-dev $pkgname-doc"
-source="https://invisible-mirror.net/archives/ncurses/current/ncurses-${_ver}.tgz"
+source="${distfilesm}/ncurses-${_ver}.tgz"
 builddir="$srcdir"/ncurses-$_ver
 replaces="$pkgname-libs"
 
@@ -68,4 +68,4 @@ dev() {
 	ln -s libncurses.so "$subpkgdir"/usr/lib/libcurses.so
 }
 
-b2sums="5d7a0592b2bf4e80df37921acca36e2635628d8b119969b35a2eb28c83fe2cdf6ae5a7fc55c40167359ac794a369b90a6641f56f819392626755de68383e338a  ncurses-6.1-20190914.tgz"
+b2sums="b3139bdd3ba7466d398b70f02aa9263764a154e03857bd74cb666dcc51853fa87ab05fd924ecfaaacf87ef430291900281512703c11c41315f0fdf3026aac0b6  ncurses-6.1-20191207.tgz"

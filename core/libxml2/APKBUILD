@@ -7,7 +7,7 @@ arch="all"
 license="MIT"
 depends_dev="zlib"
 checkdepends="perl"
-makedepends="$depends_dev zlib-dev python3-dev"
+makedepends="$depends_dev zlib-dev"
 subpackages="$pkgname-doc $pkgname-dev"
 options="!strip"
 source="http://xmlsoft.org/sources/$pkgname-$pkgver.tar.gz
@@ -39,9 +39,6 @@ prepare() {
 	rm test/icu_parse_test.xml
 
 #	cp -ra "$builddir" "$builddir"-python2
-}
-
-libxml2_configure() {
 	./configure \
 		--build=$CBUILD \
 		--host=$CHOST \
@@ -49,12 +46,12 @@ libxml2_configure() {
 		--sysconfdir=/etc \
 		--mandir=/usr/share/man \
 		--infodir=/usr/share/info \
+		--without-python \
 		"$@"
 }
 
 build() {
 	cd "$builddir"
-	libxml2_configure
 	make
 }
 

@@ -1,5 +1,5 @@
 pkgname=go
-pkgver=1.13.3
+pkgver=1.13.5
 pkgrel=0
 pkgdesc="Go programming language compiler"
 url="https://golang.org/"
@@ -22,6 +22,7 @@ aarch64)export GOARCH="arm64" ;;
 x86_64) export GOARCH="amd64" ;;
 ppc64le) export GOARCH="ppc64le" ;;
 mips64) export GOARCH="mips64" GOMIPS64=softfloat ;;
+riscv64) export COARCH="riscv64" ;;
 *)      export GOARCH="unsupported";;
 esac
 
@@ -78,6 +79,6 @@ package() {
 		-exec rm -rf \{\} \+
 }
 
-b2sums="1f45d84b373fb886e7cb4764bb82a003bfd3b8f8aa6bb52a91d8859056341b25e908861a23094ee4034fb7ea2e92ada3bd0985b724ef06a64e823dd5fba8851b  go1.13.3.src.tar.gz
+b2sums="c39a52e73136a322a1b6b4ee6888672848ff2b3278d8034ec25b93101fff2b63212d66c065d3d974ca7e8686cba8a9ea9c4fedb23cad51b6cd76adae6db6eb42  go1.13.5.src.tar.gz
 e0b33bcbbdbbc90e7c9c495549aa0e1286b231de3c29dcb6886b7c2306c4c85c0ce732a9af7511ae9a759ff8b01b4a6efd3795877368406f2bd5494d07bd7afa  default-buildmode-pie.patch
 13390878b859f16a3da5e34064723819b6c0fbc6b482a90b347be4938e81f392963d8aef23e70bb2ec929b9540b5389cea043e1d6209c0785df19962bdbca972  set-external-linker.patch"

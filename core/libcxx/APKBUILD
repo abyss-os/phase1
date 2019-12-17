@@ -1,0 +1,59 @@
+pkgname=libcxx
+pkgver=9.0.0
+pkgrel=0
+pkgdesc="$pkgname"
+source="https://github.com/llvm/llvm-project/archive/llvmorg-$pkgver.tar.gz
+	musl.patch"
+#	http://releases.llvm.org/$pkgver/libcxx-$pkgver.src.tar.xz
+#	http://releases.llvm.org/$pkgver/libcxxabi-$pkgver.src.tar.xz
+#	http://releases.llvm.org/$pkgver/libcxx-$pkgver.src.tar.xz
+
+arch="all"
+url=.
+license=.
+subpackages="$pkgname-dev"
+
+builddir="$srcdir/llvm-project-llvmorg-$pkgver"
+
+_builddir="$srcdir/build"
+
+makedepends="cmake clang lld ninja llvm-dev"
+
+prepare() {
+	default_prepare
+	mkdir -p $_builddir && cd $_builddir
+
+	cmake -G Ninja -Wno-dev \
+			-DCMAKE_C_COMPILER=$CC \
+			-DCMAKE_CXX_COMPILER=$CXX \
+			-DCMAKE_C_COMPILER_TARGET=$CTARGET \
+			-DCMAKE_CXX_COMPILER_TARGET=$CTARGET \
+			-DCMAKE_C_FLAGS="$CFLAGS" \
+			-DCMAKE_CXX_FLAGS="$CXXFLAGS" \
+			-DCMAKE_INSTALL_PREFIX=/usr \
+			-DCMAKE_BUILD_TYPE=Release \
+			-DLLVM_ENABLE_PROJECTS="libunwind;libcxxabi;libcxx" \
+			-DLIBCXX_USE_COMPILER_RT=ON \
+			-DLIBCXX_HAS_MUSL_LIBC=ON \
+			-DLIBCXX_ENABLE_STATIC_ABI_LIBRARY=ON \
+			-DLIBCXX_STATICALLY_LINK_ABI_IN_SHARED_LIBRARY=ON \
+			-DLIBCXX_STATICALLY_LINK_ABI_IN_STATIC_LIBRARY=ON \
+			-DLIBCXXABI_USE_COMPILER_RT=ON \
+			-DLIBCXXABI_USE_LLVM_UNWINDER=ON \
+			-DLIBCXXABI_ENABLE_STATIC_UNWINDER=ON \
+			-DLIBCXXABI_STATICALLY_LINK_UNWINDER_IN_SHARED_LIBRARY=YES \
+			$builddir/llvm
+}
+
+build() {
+	cd $_builddir
+#	ninja -j${JOBS} cxxabi
+	ninja -j${JOBS} cxx
+}
+
+package() {
+	cd $_builddir
+	DESTDIR="$pkgdir" ninja install-libcxx-headers install-libcxx
+}
+b2sums="e3b114c0321ce740c09eac4d0b5d031174030db2b3cc137eeb5ce7ea581f50eeba13d0080c855c2b3ac7211fd031d25cc2b82616955d6922a05872cc712d49d8  llvmorg-9.0.0.tar.gz
+4ac74027fdfe0def3a1601df2f65ad1a8fe47e41cfa4df2065863288a5ebe65057a5c4d0791bf817d8dfab923d0bc39d804e968bd3a90ed3f6720d2fbf1734aa  musl.patch"

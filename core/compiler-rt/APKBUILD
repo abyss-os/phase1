@@ -1,0 +1,50 @@
+pkgname=compiler-rt
+pkgver=9.0.0
+pkgrel=0
+pkgdesc="$pkgname"
+source="https://github.com/llvm/llvm-project/archive/llvmorg-$pkgver.tar.gz"
+
+arch="all"
+url=.
+license=.
+
+builddir="$srcdir/llvm-project-llvmorg-$pkgver"
+_builddir="$srcdir/build"
+
+makedepends="cmake clang ninja lld"
+
+prepare() {
+	default_prepare
+	mkdir -p $_builddir && cd $_builddir
+
+	cmake -G Ninja -Wno-dev \
+			-DCMAKE_C_COMPILER=$CC \
+			-DCMAKE_CXX_COMPILER=$CXX \
+			-DCMAKE_C_COMPILER_TARGET=$CTARGET \
+			-DCMAKE_CXX_COMPILER_TARGET=$CTARGET \
+			-DCMAKE_C_FLAGS="$CFLAGS" \
+			-DCMAKE_CXX_FLAGS="$CXXFLAGS" \
+			-DCMAKE_INSTALL_PREFIX=/usr \
+			-DCMAKE_BUILD_TYPE=Release \
+			-DLLVM_ENABLE_PROJECTS="compiler-rt" \
+                        -DCOMPILER_RT_USE_BUILTINS_LIBRARY=ON \
+                        -DCOMPILER_RT_DEFAULT_TARGET_ONLY=OFF \
+                        -DCOMPILER_RT_INCLUDE_TESTS=OFF \
+                        -DCOMPILER_RT_BUILD_SANITIZERS=OFF \
+                        -DCOMPILER_RT_BUILD_XRAY=OFF \
+                        -DCOMPILER_RT_INCLUDE_TESTS=OFF \
+			$builddir/llvm
+}
+
+build() {
+	cd $_builddir
+	ninja -j${JOBS} compiler-rt
+}
+
+package() {
+	cd $_builddir
+	DESTDIR="$pkgdir" ninja install-compiler-rt
+}
+b2sums="e3b114c0321ce740c09eac4d0b5d031174030db2b3cc137eeb5ce7ea581f50eeba13d0080c855c2b3ac7211fd031d25cc2b82616955d6922a05872cc712d49d8  llvmorg-9.0.0.tar.gz
+4ac74027fdfe0def3a1601df2f65ad1a8fe47e41cfa4df2065863288a5ebe65057a5c4d0791bf817d8dfab923d0bc39d804e968bd3a90ed3f6720d2fbf1734aa  musl.patch"
+sha512sums="2ad844f2d85d6734178a4ad746975a03ea9cda1454f7ea436f0ef8cc3199edec15130e322b4372b28a3178a8033af72d0a907662706cbd282ef57359235225a5  llvmorg-9.0.0.tar.gz"

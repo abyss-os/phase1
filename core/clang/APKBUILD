@@ -1,0 +1,50 @@
+pkgname=clang
+pkgver=9.0.0
+pkgrel=0
+pkgdesc="$pkgname"
+source="http://releases.llvm.org/$pkgver/cfe-$pkgver.src.tar.xz"
+arch="all"
+url=.
+license=.
+subpackages="$pkgname-dev"
+
+. ../llvm/common.inc
+
+builddir="$srcdir/build"
+
+depends="compiler-rt libcxx llvm"
+makedepends="cmake lld llvm-dev"
+
+prepare() {
+	default_prepare
+	mkdir -p $builddir && cd $builddir
+
+	cmake -G Ninja -Wno-dev \
+			-DCMAKE_C_COMPILER=$CC \
+			-DCMAKE_CXX_COMPILER=$CXX \
+			-DCMAKE_C_COMPILER_TARGET=$CTARGET \
+			-DCMAKE_CXX_COMPILER_TARGET=$CTARGET \
+			-DCMAKE_C_FLAGS="$CFLAGS" \
+			-DCMAKE_CXX_FLAGS="$CXXFLAGS" \
+			-DCMAKE_INSTALL_PREFIX=/usr \
+			-DCMAKE_BUILD_TYPE=Release \
+			-DCLANG_DEFAULT_LINKER=ld.lld \
+			-DCLANG_DEFAULT_CXX_STDLIB='libc++' \
+			-DCLANG_DEFAULT_RTLIB=compiler-rt \
+			-DCLANG_DEFAULT_UNWINDLIB=libunwind \
+			-DCLANG_VENDOR="Abyss OS" \
+			-DCLANG_ENABLE_STATIC_ANALYZER=OFF \
+			-DCLANG_ENABLE_ARCMT=OFF \
+			$srcdir/cfe-$pkgver.src
+}
+
+build() {
+	cd $builddir
+	ninja -j${JOBS}
+}
+
+package() {
+	cd $builddir
+	DESTDIR="$pkgdir" ninja install
+}
+b2sums="61fa57245d54930d09c2ff6024cdefb35592f7d1c644657b0aec9e7cc2dca29b45f08b8a2b716812025a438841e83ac3e30bb6f051498aa860533995ef7757b1  cfe-9.0.0.src.tar.xz"

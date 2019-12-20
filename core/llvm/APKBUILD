@@ -1,80 +1,38 @@
 pkgname=llvm
 pkgver=9.0.0
-#_hash=1931d3cb20a00da732c5210b123656632982fde0
-_hash=llvmorg-${pkgver}
-pkgrel=3
+pkgrel=0
 pkgdesc="$pkgname"
-source="https://github.com/llvm/llvm-project/archive/$_hash.tar.gz
-	musl.patch
-	libunwind_riscv.patch"
+source="https://github.com/llvm/llvm-project/archive/llvmorg-$pkgver.tar.gz"
 arch="all"
 url=.
 license=.
-subpackages="libcxx clang lld llvm-binutils:binutils libunwind compiler-rt:compilerrt libomp $pkgname-doc $pkgname-dev"
+subpackages="lld llvm-binutils:binutils $pkgname-dev"
+
+. ../llvm/common.inc
 
 builddir="$srcdir/build"
-_projects="llvm;clang;libcxx;libcxxabi;compiler-rt;libunwind;lld;openmp"
+_projects="llvm;lld"
 
-depends="elfutils-libelf libffi libedit ncurses zlib"
-makedepends="cmake clang lld ncurses-dev libedit-dev swig ninja elfutils-libelf elfutils-dev libffi-dev perl python3-dev libexecinfo-dev zlib-dev linux-dev"
+depends="compiler-rt libcxx elfutils-libelf libffi libedit ncurses zlib"
+makedepends="compiler-rt cmake clang lld ncurses-dev libedit-dev swig ninja elfutils-libelf elfutils-dev libffi-dev perl python3-dev libexecinfo-dev zlib-dev linux-dev"
 
 prepare() {
-	patch -p1 -d $srcdir/llvm-project-$_hash -i $srcdir/musl.patch
-	patch -p1 -d $srcdir/llvm-project-$_hash -i $srcdir/libunwind_riscv.patch
+	default_prepare
 	mkdir -p $builddir && cd $builddir
-	echo CHOST: $CHOST
-	echo CFLAGS: $CFLAGS
-	echo CTARGET: $CTARGET
-
-
-	echo CXXFLAGS: $CXXFLAGS
-	echo LDFLAGS: $LDFLAGS
-	echo Projects: $_projects
-
-	case $CARCH in
-		aarch64) _targets="AArch64";;
-#		x86_64) _targets="X86;AArch64;Mips;PowerPC;RISCV";;
-		x86_64) _targets="all";;
-		mips64) _targets="Mips";;
-		riscv64) _targets="RISCV";;
-		ppc64le) _targets="PowerPC";;
-		*) echo "Unknown arch" ; return 1;;
-	esac
-
-	if [ "$CC" = "gcc" ]; then
-		_bootstrap="-DLLVM_ENABLE_LLD=OFF"
-	else
-		_bootstrap="
-			-DLLVM_ENABLE_LLD=ON
-			-DCLANG_DEFAULT_LINKER=ld.lld
-			-DCLANG_DEFAULT_CXX_STDLIB='libc++'
-			-DCLANG_DEFAULT_RTLIB=compiler-rt
-			-DCLANG_DEFAULT_UNWINDLIB=libunwind
-		"
-	fi
-
-#			-DLIBCXX_CXX_ABI=libcxxabi \
-#			-DLIBCXX_CXX_ABI_INCLUDE_PATHS=$srcdir/llvm-project-$_hash/libcxxabi/include \
 
 	cmake -G Ninja -Wno-dev \
+			-DCMAKE_C_COMPILER=$CC \
+			-DCMAKE_CXX_COMPILER=$CXX \
+			-DCMAKE_C_COMPILER_TARGET=$CTARGET \
+			-DCMAKE_CXX_COMPILER_TARGET=$CTARGET \
+			-DCMAKE_C_FLAGS="$CFLAGS" \
+			-DCMAKE_CXX_FLAGS="$CXXFLAGS" \
 			-DCMAKE_INSTALL_PREFIX=/usr \
 			-DCMAKE_BUILD_TYPE=Release \
 			-DLLVM_VERSION_SUFFIX="" \
-			-DCLANG_VENDOR="Abyss OS" \
 			-DLLVM_APPEND_VC_REV=OFF \
 			-DLLVM_ENABLE_PROJECTS="$_projects" \
-			-DCLANG_INCLUDE_TESTS=OFF \
-			-DCLANG_INCLUDE_DOCS=OFF \
-			-DCLANG_BUILD_EXAMPLES=OFF \
-			-DCOMPILER_RT_USE_BUILTINS_LIBRARY=ON \
-			-DCOMPILER_RT_DEFAULT_TARGET_ONLY=OFF \
-			-DCOMPILER_RT_INCLUDE_TESTS=OFF \
-			-DLIBCXX_USE_COMPILER_RT=ON \
-			-DLIBCXX_HAS_MUSL_LIBC=ON \
-			-DLIBCXX_INCLUDE_BENCHMARKS=OFF \
-			-DLIBCXXABI_USE_LLVM_UNWINDER=ON \
-			-DLIBUNWIND_USE_COMPILER_RT=ON \
-			-DLIBUNWIND_WEAK_PTHREAD_LIB=ON \
+			-DLLVM_ENABLE_LLD=ON \
 			-DLLVM_TARGETS_TO_BUILD="$_targets" \
 			-DLLVM_INSTALL_BINUTILS_SYMLINKS=OFF \
 			-DLLVM_INCLUDE_EXAMPLES=OFF \
@@ -91,28 +49,10 @@ prepare() {
 			-DLLVM_OPTIMIZED_TABLEGEN=ON \
 			-DLLVM_INCLUDE_BENCHMARKS=OFF \
 			-DLLVM_INCLUDE_DOCS=OFF \
-			-DCOMPILER_RT_BUILD_SANITIZERS=OFF \
-			-DCOMPILER_RT_BUILD_XRAY=OFF \
-			-DCOMPILER_RT_INCLUDE_TESTS=OFF \
 			-DLLVM_TOOL_LLVM_ITANIUM_DEMANGLE_FUZZER_BUILD=OFF \
 			-DLLVM_TOOL_LLVM_MC_ASSEMBLE_FUZZER_BUILD=OFF \
 			-DLLVM_TOOL_LLVM_MICROSOFT_DEMANGLE_FUZZER_BUILD=OFF \
-			-DCMAKE_C_COMPILER=$CC \
-			-DCMAKE_CXX_COMPILER=$CXX \
-			-DCMAKE_C_COMPILER_TARGET=$CTARGET \
-			-DCMAKE_CXX_COMPILER_TARGET=$CTARGET \
-			-DCMAKE_C_FLAGS="$CFLAGS" \
-			-DCMAKE_CXX_FLAGS="$CXXFLAGS" \
-			-DLIBCXXABI_ENABLE_STATIC_UNWINDER=ON \
-			-DLIBCXXABI_STATICALLY_LINK_UNWINDER_IN_SHARED_LIBRARY=YES \
-			-DLIBCXX_ENABLE_STATIC_ABI_LIBRARY=ON \
-			-DLIBCXX_STATICALLY_LINK_ABI_IN_SHARED_LIBRARY=ON \
-			-DLIBCXX_STATICALLY_LINK_ABI_IN_STATIC_LIBRARY=ON \
-			-DLIBOMP_INSTALL_ALIASES=OFF \
-			-DLIBOMP_USE_QUAD_PRECISION=OFF \
-			-DLIBCXXABI_USE_COMPILER_RT=ON \
-			$_bootstrap \
-			$srcdir/llvm-project-$_hash/llvm
+			$srcdir/llvm-project-llvmorg-$pkgver/llvm
 }
 
 build() {
@@ -131,48 +71,6 @@ binutils() {
 	for t in addr2line ar as mt nm objcopy objdump ranlib readelf readobj size split strings strip dlltool lib; do
 		mv -v ${pkgdir}/usr/bin/llvm-${t} ${subpkgdir}/usr/bin/llvm-${t}
 	done
-}
-
-clang() {
-	pkgdesc="$pkgname $pkgver"
-	depends="llvm compiler-rt"
-	mkdir -p ${subpkgdir}/usr/bin ${subpkgdir}/usr/lib ${subpkgdir}/usr/share ${subpkgdir}/usr/libexec
-	mv -v ${pkgdir}/usr/bin/clang* ${subpkgdir}/usr/bin/
-	mv -v ${pkgdir}/usr/bin/c-index-test ${subpkgdir}/usr/bin/
-	mv -v ${pkgdir}/usr/bin/diagtool ${subpkgdir}/usr/bin/
-	mv -v ${pkgdir}/usr/lib/libclang* ${subpkgdir}/usr/lib/
-	mv -v ${pkgdir}/usr/lib/CheckerDependencyHandlingAnalyzerPlugin.so ${subpkgdir}/usr/lib/
-	mv -v ${pkgdir}/usr/lib/CheckerOptionHandlingAnalyzerPlugin.so ${subpkgdir}/usr/lib/
-	mv -v ${pkgdir}/usr/lib/SampleAnalyzerPlugin.so ${subpkgdir}/usr/lib/
-	mv -v ${pkgdir}/usr/share/clang ${subpkgdir}/usr/share/clang
-	mv -v ${pkgdir}/usr/share/scan-view ${subpkgdir}/usr/share/scan-view
-	mv -v ${pkgdir}/usr/share/scan-build ${subpkgdir}/usr/share/scan-build
-	mv -v ${pkgdir}/usr/libexec/ccc-analyzer ${subpkgdir}/usr/libexec/
-	mv -v ${pkgdir}/usr/libexec/c++-analyzer ${subpkgdir}/usr/libexec/
-	mv -v ${pkgdir}/usr/bin/hmaptool ${subpkgdir}/usr/bin/
-	mv -v ${pkgdir}/usr/bin/scan-build ${subpkgdir}/usr/bin/
-	mv -v ${pkgdir}/usr/bin/scan-view ${subpkgdir}/usr/bin/
-	mv -v ${pkgdir}/usr/bin/git-clang-format ${subpkgdir}/usr/bin/
-}
-
-libcxx() {
-	pkgdesc="$pkgname $pkgver"
-	replaces="libcxxabi"
-	mkdir -p ${subpkgdir}/usr/lib
-	mv -v ${pkgdir}/usr/lib/libc++* ${subpkgdir}/usr/lib/
-}
-
-libomp() {
-	pkgdesc="$pkgname $pkgver"
-	mkdir -p ${subpkgdir}/usr/lib
-	mv -v ${pkgdir}/usr/lib/libomp* ${subpkgdir}/usr/lib/
-}
-
-libunwind() {
-	pkgdesc="$pkgname $pkgver"
-	depends="compiler-rt"
-	mkdir -p ${subpkgdir}/usr/lib
-	mv -v ${pkgdir}/usr/lib/libunwind* ${subpkgdir}/usr/lib/
 }
 
 lld() {
@@ -202,12 +100,4 @@ llgo() {
 	mv -v ${builddir}/bin/llvm-go ${subpkgdir}/usr/bin/
 }
 
-compilerrt() {
-	pkgdesc="$pkgname $pkgver"
-	mkdir -p ${subpkgdir}/usr/lib
-	mv -v ${pkgdir}/usr/lib/clang ${subpkgdir}/usr/lib/
-}
-
-b2sums="e3b114c0321ce740c09eac4d0b5d031174030db2b3cc137eeb5ce7ea581f50eeba13d0080c855c2b3ac7211fd031d25cc2b82616955d6922a05872cc712d49d8  llvmorg-9.0.0.tar.gz
-4ac74027fdfe0def3a1601df2f65ad1a8fe47e41cfa4df2065863288a5ebe65057a5c4d0791bf817d8dfab923d0bc39d804e968bd3a90ed3f6720d2fbf1734aa  musl.patch
-3d72d237b9ed5244bee37d366bc06750fc9265c18598939a2169c6e322f93fe2e7edcfa553039a7043f744aecc2c1787b9b0b3818f0ee8a71758b6bec18c2791  libunwind_riscv.patch"
+b2sums="e3b114c0321ce740c09eac4d0b5d031174030db2b3cc137eeb5ce7ea581f50eeba13d0080c855c2b3ac7211fd031d25cc2b82616955d6922a05872cc712d49d8  llvmorg-9.0.0.tar.gz"

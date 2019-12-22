@@ -1,14 +1,10 @@
 pkgname=compiler-rt
-pkgver=9.0.0
-pkgrel=0
-pkgdesc="$pkgname"
-source="http://releases.llvm.org/$pkgver/$pkgname-$pkgver.src.tar.xz"
-arch="all"
-url=.
-license=.
-subpackages="$pkgname-dev"
 
-builddir="$srcdir/llvm-project-llvmorg-$pkgver"
+. ../llvm/common.inc
+
+source="https://github.com/llvm/llvm-project/releases/download/llvmorg-$pkgver/$pkgname-$pkgver.src.tar.xz"
+
+builddir="$srcdir/$pkgname-$pkgver.src"
 _builddir="$srcdir/build"
 
 makedepends="cmake clang lld ninja llvm-dev clang-dev"
@@ -25,16 +21,15 @@ prepare() {
 			-DCMAKE_CXX_COMPILER_TARGET=$CTARGET \
 			-DCMAKE_C_FLAGS="$CFLAGS" \
 			-DCMAKE_CXX_FLAGS="$CXXFLAGS" \
-			-DCMAKE_INSTALL_PREFIX=/usr \
+			-DCMAKE_INSTALL_PREFIX=/usr/lib/clang/${pkgver} \
 			-DCMAKE_BUILD_TYPE=Release \
-			-DLLVM_ENABLE_PROJECTS="compiler-rt" \
 			-DCOMPILER_RT_USE_BUILTINS_LIBRARY=ON \
 			-DCOMPILER_RT_DEFAULT_TARGET_ONLY=OFF \
 			-DCOMPILER_RT_INCLUDE_TESTS=OFF \
 			-DCOMPILER_RT_BUILD_SANITIZERS=OFF \
 			-DCOMPILER_RT_BUILD_XRAY=OFF \
 			-DCOMPILER_RT_INCLUDE_TESTS=OFF \
-			$builddir/$pkgname-$pkgver.src
+			$builddir
 
 }
 
@@ -47,4 +42,4 @@ package() {
 	cd $_builddir
 	DESTDIR="$pkgdir" ninja install-crt install-compiler-rt
 }
-b2sums="4aece9570df4cc38aaa58a3740aa0e1b5cbfe0bfc2d1a590e9e95871fda6ba4dcdeab6125d243c31ce5130386235475339f13da9f900b505eb2fec850a711646  compiler-rt-9.0.0.src.tar.xz"
+b2sums="53a727b528baa99de0c09aaefaabe9a1eee134e2bd744fdc44aadf9bc2823d036c88a7a02d7e7853f7d2214736dbaf66d40aeb5d07fee25d8f99413734519f70  compiler-rt-9.0.1.src.tar.xz"

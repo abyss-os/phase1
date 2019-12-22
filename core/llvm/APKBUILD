@@ -1,14 +1,9 @@
 pkgname=llvm
-pkgver=9.0.0
-pkgrel=0
-pkgdesc="$pkgname"
-source="https://github.com/llvm/llvm-project/archive/llvmorg-$pkgver.tar.gz"
-arch="all"
-url=.
-license=.
-subpackages="lld llvm-binutils:binutils $pkgname-dev"
 
 . ../llvm/common.inc
+
+source="https://github.com/llvm/llvm-project/archive/llvmorg-$pkgver.tar.gz"
+subpackages="lld llvm-binutils:binutils $pkgname-dev"
 
 builddir="$srcdir/build"
 _projects="llvm;lld"
@@ -100,4 +95,4 @@ llgo() {
 	mv -v ${builddir}/bin/llvm-go ${subpkgdir}/usr/bin/
 }
 
-b2sums="e3b114c0321ce740c09eac4d0b5d031174030db2b3cc137eeb5ce7ea581f50eeba13d0080c855c2b3ac7211fd031d25cc2b82616955d6922a05872cc712d49d8  llvmorg-9.0.0.tar.gz"
+b2sums="b86e405f2b8e00436045fd409fe19cdde75c797b1192c62a22b5ec75e6b4dc8e874a0f33008dc31562445e4cbe53a992b6f48c684255a6a1ef261e595b8b161f  llvmorg-9.0.1.tar.gz"

@@ -1,3 +1,10 @@
+pkgver=9.0.1
+pkgrel=0
+pkgdesc="$pkgname"
+arch="all"
+url=.
+license=.
+
 if [ -d ../llvm/src -a "$pkgname" != "llvm" ]; then
 	error "../llvm/src exists, remove before building."
 fi

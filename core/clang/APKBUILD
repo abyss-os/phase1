@@ -1,14 +1,9 @@
 pkgname=clang
-pkgver=9.0.0
-pkgrel=0
-pkgdesc="$pkgname"
-source="http://releases.llvm.org/$pkgver/cfe-$pkgver.src.tar.xz"
-arch="all"
-url=.
-license=.
 subpackages="$pkgname-dev"
 
 . ../llvm/common.inc
+
+source="https://github.com/llvm/llvm-project/releases/download/llvmorg-$pkgver/$pkgname-$pkgver.src.tar.xz"
 
 builddir="$srcdir/build"
 
@@ -35,7 +30,7 @@ prepare() {
 			-DCLANG_VENDOR="Abyss OS" \
 			-DCLANG_ENABLE_STATIC_ANALYZER=OFF \
 			-DCLANG_ENABLE_ARCMT=OFF \
-			$srcdir/cfe-$pkgver.src
+			$srcdir/$pkgname-$pkgver.src
 }
 
 build() {
@@ -47,4 +42,4 @@ package() {
 	cd $builddir
 	DESTDIR="$pkgdir" ninja install
 }
-b2sums="61fa57245d54930d09c2ff6024cdefb35592f7d1c644657b0aec9e7cc2dca29b45f08b8a2b716812025a438841e83ac3e30bb6f051498aa860533995ef7757b1  cfe-9.0.0.src.tar.xz"
+b2sums="fc03cc9f86891f341ca4cc185788555c11674a87956f14f6b0efc97d8562a5472242c8b94e46876bb96151214b287a4d3b1e8db1dd124468fdec4af0f75e94c9  clang-9.0.1.src.tar.xz"

@@ -1,0 +1,44 @@
+pkgname=openmp
+
+. ../llvm/common.inc
+
+source="https://github.com/llvm/llvm-project/releases/download/llvmorg-$pkgver/$pkgname-$pkgver.src.tar.xz"
+subpackages="$pkgname-dev"
+
+builddir="$srcdir/$pkgname-$pkgver.src"
+_builddir="$srcdir/build"
+
+makedepends="cmake clang lld ninja llvm-dev clang-dev"
+replaces="libomp"
+provides="libomp"
+
+prepare() {
+	default_prepare
+
+	mkdir -p $_builddir && cd $_builddir
+
+	cmake -G Ninja -Wno-dev \
+			-DCMAKE_C_COMPILER=$CC \
+			-DCMAKE_CXX_COMPILER=$CXX \
+			-DCMAKE_C_COMPILER_TARGET=$CTARGET \
+			-DCMAKE_CXX_COMPILER_TARGET=$CTARGET \
+			-DCMAKE_C_FLAGS="$CFLAGS" \
+			-DCMAKE_CXX_FLAGS="$CXXFLAGS" \
+			-DCMAKE_INSTALL_PREFIX=/usr \
+			-DCMAKE_BUILD_TYPE=Release \
+			-DLIBOMP_INSTALL_ALIASES=OFF \
+			-DLIBOMP_USE_QUAD_PRECISION=OFF \
+			$builddir
+
+}
+
+build() {
+	cd $_builddir
+	ninja -j${JOBS} omp
+}
+
+package() {
+	cd $_builddir
+	DESTDIR="$pkgdir" ninja install
+}
+b2sums="cb39e3d78f8667d06b436a3adad05c1d01b1265a4775019a618b57f6927fd5d0cda38ace76a76f34b87b0dc4cbec090d403c23fab329923460ce2393e4ab962c  openmp-9.0.1.src.tar.xz"

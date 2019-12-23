@@ -1,7 +1,7 @@
 pkgname=gcc
 pkgver=9.2.0
 pkgname="$pkgname$_target"
-pkgrel=2
+pkgrel=3
 pkgdesc="The GNU Compiler Collection"
 url="http://gcc.gnu.org"
 arch="all"
@@ -258,7 +258,7 @@ package() {
 	cd "$_builddir"
 	make -j1 DESTDIR="${pkgdir}" install
 
-	ln -s gcc "$pkgdir"/usr/bin/cc
+	ln -s gcc "$pkgdir"/usr/bin/gnu-cc
 
 	# we dont support gcj -static
 	# and saving 35MB is not bad.
@@ -322,7 +322,7 @@ package() {
 		done
 	else
 		# add c89/c99 wrapper scripts
-		cat >"$pkgdir"/usr/bin/c89 <<'EOF'
+		cat >"$pkgdir"/usr/bin/gnu-c89 <<'EOF'
 #!/bin/sh
 fl="-std=c89"
 for opt; do
@@ -334,7 +334,7 @@ for opt; do
 done
 exec gcc $fl ${1+"$@"}
 EOF
-		cat >"$pkgdir"/usr/bin/c99 <<'EOF'
+		cat >"$pkgdir"/usr/bin/gnu-c99 <<'EOF'
 #!/bin/sh
 fl="-std=c99"
 for opt; do

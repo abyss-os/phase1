@@ -1,0 +1,6 @@
+#!/bin/sh
+aalt-bin -D -g llvm -p as
+aalt-bin -D -g llvm -p cc
+aalt-bin -D -g llvm -p c++
+aalt-bin -D -g llvm -p cpp
+

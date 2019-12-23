@@ -1,0 +1,5 @@
+#!/bin/sh
+for p in addr2line ar mt nm objcopy objdump ranlib readelf readobj size split strings strip
+do
+  aalt-bin -R -g llvm -p $p -f /usr/bin/llvm-$p
+done

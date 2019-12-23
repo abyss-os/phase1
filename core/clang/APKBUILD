@@ -7,7 +7,7 @@ source="https://github.com/llvm/llvm-project/releases/download/llvmorg-$pkgver/$
 
 builddir="$srcdir/build"
 
-depends="compiler-rt libcxx llvm"
+depends="aalt compiler-rt libcxx llvm"
 makedepends="cmake lld llvm-dev"
 
 prepare() {
@@ -39,6 +39,7 @@ build() {
 }
 
 package() {
+	install="$pkgname.post-install $pkgname.post-deinstall"
 	cd $builddir
 	DESTDIR="$pkgdir" ninja install
 }

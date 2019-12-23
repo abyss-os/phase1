@@ -1,0 +1,6 @@
+#!/bin/sh
+aalt-bin -R -g llvm -p as  -f /usr/bin/clang
+aalt-bin -R -g llvm -p cc  -f /usr/bin/clang
+aalt-bin -R -g llvm -p c++ -f /usr/bin/clang++
+aalt-bin -R -g llvm -p cpp -f /usr/bin/clang-cpp
+

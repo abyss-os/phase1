@@ -1,6 +1,6 @@
 pkgname=aalt
-pkgver=0.1.0a
-_hash=422f8c9ca731a9ff7f6e5c822771df8b68a544e2
+pkgver=0.1.1a
+_hash=480808c40db535bcbc0ec57edced187b6d765e50
 pkgrel=1
 pkgdesc="Abyss ALTernatives"
 url="https://github.com/5paceToast/aalt"
@@ -28,6 +28,6 @@ package() {
         "$pkgdir"/var/lib/aalt/bin/aalt-bin-abyss.conf
 }
 
-b2sums="ba20d60fe028dd5b4a5882d57aa1bdd6a4d1ff0c4846dfa73be19c778318790e7d6a30d1ec0c2140f497f21e5bbc23b845f7d65ef654a80c8fc591ebabe6fc60  aalt-0.1.0a.tar.gz
+b2sums="7d5c9bc9e4da9772265bd625a8fc8458384c2b9323fd7acaeba32f6784c0a9d75ad7287a62ffad4338dad5c159c6920bfb08c20087413467460d3fe2c198bcae  aalt-0.1.1a.tar.gz
 c831e539be0edba13d50f4a082b5e95fef98322ffa2613b7cc9d6711399676699d58ff1af39b13253dbedcfc9b0ba42c505b2cc825b998800d469d3d2cbc00ec  aalt-bin
-04dd1fbba514227f36c89d1d368ef344eab0127efa75e0d6676eab4b5d60fdc61d18e1237ade4ff797abd46a308028902f6037dc49acb81d0e6d0ff81b65d216  aalt-bin-abyss.conf"
+be9660ea049a7994a3a8a0afc638568e824489f0b88b2e033d992b04656ee0100596e95444d43cd34a9b74e55b90c0fd43250a0634d9d0e9cfa5fb02d4cba772  aalt-bin-abyss.conf"

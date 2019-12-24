@@ -62,7 +62,7 @@ package() {
 
 binutils() {
 	depends="llvm"
-	install="$subpkgname.post-install $subpkgname.post-install"
+	install="$subpkgname.post-install $subpkgname.post-deinstall"
 	mkdir -p ${subpkgdir}/usr/bin
 	for t in addr2line ar as mt nm objcopy objdump ranlib readelf readobj size split strings strip dlltool lib; do
 		mv -v ${pkgdir}/usr/bin/llvm-${t} ${subpkgdir}/usr/bin/llvm-${t}
@@ -72,7 +72,7 @@ binutils() {
 lld() {
 	pkgdesc="$pkgname $pkgver"
 	depends="llvm"
-	install="$subpkgname.post-install $subpkgname.post-deinstall"
+	install="$subpkgname.post-install $subpkgname.pre-deinstall"
 	mkdir -p ${subpkgdir}/usr/bin ${subpkgdir}/usr/lib
 	for t in ld.lld lld ld64.lld lld-link wasm-ld; do
 		mv -v ${pkgdir}/usr/bin/${t} ${subpkgdir}/usr/bin/${t}

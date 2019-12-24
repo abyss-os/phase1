@@ -4,7 +4,7 @@ pkgrel=0
 pkgdesc="Linux kernel"
 url="http://kernel.org"
 #depends="mkinitfs"
-_depends_dev="perl elfutils-dev bash flex bison"
+_depends_dev="perl elfutils-dev bash flex bison binutils"
 makedepends="$_depends_dev gsed bc linux-dev openssl-dev"
 options="!strip"
 _config=${config:-config-vanilla.${CARCH}}
@@ -34,7 +34,8 @@ prepare() {
 	mkdir -p ${srcdir}/build && cd ${srcdir}/build
 	cp -v ${srcdir}/config.${CARCH} ${srcdir}/build/.config
 	make -C ${srcdir}/linux-${pkgver} O=${srcdir}/build \
-		ARCH="$_carch" HOSTCC="$CC" CC="$CC" AS=$AS HOSTAS=$AS HOSTLD=$LD LD=$LD \
+		ARCH="$_carch" HOSTCC="$CC" CC="$CC" AS=gnu-as HOSTAS=gnu-as \
+		HOSTLD=$LD LD=$LD OBJCOPY=gnu-objcopy STRIP=gnu-strip \
 		listnewconfig oldconfig
 		
 }
@@ -42,7 +43,8 @@ prepare() {
 build() {
 	cd ${srcdir}/build
 	make -C ${srcdir}/linux-${pkgver} O=${srcdir}/build \
-		ARCH="$_carch" HOSTCC="$CC" CC="$CC" AS=$AS HOSTAS=$AS HOSTLD=$LD LD=$LD \
+		ARCH="$_carch" HOSTCC="$CC" CC="$CC" AS=gnu-as HOSTAS=gnu-as \
+		HOSTLD=$LD LD=$LD OBJCOPY=gnu-objcopy STRIP=gnu-strip \
 		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-abyss"
 }
 
@@ -62,9 +64,13 @@ package() {
 	esac
 
 	# modules are disabled at the moment
-#	make ARCH="$_carch" HOSTCC="$CC" CC="$CC" AS=$AS HOSTAS=$AS HOSTLD=$LD LD=$LD \
-#		INSTALL_MOD_PATH="$pkgdir" INSTALL_PATH="$pkgdir/boot" INSTALL_HDR_PATH="$pkgdir/usr" install modules_install headers_install
-	make ARCH="$_carch" HOSTCC="$CC" CC="$CC" AS=$AS HOSTAS=$AS HOSTLD=$LD LD=$LD \
+	#make
+	#	ARCH="$_carch" HOSTCC="$CC" CC="$CC" AS=gnu-as HOSTAS=gnu-as \
+	#	HOSTLD=$LD LD=$LD OBJCOPY=gnu-objcopy STRIP=gnu-strip \
+	#	INSTALL_MOD_PATH="$pkgdir" INSTALL_PATH="$pkgdir/boot" INSTALL_HDR_PATH="$pkgdir/usr" install modules_install headers_install
+	make \
+		ARCH="$_carch" HOSTCC="$CC" CC="$CC" AS=gnu-as HOSTAS=gnu-as \
+		HOSTLD=$LD LD=$LD OBJCOPY=gnu-objcopy STRIP=gnu-strip \
 		INSTALL_MOD_PATH="$pkgdir" INSTALL_PATH="$pkgdir/boot" INSTALL_HDR_PATH="$pkgdir/usr" install headers_install
 }
 

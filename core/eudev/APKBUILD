@@ -9,7 +9,7 @@ license="GPL-2.0"
 depends="udev-init-scripts"
 replaces="udev"
 provides="udev=176"
-makedepends="gperf glib-dev linux-headers kmod-dev gobject-introspection-dev
+makedepends="gperf glib-dev linux-dev kmod-dev gobject-introspection-dev
 	util-linux-dev"
 checkdepends="tree xz perl"
 subpackages="$pkgname-dev $pkgname-doc $pkgname-openrc"

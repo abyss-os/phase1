@@ -3,13 +3,14 @@ pkgname=llvm
 . ../llvm/common.inc
 
 source="https://github.com/llvm/llvm-project/archive/llvmorg-$pkgver.tar.gz"
-subpackages="lld llvm-binutils:binutils $pkgname-dev"
+subpackages="lld llvm-binutils:binutils $pkgname-dev \
+    llvm-binutils-aalt:binutils_aalt lld-aalt:lld_aalt"
 
 builddir="$srcdir/build"
 _projects="llvm;lld"
 
-depends="aalt compiler-rt libcxx elfutils-libelf libffi libedit ncurses zlib"
-makedepends="compiler-rt cmake clang lld ncurses-dev libedit-dev swig ninja elfutils-libelf elfutils-dev libffi-dev perl python3-dev libexecinfo-dev zlib-dev linux-dev"
+depends="compiler-rt libcxx elfutils-libelf libffi libedit ncurses zlib"
+makedepends="aalt compiler-rt cmake clang lld ncurses-dev libedit-dev swig ninja elfutils-libelf elfutils-dev libffi-dev perl python3-dev libexecinfo-dev zlib-dev linux-dev"
 
 prepare() {
 	default_prepare
@@ -62,17 +63,16 @@ package() {
 
 binutils() {
 	depends="llvm"
-	install="$subpkgname.post-install $subpkgname.post-deinstall"
 	mkdir -p ${subpkgdir}/usr/bin
 	for t in addr2line ar as mt nm objcopy objdump ranlib readelf readobj size split strings strip dlltool lib; do
 		mv -v ${pkgdir}/usr/bin/llvm-${t} ${subpkgdir}/usr/bin/llvm-${t}
 	done
 }
 
+
 lld() {
 	pkgdesc="$pkgname $pkgver"
 	depends="llvm"
-	install="$subpkgname.post-install $subpkgname.pre-deinstall"
 	mkdir -p ${subpkgdir}/usr/bin ${subpkgdir}/usr/lib
 	for t in ld.lld lld ld64.lld lld-link wasm-ld; do
 		mv -v ${pkgdir}/usr/bin/${t} ${subpkgdir}/usr/bin/${t}
@@ -95,6 +95,25 @@ llgo() {
 	depends="llvm"
 	mkdir -p ${subpkgdir}/usr/bin
 	mv -v ${builddir}/bin/llvm-go ${subpkgdir}/usr/bin/
+}
+
+binutils_aalt() {
+    depends="$depends aalt"
+    pkgdesc="$pkgdesc (AAlt registration files)"
+    install_if="aalt ${subpkgname%-aalt}=$pkgver-r$pkgrel"
+
+    for p in addr2line ar mt nm objcopy objdump ranlib readelf readobj size split strings strip
+    do
+        DESTDIR=$subpkgdir aalt-bin -R -g llvm -p $p -f /usr/bin/llvm-$p
+    done
+}
+
+lld_aalt() {
+    depends="$depends aalt"
+    pkgdesc="$pkgdesc (AAlt registration files)"
+    install_if="aalt ${subpkgname%-aalt}=$pkgver-r$pkgrel"
+
+    DESTDIR=$subpkgdir aalt-bin -R -g llvm -p ld -f /usr/bin/lld
 }
 
 b2sums="b86e405f2b8e00436045fd409fe19cdde75c797b1192c62a22b5ec75e6b4dc8e874a0f33008dc31562445e4cbe53a992b6f48c684255a6a1ef261e595b8b161f  llvmorg-9.0.1.tar.gz"

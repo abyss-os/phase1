@@ -12,7 +12,7 @@ checkdepends="gsed"
 source="https://download.gnome.org/sources/gobject-introspection/${pkgver%.*}/gobject-introspection-$pkgver.tar.xz"
 
 build() {
-	meson \
+	SED=gsed meson \
 		--prefix=/usr \
 		--sysconfdir=/etc \
 		--mandir=/usr/share/man \

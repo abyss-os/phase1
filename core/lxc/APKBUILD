@@ -10,7 +10,7 @@ makedepends="
 	libcap-dev
 	libseccomp-dev
 	linux-pam-dev
-	linux-headers
+	linux-dev
 
 	automake
 	autoconf

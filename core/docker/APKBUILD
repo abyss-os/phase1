@@ -7,7 +7,7 @@ url="https://www.docker.io/"
 arch="all"
 license="Apache-2.0"
 depends="docker-engine docker-cli containerd runc"
-makedepends="go go-md2man btrfs-progs-dev bash linux-headers coreutils lvm2-dev lvm2 libtool
+makedepends="go go-md2man btrfs-progs-dev bash linux-dev coreutils lvm2-dev lvm2 libtool
 	libseccomp-dev libseccomp"
 install="$pkgname.pre-install"
 

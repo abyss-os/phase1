@@ -1,2 +1,0 @@
-#!/bin/sh
-aalt-bin -D -g llvm -p ld

@@ -1,14 +1,14 @@
 pkgname=binutils
 pkgver=2.33.1
-pkgrel=0
+pkgrel=1
 pkgdesc="Tools necessary to build programs"
 url="https://www.gnu.org/software/binutils/"
 makedepends_build="bison flex texinfo"
 makedepends_host="zlib-dev"
-makedepends="$makedepends_build $makedepends_host"
+makedepends="aalt $makedepends_build $makedepends_host"
 arch="all"
 license="GPL-2.0 GPL-3.0-or-later LGPL-2.0 BSD"
-subpackages="$pkgname-dev $pkgname-doc"
+subpackages="$pkgname-dev $pkgname-doc $pkgname-aalt"
 source="https://ftp.gnu.org/gnu/$pkgname/$pkgname-$pkgver.tar.bz2
 	binutils-ld-fix-static-linking.patch
 	gold-mips.patch
@@ -32,7 +32,7 @@ build() {
 
 	case "$CTARGET_ARCH" in
 	mips*)  _hash_style_configure="--enable-default-hash-style=sysv" ;;
-	*)      _hash_style_configure="--enable-default-hash-style=gnu"	;;
+	*)	  _hash_style_configure="--enable-default-hash-style=gnu"	;;
 	esac
 
 	cd "$builddir"
@@ -95,6 +95,20 @@ gold() {
 	fi
 	mkdir -p "$subpkgdir"/usr/$CTARGET/bin
 	mv "$pkgdir"/usr/$CTARGET/bin/ld.gold "$subpkgdir"/usr/$CTARGET/bin/ld.gold
+}
+
+aalt() {
+	depends="$depends aalt"
+	pkgdesc="$pkgdesc (AAlt registration files)"
+	install_if="aalt ${subpkgname%-aalt}=$pkgver-r$pkgrel"
+
+	for p in strings ranlib c++filt readelf gprof dwp as addr2line strip size elfedit ar objcopy objdump nm
+	do
+		DESTDIR="$subpkgdir" aalt-bin -R -g gnu -p $p -f /usr/bin/gnu-$p
+	done
+
+	DESTDIR="$subpkgdir" aalt-bin -R -g gnu  -p ld -f /usr/bin/gnu-ld.bfd
+	DESTDIR="$subpkgdir" aalt-bin -R -g gold -p ld -f /usr/bin/gnu-ld.gold
 }
 
 b2sums="f6812c3b10d8dc2d76454ff9a8eb04fb1c0a954bc41b188ecb0aa3850f1da3344b963611a79a4802870d95af1b34a271376783525c3e3784034112ff0caeef91  binutils-2.33.1.tar.bz2

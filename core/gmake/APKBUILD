@@ -1,12 +1,13 @@
 pkgname=gmake
 pkgver=4.2.1
-pkgrel=0
+pkgrel=1
 pkgdesc="GNU make utility to maintain groups of programs"
 url="https://www.gnu.org/software/make"
 arch="all"
 license="GPL-3.0-or-later"
 depends=""
-subpackages="$pkgname-doc"
+makedepends="aalt"
+subpackages="$pkgname-doc $pkgname-aalt"
 source="http://ftp.gnu.org/gnu/make/make-$pkgver.tar.bz2
 	fix-atexit-exit.patch
 	fix-glob-dtype.patch
@@ -49,6 +50,14 @@ package() {
 	else
 		make DESTDIR="$pkgdir" install
 	fi
+}
+
+aalt() {
+	depends="$depends aalt"
+	pkgdesc="$pkgdesc (AAlt registration files)"
+	install_if="aalt ${subpkgname%-aalt}=$pkgver-r$pkgrel"
+
+	DESTDIR="$subpkgdir" aalt-bin -R -g gnu -p make -f /usr/bin/gmake
 }
 
 b2sums="fa6d43f5fd46182182a296c58dcd138a1a4568104eda760bbb3c241c023dee216789cf3128e5ac2b416cec76e1ba82d5b5e7852da12e86138a7d0865c85a42b4  make-4.2.1.tar.bz2

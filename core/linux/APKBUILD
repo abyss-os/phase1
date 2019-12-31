@@ -40,6 +40,13 @@ prepare() {
 		
 }
 
+menuconfig() {
+	make -C ${srcdir}/linux-${pkgver} O=${srcdir}/build \
+		ARCH="$_carch" HOSTCC="$CC" CC="$CC" AS=gnu-as HOSTAS=gnu-as \
+		HOSTLD=$LD LD=$LD OBJCOPY=gnu-objcopy STRIP=gnu-strip \
+		menuconfig
+}
+
 build() {
 	cd ${srcdir}/build
 	make -C ${srcdir}/linux-${pkgver} O=${srcdir}/build \

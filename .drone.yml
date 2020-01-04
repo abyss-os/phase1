@@ -10,11 +10,8 @@ steps:
   - name: build
     image: abyssos/abyss:dev
     commands:
-      - env
-      - apk update
-      - apk upgrade -a
+      - apk -U upgrade -a
       - apk add git minio-client
-      - abuild-keygen -ain
       - ./.scripts/drone.sh
     environment:
       GH_TOKEN:

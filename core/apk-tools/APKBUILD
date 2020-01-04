@@ -20,6 +20,7 @@ source="https://dev.alpinelinux.org/archive/$pkgname/$pkgname-$pkgver.tar.xz
 	add-riscv64-to-apk_defines.h.patch
 	use-utc-time.patch
 	dont-unpack-root.patch
+	repositories
 	"
 
 url="https://git.alpinelinux.org/cgit/apk-tools/"
@@ -65,6 +66,9 @@ package() {
 		"$pkgdir"/etc/apk/keys \
 		"$pkgdir"/etc/apk/protected_paths.d
 
+	install -Dm700 "$srcdir"/repositories \
+		"$pkgdir"/etc/apk/repositories
+
 	# the shipped README is empty
 	rm -r "$pkgdir"/usr/share/
 
@@ -98,4 +102,5 @@ f1b654c42b1aa4abb341c4d7358c22985fe5fa4fdb507ef902f7f2603cbdd8635b227814ccc17e5b
 796e380fef107886d82ffa34711aceb7a8236ac8e4d1830f8615eb54c56b186b25e316f0e90632bcf6a5c260f3aa7bef79bff830264a96b873059d0f9be34cc3  blake2.patch
 31ab9ec77642da87185ab5852d8d1654b3302285252f73e4f8dae9f529c3e59d0d69e0dc4f8be9adf689b322f23ad9ccf5517820751e81587d6d7921f3f5dbaa  add-riscv64-to-apk_defines.h.patch
 740c77fa1033536ac02778d44141faf46fc5d5de34b94b0e0dffabcbbd637c8487bcbd2bca3f67ebde4e771ccc22573336e8b599a35b37c8c7bc6cac6d7ac277  use-utc-time.patch
-38da5df36165f7ec7cec527911692fa6c45dc1bff1445fba326afdbe50e5668a01c7bb02eb17a54977060e396a9351ad5a635bea852b145483bdca9706a7ec80  dont-unpack-root.patch"
+38da5df36165f7ec7cec527911692fa6c45dc1bff1445fba326afdbe50e5668a01c7bb02eb17a54977060e396a9351ad5a635bea852b145483bdca9706a7ec80  dont-unpack-root.patch
+2d1c5bd0ef457a9174bbcec601f2478afa19bb442d3fa00a4e5e9b7b19377cff394840d36b6123735a0192d02d9ed76c439070d1f463e45e8388557a5ac0f429  repositories"

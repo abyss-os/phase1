@@ -1,8 +1,8 @@
 pkgname="abyss-keyring"
 pkgver="1"
-pkgrel=0
+pkgrel=1
 pkgdesc="Abyss OS keys"
-url="https://getabyss.com"
+url="https://abyss.run"
 arch="all"
 license="custom"
 #depends="filesystem"

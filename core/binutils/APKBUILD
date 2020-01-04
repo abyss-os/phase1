@@ -24,7 +24,7 @@ build() {
 		_arch_configure="--enable-targets=x86_64-pep"
 	fi
 
-	if [ "$CTARGET_ARCH" = "riscv64" ]; then
+	if [ "$CTARGET_ARCH" = "riscv64" -o "$CTARGET_ARCH" = "mips64" ]; then
 		_arch_configure="--enable-gold=no"
 	else
 		_arch_configure="$_arch_configure --enable-gold=yes"

@@ -1,0 +1,60 @@
+pkgname=ldc
+pkgver=1.18.0
+pkgrel=0
+pkgdesc="The LLVM-based D Compiler"
+url="https://github.com/ldc-developers/ldc"
+arch="all"
+license="BSD-3-Clause AND BSL-1.0 AND (Artistic-1.0 OR GPL-2.0-or-later) AND NCSA AND MIT"
+depends="libexecinfo tzdata"
+makedepends="bash patchelf cmake curl-dev diffutils gnugrep llvm-dev libedit-dev libexecinfo-dev py-pip zlib-dev"
+# A user might want to install the '-runtime' subpackage when they have
+# a dynamically-linked D program.
+provides="dlang-compiler"
+source="https://github.com/ldc-developers/ldc/releases/download/v$pkgver/ldc-$pkgver-src.tar.gz
+		01-stdio-fseek.patch
+		02-conf.patch"
+builddir="$srcdir/ldc-$pkgver-src/"
+
+build() {
+	if [ "$CBUILD" != "$CHOST" ]; then
+		CMAKE_CROSSOPTS="-DCMAKE_SYSTEM_NAME=Linux -DCMAKE_HOST_SYSTEM_NAME=Linux"
+	fi
+	cmake \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_SHARED_LIBS=True \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_CXX_FLAGS="$CXXFLAGS" \
+		-DCMAKE_C_FLAGS="$CFLAGS" \
+		$CMAKE_CROSSOPTS "$builddir"
+	make
+
+	# CMake added the rpaths to the shared libs - strip them
+	patchelf --remove-rpath "$builddir"/lib/*.so*
+	:
+}
+
+check() {
+	# Dependency to lit-test
+	python -m pip install --user lit
+
+	# Note: The testsuite does not parallelize well, as the `clean` target get run in parallel.
+	# Hence `-j${JOBS}` was left out on purpose
+	#
+	# - dmd-testsuite takes too long to run and has more to do with language checks
+	#	which are less relevant to us than platform integration tests
+	# - lit-test disabled because 'TEST 'LDC :: debuginfo/print_gdb.d' FAILED'
+	#	Something to do with TLS variables not being printable in GDB
+	# - 'druntime-test-shared' fails, probably because it is using `Object.factory`
+	# - 'druntime-test-stdcpp' fails for an unknown reason and is temporarily disabled
+	# - 'druntime-test-exceptions' fails for an unknown reason and is temporarily disabled
+	ctest --output-on-failure -E "dmd-testsuite|lit-tests|druntime-test-exceptions|druntime-test-shared|druntime-test-stdcpp"
+}
+
+package() {
+	make DESTDIR="$pkgdir" install
+}
+
+b2sums="0affd49dda5f7c3df64e8d89fe66f2fce4c3a18c4bc5e4147e2e906d10f0b27316c8c460f5b9d767f3f50e5e909448b9f44cb17e156766d5488e237a71dd5009  ldc-1.18.0-src.tar.gz
+1ac407753ad058a4dfe0ead2df071bed6bc4a0f8e7cc40781dbe1c44d0df2c975d7c44b539ea35a6785ab334e052dea4fdc5ed2361e34a55a41135d3376e2fd4  01-stdio-fseek.patch
+d02a2d53408996d3a2bfee7de356134e05ee401801f3e16fd66e22fcb9be6423c6501cc145727b43f53d1402dd42903e432b818e4cdbdc42f9bb57b2ebdc035b  02-conf.patch"

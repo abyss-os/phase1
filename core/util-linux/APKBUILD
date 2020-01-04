@@ -12,8 +12,7 @@ url="https://git.kernel.org/cgit/utils/util-linux/util-linux.git"
 arch="all"
 license="GPL-2.0 GPL-2.0-or-later LGPL-2.0-or-later BSD Public-Domain"
 depends="findmnt"
-makedepends_build="autoconf automake libtool"
-makedepends_host="zlib-dev ncurses-dev linux-dev libcap-ng-dev acl-dev attr-dev"
+makedepends="zlib-dev ncurses-dev linux-dev libcap-ng-dev acl-dev attr-dev autoconf automake libtool"
 options="suid"
 source="https://www.kernel.org/pub/linux/utils/$pkgname/v${_v}/$pkgname-$pkgver.tar.xz
 	ttydefaults.h
@@ -21,12 +20,7 @@ source="https://www.kernel.org/pub/linux/utils/$pkgname/v${_v}/$pkgname-$pkgver.
 subpackages="$pkgname-doc $pkgname-dev $pkgname-bash-completion:bashcomp:noarch
 	libuuid libblkid libmount libsmartcols libfdisk sfdisk cfdisk
 	findmnt:_findmnt mcookie blkid setpriv"
-if [ -z "$BOOTSTRAP" ]; then
-	makedepends_host="$makedepends_host ncurses-dev python3-dev"
-	subpackages="$subpackages py-libmount:_py"
-else
-	_bootstrap_config="--without-python"
-fi
+
 makedepends="$makedepends_build $makedepends_host"
 replaces="e2fsprogs util-linux-ng"
 
@@ -63,7 +57,7 @@ build() {
 		--disable-su \
 		--without-systemd \
 		--without-btrfs \
-		$_bootstrap_config
+		--without-python
 	make
 }
 
@@ -164,12 +158,6 @@ _findmnt() {
 	replaces=""
 	mkdir -p "$subpkgdir"/usr/bin
 	mv "$pkgdir"/usr/bin/findmnt "$subpkgdir"/usr/bin
-}
-
-_py() {
-	pkgdesc="python bindings to libmount"
-	mkdir -p "$subpkgdir"/usr/lib
-	mv "$pkgdir"/usr/lib/python* "$subpkgdir"/usr/lib/
 }
 
 b2sums="fdeed0a236edd26d268bccca8cde2cf1b7ecbff521ede9fa26ea22c8e5cdfc380a416a168789504b303f1b569d163e41f6630ee28829be7f2b2129fa14c4fffa  util-linux-2.33.2.tar.xz

@@ -6,7 +6,7 @@ url="http://www.musl-libc.org/"
 arch="all"
 license="MIT"
 depends="filesystem"
-subpackages="$pkgname-dev libc6-compat:compat:noarch $pkgname-utils"
+subpackages="$pkgname-dev $pkgname-utils"
 makedepends="musl-dev filesystem"
 source="http://www.musl-libc.org/releases/musl-$pkgver.tar.gz
 	__stack_chk_fail_local.c
@@ -98,7 +98,7 @@ utils() {
 	replaces="libiconv"
 	license="MIT BSD GPL2+"
 
-	mkdir -p "$subpkgdir"/usr "$subpkgdir"/usr/sbin
+	mkdir -p "$subpkgdir"/usr
 	mv "$pkgdir"/usr/bin "$subpkgdir"/usr/
 
 	install -D \
@@ -107,26 +107,7 @@ utils() {
 		"$builddir"/iconv \
 		"$subpkgdir"/usr/bin
 
-	install -D -m755 "$srcdir"/ldconfig "$subpkgdir"/usr/sbin
-}
-
-compat() {
-	pkgdesc="compatibility libraries for glibc"
-
-	mkdir -p "$subpkgdir"/usr/lib
-	# definitive source is https://sourceware.org/glibc/wiki/ABIList
-	case "$CARCH" in
-	aarch64)	_ld="usr/lib/ld-linux-aarch64.so.1" ;;
-	mips64)		_ld="usr/lib64/ld.so.1" ;;
-	ppc64le)	_ld="usr/lib64/ld64.so.2" ;;
-	x86_64)		_ld="usr/lib64/ld-linux-x86-64.so.2";;
-	esac
-	mkdir -p "$subpkgdir/${_ld%/*}"
-	ln -sf "/usr/lib/libc.musl-${CARCH}.so.1" "$subpkgdir/$_ld"
-
-	for i in libc.so.6 libcrypt.so.1 libm.so.6 libpthread.so.0 librt.so.1 libutil.so.1; do
-		ln -sf "/usr/lib/libc.so" "$subpkgdir/usr/lib/$i"
-	done
+	install -D -m755 "$srcdir"/ldconfig "$subpkgdir"/usr/bin
 }
 
 b2sums="5fa26746eed0f2334b740adf94a8400568d56d9b2276bf1fbac828f9b707b4e215d3c16af9ea048b9d771f1d0a58ada3bc6e1bf0ba8f5fa693f5042fc6af30df  musl-1.1.24.tar.gz

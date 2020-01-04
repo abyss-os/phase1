@@ -3,16 +3,18 @@ subpackages="$pkgname-dev $pkgname-aalt"
 
 . ../llvm/common.inc
 
-source="https://github.com/llvm/llvm-project/releases/download/llvmorg-$pkgver/$pkgname-$pkgver.src.tar.xz"
+source="https://github.com/llvm/llvm-project/releases/download/llvmorg-$pkgver/$pkgname-$pkgver.src.tar.xz
+	mips_softfloat.patch"
 
-builddir="$srcdir/build"
+builddir="$srcdir/$pkgname-$pkgver.src"
+_builddir="$srcdir/build"
 
 depends="compiler-rt libcxx llvm"
 makedepends="aalt cmake lld llvm-dev"
 
 prepare() {
 	default_prepare
-	mkdir -p $builddir && cd $builddir
+	mkdir -p $_builddir && cd $_builddir
 
 	cmake -G Ninja -Wno-dev \
 			-DCMAKE_C_COMPILER=$CC \
@@ -23,23 +25,23 @@ prepare() {
 			-DCMAKE_CXX_FLAGS="$CXXFLAGS" \
 			-DCMAKE_INSTALL_PREFIX=/usr \
 			-DCMAKE_BUILD_TYPE=Release \
-			-DCLANG_DEFAULT_LINKER=ld.lld \
+			-DCLANG_DEFAULT_LINKER=$_linker \
 			-DCLANG_DEFAULT_CXX_STDLIB='libc++' \
 			-DCLANG_DEFAULT_RTLIB=compiler-rt \
 			-DCLANG_DEFAULT_UNWINDLIB=libunwind \
 			-DCLANG_VENDOR="Abyss OS" \
 			-DCLANG_ENABLE_STATIC_ANALYZER=OFF \
 			-DCLANG_ENABLE_ARCMT=OFF \
-			$srcdir/$pkgname-$pkgver.src
+			$builddir
 }
 
 build() {
-	cd $builddir
+	cd $_builddir
 	ninja -j${JOBS}
 }
 
 package() {
-	cd $builddir
+	cd $_builddir
 	DESTDIR="$pkgdir" ninja install
 }
 

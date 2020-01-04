@@ -78,6 +78,10 @@ package() {
 
 	chmod 4711 $pkgdir/usr/bin/new*idmap
 	touch $pkgdir/etc/subuid $pkgdir/etc/subgid
+
+	mv -v $pkgdir/bin/* $pkgdir/usr/bin/
+	mv -v $pkgdir/usr/sbin/* $pkgdir/usr/bin/
+	rm -rf $pkgdir/bin $pkgdir/usr/sbin
 }
 
 b2sums="83b926fd8136647b004bcb8afe252ad60e0f5820cba8ff0ff4bd9f7918b5e9996ffa51c05774e64e83aaf062b0fb826865492d237c0ff9abeb0927a9ff33bf7e  shadow-4.7.tar.xz

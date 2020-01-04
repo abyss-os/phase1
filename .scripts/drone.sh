@@ -15,6 +15,7 @@ echo PACKAGER_PRIVKEY=${HOME}/.abuild/${ABYSS_PRIVKEY} > ${HOME}/.abuild/abuild.
 # XXX: remove once migrated
 echo 'http://mirror.abyss.run/abyss/core' >> /etc/apk/repositories
 echo 'http://mirror.abyss.run/abyss/devel' >> /etc/apk/repositories
+apk -U upgrade -a
 
 OPWD=${PWD}
 

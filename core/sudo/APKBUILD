@@ -31,7 +31,7 @@ build() {
 		--build=$CBUILD \
 		--host=$CHOST \
 		--prefix=/usr \
-		--sbindir=/usr/sbin \
+		--sbindir=/usr/bin \
 		--libexecdir=/usr/lib \
 		--mandir=/usr/share/man \
 		--disable-nls \

@@ -10,7 +10,7 @@ builddir="$srcdir/build"
 _projects="llvm;lld"
 
 depends="compiler-rt libcxx elfutils-libelf libffi libedit ncurses zlib"
-makedepends="aalt compiler-rt cmake clang lld ncurses-dev libedit-dev swig ninja elfutils-libelf elfutils-dev libffi-dev perl python3-dev libexecinfo-dev zlib-dev linux-dev"
+makedepends="aalt compiler-rt cmake clang lld ncurses-dev libedit-dev swig ninja elfutils-libelf elfutils-dev libffi-dev perl python3-dev zlib-dev linux-dev"
 
 prepare() {
 	default_prepare

@@ -1,6 +1,6 @@
 pkgname=libcxx
 
-. ../llvm/common.inc
+. ../../devel/llvm/common.inc
 
 source="https://github.com/llvm/llvm-project/archive/llvmorg-$pkgver.tar.gz
 	musl.patch

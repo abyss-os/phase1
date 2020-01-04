@@ -15,20 +15,6 @@ source="http://xmlsoft.org/sources/$pkgname-$pkgver.tar.gz
 	"
 builddir="$srcdir/$pkgname-$pkgver"
 
-# secfixes:
-#   2.9.8-r1:
-#   - CVE-2018-9251
-#   - CVE-2018-14404
-#   - CVE-2018-14567
-#   2.9.4-r4:
-#   - CVE-2017-5969
-#   2.9.4-r2:
-#   - CVE-2016-9318
-#   2.9.4-r1:
-#   - CVE-2016-5131
-
-
-
 prepare() {
 	default_prepare
 
@@ -38,7 +24,6 @@ prepare() {
 	# We don't build libxml2 with icu.
 	rm test/icu_parse_test.xml
 
-#	cp -ra "$builddir" "$builddir"-python2
 	./configure \
 		--build=$CBUILD \
 		--host=$CHOST \
@@ -67,19 +52,6 @@ package() {
 dev() {
 	default_dev
 	mv "$pkgdir"/usr/lib/*.sh "$subpkgdir"/usr/lib/
-}
-
-_py() {
-	local python
-	cd "$builddir"
-	case $subpkgname in
-	py-*) python=python3;;
-	esac
-
-	pkgdesc="$pkgname $python bindings"
-	install_if="py-libxml2=$pkgver-r$pkgrel $python"
-	install -d "$subpkgdir"/usr/lib
-	mv "$pkgdir"/usr/lib/$python* "$subpkgdir"/usr/lib/
 }
 
 b2sums="00a67c38084f2effd5d68d7d3e68f0c96cf4f52eab6d8d9b96dc91f03a84baa132abeaf303a836ff9bbf04f832432a036077316c464398e433c9779d8519074b  libxml2-2.9.9.tar.gz

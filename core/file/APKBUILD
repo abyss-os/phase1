@@ -17,7 +17,8 @@ build() {
 		--host=$CHOST \
 		--prefix=/usr \
 		--sbindir=/usr/bin \
-		--datadir=/usr/share
+		--datadir=/usr/share \
+		--disable-libseccomp
 	make
 }
 

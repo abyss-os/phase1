@@ -33,7 +33,7 @@ platform:
 
 steps:
   - name: build
-    image: abyssos/aarch64
+    image: abyssos/abyss:aarch64
     commands:
       - env
       - apk update

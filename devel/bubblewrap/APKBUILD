@@ -1,6 +1,6 @@
 pkgname=bubblewrap
 pkgver=0.3.3
-pkgrel=0
+pkgrel=1
 pkgdesc="Unprivileged sandboxing tool"
 url="https://github.com/projectatomic/bubblewrap"
 arch="all"

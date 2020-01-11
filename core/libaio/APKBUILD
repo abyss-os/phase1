@@ -1,6 +1,6 @@
 pkgname="libaio"
 pkgver=0.3.111
-pkgrel=0
+pkgrel=1
 pkgdesc="Asynchronous input/output library"
 url="http://lse.sourceforge.net/io/aio.html"
 arch="all"

@@ -1,6 +1,6 @@
 pkgname=re2c
 pkgver=1.1.1
-pkgrel=0
+pkgrel=1
 pkgdesc="A tool for writing fast and flexible scanners in C from regular expressions"
 url="http://www.re2c.org"
 arch="all"

@@ -1,6 +1,6 @@
 pkgname=fakeroot
 pkgver=1.24
-pkgrel=0
+pkgrel=1
 pkgdesc="Gives a fake root environment, useful for building packages as a non-privileged user"
 arch="all"
 license="GPL-3.0-or-later"

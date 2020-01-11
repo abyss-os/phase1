@@ -1,6 +1,6 @@
 pkgname=gd
 pkgver=2.2.5
-pkgrel=0
+pkgrel=1
 _pkgreal=lib$pkgname
 pkgdesc="Library for the dynamic creation of images by programmers"
 url="https://libgd.github.io/"

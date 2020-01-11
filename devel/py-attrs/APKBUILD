@@ -1,6 +1,6 @@
 pkgname=py-attrs
 pkgver=19.3.0
-pkgrel=0
+pkgrel=1
 pkgdesc="Python classes without boilerplate"
 url="http://www.attrs.org"
 arch="noarch"

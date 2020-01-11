@@ -1,6 +1,6 @@
 pkgname=shadow
 pkgver=4.7
-pkgrel=0
+pkgrel=1
 pkgdesc="PAM-using login and passwd utilities (usermod, useradd, ...)"
 url="http://pkg-shadow.alioth.debian.org/"
 arch="all"

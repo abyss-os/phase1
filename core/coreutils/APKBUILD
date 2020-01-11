@@ -1,6 +1,6 @@
 pkgname=coreutils
 pkgver=8.31
-pkgrel=0
+pkgrel=1
 pkgdesc="The basic file, shell and text manipulation utilities"
 url="https://www.gnu.org/software/coreutils/"
 arch="all"

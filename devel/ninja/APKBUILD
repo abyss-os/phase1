@@ -1,6 +1,6 @@
 pkgname=ninja
 pkgver=1.9.0
-pkgrel=0
+pkgrel=1
 pkgdesc="Small build system with a focus on speed"
 url="https://ninja-build.org/"
 arch="all"

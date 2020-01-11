@@ -1,6 +1,6 @@
 pkgname=libcap-ng
 pkgver=0.7.9
-pkgrel=0
+pkgrel=1
 pkgdesc="POSIX capabilities library"
 url="http://people.redhat.com/sgrubb/libcap-ng/index.html"
 arch="all"

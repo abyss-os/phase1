@@ -1,6 +1,6 @@
 pkgname=ldc
 pkgver=1.18.0
-pkgrel=0
+pkgrel=1
 pkgdesc="The LLVM-based D Compiler"
 url="https://github.com/ldc-developers/ldc"
 arch="all"

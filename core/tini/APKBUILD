@@ -1,6 +1,6 @@
 pkgname=tini
 pkgver=0.18.0
-pkgrel=0
+pkgrel=1
 pkgdesc="A tiny but valid init for containers"
 url="https://github.com/krallin/tini"
 arch="all"

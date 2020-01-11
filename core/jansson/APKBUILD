@@ -1,6 +1,6 @@
 pkgname=jansson
 pkgver=2.12
-pkgrel=0
+pkgrel=1
 pkgdesc="lightweight JSON library"
 url="http://www.digip.org/jansson/"
 arch="all"

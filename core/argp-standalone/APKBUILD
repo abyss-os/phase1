@@ -1,6 +1,6 @@
 pkgname=argp-standalone
 pkgver=1.3
-pkgrel=0
+pkgrel=1
 pkgdesc="Hierarchial argument parsing library broken out from glibc"
 url="http://www.lysator.liu.se/~nisse/misc/"
 arch="all"

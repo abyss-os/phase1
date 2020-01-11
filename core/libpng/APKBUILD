@@ -1,6 +1,6 @@
 pkgname=libpng
 pkgver=1.6.37
-pkgrel=1
+pkgrel=2
 pkgdesc="Portable Network Graphics library"
 url="http://www.libpng.org"
 arch="all"

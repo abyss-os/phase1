@@ -1,7 +1,7 @@
 pkgname=boost
 pkgver=1.71.0
 _pkgver="${pkgver//./_}"
-pkgrel=0
+pkgrel=1
 pkgdesc="Free peer-reviewed portable C++ source libraries"
 url="http://www.boost.org/"
 arch="all"

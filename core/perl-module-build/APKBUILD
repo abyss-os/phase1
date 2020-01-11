@@ -1,7 +1,7 @@
 pkgname=perl-module-build
 _pkgreal=Module-Build
 pkgver=0.4229
-pkgrel=0
+pkgrel=1
 pkgdesc="Build and install Perl modules"
 url="http://search.cpan.org/dist/Module-Build/"
 arch="noarch"

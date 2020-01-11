@@ -1,6 +1,6 @@
 pkgname=paxmark
 pkgver=0.11
-pkgrel=0
+pkgrel=1
 pkgdesc="Manage PaX marking of executables"
 url="https://alpinelinux.org"
 arch="noarch"

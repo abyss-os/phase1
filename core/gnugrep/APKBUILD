@@ -1,6 +1,6 @@
 pkgname=gnugrep
 pkgver=3.3
-pkgrel=0
+pkgrel=1
 pkgdesc="Searches input files for lines containing a match to a specified pattern"
 url="https://www.gnu.org/software/grep/grep.html"
 arch="all"

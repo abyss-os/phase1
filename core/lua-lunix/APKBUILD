@@ -1,7 +1,7 @@
 pkgname=lua-lunix
 _pkgname=lunix
 pkgver=20150923
-pkgrel=1
+pkgrel=2
 pkgdesc="Comprehensive Unix API Module for Lua"
 url="https://github.com/wahern/lunix"
 arch="all"

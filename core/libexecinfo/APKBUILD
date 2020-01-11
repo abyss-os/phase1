@@ -1,6 +1,6 @@
 pkgname=libexecinfo
 pkgver=1.1
-pkgrel=1
+pkgrel=2
 pkgdesc="A quick-n-dirty BSD licensed clone of the GNU libc backtrace facility."
 options="!check" # No testsuite
 url="https://www.freshports.org/devel/libexecinfo"

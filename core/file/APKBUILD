@@ -1,6 +1,6 @@
 pkgname=file
 pkgver=5.37
-pkgrel=0
+pkgrel=1
 pkgdesc="File type identification utility"
 url="https://www.darwinsys.com/file"
 arch="all"

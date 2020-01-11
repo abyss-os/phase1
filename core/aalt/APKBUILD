@@ -1,7 +1,7 @@
 pkgname=aalt
 pkgver=0.2.1a
 _hash=34748fb2f3decd55205e5385a2706b44aeee91b4
-pkgrel=2
+pkgrel=3
 pkgdesc="Abyss ALTernatives"
 url="https://github.com/5paceToast/aalt"
 source="

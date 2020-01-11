@@ -1,6 +1,6 @@
 pkgname=go
 pkgver=1.13.5
-pkgrel=0
+pkgrel=1
 pkgdesc="Go programming language compiler"
 url="https://golang.org/"
 arch="all"

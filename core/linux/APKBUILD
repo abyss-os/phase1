@@ -1,6 +1,6 @@
 pkgname=linux
 pkgver=5.4.2
-pkgrel=0
+pkgrel=1
 pkgdesc="Linux kernel"
 url="http://kernel.org"
 #depends="mkinitfs"

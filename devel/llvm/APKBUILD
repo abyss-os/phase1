@@ -4,14 +4,13 @@ pkgname=llvm
 . ../llvm/common.inc
 
 source="https://github.com/llvm/llvm-project/archive/llvmorg-$pkgver.tar.gz"
-subpackages="lld llvm-binutils:binutils $pkgname-dev \
-    llvm-binutils-aalt:binutils_aalt lld-aalt:lld_aalt"
+subpackages="lld llvm-binutils:binutils $pkgname-dev"
 
 builddir="$srcdir/build"
 _projects="llvm;lld"
 
 depends="compiler-rt libcxx elfutils-libelf libffi libedit ncurses zlib"
-makedepends="aalt compiler-rt cmake clang lld ncurses-dev libedit-dev swig ninja elfutils-libelf elfutils-dev libffi-dev perl python3-dev zlib-dev linux-dev"
+makedepends="compiler-rt cmake clang lld ncurses-dev libedit-dev swig ninja elfutils-libelf elfutils-dev libffi-dev perl python3-dev zlib-dev linux-dev"
 
 prepare() {
 	default_prepare

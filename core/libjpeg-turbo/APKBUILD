@@ -1,6 +1,6 @@
 pkgname=libjpeg-turbo
 pkgver=2.0.2
-pkgrel=0
+pkgrel=1
 pkgdesc="Accelerated baseline JPEG compression and decompression library"
 url="https://libjpeg-turbo.org/"
 arch="all"

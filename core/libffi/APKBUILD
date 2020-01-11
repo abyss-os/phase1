@@ -1,6 +1,6 @@
 pkgname=libffi
 pkgver=3.3
-pkgrel=0
+pkgrel=1
 pkgdesc="A portable, high level programming interface to various calling conventions."
 url="http://sourceware.org/libffi"
 arch="all"

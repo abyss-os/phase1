@@ -1,6 +1,6 @@
 pkgname=musl
 pkgver=1.1.24
-pkgrel=0
+pkgrel=1
 pkgdesc="the musl c library (libc) implementation"
 url="http://www.musl-libc.org/"
 arch="all"

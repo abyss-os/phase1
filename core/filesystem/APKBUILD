@@ -1,6 +1,6 @@
 pkgname=filesystem
 pkgver=1
-pkgrel=2
+pkgrel=3
 pkgdesc="Basic filesystem layout"
 url="."
 arch="all"

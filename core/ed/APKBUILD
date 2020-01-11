@@ -1,6 +1,6 @@
 pkgname=ed
 pkgver=1.15
-pkgrel=0
+pkgrel=1
 pkgdesc="GNU ed is a line-oriented text editor. It is used to create, display, modify and otherwise manipulate text files"
 url="https://www.gnu.org/software/ed/"
 arch="all"

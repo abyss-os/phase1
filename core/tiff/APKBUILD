@@ -1,6 +1,6 @@
 pkgname=tiff
 pkgver=4.0.10
-pkgrel=0
+pkgrel=1
 pkgdesc="Provides support for the Tag Image File Format or TIFF"
 url="http://www.libtiff.org"
 arch="all"

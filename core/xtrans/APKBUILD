@@ -1,6 +1,6 @@
 pkgname=xtrans
 pkgver=1.4.0
-pkgrel=0
+pkgrel=1
 pkgdesc="X transport library"
 url="http://xorg.freedesktop.org/"
 arch="noarch"

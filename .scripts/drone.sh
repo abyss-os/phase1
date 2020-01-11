@@ -12,14 +12,10 @@ curl -Lo ${HOME}/.abuild/${ABYSS_PRIVKEY} ${ABYSS_KEYBASE}/${ABYSS_PRIVKEY}\?c=$
 curl -Lo ${HOME}/.abuild/${ABYSS_PUBKEY} ${ABYSS_KEYBASE}/${ABYSS_PUBKEY}\?c=${DRONE_COMMIT}
 echo PACKAGER_PRIVKEY=${HOME}/.abuild/${ABYSS_PRIVKEY} > ${HOME}/.abuild/abuild.conf
 
-# XXX: remove once migrated
-echo 'http://mirror.abyss.run/abyss/core' >> /etc/apk/repositories
-echo 'http://mirror.abyss.run/abyss/devel' >> /etc/apk/repositories
 apk -U upgrade -a
 
 OPWD=${PWD}
 
 for PKG in $(git log ...${DRONE_COMMIT_BEFORE} --format=format: --name-only | grep -e 'APKBUILD$' | tac); do
-	echo "${PKG}:"
 	cd ${OPWD}/${PKG%APKBUILD} && abuild -ri
 done

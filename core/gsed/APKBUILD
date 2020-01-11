@@ -1,6 +1,6 @@
 pkgname=gsed
 pkgver=4.7
-pkgrel=0
+pkgrel=1
 subpackages="$pkgname-doc"
 pkgdesc="GNU stream editor"
 url="https://www.gnu.org/software/sed"

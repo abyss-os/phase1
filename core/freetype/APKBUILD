@@ -1,6 +1,6 @@
 pkgname=freetype
 pkgver=2.10.0
-pkgrel=0
+pkgrel=1
 pkgdesc="TrueType font rendering library"
 url="https://www.freetype.org/"
 arch="all"

@@ -1,6 +1,6 @@
 pkgname=acl
 pkgver=2.2.53
-pkgrel=0
+pkgrel=1
 pkgdesc="Access control list utilities"
 url="https://savannah.nongnu.org/projects/acl"
 arch="all"

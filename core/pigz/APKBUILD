@@ -1,6 +1,6 @@
 pkgname=pigz
 pkgver=2.4
-pkgrel=0
+pkgrel=1
 pkgdesc="Parallel implementation of gzip"
 url="http://zlib.net/pigz/"
 arch="all"

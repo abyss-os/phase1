@@ -1,6 +1,6 @@
 pkgname=expat
 pkgver=2.2.9
-pkgrel=0
+pkgrel=1
 pkgdesc="An XML Parser library written in C"
 url="http://www.libexpat.org/"
 arch="all"

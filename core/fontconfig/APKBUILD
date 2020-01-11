@@ -1,6 +1,6 @@
 pkgname=fontconfig
 pkgver=2.13.92
-pkgrel=0
+pkgrel=1
 pkgdesc="Library for configuring and customizing font access"
 url="http://fontconfig.org"
 arch="all"

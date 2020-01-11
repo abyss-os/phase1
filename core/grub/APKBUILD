@@ -1,0 +1,265 @@
+# Contributor: Carlo Landmeter <clandmeter@gmail.com>
+# Maintainer: Timo Teräs <timo.teras@iki.fi>
+pkgname=grub
+pkgver=2.02
+pkgrel=18
+pkgdesc="Bootloader with support for Linux, Multiboot and more"
+url="https://www.gnu.org/software/grub/"
+arch="all !s390x"
+license="GPL-3.0-or-later"
+#depends="mkinitfs"
+triggers="grub.trigger=/boot"
+depends_dev=""
+makedepends="$depends_dev bison flex linux-headers xz-dev lvm2-dev
+	automake autoconf libtool python3 freetype-dev"
+install="$pkgname.post-upgrade"
+# strip handled by grub Makefiles, abuild strip breaks xen pv-grub
+options="!check !strip"  # Cannot test boot loader.
+subpackages="$pkgname-dev $pkgname-doc"
+
+# currently grub only builds on x86*, aarch64 and ppc* systems
+flavors=""
+case "$CARCH" in
+x86)		flavors="efi bios";;
+x86_64)		flavors="efi bios xenhost xenhost_pvh";;
+aarch64|arm*)	flavors="efi";;
+mips*)		flavors="qemu_mips";;
+ppc*)		flavors="ieee1275"; makedepends="$makedepends powerpc-utils" ;;
+s390x)		flavors="emu" ;;
+esac
+for f in $flavors; do
+	[ x"$f" = x"xenhost_pvh" ] && continue # xenhost_pvh shipped in the xenhost subpackage
+	subpackages="$subpackages $pkgname-$f"
+done
+
+source="https://ftp.gnu.org/gnu/grub/grub-$pkgver.tar.xz
+	fix-gcc-no-pie-specs.patch
+	grub2-accept-empty-module.patch
+	grub-xen-host_grub.cfg
+	2.02_beta3-mkconfig-alpine.patch
+	0008-Fix-packed-not-aligned-error-on-GCC-8.patch
+	0009-xfs-Accept-filesystem-with-sparse-inodes.patch
+	x86-64-Treat-R_X86_64_PLT32-as-R_X86_64_PC32.patch
+	alpine-use-uuid.patch
+	f2fs-support.patch
+	alpine-intel-ucode.patch
+	alpine-xen-initramfs.patch
+
+	0001-xen-Add-some-Xen-headers.patch
+	0002-loader-linux-Support-passing-RSDP-address-via-boot-p.patch
+	0003-xen-Carve-out-grant-tab-initialization-into-dedicate.patch
+	0004-xen-Prepare-common-code-for-Xen-PVH-support.patch
+	0005-xen-Add-some-dummy-headers-for-PVH-mode.patch
+	0006-xen-Rearrange-xen-init.c-to-prepare-it-for-Xen-PVH-m.patch
+	0007-xen-Modify-grub_xen_ptr2mfn-for-Xen-PVH.patch
+	0008-xen-Add-PVH-specific-defines-to-offset.h.patch
+	0009-xen-Add-basic-hooks-for-PVH-in-current-code.patch
+	0010-xen-Add-PVH-boot-entry-code.patch
+	0011-xen-Setup-hypercall-page-for-PVH.patch
+	0012-xen-Get-memory-map-from-hypervisor-for-PVH.patch
+	0013-xen-Setup-Xen-specific-data-for-PVH.patch
+	0014-xen-Init-memory-regions-for-PVH.patch
+	0015-xen_pvh-Add-build-runes-for-grub-core.patch
+	0016-grub-module-verifier-Ignore-all_video-for-xen_pvh.patch
+	0017-xen-Use-elfnote-defines-instead-of-plain-numbers.patch
+	0018-xen_pvh-Support-building-a-standalone-image.patch
+	0019-xen_pvh-Support-grub-install-for-xen_pvh.patch
+	0020-xen_pvh-Add-support-to-configure.patch
+	"
+builddir="$srcdir/grub-$pkgver"
+
+prepare() {
+	default_prepare
+	PYTHON=python3 ./autogen.sh
+}
+
+_build_flavor() {
+	local flavor="$1"
+	shift
+	local _configure="$@"
+
+	msg "Building grub for platform $flavor"
+	mkdir -p "$srcdir"/build-$flavor
+	cd "$srcdir"/build-$flavor
+	BUILD_CC=$CC $builddir/configure \
+		--build=$CBUILD \
+		--host=$CHOST \
+		--target=$CTARGET \
+		--prefix=/usr \
+		--sysconfdir=/etc \
+		--mandir=/usr/share/man \
+		--localstatedir=/var \
+		--disable-nls \
+		--disable-werror \
+		$_configure
+	make
+}
+
+build() {
+	local f
+	for f in $flavors; do
+		case "$f" in
+		bios)		_build_flavor $f --with-platform=pc;;
+		efi)		_build_flavor $f --with-platform=efi --disable-efiemu;;
+		xenhost)	_build_flavor $f --with-platform=xen;;
+		xenhost_pvh)	_build_flavor $f --with-platform=xen_pvh --target=i386;;
+		*)		_build_flavor $f --with-platform=$f;;
+
+		esac
+	done
+}
+
+_install_xen() {
+	grub_dir=`mktemp -d`
+	cfg=`mktemp`
+	grub_memdisk=`mktemp`
+
+	mkdir -p $grub_dir/boot/grub
+	echo 'normal (memdisk)/grub.cfg' > $cfg
+	sed -e "s/@@PVBOOT_ARCH@@/$CARCH/g" \
+		$srcdir/grub-xen-host_grub.cfg \
+			> $grub_dir/grub.cfg
+	tar -cf - -C $grub_dir grub.cfg > $grub_memdisk
+
+	./grub-mkimage \
+		-O $CARCH-xen \
+		-c $cfg \
+		-d ./grub-core ./grub-core/*.mod \
+		-m $grub_memdisk \
+		-o $pkgdir/grub-$CARCH-xen.bin
+
+	rm -r "$grub_dir"
+	rm "$cfg" "$grub_memdisk"
+}
+
+_install_xenpvh() {
+	grub_dir=`mktemp -d`
+	cfg=`mktemp`
+	grub_memdisk=`mktemp`
+
+	mkdir -p $grub_dir/boot/grub
+	echo 'normal (memdisk)/grub.cfg' > $cfg
+	sed -e "s/@@PVBOOT_ARCH@@/$CARCH/g" \
+		$srcdir/grub-xen-host_grub.cfg \
+			> $grub_dir/grub.cfg
+	tar -cf - -C $grub_dir grub.cfg > $grub_memdisk
+
+	echo "About to run grub-mkimage in: $PWD"
+	# Note: only i386-xen_pvh supported
+	./grub-mkimage \
+		-O i386-xen_pvh \
+		-c $cfg \
+		-d ./grub-core ./grub-core/*.mod \
+		-m $grub_memdisk \
+		-o $pkgdir/grub-i386-xen_pvh.bin
+
+	rm -r "$grub_dir"
+	rm "$cfg" "$grub_memdisk"
+}
+
+_install_flavor() {
+	local flavor="$1"
+	cd "$srcdir"/build-$flavor
+	case $flavor in
+	xenhost)	_install_xen;;
+	xenhost_pvh)	_install_xenpvh;;
+	*)	 	make DESTDIR="$pkgdir" install-strip;;
+	esac
+}
+
+package() {
+	# install BIOS & EFI version into the same directory
+	# and overwrite similar files.
+	for f in $flavors; do
+		_install_flavor $f
+	done
+
+	rm -f "$pkgdir"/usr/lib/charset.alias
+	# remove grub-install warning of missing directory
+	mkdir -p "$pkgdir"/usr/share/locale
+
+	mkdir -p "$pkgdir"/etc/default/
+	cat >"$pkgdir"/etc/default/grub <<-EOF
+	GRUB_DISTRIBUTOR="Alpine"
+	GRUB_TIMEOUT=2
+	GRUB_DISABLE_SUBMENU=y
+	GRUB_DISABLE_RECOVERY=true
+	EOF
+}
+
+bios() {
+	pkgdesc="$pkgdesc (BIOS version)"
+	depends="$pkgname"
+	mkdir -p $subpkgdir/usr/lib/grub
+	mv $pkgdir/usr/lib/grub/*-pc $subpkgdir/usr/lib/grub/
+}
+
+efi() {
+	pkgdesc="$pkgdesc (EFI version)"
+	depends="$pkgname"
+	mkdir -p $subpkgdir/usr/lib/grub
+	mv $pkgdir/usr/lib/grub/*-efi $subpkgdir/usr/lib/grub/
+}
+
+xenhost() {
+	pkgdesc="$pkgdesc (XEN host version)"
+	mkdir -p $subpkgdir/usr/lib/grub-xen
+	mv $pkgdir/*-xen.bin $subpkgdir/usr/lib/grub-xen/
+
+	# pick up result from xenhost_pvh build as well
+	mv $pkgdir/*-xen_pvh.bin $subpkgdir/usr/lib/grub-xen/
+}
+
+qemu_mips() {
+	pkgdesc="$pkgdesc (QEMU MIPS version)"
+	depends="$pkgname"
+	mkdir -p $subpkgdir/usr/lib/grub
+	mv $pkgdir/usr/lib/grub/*-qemu_mips $subpkgdir/usr/lib/grub/
+}
+
+ieee1275() {
+	pkgdesc="$pkgdesc (IEEE1275 version)"
+	depends="$pkgname powerpc-utils"
+	mkdir -p $subpkgdir/usr/lib/grub
+	mv $pkgdir/usr/lib/grub/*-ieee1275 $subpkgdir/usr/lib/grub/
+}
+
+emu() {
+	pkgdesc="$pkgdesc (EMU version)"
+	depends="$pkgname"
+	mkdir -p $subpkgdir/usr/lib/grub
+	mv $pkgdir/usr/lib/grub/*-emu $subpkgdir/usr/lib/grub/
+}
+
+b2sums="7c5ec61a8dc5a00e9cdc91c489f0d2ee37cd7e673eef8e8e26bbc18c5ec28829f563b9298874fb96d45a5d523ce366e936649c21ebda7462afda0cc328b970ce  grub-2.02.tar.xz
+7a3d53ed4e8efd7c454e0f1b088e362c8927bb495b534760c167eefe1e415ed2dd9811c95f5ba47d071bd14dc21a13814e0859c396feca4f066600ea835aad8f  fix-gcc-no-pie-specs.patch
+ce099b94ffc579d8b12ed7be5a13b1b3f09b407af7e9a41c2118dab437897ff7fed922b78560cbfd4dd96c74e95ba1130da1658b276542a43a26a904c3464bf3  grub2-accept-empty-module.patch
+6d3c96960a734a6878b794ab0f21f0f574deffe8ff7538496f570dee42b4d15e1ca09a33db064492a2c3dbe4ddf2a6dc01bad423772487e12b31434bb1e4fbbe  grub-xen-host_grub.cfg
+9122062124d9e8a2b88e84fef7b43bf46ca25020c4f7064c6271aa77167fcb33828ec850f2cf3348fe3de558cf14fc7b2808ddfa488f088cb1237ecae7a46268  2.02_beta3-mkconfig-alpine.patch
+4a90d2925ade3ecd7f3df34460bcb871fc58cd827b5b4ff3c7b4759a6339db5861d8ca4acecdda9e5fe18317f1669ef1a61cd38c5c475bce613e6f9ddbb88580  0008-Fix-packed-not-aligned-error-on-GCC-8.patch
+c3333b82b678bc0a2bfc6594719c89982f97b14b7a2f012814ce2f75e004cda46b8b7c2d4e668c5a52aee7814114a763c4d853d9c75b4322535096ba3c22e256  0009-xfs-Accept-filesystem-with-sparse-inodes.patch
+dbf2adc0c8490e3ad23d7658bb191cca9228a022b3c17d7224a33cd213035c53e9bc5e9f1b795544ba4bf4417b67520cca6e0602a2e86cde03af7443b159a5a0  x86-64-Treat-R_X86_64_PLT32-as-R_X86_64_PC32.patch
+fdc3a2154f83655398b6680dc5e6c7033516fda86465ed6392c9e97f5b3efa8eee1952dc6ea078410a3af9bc4c13d7c49f988cf44142affa0de4f0f1535a99ff  alpine-use-uuid.patch
+e92e0a82518b08891cd6a70ded77556799354e12b4bdbb1768798f9edeb6f11699717dfb80210d22563b8ca98bab5627027cda3a30d74339b90ad4fc8efcfba3  f2fs-support.patch
+b667426f94300c857f8d2640e97286904ffaec57796f211cf8075044c095e3f8b0a9cde76859b0e68a47b0e164d3a4e5f5bc93bfa78ab486b8e7c4ea80f87725  alpine-intel-ucode.patch
+d904218a61193cce7c32d0d2821cc8853ecd72901d0e3c8b7b898876aeebf148d7730236564ad9b0725495ea27aca810616d9b910c44d9dbe1edaa9b92c8d440  alpine-xen-initramfs.patch
+64c3c81dc76f0669ba931177fff4cc70e62e372fd3fcca673b7deba39801f39b36c20ea2e9f47a96e22ced3072818bbc4c7d8bfa32f0ec2b71600b9e08eb58a2  0001-xen-Add-some-Xen-headers.patch
+4cd8ecdc213d543ece43bc37081bd3f57f54352dd424c360e592cc7f1a2d5128304487a169bc6fd44e56b5ecc991ac23ae0872173d6c88ec29e183f6a6effb30  0002-loader-linux-Support-passing-RSDP-address-via-boot-p.patch
+548cc755943bad1016652b2621a0f4e836676b74588f1da9cc9e18314a176ee92978f9893e6b1218e70c848aebd37c1154e7fffaeff35d0f1e81790138b47100  0003-xen-Carve-out-grant-tab-initialization-into-dedicate.patch
+84d718d1d8fc0c0d39417d344a78dc026e446db49dcf32de0f74ca890e91ff3a712dac05abd888851d3813e752edde048e4494f952b9915a879cea09300771b1  0004-xen-Prepare-common-code-for-Xen-PVH-support.patch
+363d8fcb4404ce5468b9bc761f0d5d119dd43878a271e2d9d1cd36587d4c2a9c682a7773784d1e107ec0a7a9c50b254bf63f8956b9cdeeebc0f1d6826f9d5c13  0005-xen-Add-some-dummy-headers-for-PVH-mode.patch
+bf4bf3e3473038ab8063a84396fcdc79411212f791f12015ebfe3c19922268061f6e833f57d153103177ce0b6edaa4659aca51bc716abeb7741a3796657ca628  0006-xen-Rearrange-xen-init.c-to-prepare-it-for-Xen-PVH-m.patch
+ef0249132f6b7ddbc2a721de72d55f6229acdd09a990c3b0366bc2850ff668d66733dd5339e6beae69d493d0771a6caba8c68aaaa0e37aae4999cc72d99e88db  0007-xen-Modify-grub_xen_ptr2mfn-for-Xen-PVH.patch
+97c25a56855865a3c8438ccddc8399c1290b75e8e0ef2d3eedc2c11d1713e3cb2d905128c6cf5984ee9b23239c443f849a6b6f1f15c0445ee1eff578d97f41c0  0008-xen-Add-PVH-specific-defines-to-offset.h.patch
+42f21576b7cf0bea53fea9a2f338f8aaaaa696dbad141d026212dc64c82f13783f0ac56a7a6afdc6ebe2153635d6f60540267f95ac9ef876e22c53d696d4c264  0009-xen-Add-basic-hooks-for-PVH-in-current-code.patch
+91abffb034806e97f76abf8c89f2acb83c7ee2f189b12d5eabe1906f09be6314963d3a7f98b5452b24f1305eddfc7df6bbaf1fe63521d7288a56c3cd7b63b586  0010-xen-Add-PVH-boot-entry-code.patch
+2c958207e422551ccc2b9f8c2b5eb024121fbf29be689d54a13e3f163f41ef94289549a727141ff8f33b6002236ff060ebb8062665d6efcc76086115e1b1c120  0011-xen-Setup-hypercall-page-for-PVH.patch
+33834eb209f62964b01c91690f53317b0f5725e782e9ee933e2fc1f6b7df112db68de0d3ab930541ad443398586a422d6f10cb5d6fe96ac4f0becdbc5aff59f3  0012-xen-Get-memory-map-from-hypervisor-for-PVH.patch
+4a90bb5ebee66cec5b5da606afe8637072a4fa35f31095583d7bfde37e673556f3570f49a0b9e13e42bf787a7555057c28db6ab533f56ff3f59543c115e95a1f  0013-xen-Setup-Xen-specific-data-for-PVH.patch
+b5d6668dfc1e7cbbd3060e7b700399f116630e7699bb4ef48b3f13043889e67735d661e441a48a1e05b6881315045bb3cb66ab2d612f161923bbc3fd2305e50d  0014-xen-Init-memory-regions-for-PVH.patch
+eef5d7c5f028522b1a11f9cecce1684d2083e8f4768392e564b33c9e8eb50217565057e069b8dd456447366cc5a4c31516b103702f23a1d62d4d92a304fe097e  0015-xen_pvh-Add-build-runes-for-grub-core.patch
+f262f00d04cb8a03fd8cb7809d2d18e53b0cc0a7495bed183af449bb85007cdaf9f4935327bc1d95a2fd88d88586ab88fbc41a2fb409416c2630a39e049e4b84  0016-grub-module-verifier-Ignore-all_video-for-xen_pvh.patch
+7a303ace8b0b147e5d380335a95932fa1ba8aad02b3bd5f60caf2591038c0b59896f348ba75a79cc96336de10157a681b088210781e6aedfb1adb79cf4b15df2  0017-xen-Use-elfnote-defines-instead-of-plain-numbers.patch
+65d5c22d55f4ad54ebef51d1b97b377fc46d16868303a2c01d452482331dec354dff07a890cb335c75ea0c09ab4914a9a1ba4d2e5189f582778228add4f5a9c5  0018-xen_pvh-Support-building-a-standalone-image.patch
+f2414d23eaa9fea89c21b37fe5fd99f24aa7ee3b33c8ae2c7ede8484e9f311eca501360f50c10e96bd03cf11fa1150fa20fc8e997a93cc7fe6bfe6956626d3d3  0019-xen_pvh-Support-grub-install-for-xen_pvh.patch
+01cc5a6d66e05f5de8070968afa8036d85893c44ea31bd83de624f22d12d34f6712a3b39a35e580caa9aad9cc46d4a483b8473d3bfe8e8758f24fc08e58a6770  0020-xen_pvh-Add-support-to-configure.patch"

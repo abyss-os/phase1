@@ -1,6 +1,6 @@
 pkgname=tree
 pkgver=1.8.0
-pkgrel=0
+pkgrel=1
 pkgdesc="A recursive directory indented listing of files"
 url="http://mama.indstate.edu/users/ice/tree/"
 arch="all"

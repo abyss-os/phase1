@@ -1,6 +1,6 @@
 pkgname=iproute2
 pkgver=5.3.0
-pkgrel=0
+pkgrel=1
 pkgdesc="IP Routing Utilities"
 url="https://www.linuxfoundation.org/collaborate/workgroups/networking/iproute2"
 arch="all"

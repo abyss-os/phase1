@@ -1,6 +1,6 @@
 pkgname=gtar
 pkgver=1.32
-pkgrel=0
+pkgrel=1
 pkgdesc="Utility used to store, backup, and transport files"
 url="https://www.gnu.org"
 arch="all"

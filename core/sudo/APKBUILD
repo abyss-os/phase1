@@ -5,7 +5,7 @@ if [ "${pkgver%_*}" != "$pkgver" ]; then
 else
 	_realver=$pkgver
 fi
-pkgrel=0
+pkgrel=1
 pkgdesc="Give certain users the ability to run some commands as root"
 url="https://www.sudo.ws/sudo/"
 arch="all"

@@ -1,6 +1,6 @@
 pkgname=xmlto
 pkgver=0.0.28
-pkgrel=0
+pkgrel=1
 pkgdesc="Convert xml to many other formats"
 url="https://pagure.io/xmlto/"
 arch="all"

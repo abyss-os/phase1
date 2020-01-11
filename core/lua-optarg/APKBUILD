@@ -1,7 +1,7 @@
 pkgname=lua-optarg
 _rockname=optarg
 pkgver=0.2
-pkgrel=1
+pkgrel=2
 pkgdesc="Simple command line option parser for Lua"
 url="https://github.com/ncopa/lua-optarg"
 arch="noarch"

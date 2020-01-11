@@ -1,6 +1,6 @@
 pkgname=libmnl
 pkgver=1.0.4
-pkgrel=0
+pkgrel=1
 pkgdesc="Library for minimalistic netlink"
 url="http://www.netfilter.org/projects/libmnl/"
 arch="all"

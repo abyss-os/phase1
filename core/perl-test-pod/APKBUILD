@@ -1,7 +1,7 @@
 pkgname=perl-test-pod
 _pkgreal=Test-Pod
 pkgver=1.52
-pkgrel=0
+pkgrel=1
 pkgdesc="check for POD errors in files"
 url="http://search.cpan.org/dist/Test-Pod/"
 arch="noarch"

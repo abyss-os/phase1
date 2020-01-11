@@ -1,7 +1,7 @@
 pkgname=py-pluggy
 _pkgname=${pkgname#py-*}
 pkgver=0.13.1
-pkgrel=0
+pkgrel=1
 pkgdesc="Plugin management and hook calling for Python"
 options="!check"
 url="https://pluggy.readthedocs.io/en/latest/"

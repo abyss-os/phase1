@@ -1,7 +1,7 @@
 # Maintainer: Drew DeVault <sir@cmpwn.com>
 pkgname=pkgconf
 pkgver=1.6.1
-pkgrel=1
+pkgrel=2
 pkgdesc="development framework configuration tools"
 url="https://git.dereferenced.org/pkgconf/pkgconf"
 arch="all"

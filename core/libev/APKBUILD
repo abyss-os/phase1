@@ -1,6 +1,6 @@
 pkgname=libev
 pkgver=4.27
-pkgrel=0
+pkgrel=1
 pkgdesc="event dispatch library"
 url="http://software.schmorp.de/pkg/libev.html"
 arch="all"

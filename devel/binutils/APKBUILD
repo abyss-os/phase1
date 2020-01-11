@@ -1,6 +1,6 @@
 pkgname=binutils
 pkgver=2.33.1
-pkgrel=1
+pkgrel=2
 pkgdesc="Tools necessary to build programs"
 url="https://www.gnu.org/software/binutils/"
 makedepends_build="bison flex texinfo"

@@ -5,12 +5,11 @@ pkgdesc="Size optimized toolbox of many common UNIX utilities"
 url="https://busybox.net/"
 arch="all"
 license="GPL-2.0"
-makedepends="linux-dev bash aalt"
+makedepends="linux-dev bash"
 checkdepends="zip"
 # Needs which(1), enabled in busybox-1.31.1-r1
 options=""
-subpackages="$pkgname-aalt"
-triggers="busybox.trigger=/bin:/usr/bin:/sbin:/usr/sbin:/lib/modules/*"
+subpackages="$pkgname"
 provides="/bin/sh"
 source="https://busybox.net/downloads/$pkgname-$pkgver.tar.bz2
 	busyboxconfig

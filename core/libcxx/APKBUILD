@@ -18,6 +18,8 @@ prepare() {
 	default_prepare
 	mkdir -p $_builddir && cd $_builddir
 
+	ln -sv /usr/lib/libc++.so /usr/lib/libunwind.so
+
 	cmake -G Ninja -Wno-dev \
 			-DCMAKE_C_COMPILER=$CC \
 			-DCMAKE_CXX_COMPILER=$CXX \

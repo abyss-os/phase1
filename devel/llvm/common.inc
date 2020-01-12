@@ -1,5 +1,5 @@
 pkgver=9.0.1
-pkgrel=1
+pkgrel=2
 pkgdesc="$pkgname"
 arch="all"
 url=.

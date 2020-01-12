@@ -11,7 +11,7 @@ builddir="$srcdir/$pkgname-$pkgver.src"
 _builddir="$srcdir/build"
 
 depends="compiler-rt libcxx llvm"
-makedepends="cmake lld llvm-dev"
+makedepends="cmake lld llvm-dev ninja"
 
 prepare() {
 	default_prepare

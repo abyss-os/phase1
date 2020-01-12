@@ -11,7 +11,7 @@ builddir="$srcdir/$pkgname-$pkgver.src"
 _builddir="$srcdir/build"
 
 depends="compiler-rt libcxx llvm"
-makedepends="cmake lld llvm-dev ninja python3"
+makedepends="cmake lld llvm-dev ninja python3 ncurses-dev"
 
 prepare() {
 	default_prepare

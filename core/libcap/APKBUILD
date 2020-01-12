@@ -29,6 +29,8 @@ package() {
 	make lib=lib prefix=/usr RAISE_SETFCAP=no DESTDIR="$pkgdir" install
 	# Fix perms
 	chmod -v 0755 "$pkgdir"/usr/lib/libcap.so.${pkgver}
+	# move
+	mv -v ${pkgdir}/usr/sbin ${pkgdir}/usr/bin
 }
 
 b2sums="7b58d7afdd90281771a302cd9554f067b9e3636b0c052935973d8a0d890490c3933b3513874b788a8c10e37ab5ad9cfa766408c9629b7c8562cb17bfdef87747  libcap-2.27.tar.xz"

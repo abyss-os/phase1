@@ -1,6 +1,6 @@
 pkgname=linux
-pkgver=5.4.2
-pkgrel=1
+pkgver=5.4.10
+pkgrel=2
 pkgdesc="Linux kernel"
 url="http://kernel.org"
 #depends="mkinitfs"
@@ -68,7 +68,7 @@ package() {
 		INSTALL_MOD_PATH="$pkgdir" INSTALL_PATH="$pkgdir/boot" INSTALL_HDR_PATH="$pkgdir/usr" install headers_install
 }
 
-b2sums="126e00ef6a084049089f6733e480e68271083cc5f88bd2c64cba198c983c78c3e5f61a9cded8357d1767c4faadec5ab81c1a7231cc65f41913de2820e02a3467  linux-5.4.2.tar.xz
+b2sums="88706cfc05ec1cc201f08e069dc6ad4f8e6fb49dbef5937208ba1e752e18b46639a5d32d4d0e270a0f2f6ed872aed70beeb2b0367d41fe443437331902a90bb2  linux-5.4.10.tar.xz
 f4ced3fbc0b7f68d268b808e669a8c2ab161f4bf0597f66eecacb4d7537faab8ce42df3456ec3eed1520674c381b67e136fa90cc4971b12cd801e72cffde1ded  config.aarch64
 7c8d760112b6b878ebbc9a6a4981f8f66b4a9f652b3f75cb8177c00a8ea7c3dc08af86179915d9a03bf835a23dcff42e286f2f3656a65f21e5c729992facf6bb  config.x86_64
 d7c54880b8af226309cbcd2492ab2f2f3dd8b8facf9caad4eb7c097e7ff8c9c3c88802f65d7f5c738b3d173fe550a6662a56c68a024107ded1a8fcf11a17a572  config.riscv64"

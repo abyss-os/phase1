@@ -1,9 +1,6 @@
-# Contributor: Sören Tempel <soeren+alpine@soeren-tempel.net>
-# Contributor: 
-# Maintainer: Natanael Copa <ncopa@alpinelinux.org>
 pkgname=ca-certificates
 pkgver=20190108
-pkgrel=1
+pkgrel=2
 pkgdesc="Common CA certificates PEM files"
 url="https://www.mozilla.org/en-US/about/governance/policies/security-group/certs/"
 arch="all"
@@ -48,6 +45,8 @@ package() {
 	EOF
 	cat "$pkgdir"/usr/share/ca-certificates/mozilla/*.crt > $pkgdir/etc/ssl/cert.pem
 	chmod +x "$pkgdir"/etc/ca-certificates/update.d/certhash
+	mv -v ${pkgdir}/usr/sbin/* ${pkgdir}/usr/bin/
+	rm -rf ${pkgdir}/usr/sbin
 }
 
 b2sums="fa49610d32d01b2619cdb883bd1d80dea78478bcc9f6f61a5a668827928f3a1b1f189542aaa16042d0334128efe7ac205ead06271d20b1a0cf72118de235cb5d  ca-certificates-20190108.tar.xz"

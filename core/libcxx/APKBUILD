@@ -1,4 +1,4 @@
-#bump:1
+#bump:2
 pkgname=libcxx
 
 . ../../devel/llvm/common.inc
@@ -49,6 +49,7 @@ package() {
 	cd $_builddir
 	DESTDIR="$pkgdir" ninja install-libcxx-headers install-libcxx
 	ln -sv /usr/lib/libc++.so.1 $pkgdir/usr/lib/libunwind.so.1
+	ln -sv /usr/lib/libc++.so $pkgdir/usr/lib/libunwind.so
 }
 
 b2sums="b86e405f2b8e00436045fd409fe19cdde75c797b1192c62a22b5ec75e6b4dc8e874a0f33008dc31562445e4cbe53a992b6f48c684255a6a1ef261e595b8b161f  llvmorg-9.0.1.tar.gz

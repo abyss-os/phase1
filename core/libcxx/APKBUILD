@@ -12,7 +12,6 @@ builddir="$srcdir/llvm-project-llvmorg-$pkgver"
 _builddir="$srcdir/build"
 
 makedepends="cmake clang lld ninja llvm-dev linux-dev python3"
-provides="so:libunwind.so.1"
 
 prepare() {
 	default_prepare

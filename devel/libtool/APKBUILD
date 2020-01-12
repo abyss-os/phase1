@@ -10,7 +10,7 @@ source="http://ftp.gnu.org/pub/gnu/libtool/${pkgname}-${pkgver}.tar.gz
 	libtool-fix-cross-compile.patch
 	"
 depends="libltdl"
-makedepends="m4 help2man file diffutils"
+makedepends="m4 help2man file diffutils automake"
 checkdepends="gawk autoconf automake gzip"
 subpackages="libltdl $pkgname-doc"
 options="libtool"

@@ -1,3 +1,4 @@
+#bump:1
 pkgname=compiler-rt
 
 . ../../devel/llvm/common.inc

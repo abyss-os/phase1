@@ -16,6 +16,14 @@ apk -U upgrade -a
 
 OPWD=${PWD}
 
+case $DRONE_STAGE_ARCH in
+	amd64) buildarch=x86_64;;
+	arm64) buildarch=aarch64;;
+	*) echo "unknown arch" ; exit 1;;
+esac
+
 for PKG in $(git log ...${DRONE_COMMIT_BEFORE} --format=format: --name-only | grep -e 'APKBUILD$' | tac); do
-	cd ${OPWD}/${PKG%APKBUILD} && abuild -ri
+	buildpkg=${PKG%APKBUILD}
+	cd ${OPWD}/${buildpkg} || exit 1
+	abuild -ri || exit 1
 done

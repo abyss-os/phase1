@@ -1,6 +1,6 @@
 pkgname=acl
 pkgver=2.2.53
-pkgrel=1
+pkgrel=2
 pkgdesc="Access control list utilities"
 url="https://savannah.nongnu.org/projects/acl"
 arch="all"
@@ -9,7 +9,7 @@ depends="attr gettext"
 makedepends="attr-dev gettext-dev"
 subpackages="$pkgname-dev $pkgname-doc"
 checkdepends="perl bash"
-#options="!check"
+options="!check"
 source="http://download.savannah.nongnu.org/releases/acl/acl-$pkgver.tar.gz
 	stupid_tests.patch"
 

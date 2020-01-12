@@ -9,7 +9,7 @@ source="https://github.com/llvm/llvm-project/releases/download/llvmorg-$pkgver/$
 builddir="$srcdir/$pkgname-$pkgver.src"
 _builddir="$srcdir/build"
 
-makedepends="cmake clang lld ninja llvm-dev clang-dev"
+makedepends="cmake clang lld ninja llvm-dev clang-dev python3"
 
 prepare() {
 	default_prepare

@@ -63,9 +63,9 @@ package() {
 
 	# modules are disabled at the moment
 #	make ARCH="$_carch" HOSTCC="$CC" CC="$CC" AS=$AS HOSTAS=$AS HOSTLD=$LD LD=$LD \
-#		INSTALL_MOD_PATH="$pkgdir" INSTALL_PATH="$pkgdir/boot" INSTALL_HDR_PATH="$pkgdir/usr" install modules_install headers_install
+#		INSTALL_MOD_PATH="$pkgdir/usr" INSTALL_PATH="$pkgdir/boot" INSTALL_HDR_PATH="$pkgdir/usr" install modules_install headers_install
 	make ARCH="$_carch" HOSTCC="$CC" CC="$CC" AS=$AS HOSTAS=$AS HOSTLD=$LD LD=$LD \
-		INSTALL_MOD_PATH="$pkgdir" INSTALL_PATH="$pkgdir/boot" INSTALL_HDR_PATH="$pkgdir/usr" install headers_install
+		INSTALL_MOD_PATH="$pkgdir/usr" INSTALL_PATH="$pkgdir/boot" INSTALL_HDR_PATH="$pkgdir/usr" install headers_install
 }
 
 b2sums="88706cfc05ec1cc201f08e069dc6ad4f8e6fb49dbef5937208ba1e752e18b46639a5d32d4d0e270a0f2f6ed872aed70beeb2b0367d41fe443437331902a90bb2  linux-5.4.10.tar.xz

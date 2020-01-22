@@ -67,4 +67,4 @@ _rootbld() {
 	mkdir -p "$subpkgdir"
 }
 
-b2sums="4c3ae83fd4741f9e6c225be95b793c4b09898870f5a393ef56efd7c6c2026f0ce9616d38c7b7e1ee722d50d1baf84530ea8055bfd92258a6f3facc5de8e7f727  abuild-v4.0.35.tar.gz
+b2sums="4c3ae83fd4741f9e6c225be95b793c4b09898870f5a393ef56efd7c6c2026f0ce9616d38c7b7e1ee722d50d1baf84530ea8055bfd92258a6f3facc5de8e7f727  abuild-v4.0.35.tar.gz"

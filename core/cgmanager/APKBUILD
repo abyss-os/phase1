@@ -1,6 +1,6 @@
 pkgname=cgmanager
 pkgver=0.42
-pkgrel=1
+pkgrel=2
 pkgdesc="Another daemon for managing control groups"
 url="https://linuxcontainers.org/cgmanager/"
 arch="all"

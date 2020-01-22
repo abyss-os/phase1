@@ -6,7 +6,7 @@ case $pkgver in
 	*.*) _v=$pkgver;;
 esac
 
-pkgrel=2
+pkgrel=3
 pkgdesc="Random collection of Linux utilities"
 url="https://git.kernel.org/cgit/utils/util-linux/util-linux.git"
 arch="all"
@@ -60,12 +60,9 @@ build() {
 
 package() {
 	make -j1 DESTDIR="$pkgdir" -C "$builddir" install
-	# use pkg-config
-}
-
-dev() {
-	default_dev
-	replaces="e2fsprogs-dev util-linux-ng-dev"
+	# sigh
+	mv -v ${pkgdir}/usr/sbin/* ${pkgdir}/usr/bin/
+	rm -rf ${pkgdir}/usr/sbin
 }
 
 bashcomp() {
@@ -81,7 +78,6 @@ bashcomp() {
 blkid() {
 	pkgdesc="block device identification tool"
 	depends=""
-	replaces="util-linux-ng"
 	mkdir -p "$subpkgdir"/usr/bin
 	mv "$pkgdir"/usr/bin/blkid "$subpkgdir"/usr/bin/
 }
@@ -137,14 +133,12 @@ cfdisk() {
 
 mcookie() {
 	pkgdesc="mcookie from util-linux"
-	replaces="util-linux-ng"
 	mkdir -p "$subpkgdir"/usr/bin
 	mv "$pkgdir"/usr/bin/mcookie "$subpkgdir"/usr/bin/
 }
 
 setpriv() {
 	pkgdesc="Run a program with different Linux privilege settings"
-	replaces="util-linux-ng"
 	mkdir -p "$subpkgdir"/usr/bin
 	mv "$pkgdir"/usr/bin/setpriv "$subpkgdir"/usr/bin/
 }

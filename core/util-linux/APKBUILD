@@ -6,7 +6,7 @@ case $pkgver in
 	*.*) _v=$pkgver;;
 esac
 
-pkgrel=1
+pkgrel=2
 pkgdesc="Random collection of Linux utilities"
 url="https://git.kernel.org/cgit/utils/util-linux/util-linux.git"
 arch="all"
@@ -20,9 +20,6 @@ source="https://www.kernel.org/pub/linux/utils/$pkgname/v${_v}/$pkgname-$pkgver.
 subpackages="$pkgname-doc $pkgname-dev $pkgname-bash-completion:bashcomp:noarch
 	libuuid libblkid libmount libsmartcols libfdisk sfdisk cfdisk
 	findmnt:_findmnt mcookie blkid setpriv"
-
-makedepends="$makedepends_build $makedepends_host"
-replaces="e2fsprogs util-linux-ng"
 
 builddir="$srcdir/$pkgname-$pkgver"
 prepare() {

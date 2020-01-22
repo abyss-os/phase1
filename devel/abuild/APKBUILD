@@ -1,6 +1,6 @@
 pkgname=abuild
 pkgver=4.0.37
-pkgrel=0
+pkgrel=1
 pkgdesc="Script to build Alpine Packages"
 url="https://git.alpinelinux.org/cgit/abuild/"
 arch="all"
@@ -9,7 +9,7 @@ depends="sudo pax-utils openssl apk-tools bsdtar
 	 attr pkgconf patch bzip2 xz zlib lzip diffutils flex 
 	 bison gtar unzip gmake file musl-utils pigz gzip clang-dev
 	 libcxx-dev llvm-dev rsync libtool curl pkgconf zlib-dev
-	 openssl-dev"
+	 openssl-de musl-dev"
 install="$pkgname.pre-install $pkgname.pre-upgrade"
 subpackages="apkbuild-cpan:cpan:noarch apkbuild-gem-resolver:gems:noarch
              abuild-rootbld:_rootbld:noarch $pkgname-doc"

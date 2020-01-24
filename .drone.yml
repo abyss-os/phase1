@@ -39,7 +39,7 @@ steps:
     image: abyssos/abyss:aarch64
     commands:
       - apk -U upgrade -a
-      - apk add git minio-client clang llvm lld abuild toolchain
+      - apk add git minio-client clang llvm lld abuild toolchain llvm-binutils
       - toolchain llvm llvm
       - ln -sfv /usr/bin/apk /usr/bin/abuild-apk
       - ln -sfv /usr/bin/gmake /usr/bin/make

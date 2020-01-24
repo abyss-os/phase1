@@ -1,6 +1,6 @@
 pkgname=libnih
 pkgver=1.0.3
-pkgrel=7
+pkgrel=8
 pkgdesc="glib-like library for embedded use"
 url="https://launchpad.net/libnih"
 arch="all"
@@ -31,7 +31,7 @@ build() {
 		--build=$CBUILD \
 		--host=$CHOST \
 		--prefix=/usr \
-		--libdir=/lib \
+		--libdir=/usr/lib \
 		--sysconfdir=/etc \
 		--localstatedir=/var \
 		--disable-nls

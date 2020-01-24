@@ -1,7 +1,7 @@
 pkgname=lxc
 pkgver=3.2.1
 _pkgver=${pkgver/_rc/.rc}
-pkgrel=1
+pkgrel=2
 pkgdesc="Userspace interface for the Linux kernel containment features"
 url="https://linuxcontainers.org/lxc/"
 arch="all"

@@ -40,6 +40,8 @@ package() {
 
 	install -D -m 644 trust-anchors.conf \
 		"$subpkgdir"/usr/share/$pkgname/trust-anchors.conf
+
+	mv -v ${pkgdir}/usr/sbin ${pkgdir}/usr/bin
 }
 
 b2sums="b13379d544dad3315a4e31fd5b511797699b069ebba5fc5facde41b9f05face99afe2bf0d101a4be8645ce270779ccfbc5308010c681c2be6b9075d889445c50  dnsmasq-2.80.tar.gz

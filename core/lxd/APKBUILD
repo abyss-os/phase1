@@ -1,9 +1,9 @@
 pkgname=lxd
 pkgver=3.18
-pkgrel=3
+pkgrel=4
 pkgdesc="a container hypervisor and a new user experience for LXC"
 url="https://linuxcontainers.org/lxd/"
-arch="all !aarch64"
+arch="all"
 license="Apache-2.0"
 depends="
 	acl

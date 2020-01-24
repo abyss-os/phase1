@@ -41,6 +41,7 @@ steps:
       - apk -U upgrade -a
       - apk add git minio-client clang llvm lld abuild toolchain
       - toolchain llvm llvm
+      - sed -i 's/abuild.*/abuild:x:300:root/' /etc/group
       - ./.scripts/drone.sh
     environment:
       GH_TOKEN:

@@ -1,6 +1,6 @@
 pkgname=squashfs-tools
 pkgver=4.4
-pkgrel=1
+pkgrel=2
 pkgdesc="Tools for squashfs, a highly compressed read-only filesystem for Linux."
 url="https://github.com/plougher/squashfs-tools"
 arch="all"
@@ -17,8 +17,8 @@ build() {
 
 package() {
 	cd "$builddir"/$pkgname
-	mkdir -p "$pkgdir"/sbin
-	cp -a mksquashfs unsquashfs "$pkgdir"/sbin
+	mkdir -p "$pkgdir"/usr/bin
+	cp -a mksquashfs unsquashfs "$pkgdir"/usr/bin/
 }
 b2sums="006e2d340bcf6e20873221fb51fa30e0808c4a4d9e1838ca71c11ddbff3bf472dffe730e9edf07c34f535650e6486a8a80a88f82d6c9ef7a7c19aa22098e9197  squashfs-tools-4.4.tar.gz
 9a16f09a6ab926a2374857af18626de9a69e58e87306199edfcee17857405883d6d938ecd1ee19a980c8fafc2980aea061f5735567524014c2945f5592f58a9e  fix-compat.patch"

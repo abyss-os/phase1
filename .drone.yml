@@ -11,7 +11,7 @@ steps:
     image: abyssos/abyss:dev
     commands:
       - apk -U upgrade -a
-      - apk add git minio-client ca-certificates
+      - apk add git minio-client
       - ./.scripts/drone.sh
     environment:
       GH_TOKEN:
@@ -38,15 +38,19 @@ steps:
   - name: build
     image: abyssos/abyss:aarch64
     commands:
-      - env
-      - apk update
-      - apk upgrade -a
-      - apk add git minio-client clang llvm lld abuild
-      - abuild-keygen -ain
+      - apk -U upgrade -a
+      - apk add git minio-client clang llvm lld abuild toolchain
+      - toolchain llvm llvm
       - ./.scripts/drone.sh
     environment:
       GH_TOKEN:
         from_secret: github_token
       MC_HOST_master:
         from_secret: MC_HOST_master
+      ABYSS_KEYBASE:
+        from_secret: ABYSS_KEYBASE
+      ABYSS_PRIVKEY:
+        from_secret: ABYSS_PRIVKEY
+      ABYSS_PUBKEY:
+        from_secret: ABYSS_PUBKEY
     pull: always

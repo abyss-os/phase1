@@ -44,6 +44,10 @@ package() {
 		"$pkgdir"/etc/init.d/cgmanager
 	install -Dm755 "$srcdir"/cgproxy.initd \
 		"$pkgdir"/etc/init.d/cgproxy
+	# yet another nonsense that ignores the configure options given
+	mkdir -p ${pkgdir}/usr/lib
+	mv -v ${pkgdir}/lib/* ${pkgdir}/usr/lib/
+	rm -rf ${pkgdir}/lib
 }
 
 b2sums="70df5ebda230773f3a2a4ed6f784e591126769122533182821b0fe2c157f9bd7b9fd58a3bb104b0ef089320b167d3136c379d760ea6c65dab0c88f46d41596cb  cgmanager-0.42.tar.gz

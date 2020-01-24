@@ -1,6 +1,6 @@
 pkgname=iproute2
 pkgver=5.3.0
-pkgrel=1
+pkgrel=2
 pkgdesc="IP Routing Utilities"
 url="https://www.linuxfoundation.org/collaborate/workgroups/networking/iproute2"
 arch="all"
@@ -38,6 +38,9 @@ build() {
 
 package() {
 	make -j1 CC=clang DESTDIR="$pkgdir" install
+	# I mean, why bother honouring sbindir
+	mv -v ${pkgdir}/usr/sbin/* ${pkgdir}/usr/bin/
+	rm -rf ${pkgdir}/usr/sbin
 }
 
 bashcomp() {

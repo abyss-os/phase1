@@ -39,8 +39,8 @@ build() {
 package() {
 	make -j1 CC=clang DESTDIR="$pkgdir" install
 	# I mean, why bother honouring sbindir
-	mv -v ${pkgdir}/usr/sbin/* ${pkgdir}/usr/bin/
-	rm -rf ${pkgdir}/usr/sbin
+	mv -v ${pkgdir}/sbin/* ${pkgdir}/usr/bin/
+	rm -rf ${pkgdir}/sbin
 }
 
 bashcomp() {

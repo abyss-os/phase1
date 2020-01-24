@@ -1,0 +1,38 @@
+pkgname=perl-xml-sax-base
+pkgver=1.09
+pkgrel=0
+pkgdesc="Base class SAX Drivers and Filters"
+url="http://search.cpan.org/dist/XML-SAX-Base"
+arch="noarch"
+license="GPL"
+depends="perl"
+depends_dev=""
+makedepends="perl-dev"
+install=""
+subpackages="$pkgname-doc"
+source="http://www.cpan.org/authors/id/G/GR/GRANTM/XML-SAX-Base-$pkgver.tar.gz"
+
+_builddir="$srcdir"/XML-SAX-Base-$pkgver
+prepare() {
+	local i
+	cd "$_builddir"
+	for i in $source; do
+		case $i in
+		*.patch) msg $i; patch -p1 -i "$srcdir"/$i || return 1;;
+		esac
+	done
+}
+
+build() {
+	cd "$_builddir"
+	PERL_MM_USE_DEFAULT=1 perl Makefile.PL INSTALLDIRS=vendor || return 1
+	make || return 1
+}
+
+package() {
+	cd "$_builddir"
+	make DESTDIR="$pkgdir" install || return 1
+	find "$pkgdir" \( -name perllocal.pod -o -name .packlist \) -delete
+}
+
+b2sums="a723958c23cbc81fde872bc29d9ccdc021952331460161f873360d94743af6ad68ed1eb061ebceb1100a26e1a47cb2884688820a735f15439de81fbf22fb6910  XML-SAX-Base-1.09.tar.gz"

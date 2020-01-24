@@ -1,0 +1,33 @@
+pkgname=perl-xml-sax
+pkgver=1.02
+pkgrel=0
+pkgdesc="Simple API for XML"
+url="https://metacpan.org/release/XML-SAX"
+arch="noarch"
+license="GPL-1.0-or-later OR Artistic-1.0-Perl"
+depends="perl-xml-sax-base perl-xml-namespacesupport"
+makedepends="perl-dev"
+install="$pkgname.post-install $pkgname.post-upgrade $pkgname.pre-deinstall"
+subpackages="$pkgname-doc"
+source="https://cpan.metacpan.org/authors/id/G/GR/GRANTM/XML-SAX-$pkgver.tar.gz"
+
+builddir="$srcdir"/XML-SAX-$pkgver
+
+build() {
+	cd "$builddir"
+	PERL_MM_USE_DEFAULT=1 perl Makefile.PL INSTALLDIRS=vendor
+	make
+}
+
+check() {
+	cd "$builddir"
+	make test
+}
+
+package() {
+	cd "$builddir"
+	PERLLIB=blib/lib make DESTDIR="$pkgdir" install
+	find "$pkgdir" \( -name perllocal.pod -o -name .packlist \) -delete
+}
+
+b2sums="4f22eafa92fa5a7bce04c1a26e2977b56ef35eb02eca4679330e92aae172f55f93b9b258369c4255813366f989399b647c17072e1fce05e3b688270ed52895cc  XML-SAX-1.02.tar.gz"

@@ -5,10 +5,8 @@ pkgdesc="DocBook converter to UNIX manpage and GNU Texinfo format"
 url="http://docbook2x.sourceforge.net"
 arch="all"
 license="MIT"
-depends="texinfo docbook-xml docbook-xsl libxslt"
-depends_dev=""
+depends="texinfo docbook-xml docbook-xsl libxslt perl-xml-sax"
 makedepends="autoconf automake"
-install=""
 subpackages="$pkgname-doc"
 source="https://downloads.sourceforge.net/$pkgname/docbook2X-$pkgver.tar.gz
 	01_fix_static_datadir_evaluation.patch

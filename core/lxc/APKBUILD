@@ -68,6 +68,10 @@ package() {
 
 	# Remove useless config for SysVinit.
 	rm -r "$pkgdir"/etc/default
+
+
+	mkdir -p ${pkgdir}/usr/lib
+	mv -v ${pkgdir}/lib/* ${pkgdir}/usr/lib/
 }
 
 lvm() {
@@ -109,8 +113,8 @@ templates_oci() {
 
 pam() {
 	pkgdesc="PAM module for LXC"
-	mkdir -p "$subpkgdir"/lib/security
-	mv "$pkgdir"/lib/security/pam_cgfs.so "$subpkgdir"/lib/security/
+	mkdir -p "$subpkgdir"/usr/lib/security
+	mv "$pkgdir"/lib/security/pam_cgfs.so "$subpkgdir"/usr/lib/security/
 }
 
 dev() {

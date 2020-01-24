@@ -1,7 +1,6 @@
-# Maintainer: Natanael Copa <ncopa@alpinelinux.org>
 pkgname=gmp
 pkgver=6.1.2
-pkgrel=2
+pkgrel=3
 pkgdesc="A free library for arbitrary precision arithmetic"
 url="https://gmplib.org/"
 arch="all"

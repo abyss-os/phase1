@@ -119,10 +119,10 @@ package() {
 	rm -r $pkgdir/usr/include
 
 	cd ${GOPATH}
-	install -Dm755 bin/$pkgname "$pkgdir"/usr/sbin/$pkgname
+	install -Dm755 bin/$pkgname "$pkgdir"/usr/bin/$pkgname
 	install -Dm755 bin/lxc "$pkgdir"/usr/bin/lxc
 	
-	patchelf --set-rpath "/usr/lib/lxd" "${pkgdir}/usr/sbin/lxd"
+	patchelf --set-rpath "/usr/lib/lxd" "${pkgdir}/usr/bin/lxd"
 	
 	install -Dm755 "$srcdir"/lxd.initd \
 		"$pkgdir"/etc/init.d/lxd

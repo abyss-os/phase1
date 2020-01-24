@@ -42,6 +42,7 @@ steps:
       - apk add git minio-client clang llvm lld abuild toolchain
       - toolchain llvm llvm
       - ln -sfv /usr/bin/apk /usr/bin/abuild-apk
+      - ln -sfv /usr/bin/gmake /usr/bin/make
       - ./.scripts/drone.sh
     environment:
       GH_TOKEN:

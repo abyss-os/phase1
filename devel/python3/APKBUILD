@@ -143,5 +143,5 @@ wininst() {
 		"$subpkgdir"/usr/lib/python$_basever/distutils/command
 }
 
-b2sums="fcef24b7f0db3b47f899810c77af1e2a84f8b4bf4098a2b417e22dcfb7a5444160e26e5995f73d1068cc7fdbe226d09a88bb5065ac765a4484f66cd327911eef  Python-3.8.0.tar.xz
+b2sums="db1841625de89b812cadcd538a990401a4e49d43968dce733c289121e9de9749eaf39e1c772a32e10ed2b40bef215b19ae9c7d88e0ec9e99cd3d467406ea063c  Python-3.8.1.tar.xz
 e05b5e9fdc01baa063f7dc64ec47a14d9658233df32146a79944fdd20a70d4604539c24bf6fca977555f15fe322f3dbee7c8d7e1fc64ed0238981a4e9b88e5d6  musl-find_library.patch"

@@ -36,13 +36,10 @@ platform:
 
 steps:
   - name: build
-    image: abyssos/abyss:aarch64
+    image: abyssos/abyss:dev
     commands:
       - apk -U upgrade -a
-      - apk add git minio-client clang llvm lld abuild toolchain llvm-binutils
-      - toolchain llvm llvm
-      - ln -sfv /usr/bin/apk /usr/bin/abuild-apk
-      - ln -sfv /usr/bin/gmake /usr/bin/make
+      - apk add git minio-client
       - ./.scripts/drone.sh
     environment:
       GH_TOKEN:

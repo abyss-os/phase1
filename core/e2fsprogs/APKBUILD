@@ -1,6 +1,6 @@
 pkgname=e2fsprogs
 pkgver=1.45.4
-pkgrel=1
+pkgrel=2
 pkgdesc="Standard Ext2/3/4 filesystem utilities"
 url="http://e2fsprogs.sourceforge.net"
 arch="all"

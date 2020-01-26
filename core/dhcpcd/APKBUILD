@@ -13,7 +13,7 @@ source="https://github.com/rsmarples/dhcpcd/archive/$pkgname-$pkgver.tar.gz
 	fix-chrony-conf-location.patch
 	dhcpcd.initd
 	"
-builddir="$srcdir/$pkgname-$pkgver"
+builddir="$srcdir/$pkgname-$pkgname-$pkgver"
 build() {
 	CFLAGS="$CFLAGS -D_GNU_SOURCE -DHAVE_PRINTF_M"
 	./configure \

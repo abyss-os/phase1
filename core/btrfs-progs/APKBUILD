@@ -1,6 +1,6 @@
 pkgname=btrfs-progs
 pkgver=5.1.1
-pkgrel=2
+pkgrel=3
 pkgdesc="BTRFS filesystem utilities"
 url="https://btrfs.wiki.kernel.org"
 arch="all"
@@ -30,7 +30,8 @@ build() {
 		--mandir=/usr/share/man \
 		--localstatedir=/var \
 		--disable-backtrace \
-		--disable-zstd
+		--disable-zstd \
+		--disable-python
 	make
 }
 

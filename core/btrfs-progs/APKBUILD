@@ -1,6 +1,6 @@
 pkgname=btrfs-progs
 pkgver=5.1.1
-pkgrel=1
+pkgrel=2
 pkgdesc="BTRFS filesystem utilities"
 url="https://btrfs.wiki.kernel.org"
 arch="all"
@@ -8,10 +8,9 @@ license="GPL-2.0-or-later LGPL-3.0-or-later"
 depends=""
 depends_dev="linux-dev"
 makedepends="$depends_dev acl-dev asciidoc attr-dev autoconf automake e2fsprogs-dev
-	libtool lzo-dev python3-dev util-linux-dev xmlto zlib-dev py-setuptools"
+	libtool lzo-dev util-linux-dev xmlto zlib-dev"
 subpackages="$pkgname-doc $pkgname-dev
-	$pkgname-bash-completion:bashcomp:noarch
-	py-$pkgname:py"
+	$pkgname-bash-completion:bashcomp:noarch"
 source="https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/$pkgname-v$pkgver.tar.xz"
 builddir="$srcdir/$pkgname-v$pkgver"
 
@@ -37,7 +36,7 @@ build() {
 
 package() {
 	cd "$builddir"
-	make -j1 DESTDIR="$pkgdir" install install_python
+	make -j1 DESTDIR="$pkgdir" install
 }
 
 bashcomp() {
@@ -46,15 +45,6 @@ bashcomp() {
 
 	install -D -m644 "$builddir"/btrfs-completion \
 		"$subpkgdir"/usr/share/bash-completion/completions/btrfs
-}
-
-py() {
-	pkgdesc="Python 3 bindings for $pkgname"
-	provides="py-btrfs-progs=$pkgver-r$pkgrel"  # for backward compatibility
-	replaces="py-btrfs-progs"  # for backward compatibility
-
-	mkdir -p "$subpkgdir"/usr/lib
-	mv "$pkgdir"/usr/lib/python* "$subpkgdir"/usr/lib/
 }
 
 b2sums="ca032cf17e78e5892788b677b5a0fead7cf1108fd464facb48e713b259c8c75f8b7714377f75e7b9e595c7c8fa5927fa37d11f43f51e4d898698f9fc5d26a808  btrfs-progs-v5.1.1.tar.xz"

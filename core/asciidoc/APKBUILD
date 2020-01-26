@@ -1,8 +1,7 @@
-# Maintainer: Natanael Copa <ncopa@alpinelinux.org>
 pkgname=asciidoc
 pkgver=8.6.10
 _hash=544574e66ca89c898151c1c6d34b88a76e44343f
-pkgrel=1
+pkgrel=2
 pkgdesc="Text based documentation"
 url="http://asciidoc.org/"
 arch="noarch"

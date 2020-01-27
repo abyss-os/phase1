@@ -12,8 +12,6 @@ curl -Lo ${HOME}/.abuild/${ABYSS_PRIVKEY} ${ABYSS_KEYBASE}/${ABYSS_PRIVKEY}\?c=$
 curl -Lo ${HOME}/.abuild/${ABYSS_PUBKEY} ${ABYSS_KEYBASE}/${ABYSS_PUBKEY}\?c=${DRONE_COMMIT}
 echo PACKAGER_PRIVKEY=${HOME}/.abuild/${ABYSS_PRIVKEY} > ${HOME}/.abuild/abuild.conf
 
-apk -U upgrade -a
-
 OPWD=${PWD}
 
 case $DRONE_STAGE_ARCH in
@@ -23,6 +21,7 @@ case $DRONE_STAGE_ARCH in
 esac
 
 for PKG in $(git log ...${DRONE_COMMIT_BEFORE} --format=format: --name-only | grep -e 'APKBUILD$' | tac); do
+	apk -U upgrade -a
 	buildpkg=${PKG%APKBUILD}
 	cd ${OPWD}/${buildpkg} || exit 1
 	abuild -ri || exit 1

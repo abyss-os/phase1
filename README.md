@@ -1,6 +1,8 @@
 Abyss OS "official" packages
 ======
 
+[![Build Status](https://cloud.drone.io/api/badges/abyss-os/phase1/status.svg)](https://cloud.drone.io/abyss-os/phase1)
+
 To contribute:
 1. If you haven't contributed before, add yourself to the list of AUTHORS.
   This should be done with a separate commit, the title being `AUTHORS: add [name]`.

@@ -27,9 +27,7 @@ subpackages="$pkgname-dev"
 builddir="$srcdir/$pkgname-$pkgver.src"
 _builddir="$srcdir/build"
 
-makedepends="cmake clang lld ninja llvm-dev clang-dev"
-replaces="libomp"
-provides="libomp"
+makedepends="cmake clang lld ninja llvm-dev clang-dev perl"
 
 prepare() {
 	default_prepare

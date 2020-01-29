@@ -46,10 +46,6 @@ package() {
 		etc/init.d \
 		etc/modprobe.d \
 		etc/modules-load.d \
-		etc/network/if-down.d \
-		etc/network/if-post-down.d \
-		etc/network/if-pre-up.d \
-		etc/network/if-up.d \
 		etc/periodic/15min \
 		etc/periodic/daily \
 		etc/periodic/hourly \
@@ -83,7 +79,6 @@ package() {
 	install -d -m 0555 var/empty
 	install -d -m 0700 "$pkgdir"/root
 	install -d -m 1777 "$pkgdir"/tmp "$pkgdir"/var/tmp
-#	install -m755 "$builddir"/mkmntdirs "$pkgdir"/usr/bin/mkmntdirs
 
 	install -m600 "$srcdir"/crontab "$pkgdir"/etc/crontabs/root
 	install -m655 "$srcdir"/color_prompt "$pkgdir"/etc/profile.d/color_prompt.sh

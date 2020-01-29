@@ -1,7 +1,7 @@
 pkgname=llvm
 
 pkgver=9.0.1
-pkgrel=2
+pkgrel=3
 pkgdesc="$pkgname"
 arch="all"
 url=.
@@ -66,6 +66,7 @@ prepare() {
 			-DLLVM_TOOL_LLVM_ITANIUM_DEMANGLE_FUZZER_BUILD=OFF \
 			-DLLVM_TOOL_LLVM_MC_ASSEMBLE_FUZZER_BUILD=OFF \
 			-DLLVM_TOOL_LLVM_MICROSOFT_DEMANGLE_FUZZER_BUILD=OFF \
+			-DLLVM_INSTALL_UTILS=ON \
 			$srcdir/llvm-project-llvmorg-$pkgver/llvm
 }
 

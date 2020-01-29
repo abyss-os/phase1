@@ -1,7 +1,11 @@
-#bump:2
 pkgname=libcxx
 
-. ../../devel/llvm/common.inc
+pkgver=9.0.1
+pkgrel=2
+pkgdesc="$pkgname"
+arch="all"
+url=.
+license=.
 
 source="https://github.com/llvm/llvm-project/archive/llvmorg-$pkgver.tar.gz
 	musl.patch

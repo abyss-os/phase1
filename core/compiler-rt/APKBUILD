@@ -1,7 +1,20 @@
-#bump:1
 pkgname=compiler-rt
 
-. ../../devel/llvm/common.inc
+pkgver=9.0.1
+pkgrel=2
+pkgdesc="$pkgname"
+arch="all"
+url=.
+license=.
+
+case $CARCH in
+        aarch64) _targets="AArch64" _linker="lld" ;;
+        x86_64) _targets="X86" _linker="lld" ;;
+        mips64) _targets="Mips" _linker="gnu-ld" ;;
+        riscv64) _targets="RISCV" _linker="gnu-ld" ;;
+        ppc64le) _targets="PowerPC" _linker="gnu-ld" ;;
+        *) echo "Unknown arch" ; return 1 ;;
+esac
 
 source="https://github.com/llvm/llvm-project/releases/download/llvmorg-$pkgver/$pkgname-$pkgver.src.tar.xz
 	mips64_crt.patch"

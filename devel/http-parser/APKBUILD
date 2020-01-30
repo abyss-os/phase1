@@ -1,0 +1,27 @@
+pkgname=http-parser
+pkgver=2.9.2
+pkgrel=0
+pkgdesc="HTTP request/response parser for C"
+url="https://github.com/nodejs/http-parser"
+arch="all"
+license="MIT"
+subpackages="$pkgname-dev"
+source="$pkgname-$pkgver.tar.gz::https://github.com/nodejs/$pkgname/archive/v$pkgver.tar.gz"
+builddir="$srcdir/$pkgname-$pkgver"
+
+build() {
+	cd "$builddir"
+	make library
+}
+
+check() {
+	cd "$builddir"
+	make test
+}
+
+package() {
+	cd "$builddir"
+	make install DESTDIR="$pkgdir" PREFIX="/usr"
+}
+
+b2sums="5d37ea197acbac468de03081010fb3b755a093085e56c9fa5a3d4dbd70dd2903335a8113ec21664ca54a74aac4cbbb1cc64b861d021df944790453c2de9baaab  http-parser-2.9.2.tar.gz"

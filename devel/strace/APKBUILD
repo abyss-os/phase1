@@ -1,5 +1,5 @@
 pkgname=strace
-pkgver=4.26
+pkgver=5.4
 pkgrel=1
 pkgdesc="Diagnostic, debugging and instructional userspace tracer"
 url="https://strace.io"
@@ -12,9 +12,7 @@ makedepends="linux-dev autoconf automake gawk"
 subpackages="$pkgname-doc"
 source="https://github.com/strace/strace/releases/download/v$pkgver/$pkgname-$pkgver.tar.xz
 	disable-fortify.patch
-	fix-ppc-pt-regs-collision.patch
 	nlattr-fix.patch
-	s390-fix-SIGNAL_FRAMESIZE-macro.patch
 	"
 
 builddir="$srcdir/$pkgname-$pkgver"
@@ -46,8 +44,6 @@ package() {
 	make -j1 DESTDIR="$pkgdir" install
 }
 
-b2sums="ea8ff5f863afa29a3a40e8d89ff5c3835c64adf7c34c8957bbe3d99a02998d61714437470293d1759e87c1ceb8ed42564632ef33dd9d5303452ec7505822d1ba  strace-4.26.tar.xz
+b2sums="0a7fd9600488f5f07042ead8123151cf0113f82329c3cc786c8f3ffb8673f73eaaa1a489f1f27c47800a20e5b6327f1bf5fb09a5b798156908f9e10374a04970  strace-5.4.tar.xz
 d1f458d21274612e8ec7df2e257bb5d9cbe01a1b7fc73acb9d92e73eb22467dbd736fac45c17336431a143e7dc0b31c9d69eb5b1e2f0c8be17487f7ba9cc92ee  disable-fortify.patch
-6233de917d58d1fe220510371fa12a2d1f9167995f5d565a7a82c07757518ce6e5b43c7773df12a8d00f1fd0e3a3238feb9455834ec8a620011d6aa09a4ad780  fix-ppc-pt-regs-collision.patch
-19aed72450a4060d577dc70b17dbae0bb1e196342339d26f491cea403878452d11f6a17d92b682c762b07e7352f8ff4151d8da9bc9d925eb0beaf0c46972ecdf  nlattr-fix.patch
-d30b128d43c9b941174d0bb096235d15c478dd0c4bab95a45d946d3e4f04a3e26633e6a1b3ad0a9e88439c45c2dab6990152e92ec70d46e0c20a4d53513e8ea6  s390-fix-SIGNAL_FRAMESIZE-macro.patch"
+19aed72450a4060d577dc70b17dbae0bb1e196342339d26f491cea403878452d11f6a17d92b682c762b07e7352f8ff4151d8da9bc9d925eb0beaf0c46972ecdf  nlattr-fix.patch"

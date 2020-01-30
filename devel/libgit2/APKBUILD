@@ -1,0 +1,50 @@
+pkgname=libgit2
+pkgver=0.28.4
+pkgrel=0
+pkgdesc="A linkable library for Git"
+url="https://libgit2.org/"
+arch="all"
+license="GPL-2.0-only WITH GCC-exception-2.0"
+makedepends="curl-dev libssh2-dev http-parser-dev python3 cmake zlib-dev openssl-dev"
+subpackages="$pkgname-dev"
+source="$pkgname-$pkgver.tar.gz::https://github.com/libgit2/libgit2/archive/v$pkgver.tar.gz"
+
+prepare() {
+	default_prepare
+	mkdir -p "$builddir"/build
+	sed -i 's|/usr/bin/env python|/usr/bin/env python3|' tests/generate.py
+}
+
+build() {
+	cd "$builddir"/build
+
+	cmake .. \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_C_FLAGS="$CFLAGS"
+	make
+
+	# Build static library
+	mkdir -p "$builddir"/build-static
+	cd "$builddir"/build-static
+
+	cmake .. \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_C_FLAGS="$CFLAGS" \
+		-DBUILD_SHARED_LIBS=OFF
+	make
+}
+
+check() {
+	cd "$builddir"/build
+	# Test 'offline' fails on s390x, aarch64 and ppc64le
+	ctest -E offline
+}
+
+package() {
+	make -C build DESTDIR="$pkgdir" install
+	make -C build-static DESTDIR="$pkgdir" install
+}
+
+b2sums="7dc94dce69c27f6de3736b94b4d80b727e3e2a7db255a9eab7422cebd93a3ea1a6f47d1de6c3fbe4ba5bcb28ade9b23a989c5b54c06eafeaf30e382f3b859cdf  libgit2-0.28.4.tar.gz"

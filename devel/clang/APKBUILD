@@ -2,7 +2,7 @@ pkgname=clang
 subpackages="$pkgname-dev"
 
 pkgver=9.0.1
-pkgrel=2
+pkgrel=3
 pkgdesc="$pkgname"
 arch="all"
 url=.
@@ -30,6 +30,8 @@ _builddir="$srcdir/build"
 
 depends="compiler-rt libcxx llvm"
 makedepends="cmake lld llvm-dev ninja python3 ncurses-dev"
+
+provides="gcc"
 
 prepare() {
 	default_prepare

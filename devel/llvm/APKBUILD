@@ -85,7 +85,7 @@ prepare() {
 			-DLLVM_ENABLE_LIBCXX=ON \
 			-DSANITIZER_CXX_ABI='libc++' \
 			-DSANITIZER_CXX_ABI_INTREE=ON \
-			$srcdir/llvm-project-llvmorg-$pkgver/llvm
+			$srcdir/llvm-project-llvmorg-${pkgver/_/-}/llvm
 }
 
 build() {

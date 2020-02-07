@@ -65,14 +65,13 @@ prepare() {
 			-DLLVM_TOOL_LLVM_MICROSOFT_DEMANGLE_FUZZER_BUILD=OFF \
 			-DLLVM_INSTALL_UTILS=ON \
 			-DLIBCXX_ENABLE_FILESYSTEM=ON \
-			-DLIBCXXABI_DISABLE_MERGE_WITH_LIBUNWINDER=OFF \
-			-DLIBCXXABI_ENABLE_ASSERTIONS=ON \
                         -DLIBCXX_USE_COMPILER_RT=ON \
                         -DLIBCXX_HAS_MUSL_LIBC=ON \
                         -DLIBCXX_ENABLE_STATIC_ABI_LIBRARY=ON \
                         -DLIBCXX_STATICALLY_LINK_ABI_IN_SHARED_LIBRARY=ON \
                         -DLIBCXX_STATICALLY_LINK_ABI_IN_STATIC_LIBRARY=ON \
 			-DLIBCXX_INSTALL_LIBRARY=OFF \
+			-DLIBCXXABI_ENABLE_ASSERTIONS=ON \
                         -DLIBCXXABI_USE_COMPILER_RT=ON \
                         -DLIBCXXABI_USE_LLVM_UNWINDER=ON \
                         -DLIBCXXABI_ENABLE_STATIC_UNWINDER=ON \
@@ -97,12 +96,12 @@ prepare() {
 }
 
 build() {
-	cd $builddir
+	cd $_builddir
 	ninja -j${JOBS}
 }
 
 package() {
-	cd $builddir
+	cd $_builddir
 	DESTDIR="$pkgdir" ninja install
 }
 
@@ -139,7 +138,7 @@ llgo() {
 	pkgdesc="$pkgname $pkgver"
 	depends="llvm"
 	mkdir -p ${subpkgdir}/usr/bin
-	mv -v ${builddir}/bin/llvm-go ${subpkgdir}/usr/bin/
+	mv -v ${_builddir}/bin/llvm-go ${subpkgdir}/usr/bin/
 }
 
 binutils_aalt() {

@@ -20,7 +20,8 @@ source="https://github.com/llvm/llvm-project/archive/llvmorg-${pkgver/_/-}.tar.g
 	musl.patch"
 subpackages="lld llvm-binutils:binutils $pkgname-dev"
 
-builddir="$srcdir/build"
+builddir=$srcdir/llvm-project-llvmorg-${pkgver/_/-}
+_builddir="$srcdir/build"
 _projects="llvm;lld;libcxx;libcxxabi;compiler-rt;libunwind"
 
 depends="compiler-rt libcxx elfutils-libelf libffi libedit ncurses zlib"
@@ -28,7 +29,7 @@ makedepends="compiler-rt cmake clang lld ncurses-dev libedit-dev swig ninja elfu
 
 prepare() {
 	default_prepare
-	mkdir -p $builddir && cd $builddir
+	mkdir -p $_builddir && cd $_builddir
 
 	cmake -G Ninja -Wno-dev \
 			-DCMAKE_C_COMPILER=$CC \
@@ -92,7 +93,7 @@ prepare() {
                         -DCOMPILER_RT_BUILD_SANITIZERS=OFF \
                         -DCOMPILER_RT_BUILD_XRAY=OFF \
                         -DCOMPILER_RT_INCLUDE_TESTS=OFF \
-			$srcdir/llvm-project-llvmorg-${pkgver/_/-}/llvm
+			$builddir/llvm
 }
 
 build() {

@@ -1,16 +1,11 @@
 pkgname=llvm
 
-pkgver=9.0.1
-pkgrel=3
+pkgver=10.0.0_rc1
+pkgrel=0
 pkgdesc="$pkgname"
 arch="all"
 url=.
 license=.
-
-if [ -d ../llvm/src -a "$pkgname" != "llvm" ]; then
-	error "../llvm/src exists, remove before building."
-	exit 1
-fi
 
 case $CARCH in
         aarch64) _targets="AArch64" _linker="lld" ;;
@@ -21,11 +16,11 @@ case $CARCH in
         *) echo "Unknown arch" ; return 1 ;;
 esac
 
-source="https://github.com/llvm/llvm-project/archive/llvmorg-$pkgver.tar.gz"
+source="https://github.com/llvm/llvm-project/archive/llvmorg-${pkgver/_/-}.tar.gz"
 subpackages="lld llvm-binutils:binutils $pkgname-dev"
 
 builddir="$srcdir/build"
-_projects="llvm;lld"
+_projects="llvm;lld;libcxx;libcxxabi;compiler-rt;libunwind"
 
 depends="compiler-rt libcxx elfutils-libelf libffi libedit ncurses zlib"
 makedepends="compiler-rt cmake clang lld ncurses-dev libedit-dev swig ninja elfutils-libelf elfutils-dev libffi-dev perl python3-dev zlib-dev linux-dev"
@@ -67,6 +62,29 @@ prepare() {
 			-DLLVM_TOOL_LLVM_MC_ASSEMBLE_FUZZER_BUILD=OFF \
 			-DLLVM_TOOL_LLVM_MICROSOFT_DEMANGLE_FUZZER_BUILD=OFF \
 			-DLLVM_INSTALL_UTILS=ON \
+			-DLIBCXX_ENABLE_FILESYSTEM=ON \
+			-DLIBCXXABI_DISABLE_MERGE_WITH_LIBUNWINDER=OFF \
+			-DLIBCXXABI_ENABLE_ASSERTIONS=ON \
+                        -DLIBCXX_USE_COMPILER_RT=ON \
+                        -DLIBCXX_HAS_MUSL_LIBC=ON \
+                        -DLIBCXX_ENABLE_STATIC_ABI_LIBRARY=ON \
+                        -DLIBCXX_STATICALLY_LINK_ABI_IN_SHARED_LIBRARY=ON \
+                        -DLIBCXX_STATICALLY_LINK_ABI_IN_STATIC_LIBRARY=ON \
+			-DLIBCXX_INSTALL_LIBRARY=OFF \
+                        -DLIBCXXABI_USE_COMPILER_RT=ON \
+                        -DLIBCXXABI_USE_LLVM_UNWINDER=ON \
+                        -DLIBCXXABI_ENABLE_STATIC_UNWINDER=ON \
+                        -DLIBCXXABI_STATICALLY_LINK_UNWINDER_IN_SHARED_LIBRARY=YES \
+			-DLIBCXXABI_ENABLE_SHARED=OFF \
+			-DLIBCXXABI_ENABLE_STATIC=ON \
+			-DLIBCXXABI_INSTALL_LIBRARY=OFF \
+			-DLIBUNWIND_ENABLE_SHARED=OFF \
+			-DLIBUNWIND_ENABLE_STATIC=ON \
+			-DLIBUNWIND_INSTALL_LIBRARY=OFF \
+			-DLIBUNWIND_USE_COMPILER_RT=ON \
+			-DLLVM_ENABLE_LIBCXX=ON \
+			-DSANITIZER_CXX_ABI='libc++' \
+			-DSANITIZER_CXX_ABI_INTREE=ON \
 			$srcdir/llvm-project-llvmorg-$pkgver/llvm
 }
 
@@ -135,4 +153,4 @@ lld_aalt() {
     DESTDIR=$subpkgdir aalt-bin -R -g llvm -p ld -f /usr/bin/lld
 }
 
-b2sums="b86e405f2b8e00436045fd409fe19cdde75c797b1192c62a22b5ec75e6b4dc8e874a0f33008dc31562445e4cbe53a992b6f48c684255a6a1ef261e595b8b161f  llvmorg-9.0.1.tar.gz"
+b2sums="a729d37d96ba498cb865c6f708734dccb796b2caabb69167b9aa3b0e12c788f2a5980a048b99d5603da3d26af909fb31f406b4f4743cabae56c45f829a7bf695  llvmorg-10.0.0-rc1.tar.gz"

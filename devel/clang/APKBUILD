@@ -2,7 +2,7 @@ pkgname=clang
 subpackages="$pkgname-dev"
 
 pkgver=9.0.1
-pkgrel=3
+pkgrel=4
 pkgdesc="$pkgname"
 arch="all"
 url=.
@@ -49,7 +49,7 @@ prepare() {
 			-DCLANG_DEFAULT_LINKER=$_linker \
 			-DCLANG_DEFAULT_CXX_STDLIB='libc++' \
 			-DCLANG_DEFAULT_RTLIB=compiler-rt \
-			-DCLANG_DEFAULT_UNWINDLIB=libunwind \
+			-DCLANG_DEFAULT_UNWINDLIB=none \
 			-DCLANG_VENDOR="Abyss OS" \
 			-DCLANG_ENABLE_STATIC_ANALYZER=OFF \
 			-DCLANG_ENABLE_ARCMT=OFF \

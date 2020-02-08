@@ -1,7 +1,7 @@
 pkgname=llvm
 
 pkgver=9.0.1
-pkgrel=3
+pkgrel=4
 pkgdesc="$pkgname"
 arch="all"
 url=.
@@ -25,7 +25,7 @@ source="https://github.com/llvm/llvm-project/archive/llvmorg-$pkgver.tar.gz"
 subpackages="lld llvm-binutils:binutils $pkgname-dev"
 
 builddir="$srcdir/build"
-_projects="llvm;lld"
+_projects="libunwind;libcxxabi;libcxx;llvm;lld"
 
 depends="compiler-rt libcxx elfutils-libelf libffi libedit ncurses zlib"
 makedepends="compiler-rt cmake clang lld ncurses-dev libedit-dev swig ninja elfutils-libelf elfutils-dev libffi-dev perl python3-dev zlib-dev linux-dev"
@@ -67,11 +67,33 @@ prepare() {
 			-DLLVM_TOOL_LLVM_MC_ASSEMBLE_FUZZER_BUILD=OFF \
 			-DLLVM_TOOL_LLVM_MICROSOFT_DEMANGLE_FUZZER_BUILD=OFF \
 			-DLLVM_INSTALL_UTILS=ON \
+			-DLLVM_ENABLE_LIBCXX=ON \
+			-DLLVM_STATIC_LINK_CXX_STDLIB=ON \
+			-DLIBCXX_ENABLE_FILESYSTEM=ON \
+			-DLIBCXX_USE_COMPILER_RT=ON \
+			-DLIBCXX_HAS_MUSL_LIBC=ON \
+			-DLIBCXX_ENABLE_STATIC_ABI_LIBRARY=ON \
+			-DLIBCXX_STATICALLY_LINK_ABI_IN_SHARED_LIBRARY=ON \
+			-DLIBCXX_STATICALLY_LINK_ABI_IN_STATIC_LIBRARY=ON \
+			-DLIBCXX_INSTALL_LIBRARY=OFF \
+			-DLIBCXXABI_ENABLE_ASSERTIONS=ON \
+			-DLIBCXXABI_USE_COMPILER_RT=ON \
+			-DLIBCXXABI_USE_LLVM_UNWINDER=ON \
+			-DLIBCXXABI_ENABLE_STATIC_UNWINDER=ON \
+			-DLIBCXXABI_STATICALLY_LINK_UNWINDER_IN_SHARED_LIBRARY=YES \
+			-DLIBCXXABI_ENABLE_SHARED=OFF \
+			-DLIBCXXABI_ENABLE_STATIC=ON \
+			-DLIBCXXABI_INSTALL_LIBRARY=OFF \
+			-DLIBUNWIND_ENABLE_SHARED=OFF \
+			-DLIBUNWIND_ENABLE_STATIC=ON \
+			-DLIBUNWIND_INSTALL_LIBRARY=OFF \
+			-DLIBUNWIND_USE_COMPILER_RT=ON \
 			$srcdir/llvm-project-llvmorg-$pkgver/llvm
 }
 
 build() {
 	cd $builddir
+	ninja -j${JOBS} crt unwind cxxabi cxx
 	ninja -j${JOBS}
 }
 

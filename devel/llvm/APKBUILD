@@ -7,11 +7,6 @@ arch="all"
 url=.
 license=.
 
-if [ -d ../llvm/src -a "$pkgname" != "llvm" ]; then
-	error "../llvm/src exists, remove before building."
-	exit 1
-fi
-
 case $CARCH in
         aarch64) _targets="AArch64" _linker="lld" ;;
         x86_64) _targets="X86" _linker="lld" ;;
@@ -93,7 +88,7 @@ prepare() {
 
 build() {
 	cd $builddir
-	ninja -j${JOBS} crt unwind cxxabi cxx
+	ninja -j${JOBS} unwind cxxabi cxx
 	ninja -j${JOBS}
 }
 

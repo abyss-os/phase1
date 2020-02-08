@@ -1,7 +1,6 @@
 pkgname=libcxx
-
 pkgver=9.0.1
-pkgrel=3
+pkgrel=4
 pkgdesc="$pkgname"
 arch="all"
 url=.
@@ -17,7 +16,7 @@ _builddir="$srcdir/build"
 
 makedepends="cmake clang lld ninja llvm-dev linux-dev python3"
 
-provides="so:libgcc_s.so.1"
+provides="so:libgcc_s.so.1 so:libunwind.so.1"
 
 prepare() {
 	default_prepare
@@ -52,7 +51,10 @@ build() {
 
 package() {
 	cd $_builddir
-	DESTDIR="$pkgdir" ninja install-libcxx-headers install-libcxx install-unwind
+	DESTDIR="$pkgdir" ninja install-libcxx-headers install-libcxx
+
+	# compat symlink, remove once everything is rebuilt and clang is taught not to use it
+	ln -sv /usr/lib/libc++.so.1 ${pkgdir}/usr/lib/libunwind.so.1
 }
 
 b2sums="b86e405f2b8e00436045fd409fe19cdde75c797b1192c62a22b5ec75e6b4dc8e874a0f33008dc31562445e4cbe53a992b6f48c684255a6a1ef261e595b8b161f  llvmorg-9.0.1.tar.gz

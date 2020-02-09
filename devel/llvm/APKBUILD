@@ -1,7 +1,7 @@
 pkgname=llvm
 
 pkgver=9.0.1
-pkgrel=4
+pkgrel=5
 pkgdesc="$pkgname"
 arch="all"
 url=.
@@ -95,6 +95,7 @@ build() {
 package() {
 	cd $builddir
 	DESTDIR="$pkgdir" ninja install
+	rm -rv ${pkgdir}/usr/include/c++
 }
 
 binutils() {

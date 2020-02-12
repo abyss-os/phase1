@@ -1,7 +1,7 @@
 pkgname=openrc
 pkgver=0.42.1
 _ver=${pkgver/_git*/}
-pkgrel=3
+pkgrel=4
 pkgdesc="OpenRC manages the services, startup and shutdown of a host"
 url="https://github.com/OpenRC/openrc"
 arch="all"
@@ -32,6 +32,8 @@ source="$pkgname-$pkgver.tar.gz::https://github.com/OpenRC/openrc/archive/$pkgve
 	modloop.confd
 	sysfsconf.initd
 	firstboot.initd
+	getty.initd
+	getty.confd
 	"
 
 prepare() {
@@ -135,4 +137,6 @@ bb8278e71b90dd1e94a2ecc01bda05f269b651eb9adeda76be9587344b32c904a4793939b37f43c5
 f3b284371618dbcc6d4d3916604a058f7bc25c7a29c094347da69c0a93e8dee1ff2642178efc7b613add1b904d2a638f07a141fe22f33f9bc92c2b5f3be35afb  modloop.initd
 7d32ffc9d394ac96a67b3f6956e98fa1426ed02f46d889627608ac3d937a6bf04059af9df62c720f1f1caf2b1060457ae296b2536d240fca6b5e9b8bf40bb12f  modloop.confd
 514a6813f004642b2a33d9f15baef1210e394082289de652842aedf73aeba3bf8de467449f2483d2a0606572a1797299bbf3cf6967ce78a02cdd1414fc4ceeef  sysfsconf.initd
-3cda7aa9ff575962e87d0fdc69cce2354b99a41568bb6bc97eede352bbf13083fda7a1584eddbcaee906529e2590bbbdfb57c778c34e70e339d16fdd57555144  firstboot.initd"
+3cda7aa9ff575962e87d0fdc69cce2354b99a41568bb6bc97eede352bbf13083fda7a1584eddbcaee906529e2590bbbdfb57c778c34e70e339d16fdd57555144  firstboot.initd
+4efd8bc7cd06f44dd7a4ae98ba622d2de99880ac0af9d9069335354f1af424bdadded235ee918976b930b83cdcabcecd1e0dd71feeb9b46e3c9fd556c5df32b3  getty.initd
+270476077f33587b095255570cfdfa632f39356c6aa617324f542959e36102dfe1ce9562b580e775518f490793c22b4065eca8ee677a1c2190f6ac4be7a6b414  getty.confd"

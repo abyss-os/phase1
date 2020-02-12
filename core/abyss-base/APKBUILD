@@ -1,6 +1,6 @@
 pkgname=abyss-base
 pkgver=0
-pkgrel=1
+pkgrel=2
 pkgdesc="base metapackage"
 url="https://abyss.run"
 arch="noarch"
@@ -13,7 +13,7 @@ case "$CARCH" in
 	mips64) depends_arch="" ;;
 esac
 
-depends="filesystem musl abyss-keyring apk-tools busybox ca-certificates dhcpcd openrc util-linux $depends_arch"
+depends="filesystem musl abyss-keyring apk-tools busybox ca-certificates dhcpcd openrc $depends_arch"
 
 package() {
 	mkdir -p $pkgdir

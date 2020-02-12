@@ -1,0 +1,21 @@
+pkgname=abyss-base-dev
+pkgver=0
+pkgrel=1
+pkgdesc="devel metapackage"
+url="https://abyss.run"
+arch="noarch"
+license="MIT"
+options="!check"
+builddir="$srcdir/build"
+
+case "$CARCH" in
+	x86_64) depends_arch="llvm-binutils lld" ;;
+	aarch64) depends_arch="llvm-binutils lld" ;;
+	mips64) depends_arch="binutils" ;;
+
+depends="llvm-dev clang abuild $depends_arch"
+
+package() {
+	mkdir -p $pkgdir
+}
+

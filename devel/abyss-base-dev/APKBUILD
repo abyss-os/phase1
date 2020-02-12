@@ -12,6 +12,7 @@ case "$CARCH" in
 	x86_64) depends_arch="llvm-binutils lld" ;;
 	aarch64) depends_arch="llvm-binutils lld" ;;
 	mips64) depends_arch="binutils" ;;
+esac
 
 depends="llvm-dev clang abuild $depends_arch"
 

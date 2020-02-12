@@ -1,6 +1,6 @@
 pkgname=busybox
 pkgver=1.31.1
-pkgrel=4
+pkgrel=5
 pkgdesc="Size optimized toolbox of many common UNIX utilities"
 url="https://busybox.net/"
 arch="all"
@@ -10,6 +10,7 @@ checkdepends="zip"
 # Needs which(1), enabled in busybox-1.31.1-r1
 options=""
 subpackages="$pkgname"
+triggers="busybox.trigger=/usr/bin"
 provides="/bin/sh"
 source="https://busybox.net/downloads/$pkgname-$pkgver.tar.bz2
 	busyboxconfig

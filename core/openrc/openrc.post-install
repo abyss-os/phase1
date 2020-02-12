@@ -1,10 +1,10 @@
-#!/bin/sh
+#!/usr/bin/busybox ash
 
 rc_update() {
 	local svc="$1"
 	local level="$2"
-	mkdir -p /etc/runlevels/$level
-	ln -sf /etc/init.d/$svc /etc/runlevels/$level
+	/usr/bin/busybox mkdir -p /etc/runlevels/$level
+	/usr/bin/busybox ln -sf /etc/init.d/$svc /etc/runlevels/$level
 }
 
 if [ ! -d etc/rcS.d ] && [ ! -d etc/rcL.d ]; then

@@ -21,8 +21,10 @@ case $DRONE_STAGE_ARCH in
 esac
 
 for PKG in $(git log ...${DRONE_COMMIT_BEFORE} --format=format: --name-only | grep -e 'APKBUILD$' | tac); do
-	apk -U upgrade -a
-	buildpkg=${PKG%APKBUILD}
-	cd ${OPWD}/${buildpkg} || exit 1
-	abuild -ri || exit 1
+	if [ -f "${PKG}" ]; then
+		apk -U upgrade -a
+		buildpkg=${PKG%APKBUILD}
+		cd ${OPWD}/${buildpkg} || exit 1
+		abuild -ri || exit 1
+	fi
 done

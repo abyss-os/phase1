@@ -1,11 +1,11 @@
 pkgname=xmlto
 pkgver=0.0.28
-pkgrel=1
+pkgrel=2
 pkgdesc="Convert xml to many other formats"
 url="https://pagure.io/xmlto/"
 arch="all"
 license="GPL-2.0-or-later"
-depends="libxslt perl-yaml-syck perl-test-pod bash docbook-xsl"
+depends="libxslt perl-test-pod bash docbook-xsl"
 subpackages="$pkgname-doc"
 source="https://releases.pagure.org/xmlto/xmlto-$pkgver.tar.bz2"
 

@@ -1,7 +1,6 @@
 pkgname=llvm
-
-pkgver=10.0.0_rc1
-pkgrel=1
+pkgver=10.0.0_rc2
+pkgrel=0
 pkgdesc="$pkgname"
 arch="all"
 url=.
@@ -182,7 +181,7 @@ lld_aalt() {
     DESTDIR=$subpkgdir aalt-bin -R -g llvm -p ld -f /usr/bin/lld
 }
 
-b2sums="a729d37d96ba498cb865c6f708734dccb796b2caabb69167b9aa3b0e12c788f2a5980a048b99d5603da3d26af909fb31f406b4f4743cabae56c45f829a7bf695  llvmorg-10.0.0-rc1.tar.gz
+b2sums="6e701eddbd2313e777c7b37dff8455a08d3c599d01055b60afc0319373d4709deb429aac6bf9e80c4d2e2ab8ade03bf5b398b6ccd8882e4bde608d10cdbf2284  llvmorg-10.0.0-rc2.tar.gz
 4ac74027fdfe0def3a1601df2f65ad1a8fe47e41cfa4df2065863288a5ebe65057a5c4d0791bf817d8dfab923d0bc39d804e968bd3a90ed3f6720d2fbf1734aa  musl.patch
 8e23d19518bc2bba4009c30ba6d8c981e94b6e293a95a29ebbb9be7c9a7a40b21900a7e526529149847a42bd98899306a1af9b99c819e290d4a67e34f4ea32c3  mips_softfloat.patch
 916376a80bde2f7c009a8ce2f8663f95c2e87271047a5476dc429ab014141fdd45689ebc5e3c4ca1cb11d3cd3255ef84d5425a8725cb91cb95f08ee6b56136c5  mips64_crt.patch"

@@ -1,6 +1,6 @@
 pkgname=screen
-pkgver=4.7.0
-pkgrel=1
+pkgver=4.8.0
+pkgrel=0
 pkgdesc="A window manager that multiplexes a physical terminal"
 url="http://ftp.gnu.org/gnu/screen/"
 arch="all"
@@ -37,4 +37,4 @@ package() {
 	install -Dm644 etc/screenrc "$pkgdir"/etc/skel/.screenrc
 }
 
-b2sums="f22ee3f3ad7591ee2641ba9667b131298f3cb9b7712b0f0db28516c60d0a0768893eda2f4ce35d9c641871247a638a03c2550328f1af1f85ab5ce8ffa9b77d54  screen-4.7.0.tar.gz"
+b2sums="97ef6f18bf2c63c477260b742ac0b3501f112d380c41ccecc5cf2853db853cc62d4fd6d37edeca35fb41a43b76d98a5cfe160749c992d284f9764b0a0fdcc778  screen-4.8.0.tar.gz"

@@ -1,6 +1,6 @@
 pkgname=tcl
-pkgver=8.6.9
-pkgrel=1
+pkgver=8.6.10
+pkgrel=0
 pkgdesc="The Tcl scripting language"
 url="http://tcl.sourceforge.net/"
 arch="all"
@@ -76,5 +76,5 @@ dev() {
 	done
 }
 
-b2sums="a5153f853de4034bd7462ea6e33bab0760d488586bf0b5e8cb8b50a308190986193796164cb02695e7f6eba82b49f26cf08e80cefd59cfeafaf6e013e8940d58  tcl8.6.9-src.tar.gz
+b2sums="a95b2fa88309c52a67722e8406b062575885504af6a45bce5ced5876b34af0856c34651ccff5d558b55fbdd012c2c46bfe268065644083854f6a634fceddece3  tcl8.6.10-src.tar.gz
 25ae7e76714ebc320d3953bb5475909596e96431d2a553b13fd4a3e3363bf735da6d2c4dc47c5b96df329f20a94422f2a2e97be98f7de9a0cf8f0498a6dbd768  tcl-stat64.patch"

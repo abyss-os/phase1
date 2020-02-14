@@ -1,7 +1,7 @@
 pkgname=gcc
 pkgver=9.2.0
 pkgname="$pkgname$_target"
-pkgrel=4
+pkgrel=5
 pkgdesc="The GNU Compiler Collection"
 url="http://gcc.gnu.org"
 arch="all"
@@ -19,9 +19,9 @@ export CC=gcc CXX=g++ AS=gnu-as LD=gnu-ld
 
 : ${LANG_CXX:=true}
 : ${LANG_GO:=false}
-: ${LANG_OBJC:=true}
-: ${LANG_FORTRAN:=true}
-: ${LANG_ADA:=true}
+: ${LANG_OBJC:=false}
+: ${LANG_FORTRAN:=false}
+: ${LANG_ADA:=false}
 
 LIBGOMP=true
 LIBGCC=true
@@ -221,9 +221,6 @@ build() {
 	echo "	hash_style_configure=$_hash_style_configure"
 	echo ""
 
-#		--enable-default-ssp \
-#		--enable-checking=release \
-
 	mkdir -p "$_builddir"
 	cd "$_builddir"
  	env CC=$CC CXX=$CXX CC_FOR_TARGET=$CC CXX_FOR_TARGET=$CXX \
@@ -244,10 +241,11 @@ build() {
 		--enable-default-pie \
 		--enable-cloog-backend \
 		--enable-languages=$_languages \
+		--enable-default-ssp \
+		--enable-checking=release \
 		$_arch_configure \
 		$_libc_configure \
 		$_cross_configure \
-		$_bootstrap_configure \
 		--with-system-zlib \
 		$_hash_style_configure \
 		--disable-bootstrap

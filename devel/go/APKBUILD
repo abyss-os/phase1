@@ -1,6 +1,6 @@
 pkgname=go
 pkgver=1.13.8
-pkgrel=0
+pkgrel=1
 pkgdesc="Go programming language compiler"
 url="https://golang.org/"
 arch="all"
@@ -14,6 +14,7 @@ source="https://golang.org/dl/go${pkgver/_/}.src.tar.gz
 options="!check"
 
 provides="${pkgname}-bootstrap=$pkgver-r$pkgrel"
+depends="${pkgname}-bootstrap=$pkgver-r$pkgrel"
 
 # The following tests fail currently, most of them fail due to linking
 # errors likely related to 'default-buildmode-pie.patch' or musl libc.
@@ -36,7 +37,6 @@ export CXX="${HOSTLD:-clang++}"
 export LD="${HOSTLD:-ld}"
 
 build() {
-	apk add go
 	cd "$builddir/src"
 
 	export GOOS="linux"

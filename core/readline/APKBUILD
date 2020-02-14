@@ -1,14 +1,13 @@
 pkgname=readline
 pkgver=8.0.0
-pkgrel=1
+pkgrel=2
 _myver=${pkgver%.*}
 pkgdesc="GNU readline library"
 url="https://tiswww.cwru.edu/php/chet/readline/rltop.html"
 arch="all"
 options="!check"
 license="GPL"
-depends=
-makedepends_host="ncurses-dev"
+makedepends_host="ncurses-dev gnugrep"
 subpackages="$pkgname-dev $pkgname-doc libhistory"
 source="https://ftp.gnu.org/gnu/$pkgname/$pkgname-$_myver.tar.gz
 	fix-ncurses-underlinking.patch

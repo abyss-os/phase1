@@ -13,6 +13,8 @@ source="https://golang.org/dl/go${pkgver/_/}.src.tar.gz
 	"
 options="!check"
 
+provides="${pkgname}-bootstrap=$pkgver-r$pkgrel"
+
 # The following tests fail currently, most of them fail due to linking
 # errors likely related to 'default-buildmode-pie.patch' or musl libc.
 _brokentests="runtime debug/gosym cmd/.* cgo.* go_test:os/exec ^test.* exec_linux_test"
@@ -34,6 +36,7 @@ export CXX="${HOSTLD:-clang++}"
 export LD="${HOSTLD:-ld}"
 
 build() {
+	apk add go
 	cd "$builddir/src"
 
 	export GOOS="linux"

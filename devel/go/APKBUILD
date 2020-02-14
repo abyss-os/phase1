@@ -13,8 +13,8 @@ source="https://golang.org/dl/go${pkgver/_/}.src.tar.gz
 	"
 options="!check"
 
-provides="${pkgname}-bootstrap=$pkgver-r$pkgrel"
-depends="${pkgname}-bootstrap=$pkgver-r$pkgrel"
+provides="${pkgname}-bootstrap"
+depends="${pkgname}-bootstrap"
 
 # The following tests fail currently, most of them fail due to linking
 # errors likely related to 'default-buildmode-pie.patch' or musl libc.

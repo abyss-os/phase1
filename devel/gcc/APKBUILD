@@ -15,7 +15,7 @@ _mpc=1.1.0
 makedepends="gcc g++ paxmark bison flex texinfo gawk zip zlib-dev linux-dev !gettext-dev"
 subpackages="$pkgname-doc"
 
-export CC=gcc CXX=g++ AS=gnu-as LD=gnu-ld
+#export CC=gcc CXX=g++ AS=gnu-as LD=gnu-ld
 
 : ${LANG_CXX:=true}
 : ${LANG_GO:=false}

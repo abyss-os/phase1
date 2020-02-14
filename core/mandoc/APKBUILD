@@ -1,6 +1,6 @@
 pkgname=mandoc
 pkgver=1.14.5
-pkgrel=1
+pkgrel=2
 pkgdesc="mdoc/man compiler"
 url="http://mdocml.bsd.lv/"
 arch="all"
@@ -9,7 +9,7 @@ makedepends="zlib-dev gettext-dev"
 checkdepends="perl"
 install="$pkgname.post-deinstall"
 triggers="$pkgname.trigger=/usr/share/man/*"
-subpackages="$pkgname-doc $pkgname-dev man::noarch"
+subpackages="$pkgname-doc $pkgname-dev"
 source="http://mdocml.bsd.lv/snapshots/$pkgname-$pkgver.tar.gz
 	outdated-warn-disable.patch
 	idiocy.patch
@@ -28,6 +28,7 @@ CFLAGS="$CFLAGS"
 UTF8_LOCALE="en_US.UTF-8"
 MANPATH_DEFAULT="/usr/share/man:/usr/local/man"
 LN="ln -sf"
+SBINDIR=/usr/bin
 EOF
 }
 
@@ -44,12 +45,6 @@ package() {
 	make -j1 DESTDIR="$pkgdir" base-install lib-install
 	ln -sv /usr/bin/mandoc $pkgdir/usr/bin/groff
 	ln -sv /usr/bin/mandoc $pkgdir/usr/bin/nroff
-}
-
-man() {
-	pkgdesc="dummy package for upgrade compatibility.  this can safely be removed"
-	depends="mdocml"
-	mkdir -p "$subpkgdir"
 }
 
 b2sums="27aaf97e7226e989b33861d2a255304bb64a7cd43ca026568f4b044035241c3315a0d73673b023d9ca5b80575b8c584889832bbd86b80aaa49bb785b37559367  mandoc-1.14.5.tar.gz

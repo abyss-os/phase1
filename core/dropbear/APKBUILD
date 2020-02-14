@@ -1,6 +1,6 @@
 pkgname=dropbear
 pkgver=2019.78
-pkgrel=1
+pkgrel=2
 pkgdesc="small SSH 2 client/server designed for small memory environments"
 url="http://matt.ucc.asn.au/dropbear/dropbear.html"
 arch="all"
@@ -32,6 +32,7 @@ build() {
 		--build=$CBUILD \
 		--host=$CHOST \
 		--prefix=/usr \
+		--sbindir=/usr/bin \
 		--sysconfdir=/etc \
 		--mandir=/usr/share/man \
 		--infodir=/usr/share/info \

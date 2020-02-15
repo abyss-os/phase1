@@ -1,6 +1,6 @@
 pkgname=npth
 pkgver=1.6
-pkgrel=1
+pkgrel=2
 pkgdesc="The New GNU Portable Threads library"
 url="ftp://ftp.gnupg.org/gcrypt/npth/"
 arch="all"

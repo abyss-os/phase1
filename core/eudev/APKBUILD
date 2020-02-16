@@ -1,6 +1,6 @@
 pkgname=eudev
 pkgver=3.2.9
-pkgrel=2
+pkgrel=3
 pkgdesc="OpenRC compatible fork of systemd-udev"
 url="https://wiki.gentoo.org/wiki/Project:Eudev"
 arch="all"

@@ -1,6 +1,6 @@
 pkgname=glib
 pkgver=2.62.3
-pkgrel=1
+pkgrel=2
 pkgdesc="Common C routines used by Gtk+ and other libs"
 url="https://developer.gnome.org/glib/"
 arch="all"
@@ -8,7 +8,7 @@ license="LGPL-2.1-or-later"
 triggers="$pkgname.trigger=/usr/share/glib-2.0/schemas:/usr/lib/gio/modules"
 depends_dev="python3 gettext-dev bzip2-dev libxml2 libxslt
 	docbook-xml docbook-xsl"
-makedepends="$depends_dev pcre-dev meson zlib-dev libffi-dev util-linux-dev"
+makedepends="$depends_dev pcre-dev meson zlib-dev libffi-dev util-linux-dev ninja"
 options="!check" # don't like to be run without first being installed
 source="https://download.gnome.org/sources/glib/${pkgver%.*}/glib-$pkgver.tar.xz
 	0001-gquark-fix-initialization-with-c-constructors.patch

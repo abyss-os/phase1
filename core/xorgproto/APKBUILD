@@ -1,6 +1,6 @@
 pkgname=xorgproto
 pkgver=2019.2
-pkgrel=1
+pkgrel=2
 pkgdesc="Combined X.Org X11 protocol headers"
 url="https://xorg.freedesktop.org"
 arch="noarch"

@@ -1,13 +1,13 @@
 pkgname=cmake
 pkgver=3.16.4
-pkgrel=0
+pkgrel=1
 pkgdesc="Cross-platform, open-source make system"
 url="https://www.cmake.org"
 arch="all"
 license="BSD-3-Clause"
 makedepends="bzip2-dev curl-dev expat-dev libarchive-dev linux-dev
 	libuv-dev ncurses-dev rhash-dev xz-dev zlib-dev"
-options="!checkroot"
+options="!checkroot !check" # disable for now
 checkdepends="file musl-utils"
 subpackages="$pkgname-doc $pkgname-bash-completion:bashcomp:noarch
 	"

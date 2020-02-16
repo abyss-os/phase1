@@ -1,7 +1,7 @@
 pkgname=fuse3
 _pkgname=fuse
 pkgver=3.8.0
-pkgrel=3
+pkgrel=4
 pkgdesc="The reference implementation of the Linux FUSE (Filesystem in Userspace) interface"
 url="https://github.com/libfuse/libfuse"
 arch="all"

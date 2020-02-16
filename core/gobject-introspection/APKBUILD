@@ -1,6 +1,6 @@
 pkgname=gobject-introspection
 pkgver=1.62.0
-pkgrel=2
+pkgrel=3
 pkgdesc="Introspection system for GObject-based libraries"
 url="https://wiki.gnome.org/action/show/Projects/GObjectIntrospection"
 arch="all"

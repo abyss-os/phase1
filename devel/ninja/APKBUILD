@@ -7,10 +7,7 @@ arch="all"
 license="Apache-2.0"
 checkdepends="gtest"
 makedepends="python3 re2c"
-source="
-	$pkgname-$pkgver.tar.gz::https://github.com/martine/ninja/archive/v$pkgver.tar.gz
-	fix-musl.patch
-	"
+source="$pkgname-$pkgver.tar.gz::https://github.com/martine/ninja/archive/v$pkgver.tar.gz"
 builddir="$srcdir"/${pkgname}-${pkgver}
 
 _py3_sitelib() {
@@ -42,5 +39,4 @@ package() {
 		"${pkgdir}$(_py3_sitelib)/ninja_syntax.py"
 }
 
-b2sums="0a3db145deaea8a990958ad2e812bc18ed014aaba94911a2905b082745a0d08f10ce1113badabaa362f3834540b7bd3858f07e2a5fce268c66d3d6c73e974e76  ninja-1.10.0.tar.gz
-ba62b2326d97516b8cc23b66d6ddb66be0a9688543a90337105bb1b8e8b36085fcbfaa0ff5174cd3e2e89d0953bda47dc5affd6bfb076f468c9202b7a49001c3  fix-musl.patch"
+b2sums="0a3db145deaea8a990958ad2e812bc18ed014aaba94911a2905b082745a0d08f10ce1113badabaa362f3834540b7bd3858f07e2a5fce268c66d3d6c73e974e76  ninja-1.10.0.tar.gz"

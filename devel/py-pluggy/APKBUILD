@@ -1,14 +1,13 @@
 pkgname=py-pluggy
 _pkgname=${pkgname#py-*}
 pkgver=0.13.1
-pkgrel=1
+pkgrel=2
 pkgdesc="Plugin management and hook calling for Python"
 options="!check"
 url="https://pluggy.readthedocs.io/en/latest/"
 arch="noarch"
 license="MIT"
 depends="python3"
-#makedepends="py-setuptools"
 checkdepends="py-flake8 py-pytest py-zipp"
 source="https://files.pythonhosted.org/packages/source/${_pkgname:0:1}/$_pkgname/$_pkgname-$pkgver.tar.gz"
 builddir="$srcdir/$_pkgname-$pkgver"

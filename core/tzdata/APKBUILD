@@ -2,7 +2,7 @@ pkgname=tzdata
 pkgver=2019c
 _tzcodever=2019c
 _ptzver=0.5
-pkgrel=1
+pkgrel=2
 pkgdesc="Timezone data"
 url="https://www.iana.org/time-zones"
 arch="all"
@@ -39,8 +39,8 @@ package() {
 	./zic -y ./yearistype -d "$pkgdir"/usr/share/zoneinfo -p America/New_York
 	install -m444 -t "$pkgdir"/usr/share/zoneinfo iso3166.tab zone1970.tab zone.tab
 
-	mkdir -p "$pkgdir"/usr/sbin
-	install -m755 zic zdump "$pkgdir"/usr/sbin
+	mkdir -p "$pkgdir"/usr/bin
+	install -m755 zic zdump "$pkgdir"/usr/bin
 
 	mkdir -p "$pkgdir"/usr/share/man/man8
 	install -m644 zic.8 zdump.8 "$pkgdir"/usr/share/man/man8

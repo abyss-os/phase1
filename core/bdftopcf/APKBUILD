@@ -1,15 +1,13 @@
 # Maintainer: Natanael Copa <ncopa@alpinelinux.org>
 pkgname=bdftopcf
 pkgver=1.1
-pkgrel=1
+pkgrel=2
 pkgdesc="X.Org font utility"
 url="http://xorg.freedesktop.org"
 arch="all"
 license="MIT"
 options="!check" # No test suite.
-depends="py-setuptools"
 makedepends="libxfont-dev util-macros"
-install=""
 subpackages="$pkgname-doc"
 source="https://www.x.org/releases/individual/app/$pkgname-$pkgver.tar.bz2"
 

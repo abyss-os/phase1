@@ -1,0 +1,34 @@
+diff --git a/test/Makefile.in b/test/Makefile.in
+index bab2029..9ecb122 100644
+--- a/test/Makefile.in
++++ b/test/Makefile.in
+@@ -581,7 +581,6 @@ test_udev_CPPFLAGS = \
+ 	$(AM_CPPFLAGS)
+ 
+ TESTS = \
+-	udev-test.pl \
+ 	rules-test.sh
+ 
+ check_DATA = \
+@@ -589,7 +588,6 @@ check_DATA = \
+ 
+ EXTRA_DIST = \
+ 	sys.tar.xz \
+-	udev-test.pl \
+ 	rules-test.sh \
+ 	rule-syntax-check.py
+ 
+@@ -907,13 +905,6 @@ recheck: all $(check_DATA)
+ 	        am__force_recheck=am--force-recheck \
+ 	        TEST_LOGS="$$log_list"; \
+ 	exit $$?
+-udev-test.pl.log: udev-test.pl
+-	@p='udev-test.pl'; \
+-	b='udev-test.pl'; \
+-	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+-	--log-file $$b.log --trs-file $$b.trs \
+-	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+-	"$$tst" $(AM_TESTS_FD_REDIRECT)
+ rules-test.sh.log: rules-test.sh
+ 	@p='rules-test.sh'; \
+ 	b='rules-test.sh'; \

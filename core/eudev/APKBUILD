@@ -1,6 +1,6 @@
 pkgname=eudev
 pkgver=3.2.9
-pkgrel=4
+pkgrel=5
 pkgdesc="OpenRC compatible fork of systemd-udev"
 url="https://wiki.gentoo.org/wiki/Project:Eudev"
 arch="all"
@@ -19,6 +19,7 @@ source="https://dev.gentoo.org/~blueness/eudev/eudev-$pkgver.tar.gz
 	load-fbcon.patch
 	udev-postmount.initd
 	setup-udev
+	tests.patch
 	"
 
 build() {
@@ -60,4 +61,5 @@ b2sums="8792ded8a7d1dfbc16fae249283b58251656961cf360d72932c3fc6ea3e752f6334c21e9
 824207b5ac9f6c6f0dbe78435a524d6eea6ee8bcb7d1f7ab94c74e1a4730bd585623f0b3cacaf976ecabdac4d69bf9b63742bda10d8e4d570998e1fdfb30a8d8  default-rules.patch
 86db90ccc9021418890673d8d1064b430b2310c69c801ba89c806787256af37ac3234d23fe5783a6b282024cc779587cc57eaf62fdd8c7b6ac6fc6d9904919cb  load-fbcon.patch
 bcfbaee26ea666304091092deabcc068c533c7707252917a0d8617812f26744c0454f10f5f829031f8668a345c35034ec68396cbf07792a4a83a87e3816001bb  udev-postmount.initd
-d5e99be074b1817fa1d7d5074a566574914bd92049774f9272566777a8b49f475d041ed05f64f03d437cfeb715e682911917ba2ebb2816da6c843607b85b883a  setup-udev"
+d5e99be074b1817fa1d7d5074a566574914bd92049774f9272566777a8b49f475d041ed05f64f03d437cfeb715e682911917ba2ebb2816da6c843607b85b883a  setup-udev
+28faea35412782be121bab709c78095eed62a52caf9c789f13f1500bc209a74f56f8b659227926bba52bae6b462a9984983fcd630b624b58606f907b21e445dd  tests.patch"

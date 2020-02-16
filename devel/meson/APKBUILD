@@ -5,7 +5,7 @@ pkgdesc="Fast and user friendly build system"
 url="https://mesonbuild.com"
 arch="noarch"
 license="Apache-2.0"
-depends="ninja"
+depends="ninja python3"
 subpackages="$pkgname-doc"
 source="https://github.com/mesonbuild/meson/releases/download/$pkgver/$pkgname-$pkgver.tar.gz"
 

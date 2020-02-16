@@ -1,6 +1,6 @@
 pkgname=libfontenc
 pkgver=1.1.4
-pkgrel=2
+pkgrel=3
 pkgdesc="X11 font encoding library"
 url="http://xorg.freedesktop.org/"
 arch="all"
@@ -9,7 +9,7 @@ options="!check"  # No test suite.
 depends=
 makedepends="util-macros xorgproto zlib-dev"
 subpackages="$pkgname-dev"
-source="https://www.x.org/releases/individual/lib/$pkgname-$pkgver.tar.bz2"
+source="${distfilesm}/$pkgname-$pkgver.tar.bz2"
 
 build() {
 	cd "$builddir"

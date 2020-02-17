@@ -9,8 +9,8 @@ license="Apache-2.0 AND MIT"
 depends="$pkgname-stdlib=$pkgver-r$pkgrel musl-dev"
 
 config_helper() {
-	# lol
-	echo nope
+	# rust has stupid checksums, will disable later
+	return 0
 }
 
 # * Rust is self-hosted, so you need rustc (and cargo) to build rustc...
@@ -115,7 +115,10 @@ build() {
 		--enable-vendor \
 		--set="target.$_build.crt-static=false" \
 		--set="target.$_build.linker=$CC" \
-		--set="build.local-rebuild=true"
+		--set="build.local-rebuild=true" \
+		--set="rust.parallel-compiler=true" \
+		--set="llvm.static-libstdcpp=true" \
+		--set="build.full-bootstrap=false"
 
 	# Allow warnings instead of just aborting the build
 	sed 's/#deny-warnings = .*/deny-warnings = false/' -i config.toml

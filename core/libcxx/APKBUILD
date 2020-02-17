@@ -1,6 +1,6 @@
 pkgname=libcxx
 pkgver=9.0.1
-pkgrel=7
+pkgrel=8
 pkgdesc="$pkgname"
 arch="all"
 url=.

@@ -1,6 +1,6 @@
 pkgname=talloc
-pkgver=2.2.0
-pkgrel=1
+pkgver=2.3.1
+pkgrel=0
 pkgdesc="Memory pool management library"
 url="https://talloc.samba.org"
 arch="all"
@@ -54,5 +54,5 @@ _py() {
 		"$pkgdir"/usr/lib/python3* "$subpkgdir"/usr/lib/
 }
 
-b2sums="efdb53dbd4d43ce5d682faec01fb53d9c4b5dd7e97cf125e12661e7432bb968f577416cccbd8ee5003811bdd03dcc949b2e7a06312c497fb9eef54667209a653  talloc-2.2.0.tar.gz
+b2sums="3d014a47639434c65f5dda2c51da3c6c28d5d60dbc9afdaca27b8ec903cde3433a8fa4ca33305750ff60911f7e43171d0d932d98c2d30ea38494aa532d6d9626  talloc-2.3.1.tar.gz
 8d32bfc87492c8b36b6b7c1395f344786e8467007fae37f31b1e5346cc1cec089a20acbb10013562c4a0be2fa6fd4aaf60258782c60d2e42c73b756d8a5f1577  always-libs.patch"

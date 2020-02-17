@@ -1,6 +1,6 @@
 pkgname=musl
 pkgver=1.1.24
-pkgrel=1
+pkgrel=2
 pkgdesc="the musl c library (libc) implementation"
 url="http://www.musl-libc.org/"
 arch="all"
@@ -80,6 +80,11 @@ package() {
 		mv -f "$pkgdir"/usr/lib/libc.so "$pkgdir"/usr/lib/"$LDSO"
 		ln -svf "$LDSO" "$pkgdir"/usr/lib/libc.musl-${CARCH}.so.1
 		ln -svf "$LDSO" "$pkgdir"/usr/lib/libc.so
+
+		# figure this out later (jwh)
+		if [ "$CARCH" = "mips64" ]; then
+			ln -svf "$LDSO" "$pkgdir"/usr/lib/ld-musl-mips64.so.1
+		fi
 
 		mkdir -p "$pkgdir"/usr/bin
 		ln -sv /usr/lib/"$LDSO" $pkgdir/usr/bin/ldd

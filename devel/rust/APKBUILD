@@ -117,8 +117,13 @@ build() {
 		--set="target.$_build.linker=$CC" \
 		--set="build.local-rebuild=true" \
 		--set="rust.parallel-compiler=true" \
-		--set="llvm.static-libstdcpp=true" \
-		--set="build.full-bootstrap=false"
+		--set="build.full-bootstrap=false \
+		--set="build.fast-submodules=true" \
+		--set="rust.incremental=true" \
+		--set="rust.llvm-libunwind=true" \
+		--set="rust.debug=false" \
+		--set="rust.debuginfo-level=0"
+
 
 	# Allow warnings instead of just aborting the build
 	sed 's/#deny-warnings = .*/deny-warnings = false/' -i config.toml

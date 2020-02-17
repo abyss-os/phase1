@@ -16,8 +16,6 @@ _builddir="$srcdir/build"
 
 makedepends="cmake clang lld ninja llvm-dev linux-dev python3"
 
-provides="so:libgcc_s.so.1 so:libunwind.so.1"
-
 prepare() {
 	default_prepare
 	mkdir -p $_builddir && cd $_builddir
@@ -32,32 +30,33 @@ prepare() {
 			-DCMAKE_INSTALL_PREFIX=/usr \
 			-DCMAKE_BUILD_TYPE=Release \
 			-DLLVM_ENABLE_PROJECTS="libunwind;libcxxabi;libcxx" \
-			-DLIBCXX_USE_COMPILER_RT=ON \
-			-DLIBCXX_HAS_MUSL_LIBC=ON \
-			-DLIBCXX_ENABLE_STATIC_ABI_LIBRARY=ON \
-			-DLIBCXX_STATICALLY_LINK_ABI_IN_SHARED_LIBRARY=ON \
-			-DLIBCXX_STATICALLY_LINK_ABI_IN_STATIC_LIBRARY=ON \
-			-DLIBCXXABI_USE_COMPILER_RT=ON \
-			-DLIBCXXABI_USE_LLVM_UNWINDER=ON \
-			-DLIBCXXABI_ENABLE_STATIC_UNWINDER=ON \
-			-DLIBCXXABI_STATICALLY_LINK_UNWINDER_IN_SHARED_LIBRARY=YES \
+                        -DLIBCXX_ENABLE_FILESYSTEM=ON \
+                        -DLIBCXX_USE_COMPILER_RT=ON \
+                        -DLIBCXX_HAS_MUSL_LIBC=ON \
+                        -DLIBCXX_ENABLE_STATIC_ABI_LIBRARY=ON \
+                        -DLIBCXX_STATICALLY_LINK_ABI_IN_SHARED_LIBRARY=ON \
+                        -DLIBCXX_STATICALLY_LINK_ABI_IN_STATIC_LIBRARY=ON \
+                        -DLIBCXXABI_ENABLE_ASSERTIONS=ON \
+                        -DLIBCXXABI_USE_COMPILER_RT=ON \
+                        -DLIBCXXABI_USE_LLVM_UNWINDER=ON \
+                        -DLIBCXXABI_ENABLE_STATIC_UNWINDER=ON \
+                        -DLIBCXXABI_STATICALLY_LINK_UNWINDER_IN_SHARED_LIBRARY=YES \
+                        -DLIBCXXABI_ENABLE_SHARED=ON \
+                        -DLIBCXXABI_ENABLE_STATIC=ON \
+                        -DLIBUNWIND_ENABLE_SHARED=ON \
+                        -DLIBUNWIND_ENABLE_STATIC=ON \
+                        -DLIBUNWIND_USE_COMPILER_RT=ON \
 			$builddir/llvm
 }
 
 build() {
 	cd $_builddir
-	ninja -j${JOBS} cxx
+	ninja -j${JOBS} cxx unwind
 }
 
 package() {
 	cd $_builddir
-	DESTDIR="$pkgdir" ninja install-libcxx-headers install-libcxx
-
-	# compat symlink, remove once everything is rebuilt and clang is taught not to use it
-	ln -sv /usr/lib/libc++.so.1 ${pkgdir}/usr/lib/libunwind.so.1
-
-	# use linker script for compat also
-	#echo -n 'INPUT(-lc++)' > ${pkgdir}/usr/lib/libunwind.so
+	DESTDIR="$pkgdir" ninja install-libcxx install-unwind install-libcxx-headers
 }
 
 b2sums="b86e405f2b8e00436045fd409fe19cdde75c797b1192c62a22b5ec75e6b4dc8e874a0f33008dc31562445e4cbe53a992b6f48c684255a6a1ef261e595b8b161f  llvmorg-9.0.1.tar.gz

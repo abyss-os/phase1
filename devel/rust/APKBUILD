@@ -117,7 +117,7 @@ build() {
 		--set="target.$_build.linker=$CC" \
 		--set="build.local-rebuild=true" \
 		--set="rust.parallel-compiler=true" \
-		--set="build.full-bootstrap=false \
+		--set="build.full-bootstrap=false" \
 		--set="build.fast-submodules=true" \
 		--set="rust.incremental=true" \
 		--set="rust.llvm-libunwind=true" \

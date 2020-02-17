@@ -120,7 +120,6 @@ build() {
 		--set="build.full-bootstrap=false" \
 		--set="build.fast-submodules=true" \
 		--set="rust.incremental=true" \
-		--set="rust.llvm-libunwind=true" \
 		--set="rust.debug=false" \
 		--set="rust.debuginfo-level=0"
 

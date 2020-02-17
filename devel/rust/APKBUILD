@@ -128,7 +128,7 @@ build() {
 	sed 's/#deny-warnings = .*/deny-warnings = false/' -i config.toml
 	sed 's|deny(warnings,|deny(|' -i src/bootstrap/lib.rs
 
-	./x.py build --jobs ${JOBS:-2}
+	./x.py build -i --jobs ${JOBS}
 }
 
 check() {

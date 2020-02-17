@@ -114,7 +114,8 @@ build() {
 		--enable-locked-deps \
 		--enable-vendor \
 		--set="target.$_build.crt-static=false" \
-		--set="target.$_build.linker=$CC"
+		--set="target.$_build.linker=$CC" \
+		--set="build.local-rebuild=true"
 
 	# Allow warnings instead of just aborting the build
 	sed 's/#deny-warnings = .*/deny-warnings = false/' -i config.toml

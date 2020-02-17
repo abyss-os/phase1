@@ -1,6 +1,6 @@
 pkgname=lxd
-pkgver=3.18
-pkgrel=6
+pkgver=3.21
+pkgrel=0
 pkgdesc="a container hypervisor and a new user experience for LXC"
 url="https://linuxcontainers.org/lxd/"
 arch="all"
@@ -27,11 +27,10 @@ makedepends="
 	libuv-dev
 	libcap-dev
 	linux-dev
-
+	eudev-dev
 	rsync
 	go
 	intltool
-
 	libtool
 	autoconf
 	automake
@@ -102,7 +101,7 @@ build() {
 
 	cd "$builddir"
 	go install -v -x -tags libsqlite3 $_project/lxd
-	for bin in lxc fuidshift lxc-to-lxd lxd-benchmark lxd-p2c; do
+	for bin in lxc fuidshift lxc-to-lxd lxd-benchmark lxd-p2c lxd-agent; do
 		go install -v -x $_project/$bin
 	done
 }
@@ -148,7 +147,7 @@ scripts() {
 	export GOPATH="$builddir/_dist"
 	cd $GOPATH
 
-	for tool in fuidshift lxc-to-lxd lxd-benchmark lxd-p2c; do
+	for tool in fuidshift lxc-to-lxd lxd-benchmark lxd-p2c lxd-agent; do
 		install -Dm755 bin/$tool "$subpkgdir"/usr/bin/$tool
 	done
 	install -Dm755 ../scripts/empty-lxd.sh "$subpkgdir"/usr/bin/empty-lxd.sh
@@ -157,9 +156,9 @@ scripts() {
 	patchelf --set-rpath "/usr/lib/lxd" "${pkgdir}/usr/lib/lxd/libsqlite3.so"
 }
 
-b2sums="e437efcbd71a3e795252b40c5eabae8c893a2322329e5799edefa4cecd90025ffb248408aba6637a7346b5f55dedcadbb840780f2c8ce25584cfa5287925c6d4  lxd-3.18.tar.gz
+b2sums="99cba8f280c81a87dc696ec66a4a381f948773d366f27026a7223be4268b7cbf36338f82ee6c7d8ea238fc5a1b2576a3070327deeadecd2892770f05301d1b90  lxd-3.21.tar.gz
 0c53ad54c956fa067e83ae53467cfcdb8ace2e14972b762dcf8715493d89a74da376f37386626b8b96b27df163e3d8ce13b96858191b6d0000d90a0ce08cc137  lxd.confd
 b638fca189b270567f8077890d7820e3d9e82b0a29e9c665a4f4b1a5454d1df627d7849ae2e7e83800d5b4f6e62791a65742522cfaf422f12b67f4b359f4e79f  lxd.initd
-a1ff0a61b96373e615353e3eff8e52afb63825d77de31388a3f1cc27a5465621181285060d6d857f0c62a8e19fc4e224bb9cd18e76d338c6bb1c46c635176be5  lxd-dont-go-get.patch
+2581251827446fd02eb84059e3ab3d940c28c681165307cbed64f875448d537b32fa92c238a40973d8eb55031ae7261a020279d1c0578dca60aca25f1e961626  lxd-dont-go-get.patch
 7e6d3bf71a4d5a4b7fa46fe2e45c815782bb6337528c2c3026c1619abcae9ca89fc073a62b5ffaa6f84fe46650028e74a98fd40ed7e68a31df9c97b4a73474a6  add-missing-includes.patch
 a9b8739aebb7dc129bb50bc565397c99b6fcff6fb3b81feb2533979e5c98e5dabfb0393bbaf82850c2635ffb8d90dc9de544be133c7ebcd41dcf07c274b7e202  mips.patch"

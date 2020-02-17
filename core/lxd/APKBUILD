@@ -1,6 +1,6 @@
 pkgname=lxd
 pkgver=3.18
-pkgrel=4
+pkgrel=5
 pkgdesc="a container hypervisor and a new user experience for LXC"
 url="https://linuxcontainers.org/lxd/"
 arch="all"
@@ -49,6 +49,7 @@ source="https://linuxcontainers.org/downloads/$pkgname/$pkgname-$pkgver.tar.gz
 	$pkgname.initd
 	lxd-dont-go-get.patch
 	add-missing-includes.patch
+	mips.patch
 	"
 # avoid conflict with system libsqlite3.so.0 by adding a soname prefix.
 # this makes lxd-libs provide so:lxd:libsqlite3.so.0 and lxd depend on
@@ -160,4 +161,5 @@ b2sums="e437efcbd71a3e795252b40c5eabae8c893a2322329e5799edefa4cecd90025ffb248408
 0c53ad54c956fa067e83ae53467cfcdb8ace2e14972b762dcf8715493d89a74da376f37386626b8b96b27df163e3d8ce13b96858191b6d0000d90a0ce08cc137  lxd.confd
 b638fca189b270567f8077890d7820e3d9e82b0a29e9c665a4f4b1a5454d1df627d7849ae2e7e83800d5b4f6e62791a65742522cfaf422f12b67f4b359f4e79f  lxd.initd
 a1ff0a61b96373e615353e3eff8e52afb63825d77de31388a3f1cc27a5465621181285060d6d857f0c62a8e19fc4e224bb9cd18e76d338c6bb1c46c635176be5  lxd-dont-go-get.patch
-7e6d3bf71a4d5a4b7fa46fe2e45c815782bb6337528c2c3026c1619abcae9ca89fc073a62b5ffaa6f84fe46650028e74a98fd40ed7e68a31df9c97b4a73474a6  add-missing-includes.patch"
+7e6d3bf71a4d5a4b7fa46fe2e45c815782bb6337528c2c3026c1619abcae9ca89fc073a62b5ffaa6f84fe46650028e74a98fd40ed7e68a31df9c97b4a73474a6  add-missing-includes.patch
+a9b8739aebb7dc129bb50bc565397c99b6fcff6fb3b81feb2533979e5c98e5dabfb0393bbaf82850c2635ffb8d90dc9de544be133c7ebcd41dcf07c274b7e202  mips.patch"

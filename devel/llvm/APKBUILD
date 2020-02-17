@@ -7,11 +7,11 @@ url=.
 license=.
 
 case $CARCH in
-        aarch64) _targets="AArch64" _linker="lld" ;;
-        x86_64) _targets="X86" _linker="lld" ;;
-        mips64) _targets="Mips" _linker="gnu-ld" ;;
-        riscv64) _targets="RISCV" _linker="gnu-ld" ;;
-        ppc64le) _targets="PowerPC" _linker="gnu-ld" ;;
+        aarch64) _targets="AArch64" _linker="lld" lld="ON";;
+        x86_64) _targets="X86" _linker="lld" lld="ON";;
+        mips64) _targets="Mips" _linker="gnu-ld" lld="OFF";;
+        riscv64) _targets="RISCV" _linker="gnu-ld" lld="OFF";;
+        ppc64le) _targets="PowerPC" _linker="gnu-ld" lld="OFF";;
         *) echo "Unknown arch" ; return 1 ;;
 esac
 
@@ -48,7 +48,7 @@ prepare() {
 			-DLLVM_VERSION_SUFFIX="" \
 			-DLLVM_APPEND_VC_REV=OFF \
 			-DLLVM_ENABLE_PROJECTS="$_projects" \
-			-DLLVM_ENABLE_LLD=ON \
+			-DLLVM_ENABLE_LLD=$lld \
 			-DLLVM_TARGETS_TO_BUILD="$_targets" \
 			-DLLVM_INSTALL_BINUTILS_SYMLINKS=OFF \
 			-DLLVM_INCLUDE_EXAMPLES=OFF \

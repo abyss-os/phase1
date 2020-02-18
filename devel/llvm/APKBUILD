@@ -32,8 +32,8 @@ builddir=$srcdir/llvm-project-llvmorg-${pkgver/_/-}
 _builddir="$srcdir/build"
 _projects="libunwind;libcxxabi;libcxx;compiler-rt;llvm;lld;clang"
 
-depends="compiler-rt libcxx elfutils-libelf libffi libedit ncurses zlib"
-makedepends="compiler-rt cmake clang lld ncurses-dev libedit-dev swig ninja elfutils-libelf elfutils-dev libffi-dev perl python3-dev zlib-dev linux-dev"
+depends="libcxx elfutils-libelf libffi libedit ncurses zlib"
+makedepends="cmake clang lld ncurses-dev libedit-dev swig ninja elfutils-libelf elfutils-dev libffi-dev perl python3-dev zlib-dev linux-dev"
 
 provides="clang compiler-rt llvm-bootstrap"
 replaces="clang compiler-rt"

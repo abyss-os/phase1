@@ -1,10 +1,11 @@
 pkgname=llvm
 case $CARCH in
-	aarch64) pkgver=9.0.1;;
-	*) pkgver=10.0.0_rc2;;
+	riscv64) pkgver=10.0.0_rc2;;
+	mips64) pkgver=10.0.0_rc2;;
+	*) pkgver=9.0.1;;
 esac
 
-pkgrel=1
+pkgrel=2
 pkgdesc="$pkgname"
 arch="all"
 url=.
@@ -34,8 +35,8 @@ _projects="libunwind;libcxxabi;libcxx;compiler-rt;llvm;lld;clang"
 depends="compiler-rt libcxx elfutils-libelf libffi libedit ncurses zlib"
 makedepends="compiler-rt cmake clang lld ncurses-dev libedit-dev swig ninja elfutils-libelf elfutils-dev libffi-dev perl python3-dev zlib-dev linux-dev"
 
-provides="clang"
-replaces="clang"
+provides="clang compiler-rt llvm-bootstrap"
+replaces="clang compiler-rt"
 
 prepare() {
 	config_helper

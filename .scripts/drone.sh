@@ -22,7 +22,7 @@ esac
 
 for PKG in $(git log ...${DRONE_COMMIT_BEFORE} --format=format: --name-only | grep -e 'APKBUILD$' | tac); do
 	if [ -f "${PKG}" ]; then
-		apk -U upgrade -a
+		apk --force-overwrite -U upgrade -a
 		buildpkg=${PKG%APKBUILD}
 		cd ${OPWD}/${buildpkg} || exit 1
 		abuild -ri || exit 1

@@ -1,6 +1,6 @@
 pkgname=llvm
 case $CARCH in
-	aarch64) pkgver=10.0.0_rc1;;
+	aarch64) pkgver=9.0.1;;
 	*) pkgver=10.0.0_rc2;;
 esac
 

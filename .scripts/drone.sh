@@ -20,6 +20,9 @@ case $DRONE_STAGE_ARCH in
 	*) echo "unknown arch" ; exit 1;;
 esac
 
+apk --force-overwrite -U upgrade -a
+apk add git minio-client
+
 for PKG in $(git log ...${DRONE_COMMIT_BEFORE} --format=format: --name-only | grep -e 'APKBUILD$' | tac); do
 	if [ -f "${PKG}" ]; then
 		apk --force-overwrite -U upgrade -a

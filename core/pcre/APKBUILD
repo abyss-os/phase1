@@ -1,6 +1,6 @@
 pkgname=pcre
-pkgver=8.43
-pkgrel=1
+pkgver=8.44
+pkgrel=0
 pkgdesc="Perl-compatible regular expression library"
 url="http://pcre.sourceforge.net"
 arch="all"
@@ -22,6 +22,7 @@ build() {
 	mips64*) export CPPFLAGS="$CPPFLAGS -DSLJIT_IS_FPU_AVAILABLE=0";;
 	mips*) export CPPFLAGS="$CPPFLAGS -DSLJIT_IS_FPU_AVAILABLE=0 -DSLJIT_MIPS_R1=1";;
 	s390x) _enable_jit="";;
+	riscv*) _enable_jit="";;
 	esac
 
 	CC=$CC CXX=$CXX ./configure \
@@ -86,4 +87,4 @@ tools() {
 	mv "$pkgdir"/usr/bin "$subpkgdir"/usr/
 }
 
-b2sums="12c2117fc5d242ada44884df279f7f8b4c680fa1623ddc131c0adca1740ec47614ac6af20fc60b0c516d9d7b66488ba8a4e5efa5fc8a0a70aacb02bb3d38ee53  pcre-8.43.tar.bz2"
+b2sums="ef8d5737ca1f4c72f12c8726956ce5d3bad13aa8303b7c3b5d25499e3027ddc2edcdb937d9ad2bdd437a8885f1af8757ba194aa0b2f236b6e6a3a18d2ec8f138  pcre-8.44.tar.bz2"

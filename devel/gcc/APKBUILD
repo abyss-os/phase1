@@ -12,7 +12,7 @@ _mpfr=4.0.2
 _isl=0.22
 _mpc=1.1.0
 #depends="binutils$_target isl"
-makedepends="gcc g++ paxmark bison flex texinfo gawk zip zlib-dev linux-dev !gettext-dev"
+makedepends="gcc g++ bison flex texinfo gawk zip zlib-dev linux-dev !gettext-dev"
 subpackages="$pkgname-doc"
 
 #export CC=gcc CXX=g++ AS=gnu-as LD=gnu-ld
@@ -292,8 +292,6 @@ package() {
 		done
 	fi
 
-	paxmark -pmrs "$pkgdir"/$_gcclibexec/cc1
-
 	# move ada runtime libs
 	if $LANG_ADA; then
 		for i in $(find "$pkgdir"/$_gcclibdir/adalib/ -type f -maxdepth 1 -name "libgna*.so"); do
@@ -374,7 +372,6 @@ gpp() {
 		"$subpkgdir"/usr/${_target:+$CTARGET/}lib \
 
 	mv "$pkgdir/$_gcclibexec/cc1plus" "$subpkgdir/$_gcclibexec/"
-	paxmark -pmrs "$subpkgdir/$_gcclibexec/cc1plus"
 
 	mv "$pkgdir"/usr/${_target:+$CTARGET/}lib/*++* "$subpkgdir"/usr/${_target:+$CTARGET/}lib/
 	mv "$pkgdir"/usr/${_target:+$CTARGET/}include/c++ "$subpkgdir"/usr/${_target:+$CTARGET/}include/

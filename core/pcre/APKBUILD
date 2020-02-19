@@ -7,7 +7,6 @@ arch="all"
 license="BSD-3-Clause"
 depends=
 makedepends=""
-checkdepends="paxmark"
 subpackages="$pkgname-dev $pkgname-doc $pkgname-tools
 	libpcrecpp libpcre16 libpcre32"
 source="https://ftp.pcre.org/pub/$pkgname/$pkgname-$pkgver.tar.bz2"
@@ -50,12 +49,6 @@ package() {
 
 check() {
 	cd "$builddir"
-
-	# paxmark tests requiring JIT
-	for fn in pcre_jit_test pcretest; do
-		./$fn &>/dev/null < /dev/null || true
-		[ -x .libs/lt-$fn ] && paxmark -m .libs/lt-$fn
-	done
 
 	# skip locale specific tests
 	sed -i -e 's/do3=yes//g' RunTest

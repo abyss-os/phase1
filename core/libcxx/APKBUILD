@@ -1,17 +1,16 @@
 pkgname=libcxx
-pkgver=9.0.1
-pkgrel=8
+pkgver=10.0.0_rc2
+pkgrel=0
 pkgdesc="$pkgname"
 arch="all"
 url=.
 license=.
 
-source="https://github.com/llvm/llvm-project/archive/llvmorg-$pkgver.tar.gz
-	musl.patch
-	libunwind_riscv.patch"
+source="https://github.com/llvm/llvm-project/archive/llvmorg-${pkgver/_/-}.tar.gz
+	musl.patch"
 subpackages="$pkgname-dev"
 
-builddir="$srcdir/llvm-project-llvmorg-$pkgver"
+builddir="$srcdir/llvm-project-llvmorg-${pkgver/_/-}"
 _builddir="$srcdir/build"
 
 makedepends="cmake clang lld ninja llvm-dev linux-dev python3"
@@ -59,6 +58,5 @@ package() {
 	DESTDIR="$pkgdir" ninja install-libcxx install-unwind install-libcxx-headers
 }
 
-b2sums="b86e405f2b8e00436045fd409fe19cdde75c797b1192c62a22b5ec75e6b4dc8e874a0f33008dc31562445e4cbe53a992b6f48c684255a6a1ef261e595b8b161f  llvmorg-9.0.1.tar.gz
-4ac74027fdfe0def3a1601df2f65ad1a8fe47e41cfa4df2065863288a5ebe65057a5c4d0791bf817d8dfab923d0bc39d804e968bd3a90ed3f6720d2fbf1734aa  musl.patch
-3d72d237b9ed5244bee37d366bc06750fc9265c18598939a2169c6e322f93fe2e7edcfa553039a7043f744aecc2c1787b9b0b3818f0ee8a71758b6bec18c2791  libunwind_riscv.patch"
+b2sums="6e701eddbd2313e777c7b37dff8455a08d3c599d01055b60afc0319373d4709deb429aac6bf9e80c4d2e2ab8ade03bf5b398b6ccd8882e4bde608d10cdbf2284  llvmorg-10.0.0-rc2.tar.gz
+4ac74027fdfe0def3a1601df2f65ad1a8fe47e41cfa4df2065863288a5ebe65057a5c4d0791bf817d8dfab923d0bc39d804e968bd3a90ed3f6720d2fbf1734aa  musl.patch"

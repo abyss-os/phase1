@@ -1,6 +1,5 @@
 pkgname=llvm
 case $CARCH in
-	riscv64) pkgver=10.0.0_rc2;;
 	mips64) pkgver=10.0.0_rc2;;
 	*) pkgver=9.0.1;;
 esac
@@ -121,6 +120,7 @@ prepare() {
 			-DCOMPILER_RT_BUILD_XRAY=OFF \
 			-DCOMPILER_RT_INCLUDE_TESTS=OFF \
 			-DCOMPILER_RT_BUILD_LIBFUZZER=OFF \
+			-DENABLE_EXPERIMENTAL_NEW_PASS_MANAGER=TRUE \
 			$builddir/llvm
 }
 

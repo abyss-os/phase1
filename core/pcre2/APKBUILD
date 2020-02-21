@@ -1,6 +1,6 @@
 pkgname=pcre2
-pkgver=10.33
-pkgrel=1
+pkgver=10.34
+pkgrel=0
 pkgdesc="Perl-compatible regular expression library"
 url="https://pcre.org/"
 arch="all"
@@ -14,6 +14,7 @@ builddir="$srcdir/$pkgname-$pkgver"
 
 case "$CARCH" in
 	s390x) _enable_jit="";;
+	riscv64) _enable_jit="";;
 	*) _enable_jit="--enable-jit";;
 esac
 
@@ -75,4 +76,4 @@ tools() {
 	mv "$pkgdir"/usr/bin "$subpkgdir"/usr/
 }
 
-b2sums="8c68819c0f763cf9e02cb58a8ae373acc8dcf3c687dd29c8be10330dacbab1a03d7c76223d769597da3beb2bd4543ac51ab74adea380cca85ec9274c98672019  pcre2-10.33.tar.gz"
+b2sums="95817afd6ecc8eabc24439f317c26b461aebf2ae796f0daa9dc627d7ac66f658c7ababc21ce291946570f6a48322f7ef8c474bd74495f6b2e03d1facb23080ce  pcre2-10.34.tar.gz"

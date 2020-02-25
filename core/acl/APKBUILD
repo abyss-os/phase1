@@ -1,12 +1,12 @@
 pkgname=acl
 pkgver=2.2.53
-pkgrel=2
+pkgrel=4
 pkgdesc="Access control list utilities"
 url="https://savannah.nongnu.org/projects/acl"
 arch="all"
 license="LGPL-2.1-or-later AND GPL-2.0-or-later"
-depends="attr gettext"
-makedepends="attr-dev gettext-dev"
+depends="attr"
+makedepends="attr-dev"
 subpackages="$pkgname-dev $pkgname-doc"
 checkdepends="perl bash"
 options="!check"
@@ -23,7 +23,8 @@ build() {
 		--host=$CHOST \
 		--prefix=/usr \
 		--sbindir=/usr/bin \
-		--libexecdir=/usr/lib
+		--libexecdir=/usr/lib \
+		--disable-nls
 	make
 }
 

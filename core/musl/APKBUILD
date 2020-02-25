@@ -1,6 +1,6 @@
 pkgname=musl
 pkgver=1.1.24
-pkgrel=3
+pkgrel=4
 pkgdesc="the musl c library (libc) implementation"
 url="http://www.musl-libc.org/"
 arch="all"
@@ -86,7 +86,7 @@ package() {
 			ln -svf "$LDSO" "$pkgdir"/usr/lib/ld-musl-mips64.so.1
 		fi
 
-		ln -sv /usr/lib/"$LDSO" $pkgdir/usr/lib/libintl.so.8
+		ln -sv /usr/lib/"$LDSO" $pkgdir/usr/lib/libintl.so.1
 		ln -sv /usr/lib/libintl.so.8 $pkgdir/usr/lib/libintl.so
 
 		mkdir -p "$pkgdir"/usr/bin

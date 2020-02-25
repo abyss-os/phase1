@@ -1,0 +1,27 @@
+pkgname=gettext-tiny
+pkgver=0.3.1
+pkgrel=0
+pkgdesc="gettext-tiny"
+url="https://github.com/sabotage-linux/gettext-tiny"
+arch="all"
+license="MIT"
+depends=""
+source="http://ftp.barfooze.de/pub/sabotage/tarballs/gettext-tiny-${pkgver}.tar.xz
+	fix_prefix.patch"
+subpackages="$pkgname-dev"
+options="!check"
+
+provides="gettext"
+
+build() {
+	cd "$builddir"
+	make CC=$CC CXX=$CXX LIBINTL=musl
+}
+
+package() {
+	cd "$builddir"
+	make CC=$CC CXX=$CXX LIBINTL=musl DESTDIR=${pkgdir} prefix=/usr install
+}
+
+b2sums="f9d439ed3f9624fe892a1216757772490bb87716ce46483fd2bd173d65cf70d9826c3c75ba79728f3fcb14a3ddcbebf393ef95e469cf0cac1969cb93e1dda303  gettext-tiny-0.3.1.tar.xz
+e52b0012a5caec5a8363d6f990dc67450fded3d9df73376545b7dc24bb988eda5baea55e538f253000bf42de26018b1d6f1c7a743b607c4e63f1639a3ac674c0  fix_prefix.patch"

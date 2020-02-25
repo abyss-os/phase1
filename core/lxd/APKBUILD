@@ -18,6 +18,7 @@ depends="
 	ca-certificates
 	gtar
 	iproute2
+	gettext-tiny
 	"
 makedepends="
 	lxc-dev
@@ -34,6 +35,7 @@ makedepends="
 	autoconf
 	automake
 	patchelf
+	gettext-tiny-dev
 	"
 subpackages="
 	$pkgname-scripts:scripts

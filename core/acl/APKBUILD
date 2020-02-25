@@ -18,7 +18,7 @@ build() {
 	unset PLATFORM
 	export OPTIMIZER="${CFLAGS}"
 	export DEBUG=-DNDEBUG
-	CC=$CC CXX=$CXX LDFLAGS="-lintl" CONFIG_SHELL=/bin/sh ./configure \
+	CC=$CC CXX=$CXX CONFIG_SHELL=/bin/sh ./configure \
 		--build=$CBUILD \
 		--host=$CHOST \
 		--prefix=/usr \

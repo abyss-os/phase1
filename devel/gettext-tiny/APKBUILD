@@ -20,8 +20,9 @@ build() {
 
 package() {
 	cd "$builddir"
-	make CC=$CC CXX=$CXX LIBINTL=musl DESTDIR=${pkgdir} prefix=/usr install
+	make CC=$CC CXX=$CXX LIBINTL=musl DESTDIR=$pkgdir prefix=/usr install
+	ln -sv /usr/lib/libintl.so.1 $pkgdir/usr/lib/libintl.so
 }
 
 b2sums="f9d439ed3f9624fe892a1216757772490bb87716ce46483fd2bd173d65cf70d9826c3c75ba79728f3fcb14a3ddcbebf393ef95e469cf0cac1969cb93e1dda303  gettext-tiny-0.3.1.tar.xz
-e52b0012a5caec5a8363d6f990dc67450fded3d9df73376545b7dc24bb988eda5baea55e538f253000bf42de26018b1d6f1c7a743b607c4e63f1639a3ac674c0  fix_prefix.patch"
+fb682a71b088e62888c6f14cd0e15c08a76e4df55fcc60cc478980e3335ce76433946e18ccb057bfe519e754c1494341e3d2fa21a2a5d941a46b7d01f98f5495  fix_prefix.patch"

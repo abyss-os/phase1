@@ -9,7 +9,7 @@ index 87e8091..4470e05 100644
  		TLSIEtoLE:        tlsIEtoLE,
  
 -		Linuxdynld:     "/lib64/ld-linux-x86-64.so.2",
-+		Linuxdynld:     "/lib/ld-musl-x86_64.so.1",
++		Linuxdynld:     "/usr/lib/ld-musl-x86_64.so.1",
  		Freebsddynld:   "/libexec/ld-elf.so.1",
  		Openbsddynld:   "/usr/libexec/ld.so",
  		Netbsddynld:    "/libexec/ld.elf_so",
@@ -22,7 +22,7 @@ index da16f92..fd14940 100644
  		Machoreloc1:      machoreloc1,
  
 -		Linuxdynld:     "/lib/ld-linux.so.3", // 2 for OABI, 3 for EABI
-+		Linuxdynld:     "/lib/ld-musl-armhf.so.1",
++		Linuxdynld:     "/usr/lib/ld-musl-armhf.so.1",
  		Freebsddynld:   "/usr/libexec/ld-elf.so.1",
  		Openbsddynld:   "/usr/libexec/ld.so",
  		Netbsddynld:    "/libexec/ld.elf_so",
@@ -35,7 +35,7 @@ index 6b386ad..9986371 100644
  		Machoreloc1:      machoreloc1,
  
 -		Linuxdynld: "/lib/ld-linux-aarch64.so.1",
-+		Linuxdynld: "/lib/ld-musl-aarch64.so.1",
++		Linuxdynld: "/usr/lib/ld-musl-aarch64.so.1",
  
  		Freebsddynld:   "XXX",
  		Openbsddynld:   "XXX",
@@ -48,7 +48,7 @@ index c5d3451..fd85e63 100644
  		Machoreloc1:      machoreloc1,
  
 -		Linuxdynld: "/lib/ld.so.1",
-+		Linuxdynld: "/lib/ld-musl-mipsle.so.1",
++		Linuxdynld: "/usr/lib/ld-musl-mipsle.so.1",
  
  		Freebsddynld:   "XXX",
  		Openbsddynld:   "XXX",
@@ -61,7 +61,7 @@ index 83974e5..0f65647 100644
  		Machoreloc1:      machoreloc1,
  
 -		Linuxdynld:     "/lib64/ld64.so.1",
-+		Linuxdynld:     "/lib/ld-musl-mips64le.so.1",
++		Linuxdynld:     "/usr/lib/ld-musl-mips64le.so.1",
  		Freebsddynld:   "XXX",
  		Openbsddynld:   "XXX",
  		Netbsddynld:    "XXX",
@@ -74,7 +74,7 @@ index 273d9b4..abe257d 100644
  
  		// TODO(austin): ABI v1 uses /usr/lib/ld.so.1,
 -		Linuxdynld: "/lib64/ld64.so.1",
-+		Linuxdynld: "/lib/ld-musl-powerpc64le.so.1",
++		Linuxdynld: "/usr/lib/ld-musl-powerpc64le.so.1",
  
  		Freebsddynld:   "XXX",
  		Openbsddynld:   "XXX",
@@ -87,7 +87,7 @@ index 9ac7eb8..b3f7a66 100644
  		Machoreloc1:      machoreloc1,
  
 -		Linuxdynld: "/lib64/ld64.so.1",
-+		Linuxdynld: "/lib/ld-musl-s390x.so.1",
++		Linuxdynld: "/usr/lib/ld-musl-s390x.so.1",
  
  		// not relevant for s390x
  		Freebsddynld:   "XXX",
@@ -100,7 +100,7 @@ index 6a744dc..d81f392 100644
  		PEreloc1:         pereloc1,
  
 -		Linuxdynld:   "/lib/ld-linux.so.2",
-+		Linuxdynld:   "/lib/ld-musl-i386.so.1",
++		Linuxdynld:   "/usr/lib/ld-musl-i386.so.1",
  		Freebsddynld: "/usr/libexec/ld-elf.so.1",
  		Openbsddynld: "/usr/libexec/ld.so",
  		Netbsddynld:  "/usr/libexec/ld.elf_so",

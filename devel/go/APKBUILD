@@ -1,6 +1,6 @@
 pkgname=go
 pkgver=1.13.8
-pkgrel=1
+pkgrel=2
 pkgdesc="Go programming language compiler"
 url="https://golang.org/"
 arch="all"
@@ -31,10 +31,10 @@ esac
 
 builddir="$srcdir"/go
 
-export CC_FOR_TARGET="$CC"
 export CC="${HOSTLD:-clang}"
 export CXX="${HOSTLD:-clang++}"
 export LD="${HOSTLD:-ld}"
+export CC_FOR_TARGET="$CC"
 
 build() {
 	cd "$builddir/src"
@@ -84,4 +84,4 @@ package() {
 
 b2sums="1752a4ecc4fd9409ebbb129f6b6edaacb7d9e140e3b0a8cbbb9b16b64b481a375b4fbe2a4814e2a272be4fdb5929e5d40f40778a07d6ff0b814230b2d4ed9697  go1.13.8.src.tar.gz
 e0b33bcbbdbbc90e7c9c495549aa0e1286b231de3c29dcb6886b7c2306c4c85c0ce732a9af7511ae9a759ff8b01b4a6efd3795877368406f2bd5494d07bd7afa  default-buildmode-pie.patch
-13390878b859f16a3da5e34064723819b6c0fbc6b482a90b347be4938e81f392963d8aef23e70bb2ec929b9540b5389cea043e1d6209c0785df19962bdbca972  set-external-linker.patch"
+494a103d17f5ef0f787d83c263f9ccac200ada59abc8c0cf125febb6031a453b20c9dbbdc383917ff4829e88616191824762ee83e7a039f6a29775081c585dec  set-external-linker.patch"

@@ -1,11 +1,11 @@
 pkgname=intltool
 pkgver=0.51.0
-pkgrel=2
+pkgrel=3
 pkgdesc="The internationalization tool collection"
 url="http://freedesktop.org/wiki/Software/intltool"
 arch="noarch"
 license="GPL-2.0"
-depends="perl gettext file perl-xml-parser"
+depends="perl file perl-xml-parser"
 subpackages="$pkgname-doc"
 source="https://edge.launchpad.net/intltool/trunk/$pkgver/+download/$pkgname-$pkgver.tar.gz
 	intltool-perl-regexp.patch"

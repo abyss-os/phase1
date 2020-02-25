@@ -1,6 +1,6 @@
 pkgname=lxd
 pkgver=3.21
-pkgrel=0
+pkgrel=1
 pkgdesc="a container hypervisor and a new user experience for LXC"
 url="https://linuxcontainers.org/lxd/"
 arch="all"
@@ -21,7 +21,6 @@ depends="
 	"
 makedepends="
 	lxc-dev
-	gettext-dev
 	acl-dev
 	tcl-dev
 	libuv-dev

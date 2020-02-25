@@ -1,6 +1,6 @@
 pkgname=musl
 pkgver=1.1.24
-pkgrel=4
+pkgrel=5
 pkgdesc="the musl c library (libc) implementation"
 url="http://www.musl-libc.org/"
 arch="all"
@@ -86,13 +86,10 @@ package() {
 			ln -svf "$LDSO" "$pkgdir"/usr/lib/ld-musl-mips64.so.1
 		fi
 
-		ln -sv /usr/lib/"$LDSO" $pkgdir/usr/lib/libintl.so.1
-		ln -sv /usr/lib/libintl.so.8 $pkgdir/usr/lib/libintl.so
-
 		mkdir -p "$pkgdir"/usr/bin
 		ln -sv /usr/lib/"$LDSO" $pkgdir/usr/bin/ldd
 
-		#rm -v $pkgdir/usr/include/libintl.h
+		rm -v $pkgdir/usr/include/libintl.h
 	fi
 
 	install -m644 $srcdir/sys-cdefs.h $pkgdir/usr/include/sys/cdefs.h

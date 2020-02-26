@@ -10,6 +10,7 @@ makedepends="autoconf automake libuv-dev"
 subpackages="$pkgname-dev"
 source="$pkgname-$pkgver::https://github.com/canonical/raft/archive/v${pkgver}.tar.gz"
 builddir="$srcdir/$pkgname-$pkgver"
+options="!check"
 
 build() {
 	cd $builddir

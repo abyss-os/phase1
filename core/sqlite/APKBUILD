@@ -8,7 +8,7 @@ arch="all"
 license="Public-Domain"
 makedepends="readline-dev tcl-dev"
 subpackages="$pkgname-doc $pkgname-dev"
-
+options="!check"
 builddir="$srcdir/sqlite-version-${pkgver}-${_pkgver}"
 source="$pkgname-$pkgver.tar.gz::https://github.com/canonical/sqlite/archive/version-${pkgver}+${_pkgver}.tar.gz
 	license.txt
@@ -36,11 +36,6 @@ build() {
 #	sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 
 	make
-}
-
-check() {
-	cd "$builddir"
-	make check
 }
 
 package() {

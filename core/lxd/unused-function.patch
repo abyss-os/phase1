@@ -1,0 +1,17 @@
+diff --git a/lxd/main_forksyscall.go b/lxd/main_forksyscall.go
+index 669445d..f51b243 100644
+--- a/lxd/main_forksyscall.go
++++ b/lxd/main_forksyscall.go
+@@ -33,12 +33,6 @@ extern void attach_userns(int pid);
+ extern char* advance_arg(bool required);
+ extern int dosetns(int pid, char *nstype);
+ 
+-static inline bool same_fsinfo(struct stat *s1, struct stat *s2,
+-			       struct statfs *sfs1, struct statfs *sfs2)
+-{
+-	return ((sfs1->f_type == sfs2->f_type) && (s1->st_dev == s2->st_dev));
+-}
+-
+ static bool chdirchroot_in_mntns(int cwd_fd, int root_fd)
+ {
+ 	ssize_t len;

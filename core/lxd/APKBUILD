@@ -18,7 +18,7 @@ depends="
 	ca-certificates
 	gtar
 	iproute2
-	gettext-tiny
+	dqlite
 	"
 makedepends="
 	lxc-dev
@@ -34,8 +34,7 @@ makedepends="
 	libtool
 	autoconf
 	automake
-	patchelf
-	gettext-tiny-dev
+	dqlite-dev
 	"
 subpackages="
 	$pkgname-scripts:scripts
@@ -50,55 +49,15 @@ source="https://linuxcontainers.org/downloads/$pkgname/$pkgname-$pkgver.tar.gz
 	lxd-dont-go-get.patch
 	add-missing-includes.patch
 	mips.patch
+	riscv.patch
+	unused-var.patch
+	unused-function.patch
+	wot.patch
 	"
-# avoid conflict with system libsqlite3.so.0 by adding a soname prefix.
-# this makes lxd-libs provide so:lxd:libsqlite3.so.0 and lxd depend on
-# so:lxd:libsqlite3.so.0.
-ldpath="/usr/lib/lxd"
-sonameprefix="$pkgname:"
-
 _project="github.com/lxc/lxd"
-
-prepare() {
-	export GOPATH="$builddir/_dist"
-	default_prepare
-	#update_config_guess
-	for p in raft sqlite dqlite; do
-		cd "$GOPATH"/deps/$p
-		autoreconf -i
-	done
-}
 
 build() {
 	export GOPATH="$builddir/_dist"
-	export CGO_CFLAGS="-I${GOPATH}/deps/sqlite/ -I${GOPATH}/deps/libco/ -I${GOPATH}/deps/raft/include/ -I${GOPATH}/deps/dqlite/include/"
-	export CGO_LDFLAGS="$CGO_LDFLAGS -L${GOPATH}/deps/sqlite/.libs/ -L${GOPATH}/deps/libco/ -L${GOPATH}/deps/raft/.libs -L${GOPATH}/deps/dqlite/.libs/ -lintl"
-	export LD_LIBRARY_PATH="$ldpath ${GOPATH}/deps/sqlite/.libs/:${GOPATH}/deps/libco/:${GOPATH}/deps/raft/.libs/:${GOPATH}/deps/dqlite/.libs/"
-
-	cd "$GOPATH"/deps/raft
-    PKG_CONFIG_PATH="${GOPATH}/deps/raft/" ./configure \
-        --prefix=/usr \
-        --libdir=/usr/lib/lxd
-	make
-
-	cd "$GOPATH"/deps/libco
-	make
-	
-	cd "$GOPATH"/deps/sqlite
-	./configure \
-		--prefix=/usr \
-		--enable-replication \
-		--disable-amalgamation \
-		--disable-tcl \
-		--libdir=/usr/lib/lxd
-	make
-
-	cd "$GOPATH"/deps/dqlite
-	PKG_CONFIG_PATH="${GOPATH}/deps/sqlite/:${GOPATH}/deps/libco/:${GOPATH}/deps/raft/" ./configure \
-		--prefix=/usr \
-		--libdir=/usr/lib/lxd
-
-	make CFLAGS="-I${GOPATH}/deps/sqlite/ -I${GOPATH}/deps/libco/ -I${GOPATH}/deps/raft/include/" LDFLAGS="-L${GOPATH}/deps/sqlite/.libs/ -L${GOPATH}/deps/libco/ -L${GOPATH}/deps/raft/.libs/"
 
 	cd "$builddir"
 	go install -v -x -tags libsqlite3 $_project/lxd
@@ -108,22 +67,9 @@ build() {
 }
 
 package() {
-	for r in sqlite dqlite; do
-		cd "$GOPATH"/deps/$r
-		make DESTDIR="$pkgdir" install
-	done
-
-	cp ${GOPATH}/deps/libco/libco.so* "$pkgdir"/usr/lib/lxd
-	cp ${GOPATH}/deps/raft/.libs/libraft.so* "$pkgdir"/usr/lib/lxd
-
-	rm $pkgdir/usr/bin/sqlite3
-	rm -r $pkgdir/usr/include
-
 	cd ${GOPATH}
 	install -Dm755 bin/$pkgname "$pkgdir"/usr/bin/$pkgname
 	install -Dm755 bin/lxc "$pkgdir"/usr/bin/lxc
-	
-	patchelf --set-rpath "/usr/lib/lxd" "${pkgdir}/usr/bin/lxd"
 	
 	install -Dm755 "$srcdir"/lxd.initd \
 		"$pkgdir"/etc/init.d/lxd
@@ -152,9 +98,6 @@ scripts() {
 		install -Dm755 bin/$tool "$subpkgdir"/usr/bin/$tool
 	done
 	install -Dm755 ../scripts/empty-lxd.sh "$subpkgdir"/usr/bin/empty-lxd.sh
-
-	patchelf --set-rpath "/usr/lib/lxd" "${pkgdir}/usr/lib/lxd/libdqlite.so"
-	patchelf --set-rpath "/usr/lib/lxd" "${pkgdir}/usr/lib/lxd/libsqlite3.so"
 }
 
 b2sums="99cba8f280c81a87dc696ec66a4a381f948773d366f27026a7223be4268b7cbf36338f82ee6c7d8ea238fc5a1b2576a3070327deeadecd2892770f05301d1b90  lxd-3.21.tar.gz
@@ -162,4 +105,8 @@ b2sums="99cba8f280c81a87dc696ec66a4a381f948773d366f27026a7223be4268b7cbf36338f82
 b638fca189b270567f8077890d7820e3d9e82b0a29e9c665a4f4b1a5454d1df627d7849ae2e7e83800d5b4f6e62791a65742522cfaf422f12b67f4b359f4e79f  lxd.initd
 2581251827446fd02eb84059e3ab3d940c28c681165307cbed64f875448d537b32fa92c238a40973d8eb55031ae7261a020279d1c0578dca60aca25f1e961626  lxd-dont-go-get.patch
 7e6d3bf71a4d5a4b7fa46fe2e45c815782bb6337528c2c3026c1619abcae9ca89fc073a62b5ffaa6f84fe46650028e74a98fd40ed7e68a31df9c97b4a73474a6  add-missing-includes.patch
-a9b8739aebb7dc129bb50bc565397c99b6fcff6fb3b81feb2533979e5c98e5dabfb0393bbaf82850c2635ffb8d90dc9de544be133c7ebcd41dcf07c274b7e202  mips.patch"
+a9b8739aebb7dc129bb50bc565397c99b6fcff6fb3b81feb2533979e5c98e5dabfb0393bbaf82850c2635ffb8d90dc9de544be133c7ebcd41dcf07c274b7e202  mips.patch
+39e8fd6fb04c3fc17d04bbcd6fb95172979d4fff67243c84fe18fe8a2b4e0623328987dc90435f49f8388950fef3ca82fae5fdd1b116464a08aa31a774ff89a6  riscv.patch
+337f3c9c3d33227fded3e947dfd3bb264a77942a63ff132d2031efbc8f03ff41812a7de885d775dc5b6e477443ac4109516c36db72bac9d47cd8e65597b12b69  unused-var.patch
+d3db61e25760bcdcc4a4b7a615ab90569e7a9e6b3cfba864018f5a21f71303a331f75c7c3dacda66f76d454db43db3ce4112f082eac8a20639d8694c8d113ad3  unused-function.patch
+e5554d7cc8804b87c3e7952d1c403a575c578a2fe063f50d41d03f5da3d735a88dddc250729146da87e0d925620c756f533c9d980a508600439728804c011d51  wot.patch"

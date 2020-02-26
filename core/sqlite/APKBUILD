@@ -1,7 +1,7 @@
 pkgname=sqlite
 pkgver=3.31.1
 _pkgver=replication4
-pkgrel=1
+pkgrel=2
 pkgdesc="C library that implements an SQL database engine"
 url="https://www.sqlite.org/"
 arch="all"
@@ -59,7 +59,9 @@ build() {
 		--enable-static \
 		--enable-dynamic-extensions \
 		--enable-fts3 \
-		--enable-replication
+		--enable-replication \
+		--disable-amalgamation \
+		--disable-tcl
 
 	# rpath removal
 	sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool

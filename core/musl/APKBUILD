@@ -1,6 +1,6 @@
 pkgname=musl
-pkgver=1.1.24
-pkgrel=5
+pkgver=1.2.0
+pkgrel=0
 pkgdesc="the musl c library (libc) implementation"
 url="http://www.musl-libc.org/"
 arch="all"
@@ -89,7 +89,8 @@ package() {
 		mkdir -p "$pkgdir"/usr/bin
 		ln -sv /usr/lib/"$LDSO" $pkgdir/usr/bin/ldd
 
-		rm -v $pkgdir/usr/include/libintl.h
+		ln -svf "$LDSO" "$pkgdir"/usr/lib/libintl.so.1
+		ln -svf "$LDSO" "$pkgdir"/usr/lib/libintl.so
 	fi
 
 	install -m644 $srcdir/sys-cdefs.h $pkgdir/usr/include/sys/cdefs.h
@@ -115,7 +116,7 @@ utils() {
 	install -D -m755 "$srcdir"/ldconfig "$subpkgdir"/usr/bin
 }
 
-b2sums="5fa26746eed0f2334b740adf94a8400568d56d9b2276bf1fbac828f9b707b4e215d3c16af9ea048b9d771f1d0a58ada3bc6e1bf0ba8f5fa693f5042fc6af30df  musl-1.1.24.tar.gz
+b2sums="0a47e0f438cca0f3ce31ae024c19358160214842115b560efc48e66228055c9147d9550957a79425322d510ba773f197d0944bb844bf6addbbf698088a3358a9  musl-1.2.0.tar.gz
 a70433fea40342429ef7e21fc4338a4d600e902c44c21765434104c5d602267695c403da33479d352328f84c41c99bc46757e5ae18e42f6a0479789bf04323ea  __stack_chk_fail_local.c
 5edec5b375218e2c8c7692fc592d80a6905e1949dbdf3c8375f64821a15bcb9212266155dbd2fad2d14cb9de583646be8f61c5ba50c817f0bef6352dbb81fa70  handle-aux-at_base.patch
 535d64c6883883ad7d8efbfa67d76a9f2120ee126fe69a06e29513a68c8c2a2cff27f2fddfb4bddb19e9d8c4c3a56314dd1dd96ec25d1759829df97fa32d191f  ldconfig

@@ -1,6 +1,7 @@
 pkgname=sqlite
 pkgver=3.31.1
-pkgrel=0
+_pkgver=replication4
+pkgrel=1
 pkgdesc="C library that implements an SQL database engine"
 url="https://www.sqlite.org/"
 arch="all"
@@ -25,14 +26,9 @@ _ver=${_a}${_b}${_c}${_d}
 
 # these variables depend on _ver being set
 builddir="$srcdir/$pkgname-autoconf-$_ver"
-source="https://www.sqlite.org/2020/$pkgname-autoconf-$_ver.tar.gz
+source="https://github.com/canonical/sqlite/releases/download/version-${pkgver}+${_pkgver}/sqlite-src-${pkgver}.tar.gz
 	license.txt
 	"
-
-# secfixes:
-#   3.28.0-r0:
-#   - CVE-2019-5018
-#   - CVE-2019-8457
 
 # additional CFLAGS to set
 _amalgamation="-DSQLITE_ENABLE_FTS4 \
@@ -62,7 +58,8 @@ build() {
 		--enable-readline \
 		--enable-static \
 		--enable-dynamic-extensions \
-		--enable-fts3
+		--enable-fts3 \
+		--enable-replication
 
 	# rpath removal
 	sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
@@ -87,5 +84,5 @@ package() {
 		"$pkgdir"/usr/share/licenses/$pkgname/license.txt
 }
 
-b2sums="ef5d40b6e6c59a51ae95368eb9f6a938188813f89d5328ea1c1180ef35f124c14b3e83b0832ae5c2fa24cc2df352f1b0ea5f20b64d0762d50a700d9895f9a12e  sqlite-autoconf-3310100.tar.gz
+b2sums="1724535631f15d3a8a1697b57f9f94618d7e7cae7dacf1f6c6adea3cb72f6abf4d34341fd3602b16f45b6abe3ef833faf05ed6be05796ed2b03f16e65e36f5e8  sqlite-src-3.31.1.tar.gz
 847d2f10831a4a7a2dfb12c142c418fffc74829f3fde24f9a343bb6e0f7b7de110a909ca97da77aaa7462056f8ce009ffbcb86d7ecd3a4f36fa80ee598ca921e  license.txt"

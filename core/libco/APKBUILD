@@ -1,0 +1,22 @@
+pkgname="libco"
+pkgver="20"
+pkgrel=0
+pkgdesc="libco is a cooperative multithreading library written in C89."
+url="https://byuu.org/library/libco"
+arch="all"
+license="ISC"
+subpackages="$pkgname-dev"
+source="$pkgname-$pkgver::https://github.com/canonical/libco/archive/v${pkgver}.tar.gz"
+builddir="$srcdir/$pkgname-$pkgver"
+
+build() {
+	cd $builddir
+	make
+}
+
+package() {
+	cd $builddir
+	make DESTDIR=$pkgdir install
+}
+
+b2sums="2f49e46af557c4206ba2edc8451836c0d523f01b2bf3f3be9bf6ee85ceebc22792163b3ee358dcd99adf065f3efb9932d112ccae27f16ae769b7c37d0c00b380  libco-20"

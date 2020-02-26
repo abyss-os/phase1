@@ -1,0 +1,31 @@
+pkgname="raft"
+pkgver="0.9.17"
+pkgrel=0
+pkgdesc="Fully asynchronous C implementation of the Raft consensus protocol."
+url="https://github.com/canonical/raft"
+arch="all"
+license="LGPLv3"
+depends="libuv"
+makedepends="autoconf automake"
+subpackages="$pkgname-dev"
+source="$pkgname-$pkgver::https://github.com/canonical/raft/archive/v${pkgver}.tar.gz"
+builddir="$srcdir/$pkgname-$pkgver"
+
+build() {
+	cd $builddir
+	autoreconf -if
+	./configure --prefix=/usr
+	make	
+}
+
+check() {
+	cd $builddir
+	make check
+}
+
+package() {
+	cd $builddir
+	make DESTDIR=$pkgdir install
+}
+
+b2sums="83b6581b7dbf4399dee57fca605dc73b8e1ee2af6e8d64fd9b8f30de5be964391d52cc74a5727c264eaff10fd0453fc383125f67cb8236dff22519dd2cf2b93c  raft-0.9.17"

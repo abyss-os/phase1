@@ -19,6 +19,7 @@ depends="
 	gtar
 	iproute2
 	dqlite
+	raft
 	"
 makedepends="
 	lxc-dev
@@ -35,6 +36,7 @@ makedepends="
 	autoconf
 	automake
 	dqlite-dev
+	raft-dev
 	"
 subpackages="
 	$pkgname-scripts:scripts

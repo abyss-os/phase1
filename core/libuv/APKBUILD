@@ -1,9 +1,6 @@
-# Contributor: Jose-Luis Rivas <ghostbar@riseup.net>
-# Contributor: Sören Tempel <soeren+alpine@soeren-tempel.net>
-# Maintainer: Natanael Copa <ncopa@alpinelinux.org>
 pkgname=libuv
-pkgver=1.29.1
-pkgrel=1
+pkgver=1.34.2
+pkgrel=0
 pkgdesc="Cross-platform asychronous I/O"
 url="https://libuv.org"
 arch="all"
@@ -54,4 +51,4 @@ package() {
 		"$pkgdir"/usr/share/licenses/$pkgname/LICENSE
 }
 
-b2sums="d654a4c57aa840441bc9e97481708366be3736de790a5553ff7bca123c1c70d8c54a0faaf7c6b993b414044d5a1d22f16292b19f81b5d5f89df29f1d76bdf390  libuv-v1.29.1.tar.gz"
+b2sums="47040e3ea742229de8c113f4763cb3bcb257d38e35dc36bee31a7c417e3f54a499b1f372453286e5bb0f6b75181e1f5694936e81a28db10195bda9fb99f23906  libuv-v1.34.2.tar.gz"

@@ -1,8 +1,6 @@
-# Contributor: Stuart Cardall <developer@it-offshore.co.uk>
-# Maintainer: Stuart Cardall <developer@it-offshore.co.uk>
 pkgname=lz4
-pkgver=1.9.1
-pkgrel=1
+pkgver=1.9.2
+pkgrel=0
 pkgdesc="LZ4 is lossless compression algorithm with fast decoder @ multiple GB/s per core."
 url="https://github.com/lz4/lz4"
 arch="all"
@@ -28,4 +26,4 @@ package() {
 	make PREFIX="/usr" DESTDIR="$pkgdir" install
 }
 
-b2sums="50dfad2e92028a1ccfe186efb5dbe24e4641e104da656990ba5138a84d29fbfea26d96c2d7f64f8d6a686dc98b4890990a280d4d86e321b04f467b65b6c61e1f  lz4-1.9.1.tar.gz"
+b2sums="0021487bee8657bc825fdd2b98a6dc8a6d10be3240fe0bebf6563e9c855a15bf5440a02d5cd6ee1f1e8502743348bcec1e866d3287b07e623887e9eb9da35eee  lz4-1.9.2.tar.gz"

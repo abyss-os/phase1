@@ -1,5 +1,5 @@
 pkgname=util-linux
-pkgver=2.33.2
+pkgver=2.35.1
 
 case $pkgver in
 	*.*.*) _v=${pkgver%.*};;
@@ -151,5 +151,5 @@ _findmnt() {
 	mv "$pkgdir"/usr/bin/findmnt "$subpkgdir"/usr/bin
 }
 
-b2sums="fdeed0a236edd26d268bccca8cde2cf1b7ecbff521ede9fa26ea22c8e5cdfc380a416a168789504b303f1b569d163e41f6630ee28829be7f2b2129fa14c4fffa  util-linux-2.33.2.tar.xz
+b2sums="08c16d4d9fd670b62c2d664feda2cfa53d0cecc36bbaa2c3ed5960bf70f905f11caa7a904c63f36e12b472f10b8e781351cca0cf2f858c2b66e4fd0204b1c456  util-linux-2.35.1.tar.xz
 db5861e6f809b1537a065e5af769bf539c9f96889cf39b703f5b1575a982d9f13fc37e46c8282c2d90f69bc4998bd1bc013db4336871a382ad2f0d5a045df231  ttydefaults.h"

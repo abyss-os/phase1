@@ -20,6 +20,9 @@ depends="
 	iproute2
 	dqlite
 	raft
+	sqlite
+	libuv
+	libco
 	"
 makedepends="
 	lxc-dev
@@ -37,6 +40,9 @@ makedepends="
 	automake
 	dqlite-dev
 	raft-dev
+	sqlite-dev
+	libuv-dev
+	libco-dev
 	"
 subpackages="
 	$pkgname-scripts:scripts

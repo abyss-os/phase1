@@ -6,49 +6,17 @@ pkgdesc="C library that implements an SQL database engine"
 url="https://www.sqlite.org/"
 arch="all"
 license="Public-Domain"
-makedepends="readline-dev"
+makedepends="readline-dev tcl-dev"
 subpackages="$pkgname-doc $pkgname-dev"
 
-# compute _ver
-_a=${pkgver%%.*}
-_b=${pkgver#${_a}.}
-_b=${_b%%.*}
-_c=${pkgver#${_a}.${_b}.}
-_c=${_c%%.*}
-case $pkgver in
-	*.*.*.*)_d=${pkgver##*.};;
-	*.*.*)	_d=0;;
-esac
-[ $_b -lt 10 ] && _b=0$_b
-[ $_c -lt 10 ] && _c=0$_c
-[ $_d -lt 10 ] && _d=0$_d
-_ver=${_a}${_b}${_c}${_d}
-
-# these variables depend on _ver being set
-builddir="$srcdir/$pkgname-autoconf-$_ver"
-source="https://github.com/canonical/sqlite/releases/download/version-${pkgver}+${_pkgver}/sqlite-src-${pkgver}.tar.gz
+builddir="$srcdir/sqlite-version-${pkgver}-${_pkgver}"
+source="$pkgname-$pkgver.tar.gz::https://github.com/canonical/sqlite/archive/version-${pkgver}+${_pkgver}.tar.gz
 	license.txt
 	"
-
-# additional CFLAGS to set
-_amalgamation="-DSQLITE_ENABLE_FTS4 \
-	-DSQLITE_ENABLE_FTS3_PARENTHESIS \
-	-DSQLITE_ENABLE_FTS3 \
-	-DSQLITE_ENABLE_FTS5 \
-	-DSQLITE_ENABLE_COLUMN_METADATA \
-	-DSQLITE_SECURE_DELETE \
-	-DSQLITE_ENABLE_UNLOCK_NOTIFY \
-	-DSQLITE_ENABLE_RTREE \
-	-DSQLITE_ENABLE_GEOPOLY \
-	-DSQLITE_USE_URI \
-	-DSQLITE_ENABLE_DBSTAT_VTAB \
-	-DSQLITE_MAX_VARIABLE_NUMBER=250000 \
-	-DSQLITE_ENABLE_JSON1"
 
 build() {
 	cd "$builddir"
 
-	export CFLAGS="$CFLAGS $_amalgamation"
 	./configure \
 		--build="$CBUILD" \
 		--host="$CHOST" \
@@ -64,8 +32,8 @@ build() {
 		--disable-tcl
 
 	# rpath removal
-	sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
-	sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
+#	sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
+#	sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 
 	make
 }
@@ -86,5 +54,5 @@ package() {
 		"$pkgdir"/usr/share/licenses/$pkgname/license.txt
 }
 
-b2sums="1724535631f15d3a8a1697b57f9f94618d7e7cae7dacf1f6c6adea3cb72f6abf4d34341fd3602b16f45b6abe3ef833faf05ed6be05796ed2b03f16e65e36f5e8  sqlite-src-3.31.1.tar.gz
+b2sums="a291928b69814d8a9dbda600960f84587bf375437efab3e41a7f25c2cde275b660b8d2a62566a50e328c9f1756174dd97702b937dfab78ef87df8b88c8ce16d0  sqlite-3.31.1.tar.gz
 847d2f10831a4a7a2dfb12c142c418fffc74829f3fde24f9a343bb6e0f7b7de110a909ca97da77aaa7462056f8ce009ffbcb86d7ecd3a4f36fa80ee598ca921e  license.txt"

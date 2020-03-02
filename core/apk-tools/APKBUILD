@@ -1,7 +1,7 @@
 # Maintainer: Natanael Copa <ncopa@alpinelinux.org>
 pkgname=apk-tools
 pkgver=2.10.4
-pkgrel=4
+pkgrel=5
 pkgdesc="Alpine Package Keeper - package manager for alpine"
 makedepends_build="openssl"
 makedepends_host="zlib-dev openssl-dev linux-dev"
@@ -21,6 +21,7 @@ source="https://dev.alpinelinux.org/archive/$pkgname/$pkgname-$pkgver.tar.xz
 	use-utc-time.patch
 	dont-unpack-root.patch
 	repositories
+	https_libfetch.patch
 	"
 
 url="https://git.alpinelinux.org/cgit/apk-tools/"
@@ -103,4 +104,5 @@ f1b654c42b1aa4abb341c4d7358c22985fe5fa4fdb507ef902f7f2603cbdd8635b227814ccc17e5b
 31ab9ec77642da87185ab5852d8d1654b3302285252f73e4f8dae9f529c3e59d0d69e0dc4f8be9adf689b322f23ad9ccf5517820751e81587d6d7921f3f5dbaa  add-riscv64-to-apk_defines.h.patch
 740c77fa1033536ac02778d44141faf46fc5d5de34b94b0e0dffabcbbd637c8487bcbd2bca3f67ebde4e771ccc22573336e8b599a35b37c8c7bc6cac6d7ac277  use-utc-time.patch
 38da5df36165f7ec7cec527911692fa6c45dc1bff1445fba326afdbe50e5668a01c7bb02eb17a54977060e396a9351ad5a635bea852b145483bdca9706a7ec80  dont-unpack-root.patch
-2d1c5bd0ef457a9174bbcec601f2478afa19bb442d3fa00a4e5e9b7b19377cff394840d36b6123735a0192d02d9ed76c439070d1f463e45e8388557a5ac0f429  repositories"
+2d1c5bd0ef457a9174bbcec601f2478afa19bb442d3fa00a4e5e9b7b19377cff394840d36b6123735a0192d02d9ed76c439070d1f463e45e8388557a5ac0f429  repositories
+876ab7c9bea3a5ecd18b71135040df1076ef433c5915f72eb5812c753ad04748771eefe817dd36bddc38a97b8a08b4567e4b3a34ed174afd5334c7f9468ef628  https_libfetch.patch"

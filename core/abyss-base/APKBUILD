@@ -1,21 +1,157 @@
 pkgname=abyss-base
-pkgver=0
-pkgrel=2
-pkgdesc="base metapackage"
+pkgver=1
+pkgrel=0
+pkgdesc="Abyss OS base package"
 url="https://abyss.run"
-arch="noarch"
+arch="all"
 license="MIT"
-options="!check"
+options="!fhs !check"
+source="crontab
+	color_prompt
+	group
+	passwd
+	profile
+	protocols
+	services
+	"
+builddir="$srcdir/build"
 
 case "$CARCH" in
-	x86_64) depends_arch="" ;;
-	aarch64) depends_arch="" ;;
-	mips64) depends_arch="" ;;
+    x86_64) depends_arch="" ;;
+    aarch64) depends_arch="" ;;
+    mips64) depends_arch="" ;;
+    riscv64) depends_arch="" ;;
 esac
 
-depends="filesystem musl abyss-keyring apk-tools busybox ca-certificates dhcpcd openrc $depends_arch"
+depends="musl abyss-keyring apk-tools busybox ca-certificates dhcpcd openrc $depends_arch"
+provides="filesystem"
+replaces="filesystem"
 
-package() {
-	mkdir -p $pkgdir
+prepare() {
+	mkdir -p "$builddir"
 }
 
+build() {
+	cd "$builddir"
+
+	# generate shadow
+	awk -F: '{
+		pw = ":!:"
+		if ($1 == "root") { pw = "::" }
+		print($1 pw ":0:::::")
+	}' "$srcdir"/passwd > shadow
+}
+
+package() {
+	mkdir -p "$pkgdir"
+	cd "$pkgdir"
+	install -m 0755 -d \
+		dev \
+		dev/pts \
+		dev/shm \
+		etc \
+		etc/apk \
+		etc/conf.d \
+		etc/crontabs \
+		etc/init.d \
+		etc/modprobe.d \
+		etc/modules-load.d \
+		etc/periodic/15min \
+		etc/periodic/daily \
+		etc/periodic/hourly \
+		etc/periodic/monthly \
+		etc/periodic/weekly \
+		etc/profile.d \
+		etc/sysctl.d \
+		home \
+		usr/lib/firmware \
+		usr/lib/mdev \
+		mnt \
+		proc \
+		run \
+		sys \
+		usr/bin \
+		usr/share \
+		usr/share/man \
+		usr/share/misc \
+		var/cache \
+		var/cache/misc \
+		var/lib \
+		var/lib/misc \
+		var/local \
+		var/lock/subsys \
+		var/log \
+		var/opt \
+		var/spool \
+		var/spool/cron
+
+	ln -s /run var/run
+	install -d -m 0555 var/empty
+	install -d -m 0700 "$pkgdir"/root
+	install -d -m 1777 "$pkgdir"/tmp "$pkgdir"/var/tmp
+
+	install -m600 "$srcdir"/crontab "$pkgdir"/etc/crontabs/root
+	install -m655 "$srcdir"/color_prompt "$pkgdir"/etc/profile.d/color_prompt.sh
+
+	echo "localhost" > "$pkgdir"/etc/hostname
+	cat > "$pkgdir"/etc/hosts <<-EOF
+		127.0.0.1	localhost localhost.localdomain
+		::1		localhost localhost.localdomain
+	EOF
+	cat > "$pkgdir"/etc/modules <<-EOF
+		af_packet
+		ipv6
+	EOF
+	cat > "$pkgdir"/etc/shells <<-EOF
+		# valid login shells
+		/bin/sh
+		/bin/ash
+	EOF
+	cat > "$pkgdir"/etc/motd <<-EOF
+		Welcome to Abyss, how brave are you feeling today?
+
+	EOF
+	cat > "$pkgdir"/etc/sysctl.conf <<-EOF
+		# content of this file will override /etc/sysctl.d/*
+	EOF
+	cat > "$pkgdir"/etc/sysctl.d/00-abyss.conf <<-EOF
+		# Restarts computer after 120 seconds after kernel panic
+		kernel.panic = 120
+
+		# Users should not be able to create soft or hard links to files
+		# which they do not own. This mitigates several privilege
+		# escalation vulnerabilities.
+		fs.protected_hardlinks = 1
+		fs.protected_symlinks = 1
+	EOF
+
+	install -m644 \
+		"$srcdir"/group \
+		"$srcdir"/passwd \
+		"$srcdir"/profile \
+		"$srcdir"/protocols \
+		"$srcdir"/services \
+		"$pkgdir"/etc/
+
+	install -m744 "$builddir"/shadow \
+		"$pkgdir"/etc/
+
+	# symlinks
+	ln -s /etc/crontabs "$pkgdir"/var/spool/cron/crontabs
+	ln -s /proc/mounts "$pkgdir"/etc/mtab
+
+	# add lib symlinks
+	ln -vs usr/lib lib
+	# add bin symlinks
+	ln -vs usr/bin bin
+	ln -vs usr/bin sbin
+	ln -vs bin usr/sbin
+}
+
+b2sums="68b4ddc0f8df518d0a4c3ab16f8fae0e6797237e8d251199b74041a45dbd09d67ed5db51447855597e50252d5036f822f3cc3adf479e8e03d9ba6ca18bf31b9d  crontab
+b8f02729e3a8204749a7ca80d94c7cfe47c25f44fd240cc8f14f2c863b013f5fa81835c446067af099050999bcc1a6fe8030714f7f8755b5a597c3eba4ccf304  color_prompt
+1583a26e991eb227023b639c755b0bd08e9cb10d0a7a6ab5253faf6679fbfac78d187c309cc43b107b255698d1b96aa3f4732cb8a5d9c18bbc492e289d1531a9  group
+fb3208570102fdfc151b612bc2094bc6861e08b4c02b2b986ce0407eb4d396462ff6f10aa76abbf1d806efdbfcf215181ed8890fccfee49a7ee14ebbe7d49d3d  passwd
+6bfe756cbf34757a79b645011987ac71d6fb06d4c03804df6325d0787a8ed93a579e3f68a2d455f7555683202cc190e10cf4ae701cd652efe3b497ea415ee777  profile
+c2422dd82fd3fb650ebda87f9bbb3b35b32d112afa23fb81d7b0bee29c32754d383806deb5cf89103cacdce45711fa58e27f38c2df96d3fe4143262b4462148c  protocols
+c2609a4bb16a13eb4be3833409527b9804c609b04e3ea345469fa3bee15923688a89ebf43332d2f05b62169ab635b233f98860d45a53b87d6e1dc80a5d1f6611  services"

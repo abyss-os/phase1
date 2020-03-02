@@ -1,12 +1,12 @@
 pkgname=abuild
-pkgver=4.0.40
-pkgrel=1
+pkgver=4.0.41
+pkgrel=0
 pkgdesc="Script to build Alpine Packages"
 url="https://git.alpinelinux.org/cgit/abuild/"
 arch="all"
 license="GPL-2.0"
 depends="sudo pax-utils openssl apk-tools bsdtar
-	 attr pkgconf patch bzip2 xz zlib lzip diffutils flex 
+	 attr pkgconf patch bzip2 xz zlib lzip diffutils flex
 	 bison gtar unzip gmake file musl-utils pigz gzip
 	 libcxx-dev llvm-dev rsync libtool curl pkgconf zlib-dev
 	 openssl-dev musl-dev"
@@ -63,4 +63,4 @@ _rootbld() {
 	mkdir -p "$subpkgdir"
 }
 
-b2sums="03004204e46a2f283659a68b5e26b1dfd54033dacf10066aaa5dcf2157da0ff673a851b734dd5893d9236457074dacfe5e0ffa20fcd9961acfc245063cfee942  abuild-v4.0.40.tar.gz"
+b2sums="da9fc4d2941cc15b2ad9d12bbae9865aa20a511c17943f354d2e880dd983d430181d9cbff18ec40a7ed9a3499af05839caf487f1bb4c3203b391a7ccb744c1e4  abuild-v4.0.41.tar.gz"

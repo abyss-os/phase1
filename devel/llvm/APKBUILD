@@ -1,10 +1,11 @@
 pkgname=llvm
 case $CARCH in
-	mips64) pkgver=10.0.0_rc2;;
+	mips64) pkgver=10.0.0_rc3;;
+	x86_64) pkgver=10.0.0_rc3;;
 	*) pkgver=9.0.1;;
 esac
 
-pkgrel=2
+pkgrel=3
 pkgdesc="$pkgname"
 arch="all"
 url=.
@@ -19,12 +20,13 @@ case $CARCH in
         *) echo "Unknown arch" ; return 1 ;;
 esac
 
-source="https://github.com/llvm/llvm-project/archive/llvmorg-10.0.0-rc2.tar.gz
-	https://github.com/llvm/llvm-project/archive/llvmorg-10.0.0-rc1.tar.gz
-	https://github.com/llvm/llvm-project/archive/llvmorg-9.0.1.tar.gz
-	musl.patch
-	mips_softfloat.patch
-	mips64_crt.patch"
+source="https://github.com/llvm/llvm-project/archive/llvmorg-10.0.0-rc3.tar.gz
+		https://github.com/llvm/llvm-project/archive/llvmorg-9.0.1.tar.gz
+		musl.patch
+		mips_softfloat.patch
+		mips64_crt.patch
+		clang-pie-ssp.patch
+		lld-znow.patch"
 subpackages="lld llvm-binutils:binutils $pkgname-dev"
 
 builddir=$srcdir/llvm-project-llvmorg-${pkgver/_/-}
@@ -47,6 +49,9 @@ prepare() {
 		patch -p1 -d $builddir -i $srcdir/mips_softfloat.patch
 		patch -p1 -d $builddir -i $srcdir/mips64_crt.patch
 	fi
+
+	patch -p1 -d $builddir -i $srcdir/clang-pie-ssp.patch
+	patch -p1 -d $builddir -i $srcdir/lld-znow.patch
 
 	cmake -G Ninja -Wno-dev \
 			-DCMAKE_C_COMPILER=$CC \
@@ -195,9 +200,12 @@ lld_aalt() {
     DESTDIR=$subpkgdir aalt-bin -R -g llvm -p ld -f /usr/bin/lld
 }
 
-b2sums="6e701eddbd2313e777c7b37dff8455a08d3c599d01055b60afc0319373d4709deb429aac6bf9e80c4d2e2ab8ade03bf5b398b6ccd8882e4bde608d10cdbf2284  llvmorg-10.0.0-rc2.tar.gz
+b2sums="432fe0c1e74d3020a269a256e6e456cbfa0b7166dd3f86df6caf3a55e1931c022285fe8afdc4d8998c729c5471acf5308abb336782ddec2ef9b0f58d1ccb5a3c  llvmorg-10.0.0-rc3.tar.gz
+6e701eddbd2313e777c7b37dff8455a08d3c599d01055b60afc0319373d4709deb429aac6bf9e80c4d2e2ab8ade03bf5b398b6ccd8882e4bde608d10cdbf2284  llvmorg-10.0.0-rc2.tar.gz
 a729d37d96ba498cb865c6f708734dccb796b2caabb69167b9aa3b0e12c788f2a5980a048b99d5603da3d26af909fb31f406b4f4743cabae56c45f829a7bf695  llvmorg-10.0.0-rc1.tar.gz
 b86e405f2b8e00436045fd409fe19cdde75c797b1192c62a22b5ec75e6b4dc8e874a0f33008dc31562445e4cbe53a992b6f48c684255a6a1ef261e595b8b161f  llvmorg-9.0.1.tar.gz
 4ac74027fdfe0def3a1601df2f65ad1a8fe47e41cfa4df2065863288a5ebe65057a5c4d0791bf817d8dfab923d0bc39d804e968bd3a90ed3f6720d2fbf1734aa  musl.patch
 8e23d19518bc2bba4009c30ba6d8c981e94b6e293a95a29ebbb9be7c9a7a40b21900a7e526529149847a42bd98899306a1af9b99c819e290d4a67e34f4ea32c3  mips_softfloat.patch
-916376a80bde2f7c009a8ce2f8663f95c2e87271047a5476dc429ab014141fdd45689ebc5e3c4ca1cb11d3cd3255ef84d5425a8725cb91cb95f08ee6b56136c5  mips64_crt.patch"
+916376a80bde2f7c009a8ce2f8663f95c2e87271047a5476dc429ab014141fdd45689ebc5e3c4ca1cb11d3cd3255ef84d5425a8725cb91cb95f08ee6b56136c5  mips64_crt.patch
+7991221eca8a3f32607de7da91c02928d95cfae8d2af3516d403d2edd1a43bf7bb97280b6584146cd9ed51123b2bfe686a460ac1035131d115207d55a7debcfa  clang-pie-ssp.patch
+ada8faf1f1bbdfc52b0493ba563b91de954e6613b8be0af7deeabdf0b621a69a45e5acc753ecb487f461360bb2ec99b4f510a8872bff3afe90e9e7b91de12997  lld-znow.patch"

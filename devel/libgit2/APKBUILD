@@ -1,5 +1,5 @@
 pkgname=libgit2
-pkgver=0.28.4
+pkgver=0.99.0
 pkgrel=0
 pkgdesc="A linkable library for Git"
 url="https://libgit2.org/"
@@ -47,4 +47,4 @@ package() {
 	make -C build-static DESTDIR="$pkgdir" install
 }
 
-b2sums="7dc94dce69c27f6de3736b94b4d80b727e3e2a7db255a9eab7422cebd93a3ea1a6f47d1de6c3fbe4ba5bcb28ade9b23a989c5b54c06eafeaf30e382f3b859cdf  libgit2-0.28.4.tar.gz"
+b2sums="2ff6c48d29844c8efd292b636c018403f49ae5eef1ef41e2c8755cc35d935677fa965b52c05724aa133f8542a266bb0e0fabb34fcf710127332bd6137ea4ff12  libgit2-0.99.0.tar.gz"

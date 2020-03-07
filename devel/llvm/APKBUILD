@@ -6,7 +6,7 @@ case $CARCH in
 	*) pkgver=9.0.1;;
 esac
 
-pkgrel=3
+pkgrel=4
 pkgdesc="$pkgname"
 arch="all"
 url=.
@@ -14,7 +14,7 @@ license=.
 
 case $CARCH in
         aarch64) _targets="AArch64" _linker="lld" lld="ON";;
-        x86_64) _targets="X86" _linker="lld" lld="ON";;
+        x86_64) _targets="all" _linker="lld" lld="ON";;
         mips64) _targets="Mips" _linker="gnu-ld" lld="OFF";;
         riscv64) _targets="RISCV" _linker="gnu-ld" lld="OFF";;
         ppc64le) _targets="PowerPC" _linker="gnu-ld" lld="OFF";;

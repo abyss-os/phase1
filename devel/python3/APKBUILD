@@ -1,5 +1,5 @@
 pkgname=python3
-pkgver=3.8.1
+pkgver=3.8.2
 _basever="${pkgver%.*}"
 pkgrel=0
 pkgdesc="A high-level scripting language"
@@ -143,5 +143,5 @@ wininst() {
 		"$subpkgdir"/usr/lib/python$_basever/distutils/command
 }
 
-b2sums="db1841625de89b812cadcd538a990401a4e49d43968dce733c289121e9de9749eaf39e1c772a32e10ed2b40bef215b19ae9c7d88e0ec9e99cd3d467406ea063c  Python-3.8.1.tar.xz
+b2sums="f42b35bea5e65f1f0a3fa6f1fd3d749fba3fa46d958608a314c1a98d0e3ca890e856da4d40ee489fe546fc02ce0fc9fa2daaaba96a8928d92ae7eb3d2dda3fe4  Python-3.8.2.tar.xz
 e05b5e9fdc01baa063f7dc64ec47a14d9658233df32146a79944fdd20a70d4604539c24bf6fca977555f15fe322f3dbee7c8d7e1fc64ed0238981a4e9b88e5d6  musl-find_library.patch"

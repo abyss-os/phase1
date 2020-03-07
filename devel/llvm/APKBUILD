@@ -2,6 +2,7 @@ pkgname=llvm
 case $CARCH in
 	mips64) pkgver=10.0.0_rc3;;
 	x86_64) pkgver=10.0.0_rc3;;
+	aarch64) pkgver=10.0.0_rc3;;
 	*) pkgver=9.0.1;;
 esac
 

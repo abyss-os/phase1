@@ -7,7 +7,7 @@ arch="all"
 license="GPL-2.0-or-later"
 depends=""
 makedepends="zlib-dev openssl-dev curl-dev expat-dev perl-dev python3-dev
-	pcre2-dev asciidoc xmlto perl-error"
+	pcre2-dev asciidoc xmlto perl-error gettext-tiny"
 options=""
 # note that order matters
 subpackages="$pkgname-doc

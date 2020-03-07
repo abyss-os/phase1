@@ -1,6 +1,5 @@
-# Maintainer: Drew DeVault <sir@cmpwn.com>
 pkgname=libedit
-pkgver=20190324.3.1
+pkgver=20191231.3.1
 _ver=${pkgver/./-}
 pkgrel=1
 pkgdesc="BSD line editing library"
@@ -41,4 +40,4 @@ package() {
 	rm "$pkgdir"/usr/share/man/man3/history.3*
 }
 
-b2sums="c48161626a5cf3140f75ec1df1d9652d961e568a0464a34f9e679f51e1e991a14c9d04a05f0de3815c4a38a9f17789a18e89ebd026450fa1053ef6420c045141  libedit-20190324-3.1.tar.gz"
+b2sums="e209a8f7cda164d8e4d6f3c23b35af91a466c0acbdabcdca113b7dfcd969a0a3386143eb56d486440da3aab37378850c5eb04415446c604cc4bb36de3743fd43  libedit-20191231-3.1.tar.gz"

@@ -1,6 +1,6 @@
 pkgname=fuse
-pkgver=2.9.8
-pkgrel=5
+pkgver=2.9.9
+pkgrel=0
 pkgdesc="A library that makes it possible to implement a filesystem in a userspace program."
 url="https://github.com/libfuse/"
 arch="all"
@@ -39,5 +39,5 @@ package() {
 	rmdir -v ${pkgdir}/sbin
 }
 
-b2sums="803eebea510834676379df8c9514050efcf47d83c06ba1f5b5756d27f5c32d3a0cc199d826b0c041118c5d2260ff023f58432a0d7b623807c0a4af4da7c34eff  fuse-2.9.8.tar.gz
+b2sums="9e9141380bda46eb0bcce325c6fd293fe3844fe884a4952bb38d4b89dc48b728ffcc891038b3a7a861f05acfacce9dd7bb0e11d600609f3ad0ab278ccbe98847  fuse-2.9.9.tar.gz
 28b114d23d2b491dae00ef4cb35f4fb8af430ecba5cdeb4f078f6d5c6c39f3d1293dfb15c27a5429d06885343729e73f30e4548b0b31a4b5eeb986fc6c931179  fix-realpath.patch"

@@ -1,7 +1,7 @@
 pkgname=fuse3
 _pkgname=fuse
-pkgver=3.8.0
-pkgrel=5
+pkgver=3.9.0
+pkgrel=0
 pkgdesc="The reference implementation of the Linux FUSE (Filesystem in Userspace) interface"
 url="https://github.com/libfuse/libfuse"
 arch="all"
@@ -63,7 +63,7 @@ _openrc() {
 	install_if="openrc fuse-common=$pkgver-r$pkgrel"
 }
 
-b2sums="f921b739489e8eb8b2a78b719c9761f330de839f151f787a6db37d8d004ef9b90022bfe3c5d24ceab333cde8741340ede0315a5b92cabdaf87fb1b291f72e292  fuse-3.8.0.tar.xz
+b2sums="2fff93431e59e370189fb1527de7bff3863d20e1a62628bb56a6671077a1c919b394ddac66537a1ef7c2991556b1817b2c7f6a92c161ebfffbc804466e19e5e7  fuse-3.9.0.tar.xz
 dc7953cea19eb7f9022acadbfa049ceffc31009dbbefe96f419d796d6488eae42a3badbb19962f96a47c77100abb237cb44cea5ed759d4ab98954dd630de3299  fix-realpath.patch
 81ad61a7fce781ede57b73c606691ae0a6bc9cbb664287dfc0ff4570d2856ab4ffe328b6c43dc3a68a8cc0ab95b1876ef81d96b5e358d9cdb278315ba375177e  add-includes.patch
 802821596154d3dabae5c56367656d46a714c22a284cadf8ca78b2ca01a68fce8cefc37576cd26a14551452ff910a5317544e39b8fc4bddf74d80879fb7a0334  fuse.initd

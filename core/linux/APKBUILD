@@ -4,8 +4,7 @@ pkgrel=0
 pkgdesc="Linux kernel"
 url="http://kernel.org"
 #depends="mkinitfs"
-_depends_dev="perl elfutils-dev bash flex bison"
-makedepends="$_depends_dev gsed bc linux-dev openssl-dev"
+makedepends="perl elfutils-dev bash flex bison gsed bc linux-dev openssl-dev binutils"
 options="!strip"
 _config=${config:-config-vanilla.${CARCH}}
 install=
@@ -23,7 +22,7 @@ license="GPL-2.0"
 _carch=${CARCH}
 case "$_carch" in
 aarch64*) _carch="arm64" ;;
-mips*) _carch="mips"; export CC=gcc CXX=g++ AS=gnu-as LD=ld.lld ;;
+mips*) _carch="mips" ;;
 ppc*) _carch="powerpc" ;;
 x86*) _carch="x86" ;;
 riscv64*) _carch="riscv" ;;
@@ -37,7 +36,6 @@ prepare() {
 	make -C ${srcdir}/linux-${pkgver} O=${srcdir}/build \
 		ARCH="$_carch" HOSTCC="$CC" CC="$CC" AS=$AS HOSTAS=$AS HOSTLD=$LD LD=$LD \
 		listnewconfig oldconfig
-		
 }
 
 build() {

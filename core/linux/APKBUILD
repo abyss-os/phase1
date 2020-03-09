@@ -1,6 +1,6 @@
 pkgname=linux
 pkgver=5.4.16
-pkgrel=0
+pkgrel=1
 pkgdesc="Linux kernel"
 url="http://kernel.org"
 #depends="mkinitfs"
@@ -18,6 +18,8 @@ subpackages="$pkgname-dev"
 
 arch="all"
 license="GPL-2.0"
+
+export AS=gnu-as LD=gnu-ld
 
 _carch=${CARCH}
 case "$_carch" in

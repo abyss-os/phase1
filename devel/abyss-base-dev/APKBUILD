@@ -1,6 +1,6 @@
 pkgname=abyss-base-dev
 pkgver=0
-pkgrel=3
+pkgrel=4
 pkgdesc="devel metapackage"
 url="https://abyss.run"
 arch="noarch"
@@ -13,7 +13,7 @@ case "$CARCH" in
 	mips64) depends_arch="binutils" ;;
 esac
 
-depends="abyss-base llvm-dev clang abuild linux-dev musl-dev toolchain $depends_arch"
+depends="abyss-base llvm-dev clang abuild linux-dev musl-dev toolchain git $depends_arch"
 
 package() {
 	mkdir -p $pkgdir

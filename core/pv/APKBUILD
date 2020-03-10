@@ -1,0 +1,37 @@
+pkgname=pv
+pkgver=1.6.6
+pkgrel=0
+pkgdesc="CLI tool for monitoring the progress of data through a pipeline"
+url="http://www.ivarch.com/programs/pv.shtml"
+arch="all"
+license="Artistic-2.0"
+subpackages="$pkgname-doc"
+source="https://www.ivarch.com/programs/sources/pv-$pkgver.tar.bz2"
+
+builddir="$srcdir/$pkgname-$pkgver"
+
+build() {
+	cd "$builddir"
+	./configure \
+		--build=$CBUILD \
+		--host=$CHOST \
+		--prefix=/usr \
+		--sbindir=/usr/bin \
+		--sysconfdir=/etc \
+		--mandir=/usr/share/man \
+		--infodir=/usr/share/info \
+		--localstatedir=/var
+	make
+}
+
+check() {
+	cd "$builddir"
+	make check
+}
+
+package() {
+	cd "$builddir"
+	make DESTDIR="$pkgdir" install
+}
+
+b2sums="1cfb60e49f6301f0d990467a58013522bbc1e28e2936a1a2141918af05149b59b6cc494f290d99ee7072247b8f0e230b799cd5dae6f8aa59d116691319e952cb  pv-1.6.6.tar.bz2"

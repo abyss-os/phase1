@@ -1,6 +1,6 @@
 pkgname=apk-tools
 pkgver=2.10.4
-pkgrel=6
+pkgrel=7
 pkgdesc="Alpine Package Keeper - package manager for alpine"
 makedepends_build="openssl"
 makedepends_host="zlib-dev openssl-dev linux-dev"

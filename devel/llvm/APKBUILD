@@ -1,9 +1,9 @@
 pkgname=llvm
 case $CARCH in
-	*) pkgver=10.0.0_rc3;;
+	*) pkgver=10.0.0_rc4;;
 esac
 
-pkgrel=4
+pkgrel=5
 pkgdesc="$pkgname"
 arch="all"
 url=.
@@ -18,7 +18,7 @@ case $CARCH in
         *) echo "Unknown arch" ; return 1 ;;
 esac
 
-source="https://github.com/llvm/llvm-project/archive/llvmorg-10.0.0-rc3.tar.gz
+source="https://github.com/llvm/llvm-project/archive/llvmorg-10.0.0-rc4.tar.gz
 		musl.patch
 		mips_softfloat.patch
 		mips64_crt.patch
@@ -195,7 +195,7 @@ lld_aalt() {
     DESTDIR=$subpkgdir aalt-bin -R -g llvm -p ld -f /usr/bin/lld
 }
 
-b2sums="432fe0c1e74d3020a269a256e6e456cbfa0b7166dd3f86df6caf3a55e1931c022285fe8afdc4d8998c729c5471acf5308abb336782ddec2ef9b0f58d1ccb5a3c  llvmorg-10.0.0-rc3.tar.gz
+b2sums="66c497fa682b9bcbdef3776f540e6b2781286df3405b00ab335aa405a19418d9c4571b301a6814b526e363bb9c0b7c0be0dfc85444fb9d636ecf11ee788b2cdd  llvmorg-10.0.0-rc4.tar.gz
 4ac74027fdfe0def3a1601df2f65ad1a8fe47e41cfa4df2065863288a5ebe65057a5c4d0791bf817d8dfab923d0bc39d804e968bd3a90ed3f6720d2fbf1734aa  musl.patch
 8e23d19518bc2bba4009c30ba6d8c981e94b6e293a95a29ebbb9be7c9a7a40b21900a7e526529149847a42bd98899306a1af9b99c819e290d4a67e34f4ea32c3  mips_softfloat.patch
 916376a80bde2f7c009a8ce2f8663f95c2e87271047a5476dc429ab014141fdd45689ebc5e3c4ca1cb11d3cd3255ef84d5425a8725cb91cb95f08ee6b56136c5  mips64_crt.patch

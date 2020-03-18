@@ -1,5 +1,5 @@
 pkgname=libcxx
-pkgver=10.0.0_rc2
+pkgver=10.0.0_rc4
 pkgrel=0
 pkgdesc="$pkgname"
 arch="all"
@@ -58,5 +58,5 @@ package() {
 	DESTDIR="$pkgdir" ninja install-libcxx install-unwind install-libcxx-headers
 }
 
-b2sums="6e701eddbd2313e777c7b37dff8455a08d3c599d01055b60afc0319373d4709deb429aac6bf9e80c4d2e2ab8ade03bf5b398b6ccd8882e4bde608d10cdbf2284  llvmorg-10.0.0-rc2.tar.gz
+b2sums="66c497fa682b9bcbdef3776f540e6b2781286df3405b00ab335aa405a19418d9c4571b301a6814b526e363bb9c0b7c0be0dfc85444fb9d636ecf11ee788b2cdd  llvmorg-10.0.0-rc4.tar.gz
 4ac74027fdfe0def3a1601df2f65ad1a8fe47e41cfa4df2065863288a5ebe65057a5c4d0791bf817d8dfab923d0bc39d804e968bd3a90ed3f6720d2fbf1734aa  musl.patch"

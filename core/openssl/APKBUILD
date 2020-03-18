@@ -1,7 +1,7 @@
 pkgname=openssl
-pkgver=1.1.1d
+pkgver=1.1.1e
 _abiver=${pkgver%.*}
-pkgrel=1
+pkgrel=0
 pkgdesc="Toolkit for Transport Layer Security (TLS)"
 url="https://www.openssl.org"
 arch="all"
@@ -80,5 +80,5 @@ _libssl() {
 	mv "$pkgdir"/usr/lib/libssl* "$subpkgdir"/usr/lib/
 }
 
-b2sums="d3155f07b487ebd8dd4fe25396c874f9af18b5cfd7e622298d29c4f2c8ce14ad4534609d321314a4bcd0d44414e1306190340daaacd3c8fca061c04498446244  openssl-1.1.1d.tar.gz
-fcf4f2180fff2f3472d642377bbcb9c881511e6efcc3b65311d8a3c6d232ce0c85681d1c102b1ff971e23352ea3179c094f1cb2d1ca538f831ec4142ec298fbb  dgst.patch"
+b2sums="d8731ece2f0929fdb71c324480128e182e41bda1b9ef32b9a0ff2d7a1120ad45d918ee6162fbf038bb7459cfad283307d5bc85777fe75fd7b3c11ebab8cfe3ec  openssl-1.1.1e.tar.gz
+75cd58c9096917c73fc5320722a4695c6ad3ae422338791a40bd005b652e1ea56d8676249645a496abf7b7559d9a698189bae134dfd1ec4b81c7e55b88e16509  dgst.patch"

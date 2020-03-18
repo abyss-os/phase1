@@ -1,0 +1,423 @@
+diff --git a/include/seccomp-syscalls.h b/include/seccomp-syscalls.h
+index 3c958df..d7eb383 100644
+--- a/include/seccomp-syscalls.h
++++ b/include/seccomp-syscalls.h
+@@ -273,6 +273,7 @@
+ #define __PNR_timerfd_settime64			-10239
+ #define __PNR_utimensat_time64			-10240
+ #define __PNR_ppoll				-10241
++#define __PNR_renameat				-10242
+ 
+ /*
+  * libseccomp syscall definitions
+@@ -1494,7 +1495,11 @@
+ #define __SNR_rename			__PNR_rename
+ #endif
+ 
++#ifdef __NR_renameat
+ #define __SNR_renameat			__NR_renameat
++#else
++#define __SNR_renameat			__PNR_renameat
++#endif
+ 
+ #define __SNR_renameat2			__NR_renameat2
+ 
+diff --git a/include/seccomp.h.in b/include/seccomp.h.in
+index 07a504a..2292c7a 100644
+--- a/include/seccomp.h.in
++++ b/include/seccomp.h.in
+@@ -193,6 +193,18 @@ struct scmp_arg_cmp {
+ #define SCMP_ARCH_PARISC	AUDIT_ARCH_PARISC
+ #define SCMP_ARCH_PARISC64	AUDIT_ARCH_PARISC64
+ 
++/**
++ * The RISC-V architecture tokens
++ */
++/* RISC-V support for audit was merged in 5.0-rc1 */
++#ifndef AUDIT_ARCH_RISCV64
++#ifndef EM_RISCV
++#define EM_RISCV		243
++#endif /* EM_RISCV */
++#define AUDIT_ARCH_RISCV64	(EM_RISCV|__AUDIT_ARCH_64BIT|__AUDIT_ARCH_LE)
++#endif /* AUDIT_ARCH_RISCV64 */
++#define SCMP_ARCH_RISCV64	AUDIT_ARCH_RISCV64
++
+ /**
+  * Convert a syscall name into the associated syscall number
+  * @param x the syscall name
+diff --git a/src/Makefile.am b/src/Makefile.am
+index 2e7e38d..47e2f33 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -42,6 +42,7 @@ SOURCES_ALL = \
+ 	arch-parisc.h arch-parisc.c arch-parisc64.c arch-parisc-syscalls.c \
+ 	arch-ppc.h arch-ppc.c arch-ppc-syscalls.c \
+ 	arch-ppc64.h arch-ppc64.c arch-ppc64-syscalls.c \
++	arch-riscv64.h arch-riscv64.c arch-riscv64-syscalls.c \
+ 	arch-s390.h arch-s390.c arch-s390-syscalls.c \
+ 	arch-s390x.h arch-s390x.c arch-s390x-syscalls.c
+ 
+diff --git a/src/arch-syscall-dump.c b/src/arch-syscall-dump.c
+index 9601bc0..7c267fc 100644
+--- a/src/arch-syscall-dump.c
++++ b/src/arch-syscall-dump.c
+@@ -41,6 +41,7 @@
+ #include "arch-parisc.h"
+ #include "arch-ppc.h"
+ #include "arch-ppc64.h"
++#include "arch-riscv64.h"
+ #include "arch-s390.h"
+ #include "arch-s390x.h"
+ 
+@@ -127,6 +128,9 @@ int main(int argc, char *argv[])
+ 		case SCMP_ARCH_PPC64LE:
+ 			sys = ppc64_syscall_iterate(iter);
+ 			break;
++		case SCMP_ARCH_RISCV64:
++			sys = riscv64_syscall_iterate(iter);
++			break;
+ 		case SCMP_ARCH_S390:
+ 			sys = s390_syscall_iterate(iter);
+ 			break;
+diff --git a/src/arch-syscall-validate b/src/arch-syscall-validate
+index b9e0bce..a47eb63 100755
+--- a/src/arch-syscall-validate
++++ b/src/arch-syscall-validate
+@@ -392,6 +392,45 @@ function dump_lib_ppc64() {
+ 	dump_lib_arch ppc64
+ }
+ 
++#
++# Dump the riscv64 system syscall table
++#
++# Arguments:
++#     1    path to the kernel source
++#
++#  Dump the architecture's syscall table to stdout.
++#
++function dump_sys_riscv64() {
++	gcc -E -dM -I$1/include/uapi \
++		-D__BITS_PER_LONG=64 -D__ARCH_WANT_NEW_STAT \
++		$1/include/uapi/asm-generic/unistd.h | \
++		grep "^#define __NR_" | \
++		sed -e '/__NR_syscalls/d' | \
++		sed -e '/__NR_arch_specific_syscall/d' | \
++		sed -e 's/#define[ \t]\+__NR_\([^ \t]\+\)[ \t]\+\(.*\)/\1\t\2/' | \
++		sed -e 's/__NR3264_fadvise64/223/' | \
++		sed -e 's/__NR3264_fcntl/25/' | \
++		sed -e 's/__NR3264_fstatat/79/' | \
++		sed -e 's/__NR3264_fstatfs/44/' | \
++		sed -e 's/__NR3264_ftruncate/46/' | \
++		sed -e 's/__NR3264_lseek/62/' | \
++		sed -e 's/__NR3264_mmap/222/' | \
++		sed -e 's/__NR3264_sendfile/71/' | \
++		sed -e 's/__NR3264_statfs/43/' | \
++		sed -e 's/__NR3264_truncate/45/' | \
++		sed -e 's/__NR3264_fstat/80/' | \
++		sort
++}
++
++#
++# Dump the riscv64 library syscall table
++#
++#  Dump the library's syscall table to stdout.
++#
++function dump_lib_riscv64() {
++	dump_lib_arch riscv64
++}
++
+ #
+ # Dump the s390 system syscall table
+ #
+@@ -487,6 +526,9 @@ function dump_sys() {
+ 	ppc64)
+ 		dump_sys_ppc64 "$2"
+ 		;;
++	riscv64)
++		dump_sys_riscv64 "$2"
++		;;
+ 	s390)
+ 		dump_sys_s390 "$2"
+ 		;;
+@@ -542,6 +584,9 @@ function dump_lib() {
+ 	ppc64)
+ 		dump_lib_ppc64 "$2"
+ 		;;
++	riscv64)
++		dump_lib_riscv64 "$2"
++		;;
+ 	s390)
+ 		dump_lib_s390 "$2"
+ 		;;
+diff --git a/src/arch.c b/src/arch.c
+index bfa664f..83c2c9b 100644
+--- a/src/arch.c
++++ b/src/arch.c
+@@ -41,6 +41,7 @@
+ #include "arch-parisc.h"
+ #include "arch-ppc.h"
+ #include "arch-ppc64.h"
++#include "arch-riscv64.h"
+ #include "arch-s390.h"
+ #include "arch-s390x.h"
+ #include "db.h"
+@@ -94,6 +95,8 @@ const struct arch_def *arch_def_native = &arch_def_ppc;
+ const struct arch_def *arch_def_native = &arch_def_s390x;
+ #elif __s390__
+ const struct arch_def *arch_def_native = &arch_def_s390;
++#elif __riscv && __riscv_xlen == 64
++const struct arch_def *arch_def_native = &arch_def_riscv64;
+ #else
+ #error the arch code needs to know about your machine type
+ #endif /* machine type guess */
+@@ -156,6 +159,8 @@ const struct arch_def *arch_def_lookup(uint32_t token)
+ 		return &arch_def_s390;
+ 	case SCMP_ARCH_S390X:
+ 		return &arch_def_s390x;
++	case SCMP_ARCH_RISCV64:
++		return &arch_def_riscv64;
+ 	}
+ 
+ 	return NULL;
+@@ -206,6 +211,8 @@ const struct arch_def *arch_def_lookup_name(const char *arch_name)
+ 		return &arch_def_s390;
+ 	else if (strcmp(arch_name, "s390x") == 0)
+ 		return &arch_def_s390x;
++	else if (strcmp(arch_name, "riscv64") == 0)
++		return &arch_def_riscv64;
+ 
+ 	return NULL;
+ }
+diff --git a/src/gen_pfc.c b/src/gen_pfc.c
+index 75d8507..8186f0d 100644
+--- a/src/gen_pfc.c
++++ b/src/gen_pfc.c
+@@ -87,6 +87,8 @@ static const char *_pfc_arch(const struct arch_def *arch)
+ 		return "s390x";
+ 	case SCMP_ARCH_S390:
+ 		return "s390";
++	case SCMP_ARCH_RISCV64:
++		return "riscv64";
+ 	default:
+ 		return "UNKNOWN";
+ 	}
+diff --git a/src/python/libseccomp.pxd b/src/python/libseccomp.pxd
+index 49d0be4..1888ad8 100644
+--- a/src/python/libseccomp.pxd
++++ b/src/python/libseccomp.pxd
+@@ -50,6 +50,7 @@ cdef extern from "seccomp.h":
+         SCMP_ARCH_PPC64LE
+         SCMP_ARCH_S390
+         SCMP_ARCH_S390X
++        SCMP_ARCH_RISCV64
+ 
+     cdef enum scmp_filter_attr:
+         SCMP_FLTATR_ACT_DEFAULT
+diff --git a/src/python/seccomp.pyx b/src/python/seccomp.pyx
+index 121a0d6..b57dde2 100644
+--- a/src/python/seccomp.pyx
++++ b/src/python/seccomp.pyx
+@@ -205,6 +205,7 @@ cdef class Arch:
+     PARISC64 - 64-bit PA-RISC
+     PPC64 - 64-bit PowerPC
+     PPC - 32-bit PowerPC
++    RISCV64 - 64-bit RISC-V
+     """
+ 
+     cdef int _token
+@@ -228,6 +229,7 @@ cdef class Arch:
+     PPC64LE = libseccomp.SCMP_ARCH_PPC64LE
+     S390 = libseccomp.SCMP_ARCH_S390
+     S390X = libseccomp.SCMP_ARCH_S390X
++    RISCV64 = libseccomp.SCMP_ARCH_RISCV64
+ 
+     def __cinit__(self, arch=libseccomp.SCMP_ARCH_NATIVE):
+         """ Initialize the architecture object.
+diff --git a/src/system.c b/src/system.c
+index 3e480e6..ace4a65 100644
+--- a/src/system.c
++++ b/src/system.c
+@@ -74,6 +74,7 @@ int sys_chk_seccomp_syscall(void)
+ 	case SCMP_ARCH_PPC64LE:
+ 	case SCMP_ARCH_S390:
+ 	case SCMP_ARCH_S390X:
++	case SCMP_ARCH_RISCV64:
+ 		break;
+ 	default:
+ 		goto unsupported;
+diff --git a/tests/15-basic-resolver.c b/tests/15-basic-resolver.c
+index 0c1eefe..2679270 100644
+--- a/tests/15-basic-resolver.c
++++ b/tests/15-basic-resolver.c
+@@ -45,6 +45,7 @@ unsigned int arch_list[] = {
+ 	SCMP_ARCH_S390X,
+ 	SCMP_ARCH_PARISC,
+ 	SCMP_ARCH_PARISC64,
++	SCMP_ARCH_RISCV64,
+ 	-1
+ };
+ 
+diff --git a/tests/16-sim-arch_basic.c b/tests/16-sim-arch_basic.c
+index 7495f82..2405cb4 100644
+--- a/tests/16-sim-arch_basic.c
++++ b/tests/16-sim-arch_basic.c
+@@ -84,6 +84,9 @@ int main(int argc, char *argv[])
+ 	if (rc != 0)
+ 		goto out;
+ 	rc = seccomp_arch_add(ctx, SCMP_ARCH_PPC64LE);
++	if (rc != 0)
++		goto out;
++	rc = seccomp_arch_add(ctx, SCMP_ARCH_RISCV64);
+ 	if (rc != 0)
+ 		goto out;
+ 
+@@ -150,6 +153,9 @@ int main(int argc, char *argv[])
+ 	rc = seccomp_arch_remove(ctx, SCMP_ARCH_PPC64LE);
+ 	if (rc != 0)
+ 		goto out;
++	rc = seccomp_arch_remove(ctx, SCMP_ARCH_RISCV64);
++	if (rc != 0)
++		goto out;
+ 
+ out:
+ 	seccomp_release(ctx);
+diff --git a/tests/16-sim-arch_basic.py b/tests/16-sim-arch_basic.py
+index 7d7a05f..846553f 100755
+--- a/tests/16-sim-arch_basic.py
++++ b/tests/16-sim-arch_basic.py
+@@ -44,6 +44,7 @@ def test(args):
+     f.add_arch(Arch("mipsel64"))
+     f.add_arch(Arch("mipsel64n32"))
+     f.add_arch(Arch("ppc64le"))
++    f.add_arch(Arch("riscv64"))
+     f.add_rule(ALLOW, "read", Arg(0, EQ, sys.stdin.fileno()))
+     f.add_rule(ALLOW, "write", Arg(0, EQ, sys.stdout.fileno()))
+     f.add_rule(ALLOW, "write", Arg(0, EQ, sys.stderr.fileno()))
+diff --git a/tests/23-sim-arch_all_le_basic.c b/tests/23-sim-arch_all_le_basic.c
+index 5672980..32739e5 100644
+--- a/tests/23-sim-arch_all_le_basic.c
++++ b/tests/23-sim-arch_all_le_basic.c
+@@ -69,6 +69,9 @@ int main(int argc, char *argv[])
+ 	if (rc != 0)
+ 		goto out;
+ 	rc = seccomp_arch_add(ctx, seccomp_arch_resolve_name("ppc64le"));
++	if (rc != 0)
++		goto out;
++	rc = seccomp_arch_add(ctx, seccomp_arch_resolve_name("riscv64"));
+ 	if (rc != 0)
+ 		goto out;
+ 
+diff --git a/tests/23-sim-arch_all_le_basic.py b/tests/23-sim-arch_all_le_basic.py
+index 5927f37..33eedb1 100755
+--- a/tests/23-sim-arch_all_le_basic.py
++++ b/tests/23-sim-arch_all_le_basic.py
+@@ -40,6 +40,7 @@ def test(args):
+     f.add_arch(Arch("mipsel64"))
+     f.add_arch(Arch("mipsel64n32"))
+     f.add_arch(Arch("ppc64le"))
++    f.add_arch(Arch("riscv64"))
+     f.add_rule(ALLOW, "read", Arg(0, EQ, sys.stdin.fileno()))
+     f.add_rule(ALLOW, "write", Arg(0, EQ, sys.stdout.fileno()))
+     f.add_rule(ALLOW, "write", Arg(0, EQ, sys.stderr.fileno()))
+diff --git a/tests/regression b/tests/regression
+index 56822fb..ef98c3d 100755
+--- a/tests/regression
++++ b/tests/regression
+@@ -25,7 +25,8 @@ GLBL_ARCH_LE_SUPPORT=" \
+ 	x86 x86_64 x32 \
+ 	arm aarch64 \
+ 	mipsel mipsel64 mipsel64n32 \
+-	ppc64le"
++	ppc64le \
++	riscv64"
+ GLBL_ARCH_BE_SUPPORT=" \
+ 	mips mips64 mips64n32 \
+ 	parisc parisc64 \
+@@ -46,6 +47,7 @@ GLBL_ARCH_64B_SUPPORT=" \
+ 	mips64 \
+ 	parisc64 \
+ 	ppc64 \
++	riscv64 \
+ 	s390x"
+ 
+ GLBL_SYS_ARCH="../tools/scmp_arch_detect"
+@@ -777,7 +779,7 @@ function run_test_live() {
+ 
+ 	# setup the arch specific return values
+ 	case "$arch" in
+-	x86|x86_64|x32|arm|aarch64|parisc|parisc64|ppc|ppc64|ppc64le|ppc|s390|s390x)
++	x86|x86_64|x32|arm|aarch64|parisc|parisc64|ppc|ppc64|ppc64le|ppc|s390|s390x|riscv64)
+ 		rc_kill_process=159
+ 		rc_kill=159
+ 		rc_allow=160
+diff --git a/tools/scmp_arch_detect.c b/tools/scmp_arch_detect.c
+index ad43f2d..b844a68 100644
+--- a/tools/scmp_arch_detect.c
++++ b/tools/scmp_arch_detect.c
+@@ -120,6 +120,9 @@ int main(int argc, char *argv[])
+ 		case SCMP_ARCH_S390X:
+ 			printf("s390x\n");
+ 			break;
++		case SCMP_ARCH_RISCV64:
++			printf("riscv64\n");
++			break;
+ 		default:
+ 			printf("unknown\n");
+ 		}
+diff --git a/tools/scmp_bpf_disasm.c b/tools/scmp_bpf_disasm.c
+index 27fba9a..5c914b4 100644
+--- a/tools/scmp_bpf_disasm.c
++++ b/tools/scmp_bpf_disasm.c
+@@ -508,6 +508,8 @@ int main(int argc, char *argv[])
+ 				arch = AUDIT_ARCH_S390;
+ 			else if (strcmp(optarg, "s390x") == 0)
+ 				arch = AUDIT_ARCH_S390X;
++			else if (strcmp(optarg, "riscv64") == 0)
++				arch = AUDIT_ARCH_RISCV64;
+ 			else
+ 				exit_usage(argv[0]);
+ 			break;
+diff --git a/tools/scmp_bpf_sim.c b/tools/scmp_bpf_sim.c
+index 4d30822..a381314 100644
+--- a/tools/scmp_bpf_sim.c
++++ b/tools/scmp_bpf_sim.c
+@@ -285,6 +285,8 @@ int main(int argc, char *argv[])
+ 				arch = AUDIT_ARCH_S390;
+ 			else if (strcmp(optarg, "s390x") == 0)
+ 				arch = AUDIT_ARCH_S390X;
++			else if (strcmp(optarg, "riscv64") == 0)
++				arch = AUDIT_ARCH_RISCV64;
+ 			else
+ 				exit_fault(EINVAL);
+ 			break;
+diff --git a/tools/util.c b/tools/util.c
+index 7122335..741b2a2 100644
+--- a/tools/util.c
++++ b/tools/util.c
+@@ -78,6 +78,8 @@
+ #define ARCH_NATIVE		AUDIT_ARCH_S390X
+ #elif __s390__
+ #define ARCH_NATIVE		AUDIT_ARCH_S390
++#elif __riscv && __riscv_xlen == 64
++#define ARCH_NATIVE		AUDIT_ARCH_RISCV64
+ #else
+ #error the simulator code needs to know about your machine type
+ #endif
+diff --git a/tools/util.h b/tools/util.h
+index 08c4839..6c2ca33 100644
+--- a/tools/util.h
++++ b/tools/util.h
+@@ -72,6 +72,13 @@
+ #define AUDIT_ARCH_PPC64LE	(EM_PPC64|__AUDIT_ARCH_64BIT|__AUDIT_ARCH_LE)
+ #endif
+ 
++#ifndef AUDIT_ARCH_RISCV64
++#ifndef EM_RISCV
++#define EM_RISCV		243
++#endif /* EM_RISCV */
++#define AUDIT_ARCH_RISCV64	(EM_RISCV|__AUDIT_ARCH_64BIT|__AUDIT_ARCH_LE)
++#endif /* AUDIT_ARCH_RISCV64 */
++
+ extern uint32_t arch;
+ 
+ uint16_t ttoh16(uint32_t arch, uint16_t val);

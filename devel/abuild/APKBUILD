@@ -1,6 +1,6 @@
 pkgname=abuild
-pkgver=4.0.41
-pkgrel=1
+pkgver=4.0.42
+pkgrel=0
 pkgdesc="Script to build Alpine Packages"
 url="https://git.alpinelinux.org/cgit/abuild/"
 arch="all"
@@ -10,12 +10,10 @@ depends="sudo pax-utils openssl apk-tools bsdtar
 	 bison gtar unzip gmake file musl-utils pigz gzip
 	 libcxx-dev llvm-dev rsync libtool curl pkgconf zlib-dev
 	 openssl-dev musl-dev automake autoconf"
-install="$pkgname.pre-install $pkgname.pre-upgrade"
 subpackages="apkbuild-cpan:cpan:noarch apkbuild-gem-resolver:gems:noarch
              abuild-rootbld:_rootbld:noarch $pkgname-doc"
 # tests in abuild aren't released yet
 options="suid !check"
-pkggroups="abuild"
 source="$pkgname-v$pkgver.tar.gz::https://github.com/abyss-os/abuild/archive/v$pkgver.tar.gz"
 
 builddir="$srcdir/$pkgname-$pkgver"
@@ -63,4 +61,4 @@ _rootbld() {
 	mkdir -p "$subpkgdir"
 }
 
-b2sums="da9fc4d2941cc15b2ad9d12bbae9865aa20a511c17943f354d2e880dd983d430181d9cbff18ec40a7ed9a3499af05839caf487f1bb4c3203b391a7ccb744c1e4  abuild-v4.0.41.tar.gz"
+b2sums="04678275fad23326bbb41a4fabde1e64383a4a14248fd2e3527dc08d8eee535940fbf7f6951b1d447428bdec492da832dcbb504855054185a71e969e1e3c1890  abuild-v4.0.42.tar.gz"

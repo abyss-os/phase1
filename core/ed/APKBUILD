@@ -1,6 +1,6 @@
 pkgname=ed
-pkgver=1.15
-pkgrel=1
+pkgver=1.16
+pkgrel=0
 pkgdesc="GNU ed is a line-oriented text editor. It is used to create, display, modify and otherwise manipulate text files"
 url="https://www.gnu.org/software/ed/"
 arch="all"
@@ -22,7 +22,7 @@ build() {
 		--bindir=/usr/bin \
 		--sbindir=/usr/bin \
 		--mandir=/usr/share/man \
-		CC=$CC
+		CC=$CC CFLAGS="$CFLAGS"
 	make all
 }
 
@@ -36,4 +36,4 @@ package() {
 	make DESTDIR="$pkgdir" install
 }
 
-b2sums="d395bf0d85db7c9bcc6a63dbef485e1e30ce3649f4f401905160e746d0cf916e19fed95aa0c56536d64b4cdaafcddc990615a9279100e669c7e512836aa93734  ed-1.15.tar.lz"
+b2sums="1fd07a924378ca5011c201fdf6f3ca9ad6fee40b7c625677ad901bf78482d868928bd58eb5aad83085c411b1b02d2bc78d228a5c3f41608bccecf5b427225d8f  ed-1.16.tar.lz"

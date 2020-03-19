@@ -1,13 +1,11 @@
 pkgname=btrfs-progs
-pkgver=5.1.1
-pkgrel=3
+pkgver=5.4.1
+pkgrel=0
 pkgdesc="BTRFS filesystem utilities"
 url="https://btrfs.wiki.kernel.org"
 arch="all"
 license="GPL-2.0-or-later LGPL-3.0-or-later"
-depends=""
-depends_dev="linux-dev"
-makedepends="$depends_dev acl-dev asciidoc attr-dev autoconf automake e2fsprogs-dev
+makedepends="linux-dev acl-dev asciidoc attr-dev autoconf automake e2fsprogs-dev
 	libtool lzo-dev util-linux-dev xmlto zlib-dev"
 subpackages="$pkgname-doc $pkgname-dev
 	$pkgname-bash-completion:bashcomp:noarch"
@@ -48,4 +46,4 @@ bashcomp() {
 		"$subpkgdir"/usr/share/bash-completion/completions/btrfs
 }
 
-b2sums="ca032cf17e78e5892788b677b5a0fead7cf1108fd464facb48e713b259c8c75f8b7714377f75e7b9e595c7c8fa5927fa37d11f43f51e4d898698f9fc5d26a808  btrfs-progs-v5.1.1.tar.xz"
+b2sums="1ea58f49b0f8185e944010804e544643a2eafeea58fecb480b13095c362350c218f0602fbb43a96705a81befe88ec3e3abe35cc90d4732006479b059aa7fed32  btrfs-progs-v5.4.1.tar.xz"

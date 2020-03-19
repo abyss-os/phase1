@@ -1,6 +1,6 @@
 pkgname=iptables
-pkgver=1.8.3
-pkgrel=1
+pkgver=1.8.4
+pkgrel=0
 pkgdesc="Linux kernel firewall, NAT and packet mangling tools"
 url="https://www.netfilter.org/projects/iptables/index.html"
 arch="all"
@@ -54,7 +54,7 @@ package() {
 	install -D -m644 "$srcdir"/ip6tables.confd "$pkgdir"/etc/conf.d/ip6tables
 }
 
-b2sums="58c606a5753ae2cb8ada9039e4653d2abe03c7c9b6aeef1e458baa3e10e818893f35e8f2aed5221e692415115e618aa673c8fcd33d172f85e9d1b609ed79c7b8  iptables-1.8.3.tar.bz2
+b2sums="f677bb9ed2c86e6a39953c0565766991e9647224effdc7db2b563f3f491f6ace2f9073ecc8e865d489101a9f80cf964d9775ab81536412dbd4ca85937432de94  iptables-1.8.4.tar.bz2
 a3a41efb70d3415a0fd72a9b5f626e9d0caa4d171f3804a1b28244f7bc7d5cf6643f4ff3d0d7339a1448ffab960393a4a9f5af4880802ab48f6a655af8cc10ad  iptables.initd
 2e384728bd47108ed6c6c0f5d05fe25058135d824a40e98fc9d2568453a02562d773e8170b710ac8c13fd9ad8625eb1456e11b8cbd83e82f58a43f4bc76a5bf1  iptables.confd
 23df105fa1e28264512f972f8a95454e274e8cfa54837b8094724d40f221f50f7212fe093325f02b8fb94e5eba4ff917b4e6ba96fa89556beba260e3799d2e76  ip6tables.confd"

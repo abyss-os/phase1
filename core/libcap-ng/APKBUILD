@@ -1,6 +1,6 @@
 pkgname=libcap-ng
-pkgver=0.7.9
-pkgrel=1
+pkgver=0.7.10
+pkgrel=0
 pkgdesc="POSIX capabilities library"
 url="http://people.redhat.com/sgrubb/libcap-ng/index.html"
 arch="all"
@@ -45,5 +45,5 @@ utils() {
 	mv "$pkgdir"/usr/bin/* "$subpkgdir"/usr/bin/
 }
 
-b2sums="3f84e5078d5d443cb61358c49405e4f16ff82a56e1c96d5127b522613b1b5c56a566a01b14b40055eca85f13b37f3d795248a506c54ac4612ab184a94addc365  libcap-ng-0.7.9.tar.gz
+b2sums="8eb21b0309e46b05fa42752b9c814d90bc1eda4852ac7a4975868c279764431a8d5eafc53e50998470f622e2a59e2b4c6c2ac1ac20525c6fcd0633b09b113012  libcap-ng-0.7.10.tar.gz
 547cf5fdd879ff3a2aa2aecae285e91a76cad01375457eea4d92accfe6e8293922c44409f51d5b9e1acc73ba5164d47bd7b76dc85c827b3ed1a754b934e3bf05  fix-includes.patch"

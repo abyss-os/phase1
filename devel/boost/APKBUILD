@@ -74,12 +74,14 @@ _set_options() {
 		--prefix=\"$pkgdir/usr\"
 		release
 		$_options_python
-		toolset=clang
+		toolset=$CC
 		debug-symbols=off
 		threading=multi
 		runtime-link=shared
 		link=shared,static
-		cflags=-fno-strict-aliasing
+		cflags=\"$CFLAGS\"
+		cxxflags=\"$CXXFLAGS\"
+		linkflags=\"$LDFLAGS\"
 		--layout=system
 		-j${JOBS:-2}
 		$_options_carch
@@ -106,11 +108,11 @@ build() {
 
 	msg "Building bjam"
 	cd "$builddir"/$_enginedir
-	CC=clang ./build.sh clang
+	CC=$CC CXX=$CXX ./build.sh $CC
 
 	msg "Building bcp"
 	cd "$builddir"/tools/bcp
-	"$_bjam" toolset=clang -j${JOBS:-2}
+	"$_bjam" toolset=$CC -j${JOBS:-2}
 
 	msg "Building boost"
 	cd "$builddir"

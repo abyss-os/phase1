@@ -1,10 +1,8 @@
 pkgname=apk-tools
 pkgver=2.10.4
-pkgrel=7
+pkgrel=8
 pkgdesc="Alpine Package Keeper - package manager for alpine"
-makedepends_build="openssl"
-makedepends_host="zlib-dev openssl-dev linux-dev"
-makedepends="$makedepends_build $makedepends_host"
+makedepends="openssl zlib-dev openssl-dev linux-dev"
 if [ "$CBUILD" = "$CHOST" ]; then
 	subpackages="$subpackages lua5.2-apk:luaapk"
 	makedepends="$makedepends lua5.2-dev"

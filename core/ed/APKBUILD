@@ -22,7 +22,7 @@ build() {
 		--bindir=/usr/bin \
 		--sbindir=/usr/bin \
 		--mandir=/usr/share/man \
-		CC=$CC CFLAGS="$CFLAGS"
+		CC=$CC CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS"
 	make all
 }
 

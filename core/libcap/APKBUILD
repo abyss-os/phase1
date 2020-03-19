@@ -1,6 +1,6 @@
 pkgname=libcap
-pkgver=2.27
-pkgrel=1
+pkgver=2.33
+pkgrel=0
 pkgdesc="POSIX 1003.1e capabilities"
 options="checkroot"
 arch="all"
@@ -15,7 +15,7 @@ builddir="$srcdir"/$pkgname-$pkgver
 
 build() {
 	cd "$builddir"
-	make BUILD_CC=$CC CC=$CC lib=lib prefix=/usr DESTDIR="$pkgdir"
+	make BUILD_CC=$CC CC=$CC CFLAGS="$CFLAGS" lib=lib prefix=/usr DESTDIR="$pkgdir"
 }
 
 check() {
@@ -33,4 +33,4 @@ package() {
 	mv -v ${pkgdir}/usr/sbin ${pkgdir}/usr/bin
 }
 
-b2sums="7b58d7afdd90281771a302cd9554f067b9e3636b0c052935973d8a0d890490c3933b3513874b788a8c10e37ab5ad9cfa766408c9629b7c8562cb17bfdef87747  libcap-2.27.tar.xz"
+b2sums="9a34b6e871c6175da5ef665ab7a5ed8b9889f598875f58a6e0b7aef9b6b2737f2a85bb0a6e259a730a3fcea3b8ebbec793b52ee5dec7d11fcf236dfb2148eb83  libcap-2.33.tar.xz"

@@ -1,6 +1,6 @@
 pkgname=file
-pkgver=5.37
-pkgrel=1
+pkgver=5.38
+pkgrel=0
 pkgdesc="File type identification utility"
 url="https://www.darwinsys.com/file"
 arch="all"
@@ -36,4 +36,4 @@ libmagic() {
 	mv "$pkgdir"/usr/lib "$pkgdir"/usr/share "$subpkgdir"/usr
 }
 
-b2sums="0a9be418d11c3e31e3ec6a77970d806c12c04cd2d0f7ebe2bf6a9802719f71e89baa6fc55fcc197e9ef19338038f68deb067cc5f50ff927bd91294efaabe0384  file-5.37.tar.gz"
+b2sums="f33043c693569d632154886105d79638364c1e00744bcf2dc383448fc30b677ad0f04edb41f8d960498568968bab268d6290a61b5612e79121fbecc7d629f04b  file-5.38.tar.gz"

@@ -15,7 +15,7 @@ source="http://mama.indstate.edu/users/ice/tree/src/$pkgname-$pkgver.tgz"
 
 build() {
 	cd "$builddir"
-	make CC=$CC
+	make CC=$CC CFLAGS="$CFLAGS"
 }
 
 package() {

@@ -1,6 +1,6 @@
 pkgname=coreutils
 pkgver=8.31
-pkgrel=1
+pkgrel=2
 pkgdesc="The basic file, shell and text manipulation utilities"
 url="https://www.gnu.org/software/coreutils/"
 arch="all"
@@ -12,7 +12,7 @@ builddir="$srcdir"/$pkgname-$pkgver
 
 build() {
 	cd "$builddir"
-	FORCE_UNSAFE_CONFIGURE=1 LIBS="-lrt" ./configure \
+	FORCE_UNSAFE_CONFIGURE=1 ./configure \
 		--build=$CBUILD \
 		--host=$CHOST \
 		--prefix=/usr \
@@ -30,6 +30,8 @@ build() {
 package() {
 	cd "$builddir"
 	install -Dm755 ${builddir}/src/coreutils ${pkgdir}/usr/bin/coreutils
+
+	ln -sv /usr/bin/coreutils ${pkgdir}/usr/bin/fmt
 }
 
 # XXX - some gnulib tests broken, find a way to patch out gnulib tests

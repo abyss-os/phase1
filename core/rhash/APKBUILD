@@ -16,7 +16,8 @@ build() {
 	cd "$builddir"
 	./configure --prefix=/usr \
 		--enable-openssl \
-		--disable-openssl-runtime
+		--disable-openssl-runtime \
+		--extra-cflags="$CFLAGS"
 	make
 }
 

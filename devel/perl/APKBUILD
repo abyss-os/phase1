@@ -58,7 +58,6 @@ build() {
 		-Dsitelib=/usr/local/share/perl5/site_perl \
 		-Dsitearch=/usr/local/lib/perl5/site_perl \
 		-Dlocincpth=' ' \
-		-Doptimize="$CFLAGS" \
 		-Duselargefiles \
 		-Dusethreads \
 		-Duseshrplib \

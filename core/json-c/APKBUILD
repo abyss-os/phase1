@@ -18,7 +18,8 @@ prepare() {
 
 build() {
 	cd "$builddir"
-	CFLAGS="$CFLAGS -Wno-implicit-int-float-conversion -Wno-string-plus-int" ./configure --prefix=/usr \
+	export CFLAGS="$CFLAGS -Wno-implicit-int-float-conversion -Wno-string-plus-int"
+	./configure --prefix=/usr \
 		--build=$CBUILD \
 		--host=$CHOST \
 		--sysconfdir=/etc \

@@ -6,6 +6,7 @@ url="https://www.archlinux.org/pacman/"
 arch="all"
 license="GPL-2.0-or-later"
 options="!check"
+depends"bash"
 makedepends="autoconf automake coreutils curl-dev libtool
 	libarchive-dev m4 openssl-dev gsed gpgme-dev"
 subpackages="

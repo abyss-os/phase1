@@ -44,6 +44,7 @@ build() {
 
 	export BUILD_ZLIB BUILD_BZIP2 BZIP2_LIB BZIP2_INCLUDE
 	./Configure -des \
+		-Dccflags="$CFLAGS" \
 		-Dcccdlflags='-fPIC' \
 		-Dcccdlflags='-fPIC' \
 		-Dccdlflags='-rdynamic' \

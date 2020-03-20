@@ -1,0 +1,49 @@
+pkgname=pacman
+pkgver=5.2.1
+pkgrel=0
+pkgdesc="A simple library-based package manager"
+url="https://www.archlinux.org/pacman/"
+arch="all"
+license="GPL-2.0-or-later"
+options="!check"
+makedepends="autoconf automake coreutils curl-dev libtool
+	libarchive-dev m4 openssl-dev gsed gpgme-dev"
+subpackages="
+	$pkgname-dev
+	$pkgname-doc
+	$pkgname-bash-completion:bashcomp:noarch
+	"
+source="https://sources.archlinux.org/other/pacman/pacman-$pkgver.tar.gz"
+
+build() {
+	SED=gsed ./configure \
+		--build=$CBUILD \
+		--host=$CHOST \
+		--prefix=/usr \
+		--sbindir=/usr/bin \
+		--sysconfdir=/etc \
+		--mandir=/usr/share/man \
+		--infodir=/usr/share/info \
+		--localstatedir=/var \
+		--with-scriptlet-shell=/usr/bin/bash
+	make V=1
+}
+
+package() {
+	make DESTDIR="$pkgdir" install
+
+	mkdir -p "$pkgdir"/usr/lib/pkgconfig
+	mv "$pkgdir"/usr/share/pkgconfig/* "$pkgdir"/usr/lib/pkgconfig
+	rmdir -p "$pkgdir"/usr/share/pkgconfig || true
+}
+
+bashcomp() {
+	depends=""
+	pkgdesc="Bash completions for $pkgname"
+	install_if="$pkgname=$pkgver-r$pkgrel bash-completion"
+
+	mkdir -p "$subpkgdir"/usr/share
+	mv "$pkgdir"/usr/share/bash-completion "$subpkgdir"/usr/share
+}
+
+b2sums="be5a11624eecfe6c5a54088ce8872a1f2e24f2ac3f5a32a848a115b873b8ac3ee2a3aae5ab9f706be4fc359ef5cbde374688f012f799ff7ecda8669797160a52  pacman-5.2.1.tar.gz"

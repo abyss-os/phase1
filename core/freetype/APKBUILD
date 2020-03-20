@@ -19,7 +19,7 @@ builddir="$srcdir/$pkgname-$pkgver"
 
 build() {
 	cd "$builddir"
-	MAKE=make ./configure \
+	CFLAGS="$CFLAGS" ./configure \
 		--build=$CBUILD \
 		--host=$CHOST \
 		--prefix=/usr \

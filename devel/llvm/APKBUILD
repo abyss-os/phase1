@@ -23,7 +23,8 @@ source="https://github.com/llvm/llvm-project/archive/llvmorg-${pkgver/_/-}.tar.g
 		mips_softfloat.patch
 		mips64_crt.patch
 		clang-pie-ssp.patch
-		lld-znow.patch"
+		lld-znow.patch
+		riscv_relax.patch"
 subpackages="lld llvm-binutils:binutils $pkgname-dev"
 
 builddir=$srcdir/llvm-project-llvmorg-${pkgver/_/-}
@@ -47,6 +48,8 @@ prepare() {
 
 	patch -p1 -d $builddir -i $srcdir/clang-pie-ssp.patch
 	patch -p1 -d $builddir -i $srcdir/lld-znow.patch
+
+	patch -p1 -d $builddir -i $srcdir/riscv_relax.patch
 
 	cmake -G Ninja -Wno-dev \
 			-DCMAKE_C_COMPILER=$CC \
@@ -200,4 +203,5 @@ b2sums="74c7899c1fe0d501efeaeddf732dcd4bca8035513f421602b04579034781b6e402ccc42a
 8e23d19518bc2bba4009c30ba6d8c981e94b6e293a95a29ebbb9be7c9a7a40b21900a7e526529149847a42bd98899306a1af9b99c819e290d4a67e34f4ea32c3  mips_softfloat.patch
 916376a80bde2f7c009a8ce2f8663f95c2e87271047a5476dc429ab014141fdd45689ebc5e3c4ca1cb11d3cd3255ef84d5425a8725cb91cb95f08ee6b56136c5  mips64_crt.patch
 7991221eca8a3f32607de7da91c02928d95cfae8d2af3516d403d2edd1a43bf7bb97280b6584146cd9ed51123b2bfe686a460ac1035131d115207d55a7debcfa  clang-pie-ssp.patch
-ada8faf1f1bbdfc52b0493ba563b91de954e6613b8be0af7deeabdf0b621a69a45e5acc753ecb487f461360bb2ec99b4f510a8872bff3afe90e9e7b91de12997  lld-znow.patch"
+ada8faf1f1bbdfc52b0493ba563b91de954e6613b8be0af7deeabdf0b621a69a45e5acc753ecb487f461360bb2ec99b4f510a8872bff3afe90e9e7b91de12997  lld-znow.patch
+c99d536538e3e4830c618e11214f4fdda6cf377c9ea565b254e2484e52b68202b19b921b09ef4b784897bceac8a3b7bb9331b4b0087a5cafb8a1a3518fb1a1c4  riscv_relax.patch"

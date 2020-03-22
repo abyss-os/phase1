@@ -1,5 +1,5 @@
 pkgname=go
-pkgver=1.14
+pkgver=1.14.1
 pkgrel=0
 pkgdesc="Go programming language compiler"
 url="https://golang.org/"
@@ -82,6 +82,6 @@ package() {
 		-exec rm -rf \{\} \+
 }
 
-b2sums="94ba8bac1cffd4ee71051a3ac4a1366f0fcbd0ccf71dad2152e77851593e2a3e8807c0d1f5b6dc396c217b9e7e9c3eeb788760c671b439ee244f8f856406598f  go1.14.src.tar.gz
+b2sums="2b45716cdc82edb94609143bcbb79b313ff3b6b1cc9e0791236a8d968a2fc1d84015037a2cfb75e5b73dac4974b97a1e62f1fd1f5afe0dc633137b73ab15004a  go1.14.1.src.tar.gz
 fa4473bd0c5d07e8c6d47430415190d8d1142322448290bff400dce29c2fffedf493487afecb9898ebf1884ef5b3b4fc39d42208e59197c09ef62deb1f0bf083  default-buildmode-pie.patch
 494a103d17f5ef0f787d83c263f9ccac200ada59abc8c0cf125febb6031a453b20c9dbbdc383917ff4829e88616191824762ee83e7a039f6a29775081c585dec  set-external-linker.patch"

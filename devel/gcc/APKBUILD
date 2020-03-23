@@ -173,7 +173,7 @@ prepare() {
 
 build() {
 	OLDTC="$(toolchain show)"
-	toolchain none gnu
+	/usr/bin/toolchain none gnu
 	local _arch_configure=
 	local _libc_configure=
 	local _cross_configure=
@@ -259,9 +259,9 @@ build() {
 		$_cross_configure \
 		--with-system-zlib \
 		$_hash_style_configure
-	make
+	make -j1
 
-	toolchain "${OLDTC}"
+	/usr/bin/toolchain "${OLDTC}"
 }
 
 package() {

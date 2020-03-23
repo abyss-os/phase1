@@ -122,6 +122,8 @@ source="https://gcc.gnu.org/pub/gcc/releases/gcc-${_pkgbase:-$pkgver}/gcc-${_pkg
 	https://ftp.gnu.org/gnu/gmp/gmp-$_gmp.tar.xz
 	https://ftp.gnu.org/gnu/mpfr/mpfr-$_mpfr.tar.xz
 	http://isl.gforge.inria.fr/isl-$_isl.tar.gz
+
+	__stack_chk_fail_local.c
 	"
 
 #	gcc-4.8-build-args.patch
@@ -134,6 +136,11 @@ _gcclibexec=/usr/libexec/gcc/${CTARGET}/$pkgver
 _builddir="$srcdir/build"
 
 prepare() {
+
+	$CC $CPPFLAGS $CFLAGS -c "$srcdir"/__stack_chk_fail_local.c -o __stack_chk_fail_local.o
+        ar r libssp_nonshared.a __stack_chk_fail_local.o
+	cp -v __stack_chk_fail_local.o /usr/lib/
+
 	cd "$_gccdir"
 
 	_err=
@@ -491,4 +498,5 @@ c2e8e33eb88bba6453f0645092cc2a6b3adfb07788d7f71a3f97e4f09f95934b6dfac929b72f34c7
 afd9fefe687b7cd3c3a483e183f366348e34f58f5d713e2f6b38da16e2e382248b446d9da01ea89fe7202b795b08929b7c42c89c2c1e9a57482faf01ee697beb  mpc-1.1.0.tar.gz
 2a864e80799471037a71c10d871f9782c37fe3a0a1734872e90f14a874ecd6551099d67b2ebd07f82a43b0522249a6b46e79952db11a278f87ca8013198f7604  gmp-6.1.2.tar.xz
 4c1a15208c2dc3dcc1424974de506198e9cc479c70255149876c7f541133499ada5c89f07393b120b7079e6bbaf8ea03e5e496e1350b295e687392a6e0341c1c  mpfr-4.0.2.tar.xz
-71b6d7e3239b37b7f9c5a8b602b8809b9f92f89bc9bc349e24d309fde37471515a0a32862ed731d8f839683e4170fa074ab73e3bd36a2eeab90475a6d2529240  isl-0.22.tar.gz"
+71b6d7e3239b37b7f9c5a8b602b8809b9f92f89bc9bc349e24d309fde37471515a0a32862ed731d8f839683e4170fa074ab73e3bd36a2eeab90475a6d2529240  isl-0.22.tar.gz
+a70433fea40342429ef7e21fc4338a4d600e902c44c21765434104c5d602267695c403da33479d352328f84c41c99bc46757e5ae18e42f6a0479789bf04323ea  __stack_chk_fail_local.c"

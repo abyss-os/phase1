@@ -3,7 +3,7 @@ case $CARCH in
 	*) pkgver=10.0.0_rc5;;
 esac
 
-pkgrel=3
+pkgrel=4
 pkgdesc="$pkgname"
 arch="all"
 url=.

@@ -12,10 +12,12 @@ _mpfr=4.0.2
 _isl=0.22
 _mpc=1.1.0
 #depends="binutils$_target isl"
-makedepends="gcc g++ bison flex texinfo gawk zip zlib-dev linux-dev !gettext-dev"
+makedepends="gcc-bootstrap bison flex texinfo gawk zip zlib-dev linux-dev binutils"
 subpackages="$pkgname-doc"
 
-#export CC=gcc CXX=g++ AS=gnu-as LD=gnu-ld
+provides="$pkgname-bootstrap"
+
+export CC=clang CXX=clang++ AS=gnu-as LD=ld.lld
 
 : ${LANG_CXX:=true}
 : ${LANG_GO:=false}
@@ -58,7 +60,7 @@ fi
 
 _languages=c
 if $LANG_CXX; then
-	subpackages="$subpackages libstdc++:libcxx:$CTARGET_ARCH g++$_target:gpp"
+	subpackages="$subpackages libstdc++:libcxx:$CTARGET_ARCH"
 	_languages="$_languages,c++"
 fi
 if $LANG_OBJC; then
@@ -160,6 +162,7 @@ prepare() {
 		rm -f $srcdir/$i
 		ln -sfv $srcdir/$i-$(eval echo "\$_$i") $srcdir/gcc-$pkgver/$i
 	done
+	config_helper
 }
 
 build() {
@@ -223,7 +226,7 @@ build() {
 
 	mkdir -p "$_builddir"
 	cd "$_builddir"
- 	env CC=$CC CXX=$CXX CC_FOR_TARGET=$CC CXX_FOR_TARGET=$CXX \
+ 	env CC=$CC CXX=$CXX CC_FOR_TARGET=$CC CXX_FOR_TARGET=$CXX AS=gnu-as LD=gnu-ld \
 		"$_gccdir"/configure CC=$CC CXX=$CXX --prefix=/usr \
 		--mandir=/usr/share/man \
 		--infodir=/usr/share/info \
@@ -241,14 +244,13 @@ build() {
 		--enable-default-pie \
 		--enable-cloog-backend \
 		--enable-languages=$_languages \
-		--enable-default-ssp \
 		--enable-checking=release \
 		$_arch_configure \
 		$_libc_configure \
 		$_cross_configure \
 		--with-system-zlib \
 		$_hash_style_configure \
-		--disable-bootstrap
+		--program-prefix=gnu-
 	make
 }
 
@@ -258,8 +260,6 @@ package() {
 
 	ln -s gcc "$pkgdir"/usr/bin/gnu-cc
 
-	# we dont support gcj -static
-	# and saving 35MB is not bad.
 	find "$pkgdir" -name libgtkpeer.a \
 		-o -name libgjsmalsa.a \
 		-o -name libgij.a \
@@ -316,33 +316,6 @@ package() {
 				echo "GROUP ($_real)" > "$so"
 			fi
 		done
-	else
-		# add c89/c99 wrapper scripts
-		cat >"$pkgdir"/usr/bin/gnu-c89 <<'EOF'
-#!/bin/sh
-fl="-std=c89"
-for opt; do
-	case "$opt" in
-	-ansi|-std=c89|-std=iso9899:1990) fl="";;
-	-std=*) echo "$(basename $0) called with non ANSI/ISO C option $opt" >&2
-		exit 1;;
-	esac
-done
-exec gcc $fl ${1+"$@"}
-EOF
-		cat >"$pkgdir"/usr/bin/gnu-c99 <<'EOF'
-#!/bin/sh
-fl="-std=c99"
-for opt; do
-	case "$opt" in
-	-std=c99|-std=iso9899:1999) fl="";;
-	-std=*) echo "$(basename $0) called with non ISO C99 option $opt" >&2
-		exit 1;;
-	esac
-done
-exec gcc $fl ${1+"$@"}
-EOF
-		chmod 755 "$pkgdir"/usr/bin/c?9
 	fi
 }
 
@@ -361,21 +334,6 @@ libcxx() {
 
 	mkdir -p "$subpkgdir"/usr/lib
 	mv "$pkgdir"/usr/${_target:+$CTARGET/}lib/libstdc++.so.* "$subpkgdir"/usr/lib/
-}
-
-gpp() {
-	pkgdesc="GNU C++ standard library and compiler"
-	depends="libstdc++=$_gccrel gcc=$_gccrel musl-dev"
-	mkdir -p "$subpkgdir/$_gcclibexec" \
-		"$subpkgdir"/usr/bin \
-		"$subpkgdir"/usr/${_target:+$CTARGET/}include \
-		"$subpkgdir"/usr/${_target:+$CTARGET/}lib \
-
-	mv "$pkgdir/$_gcclibexec/cc1plus" "$subpkgdir/$_gcclibexec/"
-
-	mv "$pkgdir"/usr/${_target:+$CTARGET/}lib/*++* "$subpkgdir"/usr/${_target:+$CTARGET/}lib/
-	mv "$pkgdir"/usr/${_target:+$CTARGET/}include/c++ "$subpkgdir"/usr/${_target:+$CTARGET/}include/
-	mv "$pkgdir"/usr/bin/*++ "$subpkgdir"/usr/bin/
 }
 
 libobjc() {

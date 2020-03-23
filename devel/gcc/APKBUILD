@@ -16,7 +16,7 @@ subpackages="$pkgname-doc"
 
 provides="$pkgname-bootstrap"
 
-export CC=clang CXX=clang++ AS=gnu-as LD=gnu-ld
+#export CC=clang CXX=clang++ AS=gnu-as LD=gnu-ld
 
 : ${LANG_CXX:=true}
 : ${LANG_GO:=false}
@@ -232,7 +232,7 @@ build() {
 
 	mkdir -p "$_builddir"
 	cd "$_builddir"
- 	env CC=$CC CXX=$CXX CC_FOR_TARGET=$CC CXX_FOR_TARGET=$CXX AS=gnu-as LD=gnu-ld \
+ 	env CC=$CC CXX=$CXX CC_FOR_TARGET=$CC CXX_FOR_TARGET=$CXX \
 		"$_gccdir"/configure CC=$CC CXX=$CXX --prefix=/usr \
 		--program-prefix=gnu- \
 		--mandir=/usr/share/man \

@@ -54,7 +54,6 @@ prepare() {
 	patch -p1 -d $builddir -i $srcdir/riscv_relax.patch
 
 	patch -p1 -d $builddir -i $srcdir/tmp-kernel.patch
-	patch -p1 -d $builddir -i $srcdir/ignore-__64.patch
 
 	cmake -G Ninja -Wno-dev \
 			-DCMAKE_C_COMPILER=$CC \

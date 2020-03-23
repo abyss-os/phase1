@@ -11,7 +11,6 @@ _gmp=6.1.2
 _mpfr=4.0.2
 _isl=0.22
 _mpc=1.1.0
-#depends="binutils$_target isl"
 makedepends="gcc-bootstrap bison flex texinfo gawk zip zlib-dev linux-dev binutils"
 subpackages="$pkgname-doc"
 
@@ -228,6 +227,7 @@ build() {
 	cd "$_builddir"
  	env CC=$CC CXX=$CXX CC_FOR_TARGET=$CC CXX_FOR_TARGET=$CXX AS=gnu-as LD=gnu-ld \
 		"$_gccdir"/configure CC=$CC CXX=$CXX --prefix=/usr \
+		--program-prefix=gnu- \
 		--mandir=/usr/share/man \
 		--infodir=/usr/share/info \
 		--build=${CBUILD} \
@@ -249,9 +249,8 @@ build() {
 		$_libc_configure \
 		$_cross_configure \
 		--with-system-zlib \
-		$_hash_style_configure \
-		--program-prefix=gnu-
-	make
+		$_hash_style_configure
+	make -j1
 }
 
 package() {

@@ -1,6 +1,6 @@
 pkgname=abyss-base-dev
 pkgver=0
-pkgrel=4
+pkgrel=5
 pkgdesc="devel metapackage"
 url="https://abyss.run"
 arch="noarch"
@@ -14,7 +14,7 @@ case "$CARCH" in
 	riscv64) depends_arch="llvm-binutils lld" ;;
 esac
 
-depends="abyss-base llvm-dev clang abuild linux-dev musl-dev toolchain git $depends_arch"
+depends="abyss-base llvm-dev clang abuild linux-dev musl-dev toolchain git bash $depends_arch"
 
 package() {
 	mkdir -p $pkgdir

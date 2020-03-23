@@ -1,0 +1,13 @@
+diff --git a/clang/include/clang/Driver/Options.td b/clang/include/clang/Driver/Options.td
+index 0a6087344..852197e66 100644
+--- a/clang/include/clang/Driver/Options.td
++++ b/clang/include/clang/Driver/Options.td
+@@ -932,7 +932,7 @@ def fextdirs_EQ : Joined<["-"], "fextdirs=">, Group<f_Group>;
+ def : Flag<["-"], "fdefer-pop">, Group<clang_ignored_gcc_optimization_f_Group>;
+ def : Flag<["-"], "fno-defer-pop">, Group<clang_ignored_gcc_optimization_f_Group>;
+ def : Flag<["-"], "fextended-identifiers">, Group<clang_ignored_f_Group>;
+-def : Flag<["-"], "fno-extended-identifiers">, Group<f_Group>, Flags<[Unsupported]>;
++def : Flag<["--"], "64">, Group<f_Group>, Flags<[Ignored]>;
+ def fhosted : Flag<["-"], "fhosted">, Group<f_Group>;
+ def fdenormal_fp_math_EQ : Joined<["-"], "fdenormal-fp-math=">, Group<f_Group>, Flags<[CC1Option]>;
+ def ffp_model_EQ : Joined<["-"], "ffp-model=">, Group<f_Group>, Flags<[DriverOption]>,

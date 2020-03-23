@@ -1,8 +1,9 @@
 #!/bin/sh
+. /usr/share/abuild/functions.sh
 
 usage() {
 	echo "Usage:"
-	echo "$0 [show|<compiler> <binutils>] [<target triple>]"
+	echo "$0 [show|<compiler> <binutils>]"
 	echo
 	echo "Possible values: llvm, gnu, none"
 	exit 1
@@ -39,8 +40,6 @@ if [ $UID -gt 0 ]; then
 	exit 1
 fi
 
-CTARGET=$(apk --print-arch)-pc-linux-musl
-
 # some things
 compiler_links="gcc g++ cc c++ cpp"
 binutils_links="ar mt nm objcopy objdump ranlib readelf readobj size split strings strip addr2line"
@@ -69,16 +68,12 @@ if [ "$binutils" != "none" ]; then
 	echo "linking binutils..."
 	# setup binutils
 	for link in $binutils_links; do
-		ln -s /usr/bin/${binutils}-${link} /usr/bin/${link}
-		if [ x"$3" != "x" ]; then
-			echo "Adding ${3}..."
-			ln -s /usr/bin/${binutils}-${link} /usr/bin/${3}-abyss-linux-musl-${link}
-		fi
+		ln -vs /usr/bin/${binutils}-${link} /usr/bin/${link}
 	done
 	# special case for ld due to lld
 	case $binutils in
-		llvm) ln -s /usr/bin/lld /usr/bin/ld && ln -s /usr/bin/clang /usr/bin/as ;;
-		*) ln -s /usr/bin/${binutils}-ld /usr/bin/ld && ln -s /usr/bin/gnu-as /usr/bin/as;;
+		llvm) ln -vs /usr/bin/ld.lld /usr/bin/ld && ln -sv /usr/bin/clang /usr/bin/as;;
+		*) ln -sv /usr/bin/${binutils}-ld /usr/bin/ld && ln -sv /usr/bin/gnu-as /usr/bin/as;;
 	esac
 fi
 
@@ -88,19 +83,11 @@ if [ "$compiler" != "none" ]; then
 	case $compiler in
 		llvm)
 			for link in $compiler_links; do
-				ln -s /usr/bin/clang /usr/bin/${link}
-			if [ x"$3" != "x" ]; then
-				echo "Adding ${3}..."
-				ln -s /usr/bin/clang /usr/bin/${3}-abyss-linux-musl-${link}
-			fi
+				ln -vs /usr/bin/clang /usr/bin/${link}
 			done;;
 		gnu)
 			for link in $compiler_links $gnu_extra; do
-				ln -s /usr/bin/gnu-${link} /usr/bin/${link}
-				if [ x"$3" != "x" ]; then
-					echo "Adding ${3}..."
-					ln -s /usr/bin/gnu-${link} /usr/bin//usr/bin/${3}-abyss-linux-musl-${link}
-				fi
+				ln -vs /usr/bin/gnu-${link} /usr/bin/${link}
 			done;;
 	esac
 fi

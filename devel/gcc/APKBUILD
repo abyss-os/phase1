@@ -172,6 +172,8 @@ prepare() {
 }
 
 build() {
+	OLDTC="$(toolchain show)"
+	toolchain none gnu
 	local _arch_configure=
 	local _libc_configure=
 	local _cross_configure=
@@ -257,7 +259,9 @@ build() {
 		$_cross_configure \
 		--with-system-zlib \
 		$_hash_style_configure
-	make || cat /drone/src/devel/gcc/src/build/x86_64-abyss-linux-musl/libgcc/config.log
+	make
+
+	toolchain "${OLDTC}"
 }
 
 package() {

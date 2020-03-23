@@ -9,7 +9,7 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
-container: abyssos:dev
+container: abyssos/abyss:dev
 
 steps:
 - script: env

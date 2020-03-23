@@ -16,7 +16,7 @@ subpackages="$pkgname-doc"
 
 provides="$pkgname-bootstrap"
 
-export CC=clang CXX=clang++ AS=gnu-as LD=ld.lld
+export CC=clang CXX=clang++ AS=gnu-as LD=gnu-ld
 
 : ${LANG_CXX:=true}
 : ${LANG_GO:=false}

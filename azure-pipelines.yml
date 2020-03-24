@@ -12,4 +12,4 @@ pool:
 container: abyssos/abyss:azure
 
 steps:
-- script: ./.scripts/azure.sh
+- script: sudo ./.scripts/azure.sh

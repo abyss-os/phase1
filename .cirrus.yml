@@ -1,0 +1,5 @@
+container:
+  image: abyssos/abyss:dev
+
+build_task:
+  run_script: env

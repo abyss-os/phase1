@@ -7,4 +7,4 @@ pool:
 container: abyssos/abyss:azure
 
 steps:
-- script: ./.scripts/azure.sh
+- script: . ./.scripts/azure.sh

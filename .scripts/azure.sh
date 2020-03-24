@@ -1,6 +1,11 @@
 #!/bin/sh
 [ -z "${BUILD_DEFINITIONNAME}" ] && exit 1
 
+if [ "$USER" != "root" ]; then
+	sudo $0
+	exit
+fi
+
 echo "trigger: ${BUILD_REASON}"
 echo "commit: ${BUILD_SOURCEVERSION}"
 

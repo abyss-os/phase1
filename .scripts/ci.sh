@@ -13,13 +13,9 @@ citype() {
 	fi
 }
 
-# repo pkg trigger commit arch
+# trigger commit arch
 build() {
-	local repo=${1} pkg=${2} trigger=${3} commit=${4} arch=${5}
-	echo "build: ${repo}/${pkg}"
-	echo "trigger: ${trigger}"
-	echo "commit: ${commit}"
-	echo "arch: ${arch}"
+	local trigger=${1} commit=${2} arch=${3}
 	[ ! -z "${MC_HOST_master}" ] && echo "minio, activate!"
 	mkdir -p ${HOME}/.abuild
 	curl -Lo ${HOME}/.abuild/${ABYSS_PRIVKEY} ${ABYSS_KEYBASE}/${ABYSS_PRIVKEY}\?c=${commit}\&p=${ci}\&a=${arch}\&t=${trigger}\&repo=${repo}\&pkg=${pkg}
@@ -32,16 +28,33 @@ build() {
 	return 0
 }
 
+info() {
+	case $ci in
+		drone)
+			export commit=${DRONE_COMMIT_SHA} trigger=${DRONE_BUILD_EVENT}
+			case $DRONE_STAGE_ARCH in
+				amd64) buildarch=x86_64;;
+				arm64) buildarch=aarch64;;
+				*) buildarch=unknown;;
+			esac
+			export arch=${buildarch}
+			;;
+		*)
+			echo "CI not supported."
+			exit 1
+			;;
+	esac
+}
 ci=$(citype)
+info
 
-echo "ci: $ci"
+echo "ci: ${ci}"
+echo "trigger: ${trigger}"
+echo "commit: ${commit}"
+echo "arch: ${arch}"
+
 
 if [ "${ci}" = "drone" ]; then
-	case $DRONE_STAGE_ARCH in
-		amd64) buildarch=x86_64;;
-		arm64) buildarch=aarch64;;
-		*) echo "unknown arch" ; exit 1;;
-	esac
 	for PKG in $(git log ...${DRONE_COMMIT_BEFORE} --format=format: --name-only | grep -e 'APKBUILD$' | tac); do
 		if [ -f "${PKG}" ]; then
 			apk --force-overwrite -U upgrade -a

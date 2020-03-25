@@ -12,25 +12,12 @@ _mpfr=4.0.2
 _isl=0.22
 _mpc=1.1.0
 makedepends="bison flex texinfo gawk zip zlib-dev linux-dev binutils"
-subpackages="$pkgname-doc libatomic libgcc libquadmath libgomp libstdc++:libcxx"
+subpackages="$pkgname-doc libatomic libgcc libgomp libstdc++:libcxx"
 
 provides="$pkgname-bootstrap"
 depends="$pkgname-bootstrap"
 
 #export CC=gcc CXX=g++ AS=gnu-as LD=gnu-ld AR=gnu-ar
-
-LANG_CXX=true
-LIBGOMP=true
-LIBGCC=true
-LIBATOMIC=true
-LIBITM=true
-LIBQUADMATH=true
-
-# textrels
-case "$CTARGET_ARCH" in
-mips*)		LIBITM=false ;;
-riscv*)		LIBITM=false ;;
-esac
 
 source="https://gcc.gnu.org/pub/gcc/releases/gcc-${_pkgbase:-$pkgver}/gcc-${_pkgbase:-$pkgver}.tar.xz
 	002_all_default-relro.patch
@@ -87,8 +74,8 @@ _gcclibexec=/usr/libexec/gcc/${CTARGET}/$pkgver
 _builddir="$srcdir/build"
 
 prepare() {
-	gcc -c "$srcdir"/__stack_chk_fail_local.c -o __stack_chk_fail_local.o
-	gnu-ar r libssp_nonshared.a __stack_chk_fail_local.o
+	$CC -c "$srcdir"/__stack_chk_fail_local.c -o __stack_chk_fail_local.o
+	$AR r libssp_nonshared.a __stack_chk_fail_local.o
 	cp -v libssp_nonshared.a /usr/lib/
 
 	cd "$_gccdir"
@@ -146,7 +133,6 @@ build() {
 	echo "  CHOST=$CHOST"
 	echo "  CTARGET=$CTARGET"
 	echo "  CTARGET_ARCH=$CTARGET_ARCH"
-	echo "  CTARGET_LIBC=$CTARGET_LIBC"
 	echo "  languages=$_languages"
 	echo "  arch_configure=$_arch_configure"
 	echo "  CC $CC CXX $CXX AS $AS LD $LD"
@@ -256,15 +242,6 @@ libgomp() {
 
 	mkdir -p "$subpkgdir"/usr/lib
 	mv "$pkgdir"/usr/${_target:+$CTARGET/}lib/libgomp.so.* "$subpkgdir"/usr/lib/
-}
-
-libquadmath() {
-	replaces="gcc"
-	pkgdesc="128-bit math library for GCC"
-	depends=
-
-	mkdir -p "$subpkgdir"/usr/lib
-	mv "$pkgdir"/usr/lib/libquadmath.so.* "$subpkgdir"/usr/lib/
 }
 
 b2sums="41a5e148f9a6857d6599679964c203533f76f330ad527fbe7c5e746d78f6f6f6d6d0f330a67cb1e794e155be8d1cd6e986bcc8a116d620dca410b78f0bcdd453  gcc-9.2.0.tar.xz

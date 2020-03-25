@@ -11,71 +11,27 @@ _gmp=6.1.2
 _mpfr=4.0.2
 _isl=0.22
 _mpc=1.1.0
-makedepends="gcc-bootstrap bison flex texinfo gawk zip zlib-dev linux-dev binutils"
-subpackages="$pkgname-doc"
+makedepends="bison flex texinfo gawk zip zlib-dev linux-dev binutils"
+subpackages="$pkgname-doc libatomic libgcc libquadmath libgomp libstdc++:libcxx"
 
 provides="$pkgname-bootstrap"
 depends="$pkgname-bootstrap"
 
 export CC=gcc CXX=g++ AS=gnu-as LD=gnu-ld AR=gnu-ar
 
-: ${LANG_CXX:=true}
-: ${LANG_OBJC:=false}
-: ${LANG_FORTRAN:=false}
-: ${LANG_ADA:=false}
-
+LANG_CXX=true
 LIBGOMP=true
 LIBGCC=true
 LIBATOMIC=true
 LIBITM=true
+LIBQUADMATH=true
 
 # libitm has TEXTRELs in ARM build, so disable for now
 case "$CTARGET_ARCH" in
 arm*)		LIBITM=false ;;
 mips*)		LIBITM=false ;;
+riscv*)		LIBITM=false ;;
 esac
-
-if [ "$CTARGET_ARCH" = "riscv64" ]; then
-#	LANG_ADA=false
-	LIBITM=false
-fi
-
-# Fortran uses libquadmath if toolchain has __float128
-# currently on x86, x86_64 and ia64
-LIBQUADMATH=$LANG_FORTRAN
-case "$CTARGET_ARCH" in
-x86 | x86_64)	LIBQUADMATH=$LANG_FORTRAN ;;
-*)		LIBQUADMATH=false ;;
-esac
-
-# libatomic is a dependency for openvswitch
-$LIBATOMIC && subpackages="$subpackages libatomic::$CTARGET_ARCH"
-$LIBGCC && subpackages="$subpackages libgcc::$CTARGET_ARCH"
-$LIBQUADMATH && subpackages="$subpackages libquadmath::$CTARGET_ARCH"
-if $LIBGOMP; then
-	depends="$depends libgomp=$_gccrel"
-	subpackages="$subpackages libgomp::$CTARGET_ARCH"
-fi
-
-_languages=c
-if $LANG_CXX; then
-	subpackages="$subpackages libstdc++:libcxx:$CTARGET_ARCH"
-	_languages="$_languages,c++"
-fi
-if $LANG_OBJC; then
-	subpackages="$subpackages libobjc::$CTARGET_ARCH gcc-objc$_target:objc"
-	_languages="$_languages,objc"
-fi
-if $LANG_FORTRAN; then
-	subpackages="$subpackages libgfortran::$CTARGET_ARCH gfortran$_target:gfortran"
-	_languages="$_languages,fortran"
-fi
-if $LANG_ADA; then
-	subpackages="$subpackages libgnat::$CTARGET_ARCH gcc-gnat$_target:gnat"
-	_languages="$_languages,ada"
-	makedepends_build="$makedepends_build gcc-gnat gcc-gnat$_cross"
-fi
-makedepends="$makedepends_build $makedepends_host"
 
 source="https://gcc.gnu.org/pub/gcc/releases/gcc-${_pkgbase:-$pkgver}/gcc-${_pkgbase:-$pkgver}.tar.xz
 	002_all_default-relro.patch
@@ -168,10 +124,6 @@ prepare() {
 
 build() {
 	local _arch_configure=
-	local _libc_configure=
-	local _cross_configure=
-	local _bootstrap_configure=
-	local _symvers=
 
 	cd "$_gccdir"
 
@@ -187,24 +139,6 @@ build() {
 	*)	_hash_style_configure="--with-linker-hash-style=gnu" ;;
 	esac
 
-	case "$CTARGET_LIBC" in
-	musl)
-		# musl does not support mudflap, or libsanitizer
-		# libmpx uses struct _libc_fpstate not present in musl
-		_libc_configure="--disable-libmpx --disable-libmudflap --disable-libsanitizer"
-		_symvers="--disable-symvers"
-		export libat_cv_have_ifunc=no
-		;;
-	esac
-
-	[ "$CBUILD" != "$CHOST"   ] && _cross_configure="--disable-bootstrap"
-	[ "$CHOST"  != "$CTARGET" ] && _cross_configure="--disable-bootstrap --with-sysroot=$CBUILDROOT"
-
-	$LIBGOMP	|| _bootstrap_configure="$_bootstrap_configure --disable-libgomp"
-	$LIBATOMIC	|| _bootstrap_configure="$_bootstrap_configure --disable-libatomic"
-	$LIBITM		|| _bootstrap_configure="$_bootstrap_configure --disable-libitm"
-	$LIBQUADMATH	|| _arch_configure="$_arch_configure --disable-libquadmath"
-
 	msg "Building the following:"
 	echo ""
 	echo "  CBUILD=$CBUILD"
@@ -214,10 +148,6 @@ build() {
 	echo "  CTARGET_LIBC=$CTARGET_LIBC"
 	echo "  languages=$_languages"
 	echo "  arch_configure=$_arch_configure"
-	echo "  libc_configure=$_libc_configure"
-	echo "  cross_configure=$_cross_configure"
-	echo "  bootstrap_configure=$_bootstrap_configure"
-	echo "	hash_style_configure=$_hash_style_configure"
 	echo "  CC $CC CXX $CXX AS $AS LD $LD"
 	echo ""
 
@@ -238,20 +168,22 @@ build() {
 		--disable-multilib \
 		--disable-nls \
 		--disable-werror \
-		$_symvers \
 		--enable-__cxa_atexit \
 		--enable-default-pie \
 		--enable-cloog-backend \
 		--enable-languages=$_languages \
 		--enable-checking=release \
-		$_arch_configure \
-		$_libc_configure \
-		$_cross_configure \
 		--with-system-zlib \
-		$_hash_style_configure \
 		--enable-shared \
 		--enable-threads \
-		--enable-tls
+		--enable-tls \
+		--disable-libmpx \
+		--disable-libmudflap \
+		--disable-libsanitizer \
+		--disable-symvers \
+		$_arch_configure \
+		$_hash_style_configure \
+		libat_cv_have_ifunc=no
 	make -j1
 }
 
@@ -275,12 +207,8 @@ package() {
 		-o -name libatomic.a -o -name libasan.a -o -name libtsan.a \) \
 		-a -type f`
 
-	if $LIBGOMP; then
-		mv "$pkgdir"/usr/lib/libgomp.spec "$pkgdir"/$_gcclibdir
-	fi
-	if $LIBITM; then
-		mv "$pkgdir"/usr/lib/libitm.spec "$pkgdir"/$_gcclibdir
-	fi
+	mv "$pkgdir"/usr/lib/libgomp.spec "$pkgdir"/$_gcclibdir
+	mv "$pkgdir"/usr/lib/libitm.spec "$pkgdir"/$_gcclibdir
 
 	# remove ffi
 	rm -f "$pkgdir"/usr/lib/libffi* "$pkgdir"/usr/share/man/man3/ffi*
@@ -291,32 +219,6 @@ package() {
 		for i in $(find "$pkgdir"/usr/$gdblib/ -type f -maxdepth 1 -name "*-gdb.py"); do
 			mkdir -p "$pkgdir"/usr/share/gdb/python/auto-load/usr/$gdblib
 			mv "$i" "$pkgdir"/usr/share/gdb/python/auto-load/usr/$gdblib/
-		done
-	fi
-
-	# move ada runtime libs
-	if $LANG_ADA; then
-		for i in $(find "$pkgdir"/$_gcclibdir/adalib/ -type f -maxdepth 1 -name "libgna*.so"); do
-			mv "$i" "$pkgdir"/usr/lib/
-			ln -s ../../../../${i##*/} $i
-		done
-	fi
-
-	if [ "$CHOST" != "$CTARGET" ]; then
-		# cross-gcc: remove any files that would conflict with the
-		# native gcc package
-		rm -rf "$pkgdir"/usr/bin/cc "$pkgdir"/usr/include "$pkgdir"/usr/share
-		# libcc1 does not depend on target, don't ship it
-		rm -rf "$pkgdir"/usr/lib/libcc1.so*
-
-		# fixup gcc library symlinks to be linker scripts so
-		# linker finds the libs from relocated sysroot
-		for so in "$pkgdir"/usr/$CTARGET/lib/*.so; do
-			if [ -h "$so" ]; then
-				local _real=$(basename $(readlink "$so"))
-				rm -f "$so"
-				echo "GROUP ($_real)" > "$so"
-			fi
 		done
 	fi
 }
@@ -338,26 +240,6 @@ libcxx() {
 	mv "$pkgdir"/usr/${_target:+$CTARGET/}lib/libstdc++.so.* "$subpkgdir"/usr/lib/
 }
 
-libobjc() {
-	pkgdesc="GNU Objective-C runtime"
-	replaces="objc"
-	depends=
-	mkdir -p "$subpkgdir"/usr/lib
-	mv "$pkgdir"/usr/${_target:+$CTARGET/}lib/libobjc.so.* "$subpkgdir"/usr/lib/
-}
-
-objc() {
-	pkgdesc="GNU Objective-C"
-	replaces="gcc"
-	depends="musl-dev gcc=$_gccrel libobjc=$_gccrel"
-
-	mkdir -p "$subpkgdir"/$_gcclibdir/include \
-		"$subpkgdir"/usr/lib
-	mv "$pkgdir"/$_gcclibdir/include/objc "$subpkgdir"/$_gcclibdir/include/
-	mv "$pkgdir"/usr/lib/libobjc.so "$pkgdir"/usr/lib/libobjc.a \
-		"$subpkgdir"/usr/lib/
-}
-
 libgcc() {
 	pkgdesc="GNU C compiler runtime libraries"
 	depends=
@@ -375,14 +257,6 @@ libgomp() {
 	mv "$pkgdir"/usr/${_target:+$CTARGET/}lib/libgomp.so.* "$subpkgdir"/usr/lib/
 }
 
-libgfortran() {
-	pkgdesc="Fortran runtime library for GCC"
-	depends=
-
-	mkdir -p "$subpkgdir"/usr/lib
-	mv "$pkgdir"/usr/lib/libgfortran.so.* "$subpkgdir"/usr/lib/
-}
-
 libquadmath() {
 	replaces="gcc"
 	pkgdesc="128-bit math library for GCC"
@@ -390,50 +264,6 @@ libquadmath() {
 
 	mkdir -p "$subpkgdir"/usr/lib
 	mv "$pkgdir"/usr/lib/libquadmath.so.* "$subpkgdir"/usr/lib/
-}
-
-gfortran() {
-	pkgdesc="GNU Fortran Compiler"
-	depends="gcc=$_gccrel libgfortran=$_gccrel"
-	$LIBQUADMATH && depends="$depends libquadmath=$_gccrel"
-	replaces="gcc"
-
-	mkdir -p "$subpkgdir"/$_gcclibexec \
-		"$subpkgdir"/$_gcclibdir \
-		"$subpkgdir"/usr/lib \
-		"$subpkgdir"/usr/bin
-	mv "$pkgdir"/usr/bin/*gfortran "$subpkgdir"/usr/bin/
-	mv "$pkgdir"/usr/lib/libgfortran.a \
-		"$pkgdir"/usr/lib/libgfortran.so \
-		"$subpkgdir"/usr/lib/
-	if $LIBQUADMATH; then
-		mv "$pkgdir"/usr/lib/libquadmath.a \
-			"$pkgdir"/usr/lib/libquadmath.so \
-			"$subpkgdir"/usr/lib/
-	fi
-	mv "$pkgdir"/$_gcclibexec/f951 "$subpkgdir"/$_gcclibexec
-	mv "$pkgdir"/usr/lib/libgfortran.spec "$subpkgdir"/$_gcclibdir
-}
-
-libgnat() {
-	pkgdesc="GNU Ada runtime shared libraries"
-	depends=
-
-	mkdir -p "$subpkgdir"/usr/lib
-	mv "$pkgdir"/usr/lib/libgna*.so "$subpkgdir"/usr/lib/
-}
-
-gnat() {
-	pkgdesc="Ada support for GCC"
-	depends="gcc=$_gccrel"
-	[ "$CHOST" = "$CTARGET" ] && depends="$depends libgnat=$_gccrel"
-
-	mkdir -p "$subpkgdir"/$_gcclibexec \
-		"$subpkgdir"/$_gcclibdir \
-		"$subpkgdir"/usr/bin
-	mv "$pkgdir"/$_gcclibexec/*gnat* "$subpkgdir"/$_gcclibexec/
-	mv "$pkgdir"/$_gcclibdir/*ada* "$subpkgdir"/$_gcclibdir/
-	mv "$pkgdir"/usr/bin/*gnat* "$subpkgdir"/usr/bin/
 }
 
 b2sums="41a5e148f9a6857d6599679964c203533f76f330ad527fbe7c5e746d78f6f6f6d6d0f330a67cb1e794e155be8d1cd6e986bcc8a116d620dca410b78f0bcdd453  gcc-9.2.0.tar.xz

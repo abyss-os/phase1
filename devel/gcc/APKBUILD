@@ -15,7 +15,7 @@ makedepends="bison flex texinfo gawk zip zlib-dev linux-dev binutils"
 subpackages="$pkgname-doc libatomic libgcc libgomp libstdc++:libcxx"
 
 provides="$pkgname-bootstrap"
-depends="$pkgname-bootstrap"
+#depends="$pkgname-bootstrap"
 
 #export CC=gcc CXX=g++ AS=gnu-as LD=gnu-ld AR=gnu-ar
 
@@ -75,7 +75,7 @@ _builddir="$srcdir/build"
 
 prepare() {
 	$CC -c "$srcdir"/__stack_chk_fail_local.c -o __stack_chk_fail_local.o
-	$AR r libssp_nonshared.a __stack_chk_fail_local.o
+	llvm-ar r libssp_nonshared.a __stack_chk_fail_local.o
 	cp -v libssp_nonshared.a /usr/lib/
 
 	cd "$_gccdir"

@@ -1,9 +1,9 @@
 pkgname=llvm
 case $CARCH in
-	*) pkgver=10.0.0_rc5;;
+	*) pkgver=10.0.0;;
 esac
 
-pkgrel=4
+pkgrel=0
 pkgdesc="$pkgname"
 arch="all"
 url=.
@@ -37,7 +37,6 @@ depends="libcxx elfutils-libelf libffi libedit ncurses zlib"
 makedepends="cmake clang lld ncurses-dev libedit-dev swig ninja elfutils-libelf elfutils-dev libffi-dev perl python3-dev zlib-dev linux-dev"
 
 provides="clang compiler-rt llvm-bootstrap"
-replaces="clang compiler-rt"
 
 prepare() {
 	config_helper
@@ -202,7 +201,7 @@ lld_aalt() {
     DESTDIR=$subpkgdir aalt-bin -R -g llvm -p ld -f /usr/bin/lld
 }
 
-b2sums="74c7899c1fe0d501efeaeddf732dcd4bca8035513f421602b04579034781b6e402ccc42a7b9ab0e2da9620bb9fa171a7ffcf4b3a96287f91d745bec767da6361  llvmorg-10.0.0-rc5.tar.gz
+b2sums="6b0254f5b913398cdcf2b2ec1ff219888706d2b79d5296590934714e42ac79f6a6547941ac2b1d2c4e6313dd18b6c7068e748aa6ac033e49fccbf5d355aa8191  llvmorg-10.0.0.tar.gz
 4ac74027fdfe0def3a1601df2f65ad1a8fe47e41cfa4df2065863288a5ebe65057a5c4d0791bf817d8dfab923d0bc39d804e968bd3a90ed3f6720d2fbf1734aa  musl.patch
 8e23d19518bc2bba4009c30ba6d8c981e94b6e293a95a29ebbb9be7c9a7a40b21900a7e526529149847a42bd98899306a1af9b99c819e290d4a67e34f4ea32c3  mips_softfloat.patch
 916376a80bde2f7c009a8ce2f8663f95c2e87271047a5476dc429ab014141fdd45689ebc5e3c4ca1cb11d3cd3255ef84d5425a8725cb91cb95f08ee6b56136c5  mips64_crt.patch

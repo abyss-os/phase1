@@ -17,7 +17,7 @@ subpackages="$pkgname-doc libatomic libgcc libquadmath libgomp libstdc++:libcxx"
 provides="$pkgname-bootstrap"
 depends="$pkgname-bootstrap"
 
-export CC=gcc CXX=g++ AS=gnu-as LD=gnu-ld AR=gnu-ar
+#export CC=gcc CXX=g++ AS=gnu-as LD=gnu-ld AR=gnu-ar
 
 LANG_CXX=true
 LIBGOMP=true
@@ -26,9 +26,8 @@ LIBATOMIC=true
 LIBITM=true
 LIBQUADMATH=true
 
-# libitm has TEXTRELs in ARM build, so disable for now
+# textrels
 case "$CTARGET_ARCH" in
-arm*)		LIBITM=false ;;
 mips*)		LIBITM=false ;;
 riscv*)		LIBITM=false ;;
 esac
@@ -186,7 +185,7 @@ build() {
 		$_arch_configure \
 		$_hash_style_configure \
 		libat_cv_have_ifunc=no
-	make -j1
+	make
 }
 
 package() {

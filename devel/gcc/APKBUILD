@@ -15,8 +15,9 @@ makedepends="gcc-bootstrap bison flex texinfo gawk zip zlib-dev linux-dev binuti
 subpackages="$pkgname-doc"
 
 provides="$pkgname-bootstrap"
+depends="$pkgname-bootstrap"
 
-#export CC=clang CXX=clang++ AS=gnu-as LD=gnu-ld
+export CC=gcc CXX=g++ AS=gnu-as LD=gnu-ld
 
 : ${LANG_CXX:=true}
 : ${LANG_GO:=false}
@@ -172,8 +173,6 @@ prepare() {
 }
 
 build() {
-	OLDTC="$(toolchain show)"
-	/usr/bin/toolchain none gnu
 	local _arch_configure=
 	local _libc_configure=
 	local _cross_configure=
@@ -260,8 +259,6 @@ build() {
 		--with-system-zlib \
 		$_hash_style_configure
 	make -j1
-
-	/usr/bin/toolchain "${OLDTC}"
 }
 
 package() {

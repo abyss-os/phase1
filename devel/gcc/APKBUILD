@@ -20,7 +20,6 @@ depends="$pkgname-bootstrap"
 export CC=gcc CXX=g++ AS=gnu-as LD=gnu-ld
 
 : ${LANG_CXX:=true}
-: ${LANG_GO:=false}
 : ${LANG_OBJC:=false}
 : ${LANG_FORTRAN:=false}
 : ${LANG_ADA:=false}
@@ -66,10 +65,6 @@ fi
 if $LANG_OBJC; then
 	subpackages="$subpackages libobjc::$CTARGET_ARCH gcc-objc$_target:objc"
 	_languages="$_languages,objc"
-fi
-if $LANG_GO; then
-	subpackages="$subpackages libgo::$CTARGET_ARCH gcc-go$_target:go"
-	_languages="$_languages,go"
 fi
 if $LANG_FORTRAN; then
 	subpackages="$subpackages libgfortran::$CTARGET_ARCH gfortran$_target:gfortran"
@@ -206,11 +201,6 @@ build() {
 	[ "$CBUILD" != "$CHOST"   ] && _cross_configure="--disable-bootstrap"
 	[ "$CHOST"  != "$CTARGET" ] && _cross_configure="--disable-bootstrap --with-sysroot=$CBUILDROOT"
 
-	case "$BOOTSTRAP" in
-	nolibc)	_bootstrap_configure="--with-newlib --disable-shared --enable-threads=no" ;;
-	*)	_bootstrap_configure="--enable-shared --enable-threads --enable-tls" ;;
-	esac
-
 	$LIBGOMP	|| _bootstrap_configure="$_bootstrap_configure --disable-libgomp"
 	$LIBATOMIC	|| _bootstrap_configure="$_bootstrap_configure --disable-libatomic"
 	$LIBITM		|| _bootstrap_configure="$_bootstrap_configure --disable-libitm"
@@ -229,12 +219,14 @@ build() {
 	echo "  cross_configure=$_cross_configure"
 	echo "  bootstrap_configure=$_bootstrap_configure"
 	echo "	hash_style_configure=$_hash_style_configure"
+	echo "  CC $CC CXX $CXX AS $AS LD $LD"
 	echo ""
 
 	mkdir -p "$_builddir"
 	cd "$_builddir"
- 	env CC=$CC CXX=$CXX CC_FOR_TARGET=$CC CXX_FOR_TARGET=$CXX \
-		"$_gccdir"/configure CC=$CC CXX=$CXX --prefix=/usr \
+ 	env CC=$CC CXX=$CXX CC_FOR_TARGET=$CC CXX_FOR_TARGET=$CXX AS=$AS LD=$LD \
+		"$_gccdir"/configure CC=$CC CXX=$CXX AS=$AS LD=$LD \
+		--prefix=/usr \
 		--program-prefix=gnu- \
 		--mandir=/usr/share/man \
 		--infodir=/usr/share/info \
@@ -257,7 +249,10 @@ build() {
 		$_libc_configure \
 		$_cross_configure \
 		--with-system-zlib \
-		$_hash_style_configure
+		$_hash_style_configure \
+		--enable-shared \
+		--enable-threads \
+		--enable-tls
 	make -j1
 }
 
@@ -379,30 +374,6 @@ libgomp() {
 
 	mkdir -p "$subpkgdir"/usr/lib
 	mv "$pkgdir"/usr/${_target:+$CTARGET/}lib/libgomp.so.* "$subpkgdir"/usr/lib/
-}
-
-libgo() {
-	pkgdesc="Go runtime library for GCC"
-	depends=
-
-	mkdir -p "$subpkgdir"/usr/lib
-	mv "$pkgdir"/usr/lib/libgo.so.* "$subpkgdir"/usr/lib/
-}
-
-go() {
-	pkgdesc="Go support for GCC"
-	depends="gcc=$_gccrel libgo=$_gccrel"
-
-	mkdir -p "$subpkgdir"/$_gcclibexec \
-		"$subpkgdir"/usr/lib \
-		"$subpkgdir"/usr/bin
-	mv "$pkgdir"/usr/lib/go "$subpkgdir"/usr/lib/
-	mv "$pkgdir"/usr/bin/*gccgo "$subpkgdir"/usr/bin/
-	mv "$pkgdir"/$_gcclibexec/go1 "$subpkgdir"/$_gcclibexec/
-	mv "$pkgdir"/usr/lib/libgo.a \
-		"$pkgdir"/usr/lib/libgo.so \
-		"$pkgdir"/usr/lib/libgobegin.a \
-		"$subpkgdir"/usr/lib/
 }
 
 libgfortran() {

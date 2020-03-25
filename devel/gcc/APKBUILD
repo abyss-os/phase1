@@ -139,6 +139,8 @@ build() {
 	*)	_hash_style_configure="--with-linker-hash-style=gnu" ;;
 	esac
 
+	_languages=c,c++
+
 	msg "Building the following:"
 	echo ""
 	echo "  CBUILD=$CBUILD"

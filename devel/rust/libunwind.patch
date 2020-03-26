@@ -1,30 +1,26 @@
 diff --git a/src/libunwind/build.rs b/src/libunwind/build.rs
-index b8db16f8..2a4cdde8 100644
+index a24808b3..0f7109b6 100644
 --- a/src/libunwind/build.rs
 +++ b/src/libunwind/build.rs
-@@ -11,8 +11,8 @@ fn main() {
-         llvm_libunwind::compile();
+@@ -12,7 +12,7 @@ fn main() {
      } else if target.contains("linux") {
          if target.contains("musl") {
--            // linking for musl is handled in lib.rs
+             // linking for musl is handled in lib.rs
 -            llvm_libunwind::compile();
-+            // use libcxx
-+            println!("cargo:rustc-link-lib=c++");
++            println!("cargo:rustc-link-lib=unwind");
          } else if !target.contains("android") {
              println!("cargo:rustc-link-lib=gcc_s");
          }
 diff --git a/src/libunwind/lib.rs b/src/libunwind/lib.rs
-index 8d916447..272eeca4 100644
+index 18d41be7..fd97a764 100644
 --- a/src/libunwind/lib.rs
 +++ b/src/libunwind/lib.rs
-@@ -21,8 +21,8 @@ cfg_if::cfg_if! {
- }
+@@ -20,7 +20,7 @@ cfg_if::cfg_if! {
  
  #[cfg(target_env = "musl")]
--#[link(name = "unwind", kind = "static", cfg(target_feature = "crt-static"))]
+ #[link(name = "unwind", kind = "static", cfg(target_feature = "crt-static"))]
 -#[link(name = "gcc_s", cfg(not(target_feature = "crt-static")))]
-+#[link(name = "c++", kind = "static", cfg(target_feature = "crt-static"))]
-+#[link(name = "c++", cfg(not(target_feature = "crt-static")))]
- extern {}
++#[link(name = "unwind", cfg(not(target_feature = "crt-static")))]
+ extern "C" {}
  
  #[cfg(target_os = "redox")]

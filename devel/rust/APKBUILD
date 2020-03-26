@@ -1,6 +1,6 @@
 pkgname=rust
-pkgver=1.41.0
-pkgrel=1
+pkgver=1.42.0
+pkgrel=0
 pkgdesc="The Rust Programming Language"
 url="https://www.rust-lang.org"
 arch="x86_64 armv7 armhf aarch64 x86 ppc64le"
@@ -52,13 +52,11 @@ source="https://static.rust-lang.org/dist/rustc-$pkgver-src.tar.gz
 	musl-fix-linux_musl_base.patch
 	static-pie.patch
 	need-rpath.patch
-	minimize-rpath.patch
 	alpine-move-py-scripts-to-share.patch
 	abyss-target.patch
 	install-template-shebang.patch
 	check-rustc
 	link-musl-dynamically.patch
-	llvm10.patch
 	libunwind.patch"
 builddir="$srcdir/rustc-$pkgver-src"
 
@@ -266,16 +264,14 @@ _mv() {
 	mv "$@"
 }
 
-b2sums="51dd1595ee7ca15931a47d8e14dbee93797fc18c8d2eadbae4170cb16c50828a10d285b4000d2439bb0d8db4d27e62047bcc3a1f5449d2d21797541b98378d29  rustc-1.41.0-src.tar.gz
+b2sums="1b8aad99cf96cda60e67a29aebadf915bbae69c5dbde5a68e5e6949360b3143329d9f046ba12e18abd93e408bc953630366ae1d7cb933565b41546ca654696c1  rustc-1.42.0-src.tar.gz
 443371a1ce3e3e89469336f51414e3ada7c4cc21e567b4ee0e047d5e64c88b730ed23fc72676584da7d9949326b1736db4cad617758b650304a5fe6d28edfa40  musl-fix-static-linking.patch
 d43d643d2e7520cfe666b4dd22570838340dca2da6d8f79fc2b4b95111b32d40bff12a1a4da1ab7b000a73ae374b111e6478c5083676c6aa482831dfd66615f4  musl-fix-linux_musl_base.patch
 07edaea52281deb861d0319bc9762590b02ecd5c539becd552845e77562888ad8e3f82e6d4b9212f8719df86bce7cbacf70148f3ffe8ea1d597759ab56bda427  static-pie.patch
 2e10a1eda391092f31206dda19f4bde516d4a4a71548b441a47cf65338905490a0916d158056f707f7c1d1b5e4a3da9fa8876caa422c65dda6eb1bdfccdd25e4  need-rpath.patch
-5a913106d1df0b38ca6960f0d2e81c2c88d4461a6033938339f3fbd2486e41a2efd595d15eb91c10e5338ff77614334207125a90dd8649305f5846bc925cf93b  minimize-rpath.patch
 dcd184c205eb90591fa88aa69e80cbdd2c18ac8f22040ce20b9a638979ac4d8aa82460d187e5ee28958c7b2655df251402360e6e36556efeefc134e2fdde8111  alpine-move-py-scripts-to-share.patch
 787a125dec178583e1d8fe703ba1dceb9f856bfedff07e7b050bd7b96f0524ad574f95f2677d971ef5366e4aa57e54074f5030a4805d94c6f880b67d2841655f  abyss-target.patch
 4de9b6c3afcbc649eb3b9147d52e78cc87f32f794cb10ec22ff272f7d3edd8b9acd11a64c47dff85de090215b3493c97f39cdc7524d81f8e45df4ced22fa3879  install-template-shebang.patch
 03e1b320d2b24f09d348a5301c5fdcc88d41037cdfde36da5f92caf95b687a8c245997f8917b0bc7c4bde9ad09afcb43343df5faf1e356a3535504f2ed7e7587  check-rustc
 3762c2d820cb6fa7d5c03971e8130b33317dfc28349df99841613b5cfd5aca67d0cf22117cac42ba6b111821892fbfb8ddf2998ba4da92a67f7a1efd9ab9e883  link-musl-dynamically.patch
-a623908a15adc8d7c276dda2d77029aab9da79c99d0ceef31db79f4c97a888bb3ec7e90a5c1454f2953edc592532fd5c8b2d5e60ba0a40bf07f1cf3aeba4b714  llvm10.patch
-d49e1fdf68577a6c8b49539d9083f033efb5c2d7e62dc212f58733bea0e93d62e9a00f50080e34230b573956eba1008ec4a35db0cc1e5bea766791f0c07c16b0  libunwind.patch"
+5e360514afbe81212a6b50dbcc0ec3f569f89752e321322b2151911ba0d14d8b86b0378fc4a7ecf875c9da1db0ae20ff0a51d45c4e0889c8d7768c785e9ece39  libunwind.patch"

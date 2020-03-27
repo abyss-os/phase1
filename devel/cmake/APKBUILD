@@ -1,5 +1,5 @@
 pkgname=cmake
-pkgver=3.16.5
+pkgver=3.17.0
 pkgrel=0
 pkgdesc="Cross-platform, open-source make system"
 url="https://www.cmake.org"
@@ -76,4 +76,4 @@ bashcomp() {
 		"$subpkgdir"/usr/share/bash-completion/
 }
 
-b2sums="5f996113a4979563d7b9f298b4b1a32d6f91eebaa79af42e1cbf247884e443de47e30030fd0f16c7755c4086e2bff0c0741911753ea7c889b68c393c0b98c876  cmake-3.16.5.tar.gz"
+b2sums="63dc59a9551d6afcf009403bcc68f3bb87065f962c39f443d9a73c7babbb2e49b4237d00072d2ff4f91a6cd4c9d5ac05cd9b97acd0404c852fe03133b538f2ea  cmake-3.17.0.tar.gz"

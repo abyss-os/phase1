@@ -1,0 +1,27 @@
+diff --git a/cmake/Findllvm.cmake b/cmake/Findllvm.cmake
+index 0955936..3db269f 100644
+--- a/cmake/Findllvm.cmake
++++ b/cmake/Findllvm.cmake
+@@ -49,22 +49,6 @@ function(NEED_TARGET TARGET_NAME)
+         message(FATAL_ERROR "LLVM is missing target ${TARGET_NAME}. Zig requires LLVM to be built with all default targets enabled.")
+     endif()
+ endfunction(NEED_TARGET)
+-NEED_TARGET("AArch64")
+-NEED_TARGET("AMDGPU")
+-NEED_TARGET("ARM")
+-NEED_TARGET("BPF")
+-NEED_TARGET("Hexagon")
+-NEED_TARGET("Lanai")
+-NEED_TARGET("Mips")
+-NEED_TARGET("MSP430")
+-NEED_TARGET("NVPTX")
+-NEED_TARGET("PowerPC")
+-NEED_TARGET("RISCV")
+-NEED_TARGET("Sparc")
+-NEED_TARGET("SystemZ")
+-NEED_TARGET("WebAssembly")
+-NEED_TARGET("X86")
+-NEED_TARGET("XCore")
+ 
+ if(ZIG_STATIC_LLVM)
+   execute_process(

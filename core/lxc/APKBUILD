@@ -1,7 +1,7 @@
 pkgname=lxc
-pkgver=3.2.1
+pkgver=4.0.0
 _pkgver=${pkgver/_rc/.rc}
-pkgrel=2
+pkgrel=0
 pkgdesc="Userspace interface for the Linux kernel containment features"
 url="https://linuxcontainers.org/lxc/"
 arch="all"
@@ -32,8 +32,6 @@ subpackages="
 	"
 
 source="https://linuxcontainers.org/downloads/lxc/lxc-$_pkgver.tar.gz
-	cgroups-initialize-cpuset-properly.patch
-	network-restore-ability-to-move-nl80211-devices.patch
 	lxc.initd
 	lxc.confd
 	"
@@ -157,8 +155,6 @@ bashcomp() {
 	rmdir "$pkgdir"/etc/bash_completion.d
 }
 
-b2sums="bfa82306aa7fabbef7ab48c6996b213f45bfff88085c25bb356fd62f2600f5df474c26592a4c01c0c8850fce0b5fcb8baa2a7e3d59fe5fc6d70a7e1bb74729e4  lxc-3.2.1.tar.gz
-e4a270a1d8f8609cf1ce0466e50bcb1e989b7c635346fb83519f49cc46fc676c0d57432bb71d5a3956e56966fad6bbe95e4ac800e48c175641875be3491c2724  cgroups-initialize-cpuset-properly.patch
-bcb2c5ead633f5de760037a5463fbae0b848534f047779e9d63430a62787f048af9f8bf7c0ce84f4601a371ebee00ba8c705e7653a2be9aa5aedcb17b564e681  network-restore-ability-to-move-nl80211-devices.patch
+b2sums="565caa7e6877fa6efda2e4467723617a8d465849286e3c77301bb6356f4dd78847409cb0fe8df5418c6603feaaa730ac59f5547aca2bd2e0c7e273d5953fb761  lxc-4.0.0.tar.gz
 4e3382c79a203bb6d8dcf45ed77a583f0cb93f37ed04418aa060727ddd59b6038965c5a3b0355da4d10c2680e263121e808f5ae24cfbb6a08f640ee12e9729e9  lxc.initd
 279d1d9c71b273edf1ec40066e68a0c0ee7257d30f1728532a366aa0409013102dc9089680dcde5e8936710582759f9bffbb5026842f40b727ee67fcc4ef0784  lxc.confd"

@@ -6,7 +6,7 @@ index 8682406..669445d 100644
  
  static bool change_creds(int ns_fd, cap_t caps, uid_t nsuid, gid_t nsgid, uid_t nsfsuid, gid_t nsfsgid)
  {
--	__do_close_prot_errno int fd = -EBADF;
+-	__do_close int fd = -EBADF;
 -
  	if (prctl(PR_SET_KEEPCAPS, 1))
  		return false;

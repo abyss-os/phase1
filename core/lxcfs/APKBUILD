@@ -1,5 +1,5 @@
 pkgname=lxcfs
-pkgver=4.0.0
+pkgver=4.0.1
 pkgrel=0
 pkgdesc="FUSE filesystem for LXC"
 url="https://linuxcontainers.org/lxcfs"
@@ -42,6 +42,6 @@ package() {
 		"$pkgdir"/etc/conf.d/$pkgname
 }
 
-b2sums="88d53b41ef3af34c8c904ca2a59b20b724edec633ec17c4ef1ce6730f5628062bd5a03849dcca845eb6a36aebf5f11a94a4a7d563122bcfbd668a9a1d1ff6693  lxcfs-4.0.0.tar.gz
+b2sums="32c1e89b4f05717341fa73a47d60ae858cebe18c47caa905e83e28263958f31d4ca7ae2cc2f3d4457b173201681a4a0f54f75b92bba05e3ff1ade8295dda6844  lxcfs-4.0.1.tar.gz
 0664072178302f7b9becc80ee30f47187188d4343fb9e47dbf862dc03157f69899e8866b2e45fd7b9fa69a1b121c4fc7ee1a76adb7943842c20c1752f55f2495  lxcfs.confd
 09be32853f8620403c8d7cb67a090836667849245836a492169e70c3589f460945a8a52a09f6a267aa4eddd1ce3b74748706ff6d7be7fcb6846a00e024868ba3  lxcfs.initd"

@@ -6,7 +6,6 @@ pkgdesc="Zig!"
 url="https://github.com/ziglang/zig"
 arch="all"
 license="MIT"
-depends="abyss-base-dev"
 makedepends="ninja cmake"
 source="$pkgname-$pkgver.tar.gz::https://github.com/ziglang/zig/archive/$_hash.tar.gz
 		targets.patch"

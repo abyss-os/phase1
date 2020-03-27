@@ -19,7 +19,6 @@ case $CARCH in
 esac
 
 source="https://github.com/llvm/llvm-project/archive/llvmorg-${pkgver/_/-}.tar.gz
-		musl.patch
 		mips_softfloat.patch
 		mips64_crt.patch
 		clang-pie-ssp.patch
@@ -199,3 +198,10 @@ lld_aalt() {
     DESTDIR=$subpkgdir aalt-bin -R -g llvm -p ld -f /usr/bin/lld
 }
 
+b2sums="6b0254f5b913398cdcf2b2ec1ff219888706d2b79d5296590934714e42ac79f6a6547941ac2b1d2c4e6313dd18b6c7068e748aa6ac033e49fccbf5d355aa8191  llvmorg-10.0.0.tar.gz
+8e23d19518bc2bba4009c30ba6d8c981e94b6e293a95a29ebbb9be7c9a7a40b21900a7e526529149847a42bd98899306a1af9b99c819e290d4a67e34f4ea32c3  mips_softfloat.patch
+916376a80bde2f7c009a8ce2f8663f95c2e87271047a5476dc429ab014141fdd45689ebc5e3c4ca1cb11d3cd3255ef84d5425a8725cb91cb95f08ee6b56136c5  mips64_crt.patch
+7991221eca8a3f32607de7da91c02928d95cfae8d2af3516d403d2edd1a43bf7bb97280b6584146cd9ed51123b2bfe686a460ac1035131d115207d55a7debcfa  clang-pie-ssp.patch
+ada8faf1f1bbdfc52b0493ba563b91de954e6613b8be0af7deeabdf0b621a69a45e5acc753ecb487f461360bb2ec99b4f510a8872bff3afe90e9e7b91de12997  lld-znow.patch
+c99d536538e3e4830c618e11214f4fdda6cf377c9ea565b254e2484e52b68202b19b921b09ef4b784897bceac8a3b7bb9331b4b0087a5cafb8a1a3518fb1a1c4  riscv_relax.patch
+66835dfc1460df303d26fe7c5d630b836cbb0e1ef7c39d59695f73f69e2d12af59db72ce16b1ee16f9ff5ea7bd530a9d39b7c98c0f7c89d74c03ab212d17db9a  tmp-kernel.patch"

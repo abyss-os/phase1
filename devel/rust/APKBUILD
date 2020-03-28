@@ -91,10 +91,14 @@ prepare() {
 	_clear_vendor_checksums libc
 
 	# Remove bundled dependencies.
-	rm -Rf src/llvm-project/
+	#rm -Rf src/llvm-project/
 }
 
 build() {
+#		--llvm-root="/usr" \
+
+	# override LD for now, since rustc doesn't bother passing -L/usr/lib
+	export LD=clang
 	./configure \
 		--build="$_build" \
 		--host="$_target" \
@@ -103,30 +107,34 @@ build() {
 		--release-channel="stable" \
 		--enable-local-rust \
 		--local-rust-root="/usr" \
-		--llvm-root="/usr" \
-		--disable-docs \
+		--enable-option-checking \
 		--tools="cargo" \
 		--enable-extended \
-		--enable-llvm-link-shared \
-		--enable-option-checking \
-		--enable-locked-deps \
-		--enable-vendor \
 		--set="target.$_build.crt-static=false" \
-		--set="target.$_build.linker=$CC" \
+		--set="target.$_build.linker=$LD" \
+		--set="target.$_build.llvm-config=/usr/bin/llvm-config" \
 		--set="build.local-rebuild=true" \
-		--set="rust.parallel-compiler=true" \
 		--set="build.full-bootstrap=false" \
 		--set="build.fast-submodules=true" \
-		--set="rust.incremental=true" \
+		--set="build.print-step-timings=true" \
+		--set="build.docs=false" \
+		--set="build.locked-deps=true" \
+		--set="build.vendor=true" \
 		--set="rust.debug=false" \
-		--set="rust.debuginfo-level=0"
+		--set="rust.parallel-compiler=true" \
+		--set="rust.debuginfo-level=0" \
+		--set="rust.codegen-units=0" \
+		--set="rust.rpath=false" \
+		--set="rust.codegen-tests=false" \
+		--set="rust.deny-warnings=false" \
+		--set="llvm.skip-rebuild=true" \
+		--set="llvm.link-shared=true"
 
 
 	# Allow warnings instead of just aborting the build
-	sed 's/#deny-warnings = .*/deny-warnings = false/' -i config.toml
 	sed 's|deny(warnings,|deny(|' -i src/bootstrap/lib.rs
 
-	./x.py build -i --jobs ${JOBS}
+#	./x.py build -i --jobs ${JOBS}
 }
 
 check() {
@@ -151,7 +159,7 @@ check() {
 
 package() {
 	export LD_LIBRARY_PATH="$builddir/build/$CTARGET/stage2/lib"
-	DESTDIR="$pkgdir" ./x.py install -v
+	DESTDIR="$pkgdir" ./x.py install -v --jobs ${JOBS}
 
 	cd "$pkgdir"
 

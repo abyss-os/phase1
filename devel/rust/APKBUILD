@@ -116,7 +116,6 @@ build() {
 		--set="build.local-rebuild=true" \
 		--set="build.full-bootstrap=false" \
 		--set="build.fast-submodules=true" \
-		--set="build.print-step-timings=true" \
 		--set="build.docs=false" \
 		--set="build.locked-deps=true" \
 		--set="build.vendor=true" \
@@ -159,7 +158,7 @@ check() {
 
 package() {
 	export LD_LIBRARY_PATH="$builddir/build/$CTARGET/stage2/lib"
-	DESTDIR="$pkgdir" ./x.py install -v --jobs ${JOBS}
+	DESTDIR="$pkgdir" ./x.py install --jobs ${JOBS}
 
 	cd "$pkgdir"
 

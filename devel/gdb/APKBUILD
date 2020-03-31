@@ -1,0 +1,47 @@
+pkgname=gdb
+pkgver=9.1
+pkgrel=0
+pkgdesc="The GNU Debugger"
+url="https://www.gnu.org/software/gdb/"
+arch="all"
+license="GPL-3.0-or-later LGPL-3.0-or-later"
+makedepends="ncurses-dev expat-dev texinfo readline-dev python3-dev zlib-dev linux-dev perl"
+options="!check"
+subpackages="$pkgname-doc"
+source="https://ftp.gnu.org/gnu/gdb/gdb-$pkgver.tar.xz
+	ppc-musl.patch
+	ppc-ptregs.patch
+	musl-signals.patch
+	"
+
+build() {
+	mkdir $builddir/build && cd $builddir/build
+	../configure \
+		--prefix=/usr \
+		--with-python=/usr/bin/python \
+		--disable-nls \
+		--disable-werror \
+		--mandir=/usr/share/man \
+		--infodir=/usr/share/info \
+		--with-system-readline \
+		--with-system-zlib
+	make
+}
+
+package() {
+	cd $builddir/build
+	make DESTDIR="$pkgdir" install
+
+	# resolve conflict with binutils-doc
+	rm -f "$pkgdir"/usr/share/info/bfd.info
+	rm -f "$pkgdir"/usr/share/info/dir
+
+	# those are provided by binutils
+	rm -rf "$pkgdir"/usr/include
+	rm -rf "$pkgdir"/usr/lib
+}
+
+b2sums="b84b1dc627d7ba697dfd76ba7c0f4f88f1725e1e1b83134d08cf53bf867ebfa07e1d01eff2acd9a57d22a779077bf6ed95d6098e8a58c4d86eaed034ca62ac30  gdb-9.1.tar.xz
+058c22c6101b0279e585be2824d29f5e7c2a7bfd2e365da3073f6bf097eba3d589cefed566c56aa8117e813915089b580fce24e9c2fe45ae228ca143bc46a580  ppc-musl.patch
+43e8131d3f24aa0c8bfa76da2f4434e557490e4686b9f82d0183251004f1721909ebba9f6b5c5b69d3ac2d0f3169c8cde85882b7fa7e9c79942f526da8563005  ppc-ptregs.patch
+2864a70f22b0d66fcfcf83f1601b0bd3fa2a48bf88d130a83c5a5cb8fba9a56fd0b68a313adeafce45c487c056cc6bc6281f9b36b19927fac83e4fcae4d859ad  musl-signals.patch"

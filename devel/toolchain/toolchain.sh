@@ -21,7 +21,7 @@ if [ x"$1" = x"show" ]; then
 	esac
 
 	case $blink in
-		lld) binutils=llvm;;
+		lld|ld.lld) binutils=llvm;;
 		gnu-ld) binutils=gnu;;
 		none) binutils=$blink;;
 		*) binutils=unknown;;

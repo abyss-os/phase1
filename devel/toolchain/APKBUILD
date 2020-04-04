@@ -1,5 +1,5 @@
 pkgname=toolchain
-pkgver=2
+pkgver=3
 pkgrel=0
 pkgdesc="configures toolchain for Abyss"
 url="https://getabyss.com"

@@ -36,8 +36,8 @@ prepare() {
 	mkdir -p ${srcdir}/build && cd ${srcdir}/build
 	cp -v ${srcdir}/config.${CARCH} ${srcdir}/build/.config
 	# sledgehammer, update build env
-	msg "Updating buildenv..."
 	export OTC="$(toolchain show)"
+	msg "Updating buildenv (currently: ${OTC})..."
 	toolchain none gnu
 	make -C ${srcdir}/linux-${pkgver} O=${srcdir}/build \
 		ARCH="$_carch" HOSTCC="$CC" CC="$CC" AS=$AS HOSTAS=$AS HOSTLD=$LD LD=$LD \
@@ -49,7 +49,7 @@ build() {
 	make -C ${srcdir}/linux-${pkgver} O=${srcdir}/build \
 		ARCH="$_carch" HOSTCC="$CC" CC="$CC" AS=$AS HOSTAS=$AS HOSTLD=$LD LD=$LD \
 		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-abyss"
-	msg "Reverting buildenv..."
+	msg "Reverting buildenv (${OTC})..."
 	toolchain ${OTC}
 }
 

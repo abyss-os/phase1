@@ -1,6 +1,6 @@
 pkgname=abyss-base
 pkgver=1
-pkgrel=0
+pkgrel=1
 pkgdesc="Abyss OS base package"
 url="https://abyss.run"
 arch="all"
@@ -138,7 +138,7 @@ package() {
 
 	# symlinks
 	ln -s /etc/crontabs "$pkgdir"/var/spool/cron/crontabs
-	ln -s /proc/mounts "$pkgdir"/etc/mtab
+	ln -s ../proc/self/mounts "$pkgdir"/etc/mtab
 
 	# add lib symlinks
 	ln -vs usr/lib lib

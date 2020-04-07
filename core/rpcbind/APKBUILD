@@ -1,0 +1,53 @@
+pkgname=rpcbind
+pkgver=1.2.5
+_hash=c0c89b3bf2bdf304a5fe3cab626334e0cdaf1ef2
+pkgrel=0
+pkgdesc="portmap replacement which supports RPC over various protocols"
+url="http://rpcbind.sourceforge.net"
+arch="all"
+options="!check"  # No test suite.
+license="BSD-3-Clause"
+depends=
+install="$pkgname.pre-install $pkgname.pre-upgrade"
+makedepends="libtirpc-dev autoconf automake bsd-compat-headers"
+subpackages="$pkgname-doc $pkgname-openrc"
+source="rpcbind-$pkgver.tar.gz::http://git.linux-nfs.org/?p=steved/rpcbind.git;a=snapshot;h=${_hash};sf=tgz
+	0001-rpcinfo-Fix-stack-buffer-overflow.patch
+	rpcbind.initd
+	rpcbind.confd
+	"
+
+builddir="$srcdir"/rpcbind-${_hash:0:7}
+
+prepare() {
+	cd "$builddir"
+	default_prepare
+	sh autogen.sh
+}
+
+build() {
+	cd "$builddir"
+	./configure \
+		--build=$CBUILD \
+		--host=$CHOST \
+		--prefix=/usr \
+		--sbindir=/usr/bin \
+		--enable-warmstarts \
+		--with-statedir=/var/lib/rpcbind \
+		--with-rpcuser=rpc \
+		--enable-debug \
+		--with-systemdsystemunitdir='no'
+	make -j1
+}
+
+package() {
+	cd "$builddir"
+	make DESTDIR="$pkgdir" install
+	install -Dm755 "$srcdir"/rpcbind.initd "$pkgdir"/etc/init.d/rpcbind
+	install -Dm644 "$srcdir"/rpcbind.confd "$pkgdir"/etc/conf.d/rpcbind
+	install -D -m644 COPYING "$pkgdir"/usr/share/licenses/rpcbind/COPYING
+}
+b2sums="c38e32e47dcff4ec29764dbef621e273b7be959572d1c86a6f671ff12645c2c79cd83dff389bbe12a17f881a80e1cff5f6e5d2463d7fe916d0b248bc2f03c0d1  rpcbind-1.2.5.tar.gz
+79693d3ad8546c7735c7dc5f3d9dd7ed96ce7dde3d27e022cfb143c6bc604ae6a38fb5dfacc7336347d6b8b239cea81cd820895d7f8454e28a68de0ea8de2d89  0001-rpcinfo-Fix-stack-buffer-overflow.patch
+1ad6523558cc95fc3954745a8859ebb946008b95b3fd857ee86a124bf1280f14e28ede0eacd0a78a3b4100ed355dc6d1f6193a6fe19c5fd46aaa2b67db204228  rpcbind.initd
+5b0c9416c456b2a4e12345eb2f5b6cf7a553ec838b82599c58a64cc2b7f61635252fd7a8965995120c286c150986632a325be6dabcdd1ab0c02d3d20a1d28bd8  rpcbind.confd"

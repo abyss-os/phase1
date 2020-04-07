@@ -84,10 +84,12 @@ if [ "$compiler" != "none" ]; then
 		llvm)
 			for link in $compiler_links; do
 				ln -vs /usr/bin/clang /usr/bin/${link}
-			done;;
+			done
+			ln -vs /usr/bin/clang-cpp /usr/bin/cpp;;
 		gnu)
 			for link in $compiler_links $gnu_extra; do
 				ln -vs /usr/bin/gnu-${link} /usr/bin/${link}
-			done;;
+			done
+			ln -vs /usr/bin/gnu-cpp /usr/bin/cpp;;
 	esac
 fi

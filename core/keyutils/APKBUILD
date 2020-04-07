@@ -1,0 +1,43 @@
+pkgname=keyutils
+pkgver=1.6.1
+pkgrel=0
+pkgdesc="Linux Key Management Utilities"
+url="http://people.redhat.com/~dhowells/keyutils/"
+arch="all"
+options="!check"  # Test suite requires RPM.
+license="GPL-2.0-or-later LGPL-2.0-or-later"
+makedepends="file linux-dev"
+subpackages="$pkgname-dev $pkgname-doc"
+source="https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/keyutils.git/snapshot/keyutils-$pkgver.tar.gz"
+
+build() {
+	cd "$builddir"
+	make -j1 \
+		NO_ARLIB=1 \
+		LIBDIR=/usr/lib \
+		USRLIBDIR=/usr/lib \
+		BINDIR=/usr/bin \
+		SBINDIR=/usr/bin \
+		VERSION=$pkgver \
+		RELEASE=-r$pkgrel \
+		CFLAGS="$CFLAGS"
+}
+
+package() {
+	cd "$builddir"
+	make DESTDIR="$pkgdir" \
+		NO_ARLIB=1 \
+		LIBDIR=/usr/lib \
+		USRLIBDIR=/usr/lib \
+		BINDIR=/usr/bin \
+		SBINDIR=/usr/bin \
+		install
+}
+
+libs() {
+	pkgdesc="Key utilities library"
+	mkdir -p "$subpkgdir"/usr/lib
+	mv "$pkgdir"/usr/lib/* "$subpkgdir"/usr/lib
+}
+
+b2sums="b0c65d8a1ee8cab1ac712820a8bf073777eacd558ddd007fa0fd50467d1de86cff238c1c0e6b33b5ff4da7dfd7e2fd673ce5706c39780e1a4fbee7d9653f3bc9  keyutils-1.6.1.tar.gz"

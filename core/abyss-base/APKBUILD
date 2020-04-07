@@ -1,6 +1,6 @@
 pkgname=abyss-base
 pkgver=1
-pkgrel=2
+pkgrel=3
 pkgdesc="Abyss OS base package"
 url="https://abyss.run"
 arch="all"
@@ -141,7 +141,7 @@ package() {
 		ID=abyss
 		VERSION_ID=rolling
 		PRETTY_NAME="Abyss OS rolling"
-		HOME_URL="http://abyss.run"
+		HOME_URL="https://abyss.run"
 		BUG_REPORT_URL="https://github.com/abyss-os/phase1/issues"
 	EOF
 

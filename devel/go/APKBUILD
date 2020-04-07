@@ -9,7 +9,7 @@ makedepends="bash go"
 subpackages="$pkgname-doc"
 source="https://golang.org/dl/go${pkgver/_/}.src.tar.gz
 	default-buildmode-pie.patch
-	pie.patch
+	external-linker.patch
 	"
 options="!check"
 

@@ -16,7 +16,7 @@ source="https://www.kernel.org/pub/linux/utils/nfs-utils/$pkgver/nfs-utils-$pkgv
 	musl-configure_ac.patch
 	musl-getservbyport.patch
 	musl-svcgssd-sysconf.patch
-
+	cpp.patch
 	nfs.initd
 	nfsmount.initd
 	nfsmount.confd
@@ -37,7 +37,7 @@ prepare() {
 }
 
 build() {
-	CFLAGS="$CFLAGS -Wno-format-nonliteral" ./configure \
+	env CFLAGS="$CFLAGS -Wno-format-nonliteral" CPP=clang-cpp ./configure \
 		--build=$CBUILD \
 		--host=$CHOST \
 		--prefix=/usr \
@@ -54,7 +54,7 @@ build() {
 		--disable-svcgss \
 		--enable-libmount-mount \
 		--enable-static=no
-	make
+	make -j1
 }
 
 # Simple test, "make check" requires running nfsd
@@ -105,6 +105,7 @@ b2sums="760a00ef6b4c2b201e4130f8bd614a06712da36439c1de59e18c775cf29eb1fab4c3fceb
 2631726cfe0a737ee6e9e1c5ed924f668d2e24f9df4a104cdad4792bfbe7a87ead1d38e35f2b45ee034c00be1c47c1f153e930eb0a3bcc4d19e4457e84a0a3a2  musl-configure_ac.patch
 118b4105b955de5e2d628da6d3386968758c2aaa526fc7be462d5854d91629b2876a194faa2d693acdd2ef125941b9556d13314c70160c4228b167c84efe8819  musl-getservbyport.patch
 cf35af2713872432f6327599f1655d97c27909e6ee6cc6d1bec2235b9b38a7dc200343affc696e4237af37f0abb70d8421c92274e707b0218138c09e956bd32d  musl-svcgssd-sysconf.patch
+c1341734fa42c2b8cf75927ed0ce2131eff250ac5aa960f62571287ec03ba085c738a35df7ca51642ab49283b10dc95959648457b8c2dd98bf1a2f94247b2ed9  cpp.patch
 0df8f270cf38b16efb331202d300d0bd648ee90c9dc44704e4db6f6aaad53e1c16059e94e14278923db59ce17752e4f034ad948ed53d6f2aefe8ecd6faf808c9  nfs.initd
 2a8f142c3932afa7867e2e85ed4497a45413a2abe602ac39a1897f912d2c24d4e80be3ed50602c5563eff05ce4476eba2f4e2442fce3deec34558533c26ff73b  nfsmount.initd
 c9506a71d28358d0ee7eef18985e3f65decd6cd2735cae17cef911129fe0531e2859c833ef75b04c1521c364c5aa1245d38a03191cb4167f6c1fa02383e7c091  nfsmount.confd

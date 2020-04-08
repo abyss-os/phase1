@@ -12,9 +12,9 @@ applet_exists() {
 	return 1
 }
 
-for l in $(find /usr/bin -type l); do
+for l in $(/usr/bin/busybox find /usr/bin -type l); do
 	a=${l##*/}
-	if [ "$(readlink -nf /usr/bin/$a)" = "/usr/bin/busybox" ]; then
+	if [ "$(/usr/bin/busybox readlink -nf /usr/bin/$a)" = "/usr/bin/busybox" ]; then
 		applet_exists "$a" ${applets} || rm -f /usr/bin/"$a"
 	fi
 done

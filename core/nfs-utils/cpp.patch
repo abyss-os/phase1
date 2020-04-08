@@ -1,0 +1,13 @@
+diff --git a/tools/rpcgen/rpc_main.c b/tools/rpcgen/rpc_main.c
+index 1b26e52..9aa1641 100644
+--- a/tools/rpcgen/rpc_main.c
++++ b/tools/rpcgen/rpc_main.c
+@@ -343,7 +343,7 @@ find_cpp (void)
+     }
+ 
+   /* fall back to system CPP */
+-  CPP = "cpp";
++  CPP = "clang-cpp";
+ }
+ 
+ /*

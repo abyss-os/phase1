@@ -1,0 +1,73 @@
+pkgname=chrony
+pkgver=3.5
+pkgrel=0
+_ver=${pkgver/_/-}
+pkgdesc="NTP client and server programs"
+options="!check" # line 82 of test/unit/util.c fails on all arches
+url="https://chrony.tuxfamily.org"
+pkgusers="$pkgname"
+pkggroups="$pkgname"
+arch="all"
+license="GPL-2.0-only"
+install="$pkgname.pre-install $pkgname.pre-upgrade"
+makedepends="libcap-dev texinfo"
+checkdepends="bash"
+subpackages="$pkgname-doc $pkgname-openrc"
+source="https://download.tuxfamily.org/chrony/chrony-$_ver.tar.gz
+	fix-tests.patch
+	max_resolve_interval.patch
+
+	chronyd.confd
+	chronyd.initd
+	chrony.conf
+	"
+
+build() {
+	CPPFLAGS="$CPPFLAGS" ./configure \
+		--prefix=/usr \
+		--infodir=/usr/share/info \
+		--sbindir=/usr/bin \
+		--mandir=/usr/share/man \
+		--sysconfdir=/etc/$pkgname \
+		--disable-readline \
+		--with-user=$pkgname \
+		--with-sendmail=/usr/bin/sendmail \
+		--enable-ntp-signd
+	make all docs
+}
+
+check() {
+	make check
+}
+
+package() {
+	make DESTDIR="$pkgdir" install
+
+	mkdir -p "$pkgdir"/etc/logrotate.d
+	install -Dm644 examples/chrony.logrotate "$pkgdir"/etc/logrotate.d/chrony
+
+	mkdir -p "$pkgdir"/usr/share/doc/chrony
+	install -m644 examples/*.example "$pkgdir"/usr/share/doc/chrony/
+	install -Dm755 "$srcdir"/chronyd.initd "$pkgdir"/etc/init.d/chronyd
+	install -Dm644 "$srcdir"/chronyd.confd "$pkgdir"/etc/conf.d/chronyd
+
+	install -dm2750 -g wheel "$pkgdir"/var/log/chrony
+
+	mkdir -p "$pkgdir"/var/lib/chrony \
+		"$pkgdir"/etc/chrony
+
+	# chrony.drift must be writable by chrony user
+	chown $pkgusers:$pkggroups "$pkgdir"/etc/chrony
+	install -m644 "$srcdir"/chrony.conf "$pkgdir"/etc/chrony/chrony.conf
+	chown root:root "$pkgdir"/etc/chrony/*
+
+	chown $pkgusers:$pkggroups "$pkgdir"/var/lib/chrony
+	touch "$pkgdir"/var/lib/chrony/chrony.drift
+}
+
+b2sums="611f21e36c6e745208e00eba988519fcd912c6c0c3518c953591f43224dc3da79f627027a6cd4bf9c4227e9f8659a69adbdb634252ff3920d2ef677e32012456  chrony-3.5.tar.gz
+6727ca2c33b55341cd5e61151867b3d93a5f2aaba55b73bb0972f611c3cbd83302e8f6836fe5ed0fc3e3e2c49a3977bb4d0cf478375958dc233bcbcbf16f6e5b  fix-tests.patch
+d72ccb5fe80728b5643117d5bbab2a5763ea43bf13e60c2c56f7a0b5a6915f9452f0b63c26035d1c7a0d02d7f5030752c53283ab0ca822241394fceb5143257a  max_resolve_interval.patch
+40e9c0a95adaaa7a0a790c11f672638de2a7a63481a6a8ff2e1671b61d43d0515d7a3340e8438c666f15705fd840a6c79f4575adc686cc24e95285671c3acf54  chronyd.confd
+221f280c112da17e8eec9f808b3307ace92b326966d2ebbe1b5f5d65ff17daffe7c17f4095ae3065162264d597df11923fe08c7fcf429f7e5208032bca9464cb  chronyd.initd
+1e18c5b5b5bdf5b70174155794d043d490add0c8db2b06cd356e0b3cd997c7752595a5a68ccd69ccc79103505897c2c0e7385134b3932f3d79c74ef1744e9589  chrony.conf"

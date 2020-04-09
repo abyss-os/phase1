@@ -1,12 +1,10 @@
 pkgname=rust
 pkgver=1.42.0
-pkgrel=0
+pkgrel=1
 pkgdesc="The Rust Programming Language"
 url="https://www.rust-lang.org"
-arch="x86_64 armv7 armhf aarch64 x86 ppc64le"
+arch="all"
 license="Apache-2.0 AND MIT"
-
-depends="$pkgname-stdlib=$pkgver-r$pkgrel musl-dev"
 
 config_helper() {
 	# rust has stupid checksums, will disable later
@@ -34,12 +32,9 @@ makedepends="
 	cargo-bootstrap
 "
 
-# XXX: This is a hack to allow this abuild to depend on itself. Adding "rust"
-# to makedepends would not work, because abuild implicitly removes $pkgname
-# and $subpackages from the abuild's dependencies.
 provides="rust-bootstrap=$pkgver-r$pkgrel"
-# This is needed for -src that contains some testing binaries.
-# Disable tests for now, while we use foreign triplets
+depends="$pkgname-stdlib=$pkgver-r$pkgrel musl-dev"
+
 options="!archcheck !check"
 subpackages="
 	$pkgname-stdlib
@@ -72,10 +67,6 @@ _sharedir="usr/share/rust"
 ldpath="/$_rlibdir"
 
 export RUST_BACKTRACE=1
-# Don't use system libgit2 for now...
-# https://github.com/rust-lang/rust/issues/63476
-# Convince libgit2-sys to use the distro libgit2.
-#export LIBGIT2_SYS_USE_PKG_CONFIG=1
 
 # rust checksums files in vendor/, but we have to patch a few files...
 _clear_vendor_checksums() {
@@ -91,7 +82,7 @@ prepare() {
 	_clear_vendor_checksums libc
 
 	# Remove bundled dependencies.
-	#rm -Rf src/llvm-project/
+	rm -Rf src/llvm-project/
 }
 
 build() {
@@ -101,15 +92,15 @@ build() {
 	export LD=clang
 	./configure \
 		--build="$_build" \
-		--host="$_target" \
+		--host="$_build" \
 		--target="$_target" \
 		--prefix="/usr" \
 		--release-channel="stable" \
 		--enable-local-rust \
 		--local-rust-root="/usr" \
 		--enable-option-checking \
-		--tools="cargo" \
 		--enable-extended \
+		--tools="cargo" \
 		--set="target.$_build.crt-static=false" \
 		--set="target.$_build.linker=$LD" \
 		--set="target.$_build.llvm-config=/usr/bin/llvm-config" \
@@ -123,42 +114,15 @@ build() {
 		--set="rust.parallel-compiler=true" \
 		--set="rust.debuginfo-level=0" \
 		--set="rust.codegen-units=0" \
-		--set="rust.rpath=false" \
 		--set="rust.codegen-tests=false" \
 		--set="rust.deny-warnings=false" \
 		--set="llvm.skip-rebuild=true" \
 		--set="llvm.link-shared=true"
-
-
-	# Allow warnings instead of just aborting the build
-	sed 's|deny(warnings,|deny(|' -i src/bootstrap/lib.rs
-
-#	./x.py build -i --jobs ${JOBS}
-}
-
-check() {
-	# At this moment lib/rustlib/$CTARGET/lib does not contain a complete
-	# copy of the .so libs from lib (they will be copied there during
-	# 'x.py install'). Thus we must set LD_LIBRARY_PATH for tests to work.
-	# This is related to change-rpath-to-rustlib.patch.
-	export LD_LIBRARY_PATH="$builddir/build/$CTARGET/stage2/lib"
-
-	"$srcdir"/check-rustc "$builddir"/build/$CTARGET/stage2/bin/rustc
-
-# XXX: There's some problem with these tests, we will figure it out later.
-#	make check \
-#		LD_LIBRARY_PATH="$_stage0dir/lib" \
-#		VERBOSE=1
-
-	msg "Running tests for cargo..."
-	CFG_DISABLE_CROSS_TESTS=1 ./x.py test --no-fail-fast src/tools/cargo
-
-	unset LD_LIBRARY_PATH
+	make
 }
 
 package() {
-	export LD_LIBRARY_PATH="$builddir/build/$CTARGET/stage2/lib"
-	DESTDIR="$pkgdir" ./x.py install --jobs ${JOBS}
+	make DESTDIR="$pkgdir" install
 
 	cd "$pkgdir"
 

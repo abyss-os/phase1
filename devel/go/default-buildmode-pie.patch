@@ -1,13 +1,15 @@
 diff --git a/src/cmd/go/internal/work/init.go b/src/cmd/go/internal/work/init.go
-index 7f894f5..a517887 100644
+index 473bd1a31b..7aedf2c7ba 100644
 --- a/src/cmd/go/internal/work/init.go
 +++ b/src/cmd/go/internal/work/init.go
-@@ -131,7 +131,7 @@ func buildModeInit() {
- 		ldBuildmode = "c-shared"
- 	case "default":
- 		switch cfg.Goos {
--		case "android":
-+		case "android", "linux":
- 			codegenArg = "-shared"
- 			ldBuildmode = "pie"
- 		case "darwin":
+@@ -106,6 +106,10 @@ func buildModeInit() {
+ 	// That way, if the flag is completely bogus we will prefer to error out with
+ 	// "-buildmode=%s not supported" instead of naming the specific platform.
+ 
++	if cfg.BuildBuildmode == "default" && cfg.Goos == "linux" && !cfg.BuildRace {
++		cfg.BuildBuildmode = "pie"
++	}
++
+ 	switch cfg.BuildBuildmode {
+ 	case "archive":
+ 		pkgsFilter = pkgsNotMain

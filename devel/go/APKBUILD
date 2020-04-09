@@ -5,7 +5,7 @@ pkgdesc="Go programming language compiler"
 url="https://golang.org/"
 arch="all"
 license="BSD-3-Clause"
-makedepends="bash go"
+makedepends="bash go-bootstrap"
 subpackages="$pkgname-doc"
 source="https://golang.org/dl/go${pkgver/_/}.src.tar.gz
 	default-buildmode-pie.patch
@@ -14,7 +14,6 @@ source="https://golang.org/dl/go${pkgver/_/}.src.tar.gz
 options="!check"
 
 provides="${pkgname}-bootstrap"
-depends="${pkgname}-bootstrap"
 
 # The following tests fail currently, most of them fail due to linking
 # errors likely related to 'default-buildmode-pie.patch' or musl libc.
@@ -26,14 +25,11 @@ x86_64) export GOARCH="amd64" ;;
 ppc64le) export GOARCH="ppc64le" ;;
 mips64) export GOARCH="mips64" GOMIPS64=softfloat ;;
 riscv64) export COARCH="riscv64" ;;
-*)      export GOARCH="unsupported";;
+*)      export GOARCH="unsupported" ; return 1;;
 esac
 
 builddir="$srcdir"/go
 
-export CC="${HOSTLD:-clang}"
-export CXX="${HOSTLD:-clang++}"
-export LD="${HOSTLD:-ld}"
 export CC_FOR_TARGET="$CC"
 
 build() {
@@ -72,8 +68,6 @@ package() {
 	mkdir -p "$pkgdir"/usr/lib/go/
 	cp -a "$builddir"/src "$pkgdir"/usr/lib/go
 
-	# Remove tests from /usr/lib/go/src.
-	# Those shouldn't be affacted by the upstream bug (see above).
 	find "$pkgdir"/usr/lib/go/src \( -type f -a -name "*_test.go" \) \
 		-exec rm -rf \{\} \+
 	find "$pkgdir"/usr/lib/go/src \( -type d -a -name "testdata" \) \

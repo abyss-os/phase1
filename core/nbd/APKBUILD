@@ -1,0 +1,42 @@
+pkgname=nbd
+pkgver=3.20
+pkgrel=0
+pkgdesc="Tools for network block devices"
+url="http://nbd.sourceforge.net"
+arch="all"
+license="GPL-2.0-or-later"
+makedepends="glib-dev linux-dev zlib-dev bash"
+subpackages="$pkgname-doc $pkgname-openrc"
+source="https://downloads.sourceforge.net/nbd/nbd-$pkgver.tar.xz
+	nbd-server.initd
+	"
+
+build() {
+	CONFIG_SHELL=/bin/bash \
+	./configure \
+		--build=$CBUILD \
+		--host=$CHOST \
+		--prefix=/usr \
+		--sysconfdir=/etc \
+		--sbindir=/usr/bin \
+		--mandir=/usr/share/man \
+		--localstatedir=/var \
+		--enable-lfs \
+		--enable-syslog \
+		--enable-gznbd
+	make
+}
+
+check() {
+	make check
+}
+
+package() {
+	make DESTDIR="$pkgdir" install
+	install -Dm755 "$srcdir"/nbd-server.initd \
+		"$pkgdir"/etc/init.d/nbd-server
+	mkdir -p "$pkgdir"/etc/nbd-server
+}
+
+b2sums="e707ab5565ca2281052d04e0b8854222a14b3dd365a2bb71b6544a9253204aad49df652bb888a035fbcc3b352530ccf59ab5374280ae78feea012f91fd4fa24c  nbd-3.20.tar.xz
+b5b9232cfb10c0274aa9ecb6373856285a0aa6f08247d6601ef7446c43eea4aca8682d5f45a342ea924428132d2efa00f2724bced85aaf68e9ca35c6e988984c  nbd-server.initd"

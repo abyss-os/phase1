@@ -1,0 +1,21 @@
+pkgname=aoetools
+pkgver=37
+pkgrel=0
+pkgdesc="aoetools"
+url="https://github.com/OpenAoE/aoetools/"
+arch="all"
+license="GPL-2.0-or-later BSD-3-Clause"
+source="https://github.com/OpenAoE/aoetools/archive/$pkgname-$pkgver.tar.gz"
+subpackages="$pkgname-doc"
+builddir="$srcdir/$pkgname-$pkgname-$pkgver"
+
+build() {
+	make CFLAGS="$CFLAGS" CC=$CC
+}
+
+package() {
+	make -j1 DESTDIR="$pkgdir" install
+	mv $pkgdir/usr/sbin $pkgdir/usr/bin
+}
+
+b2sums="d928e600a610020172d96a12a0ff97f57b29d13bb104c4592d83626ffe525a0eb5f1272209d0eadc4e68dea949f0bbbc33527520c6b5b01893017e1f16de8d5f  aoetools-37.tar.gz"

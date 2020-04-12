@@ -3,6 +3,7 @@ pkgname=go-abyss
 pkgrel=1
 GOROOT_FINAL=/usr/lib/go-abyss
 GOROOT_BOOTSTRAP=$GOROOT_FINAL
+install="$pkgname.post-install"
 
 # include
 . "../go/common.include"

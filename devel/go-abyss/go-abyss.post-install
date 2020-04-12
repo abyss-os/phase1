@@ -1,6 +1,6 @@
 #!/usr/bin/busybox ash
 
 echo "This is an Abyss modified version of Go that defaults to PIE.
-echo "If you require upstream Go then install `go-upstream` instead.
+echo "If you require upstream Go then install 'go-upstream' instead.
 
 exit 0

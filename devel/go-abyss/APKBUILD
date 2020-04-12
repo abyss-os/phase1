@@ -1,6 +1,6 @@
 # baseline
 pkgname=go-abyss
-pkgrel=0
+pkgrel=1
 GOROOT_FINAL=/usr/lib/go-abyss
 GOROOT_BOOTSTRAP=$GOROOT_FINAL
 

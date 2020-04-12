@@ -1,6 +1,6 @@
 # baseline
 pkgname=go-abyss
-pkgrel=1
+pkgrel=2
 GOROOT_FINAL=/usr/lib/go-abyss
 GOROOT_BOOTSTRAP=$GOROOT_FINAL
 install="$pkgname.post-install"
@@ -11,7 +11,8 @@ install="$pkgname.post-install"
 # extend
 source="$source
 	default-buildmode-pie.patch"
-provides="$provides go-bootstrap go"
+
+provides="go-bootstrap go=$pkgver-r$pkgrel"
 
 b2sums="edd8a1081e7da6988532b9fefe6d6f789a7d336562d61d5e585a8b881fb45d77721bee9837ae79318295471aea138e175650c2138175a587f0b7957988e8e209  go1.14.2.src.tar.gz
 092470769860f13720d5399edbbf51f5ab8b7cc18da68e2fa18a89e25e9f98c61195545d2977e724c59190aad78f97f165ac59002cf46697415eff9c7af1e9ed  external-linker.patch

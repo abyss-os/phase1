@@ -3,6 +3,7 @@ pkgname=go-upstream
 pkgrel=0
 GOROOT_FINAL=/usr/lib/go-upstream
 GOROOT_BOOTSTRAP=$GOROOT_FINAL
+replaces="go-abyss"
 
 # include
 . "../go/common.include"

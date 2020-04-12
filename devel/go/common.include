@@ -18,8 +18,6 @@ subpackages="$pkgname-doc"
 source="https://golang.org/dl/go${pkgver/_/}.src.tar.gz
 	external-linker.patch"
 options="!check"
-provides="go"
-replaces="go"
 
 case "$CTARGET_ARCH" in
 mips64) export GOMIPS64=softfloat ;;

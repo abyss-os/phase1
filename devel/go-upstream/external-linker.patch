@@ -1,0 +1,15 @@
+diff --git a/src/make.bash b/src/make.bash
+index 880a0f4..c647671 100755
+--- a/src/make.bash
++++ b/src/make.bash
+@@ -130,8 +130,8 @@ if [ "$(uname -s)" = "GNU/kFreeBSD" ]; then
+ 	export CGO_ENABLED=0
+ fi
+ 
+-# On Alpine Linux, use the musl dynamic linker/loader
+-if [ -f "/etc/alpine-release" ]; then
++# On Alpine Linux and Abyss OS, use the musl dynamic linker/loader
++if [ -f "/etc/alpine-release" -o -f "/etc/abyss-release" ]; then
+ 	if type readelf >/dev/null 2>&1; then
+ 		echo "int main() { return 0; }" | ${CC:-gcc} -o ./test-alpine-ldso -x c -
+ 		export GO_LDSO=$(readelf -l ./test-alpine-ldso | grep 'interpreter:' | sed -e 's/^.*interpreter: \(.*\)[]]/\1/')

@@ -1,0 +1,66 @@
+#!/bin/sh
+# this is not the APKBUILD, those are in go-abyss and go-upstream
+
+# these can be overriden in the APKBUILDs
+# to use:
+# set pkgname, pkgrel, GOROOT_FINAL and GOROOT_BOOTSTRAP
+# optionally expand source and/or provides
+# please copy external-linker.patch in - abuild is broken right now
+# 	(startdir is inaccessible and it can't deal with symlinked patches)
+
+pkgver=1.14.2
+pkgdesc="Go programming language compiler"
+url="https://golang.org/"
+arch="all"
+license="BSD-3-Clause"
+makedepends="bash go-bootstrap"
+subpackages="$pkgname-doc"
+source="https://golang.org/dl/go${pkgver/_/}.src.tar.gz
+	external-linker.patch"
+options="!check"
+provides="go"
+replaces="go"
+
+case "$CTARGET_ARCH" in
+mips64) export GOMIPS64=softfloat ;;
+esac
+
+export GOPATH="$srcdir"
+export GOROOT="$GOPATH"/go
+export builddir="$GOROOT"
+
+build() {
+	cd src
+	./make.bash
+}
+
+check() {
+	cd src
+	./run.bash --no-rebuild -k
+}
+
+package() {
+	# clean source tree
+	rm -rf pkg/bootstrap \
+		pkg/obj
+	# we want to keep test data around so users can have deeper go test
+	# removing .bash, .rc etc isn't really worth it
+
+	dbin="$pkgdir"/usr/bin
+	dgo="$pkgdir"/"$GOROOT_FINAL"
+	ddoc="$pkgdir"/usr/share/doc/"$pkgname"
+	install -d \
+		"$dbin" \
+		"$dgo"/bin \
+		"$ddoc"
+
+	# TODO: this is the only reason go-abyss and go-upstream conflict right now
+	# once abuild is smart enough use aalt, move to that
+	for binary in go gofmt; do
+		install -Dm755 bin/"$binary" "$dgo"/bin/"$binary"
+		ln -s "$GOROOT_FINAL"/bin/"$binary" "$dbin"
+	done
+
+	cp -a api lib misc pkg src test "$dgo"
+	cp -a doc/* "$ddoc"
+}

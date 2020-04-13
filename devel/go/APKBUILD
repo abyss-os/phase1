@@ -1,0 +1,63 @@
+pkgname=go
+pkgrel=3
+pkgver=1.14.2
+pkgdesc="Go programming language compiler"
+url="https://golang.org/"
+arch="all"
+license="BSD-3-Clause"
+makedepends="bash go-bootstrap"
+subpackages="$pkgname-doc"
+source="https://golang.org/dl/go${pkgver/_/}.src.tar.gz
+	external-linker.patch"
+options="!check"
+
+case "$CTARGET_ARCH" in
+mips64) export GOMIPS64=softfloat ;;
+esac
+
+export GOPATH="$srcdir"
+export GOROOT="$GOPATH"/go
+export builddir="$GOROOT"
+
+provides="go-bootstrap"
+replaces="go-abyss go-upstream"
+
+GOROOT_FINAL=/usr/lib/go
+GOROOT_BOOTSTRAP=$GOROOT_FINAL
+
+build() {
+	cd src
+	./make.bash
+}
+
+check() {
+	cd src
+	./run.bash --no-rebuild -k
+}
+
+package() {
+	# clean source tree
+	rm -rf pkg/bootstrap \
+		pkg/obj
+	# we want to keep test data around so users can have deeper go test
+	# removing .bash, .rc etc isn't really worth it
+
+	dbin="$pkgdir"/usr/bin
+	dgo="$pkgdir"/"$GOROOT_FINAL"
+	ddoc="$pkgdir"/usr/share/doc/"$pkgname"
+	install -d \
+		"$dbin" \
+		"$dgo"/bin \
+		"$ddoc"
+
+	for binary in go gofmt; do
+		install -Dm755 bin/"$binary" "$dgo"/bin/"$binary"
+		ln -s "$GOROOT_FINAL"/bin/"$binary" "$dbin"
+	done
+
+	cp -a api lib misc pkg src test "$dgo"
+	cp -a doc/* "$ddoc"
+}
+
+b2sums="edd8a1081e7da6988532b9fefe6d6f789a7d336562d61d5e585a8b881fb45d77721bee9837ae79318295471aea138e175650c2138175a587f0b7957988e8e209  go1.14.2.src.tar.gz
+092470769860f13720d5399edbbf51f5ab8b7cc18da68e2fa18a89e25e9f98c61195545d2977e724c59190aad78f97f165ac59002cf46697415eff9c7af1e9ed  external-linker.patch"

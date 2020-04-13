@@ -5,7 +5,7 @@ pkgdesc="Go programming language compiler"
 url="https://golang.org/"
 arch="all"
 license="BSD-3-Clause"
-makedepends="bash go-bootstrap"
+makedepends="bash go-abyss"
 subpackages="$pkgname-doc"
 source="https://golang.org/dl/go${pkgver/_/}.src.tar.gz
 	external-linker.patch"

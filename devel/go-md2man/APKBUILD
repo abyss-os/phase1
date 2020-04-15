@@ -1,6 +1,6 @@
 pkgname=go-md2man
-pkgver=1.0.10
-pkgrel=2
+pkgver=2.0.0
+pkgrel=0
 pkgdesc="Utility to convert markdown to man pages"
 url="https://github.com/cpuguy83/go-md2man"
 arch="all"
@@ -8,26 +8,18 @@ license="MIT"
 makedepends="go"
 subpackages="$pkgname-doc"
 source="go-md2man-$pkgver.tar.gz::https://github.com/cpuguy83/go-md2man/archive/v$pkgver.tar.gz"
-builddir="$srcdir/src/github.com/cpuguy83/go-md2man"
+options="!check"
 
 build() {
-	cd "$srcdir"
-	export GOPATH="$PWD"
-	mkdir -p $(dirname "$builddir")
-	ln -s "$PWD/go-md2man-$pkgver" "$builddir"
-	cd $builddir
-	CGO_ENABLED=0 go build
-}
-
-check() {
-	cd "$builddir"
-	./go-md2man -in go-md2man.1.md -out go-md2man.1
+	export GOPATH="$srcdir/go"
+	go build
 }
 
 package() {
 	cd "$builddir"
 	install -Dsm755 go-md2man "$pkgdir"/usr/bin/go-md2man
+	./go-md2man -in go-md2man.1.md -out go-md2man.1
 	install -Dm644 go-md2man.1 "$pkgdir"/usr/share/man/man1/go-md2man.1
 }
 
-b2sums="2858c50d4fa492ba4182f08502b1145a401d0a45dd6a86eeb8b78ca7c65c97c108da07239c12bb25593f619365660d0b78903d3e699a086e1162736b949f0c4a  go-md2man-1.0.10.tar.gz"
+b2sums="d3df2300a28d972b6b7269172a734dda7a60df5c25d8b4a4d9a45a2c636f08286eea4873c32d22a9533ba4e333660e4ec2deabe8fbdb9af3db96c07884278d04  go-md2man-2.0.0.tar.gz"

@@ -1,16 +1,15 @@
 pkgname=zig
-pkgver=0.5.0.20200327
-_hash=aec4967f36d16cfee43529bd341300f5f77af34a
+pkgver=0.6.0
 pkgrel=0
 pkgdesc="Zig!"
 url="https://github.com/ziglang/zig"
 arch="all"
 license="MIT"
 makedepends="ninja cmake"
-source="$pkgname-$pkgver.tar.gz::https://github.com/ziglang/zig/archive/$_hash.tar.gz
+source="$pkgname-$pkgver.tar.gz::https://github.com/ziglang/zig/archive/$pkgver.tar.gz
 		targets.patch"
 
-builddir=$srcdir/$pkgname-$_hash
+builddir=$srcdir/$pkgname-$pkgver
 _builddir=$srcdir/build
 
 prepare() {
@@ -29,5 +28,5 @@ package() {
 	DESTDIR=$pkgdir ninja install
 }
 
-b2sums="549b1f39bd1531fbb3e5bee448c42bff0eab69cc17d304c703c7b9fded0a1e9d2f7b22c78d937d6ba2c9ef1f34edc9aaf74025699d9c955a3ebc471b0b391da5  zig-0.5.0.20200327.tar.gz
-7707d04f9b2afe51380fb34cc21346e945d810c898131738e1dfbbb76b66530bcc19fff6027e5cfad8b4e67dd40c4acb9bea3b3b32c4621113385870f9062d5f  targets.patch"
+b2sums="457b4035187db1fb215b2a878c18e096ff6f5a7a29fd044446bdda84bfdd54bd9e1ae9889a51576b029ade2d16ae1d94a43ee1550b5415ae06279970be7ac0cb  zig-0.6.0.tar.gz
+20d7cb128e47d2ebf1be995eca6099275a39d5d1edcce1700a637c99ac637b14de2a12db780a726e634c68d975ab05bb012e9576b31680c206d0cdfbc446e44a  targets.patch"

@@ -1,6 +1,6 @@
 pkgname=binutils
 pkgver=2.33.1
-pkgrel=2
+pkgrel=3
 pkgdesc="Tools necessary to build programs"
 url="https://www.gnu.org/software/binutils/"
 makedepends="bison flex texinfo zlib-dev"
@@ -10,7 +10,8 @@ subpackages="$pkgname-dev $pkgname-doc"
 source="https://ftp.gnu.org/gnu/$pkgname/$pkgname-$pkgver.tar.bz2
 	binutils-ld-fix-static-linking.patch
 	gold-mips.patch
-	"
+	mips64_default_emul.patch"
+
 builddir="$srcdir/$pkgname-$pkgver"
 
 build() {
@@ -111,4 +112,5 @@ aalt() {
 
 b2sums="f6812c3b10d8dc2d76454ff9a8eb04fb1c0a954bc41b188ecb0aa3850f1da3344b963611a79a4802870d95af1b34a271376783525c3e3784034112ff0caeef91  binutils-2.33.1.tar.bz2
 ef739456181984b988abf9b6788319122284b879317868ff32750508166435f01af23839eff178e60092d55851c1cb6a2d1ca8d4e7c3a7a29be5be7997b7b5d7  binutils-ld-fix-static-linking.patch
-411da71de153a922193ba1be212c86a0e5b6e6d4247fd18d24278453720b95724408ccad797a8f57758953ad958792230778d9cf49304a3678226de379e65fe3  gold-mips.patch"
+411da71de153a922193ba1be212c86a0e5b6e6d4247fd18d24278453720b95724408ccad797a8f57758953ad958792230778d9cf49304a3678226de379e65fe3  gold-mips.patch
+1b46fa9a1ed6f46b771fb11e51d1db931e8d5f8ddce31b39ee42c834fb562dbee6da0173da2039b49dca16371333fd8eb5e46cead275a88c1f24837feb2d98bc  mips64_default_emul.patch"

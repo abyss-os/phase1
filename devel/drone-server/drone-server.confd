@@ -1,0 +1,3 @@
+# secrets
+export DRONE_GITHUB_CLIENT_ID=
+export DRONE_GITHUB_CLIENT_SECRET=

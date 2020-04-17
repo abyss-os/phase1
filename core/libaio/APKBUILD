@@ -1,28 +1,28 @@
 pkgname="libaio"
-pkgver=0.3.111
-pkgrel=1
+pkgver=0.3.112
+pkgrel=0
 pkgdesc="Asynchronous input/output library"
-url="http://lse.sourceforge.net/io/aio.html"
+url="https://pagure.io/libaio"
 arch="all"
 license="LGPL-2.1-or-later"
 options="!check"  # No test suite.
-makedepends_build=""
-makedepends_host="linux-dev"
-makedepends="$makedepends_build $makedepends_host"
+makedepends="linux-dev"
 subpackages="$pkgname-dev"
-source="http://us.archive.ubuntu.com/ubuntu/pool/main/liba/$pkgname/${pkgname}_${pkgver}.orig.tar.gz"
+source="https://releases.pagure.org/libaio/$pkgname-$pkgver.tar.gz"
 
 build() {
-	cd $builddir
+	make CC=$CC prefix="$pkgdir/usr" \
+		sysconfdir="$pkgdir/etc" \
+		mandir="$pkgdir/usr/share/man" \
+		infodir="$pkgdir/usr/share/info"
 }
-
+	
 package() {
-	cd $builddir
-	make prefix="$pkgdir/usr" \
+	make CC=$CC prefix="$pkgdir/usr" \
 		sysconfdir="$pkgdir/etc" \
 		mandir="$pkgdir/usr/share/man" \
 		infodir="$pkgdir/usr/share/info" \
 		install
 }
 
-b2sums="6846294389585de7a5b89de6ea95e4f587fd14e21086426aab96256f2dbb474b663e4d0a7bc23801b073407b10ed08142d7d650068476d4d747d72f655175ae6  libaio_0.3.111.orig.tar.gz"
+b2sums="088f3b195a65bdc97ae2318e47af17c65259ed3208dca7bfef93c81a800602085e5b2078dbd436c740be316d0ebd923a1b3b7c0808257e2e7c7fb0f7ae1e0dba  libaio-0.3.112.tar.gz"

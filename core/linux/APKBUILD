@@ -1,7 +1,7 @@
 pkgname=linux
 pkgver=5.7_rc1
 _pkgver=${pkgver/_/-}
-pkgrel=0
+pkgrel=1
 pkgdesc="Linux kernel"
 url="http://kernel.org"
 #depends="mkinitfs"
@@ -21,15 +21,14 @@ license="GPL-2.0"
 
 builddir="$srcdir"/linux-"$_pkgver"
 _builddir="$srcdir"/build
-#export AS=gnu-as
 
 _carch=${CARCH}
 case "$_carch" in
-aarch64*) _carch="arm64" ;;
-mips*) _carch="mips" ;;
-ppc*) _carch="powerpc" ;;
-x86*) _carch="x86" ;;
-riscv64*) _carch="riscv" ;;
+aarch64*) _carch="arm64" archopts="LLVM=1" ;;
+mips*) _carch="mips" archopts="LLVM=0 HOSTAS=gnu-as" ;;
+ppc*) _carch="powerpc" archopts="LLVM=0 HOSTAS=gnu-as" ;;
+x86*) _carch="x86" archopts="LLVM=1" ;;
+riscv64*) _carch="riscv" archopts="LLVM=1" ;;
 *) error "Unsupported architecture" ;;
 esac
 
@@ -76,7 +75,7 @@ package() {
 # DO NOT USE THESE FUNCTIONS UNLESS YOU'RE A DEV AND KNOW WHAT YOU'RE DOING AND WHY
 _make() {
 	make -C "$builddir" O="$_builddir" \
-		LLVM=1 \
+		$archopts \
 		KBUILD_BUILD_VERSION="$(( pkgrel + 1 ))-abyss" \
 		INSTALL_MOD_PATH="$pkgdir"/usr \
 		INSTALL_HDR_PATH="$pkgdir"/usr \

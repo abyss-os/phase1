@@ -1,7 +1,7 @@
 pkgname=linux
 pkgver=5.7_rc1
 _pkgver=${pkgver/_/-}
-pkgrel=1
+pkgrel=2
 pkgdesc="Linux kernel"
 url="http://kernel.org"
 #depends="mkinitfs"
@@ -25,8 +25,8 @@ _builddir="$srcdir"/build
 _carch=${CARCH}
 case "$_carch" in
 aarch64*) _carch="arm64" archopts="LLVM=1" ;;
-mips*) _carch="mips" archopts="LLVM=0 HOSTAS=gnu-as" ;;
-ppc*) _carch="powerpc" archopts="LLVM=0 HOSTAS=gnu-as" ;;
+mips*) _carch="mips" archopts="LLVM=0 HOSTAS=gnu-as HOSTLD=gnu-ld LD=gnu-ld" ;;
+ppc*) _carch="powerpc" archopts="LLVM=0 HOSTAS=gnu-as HOSTLD=gnu-ld LD=gnu-ld" ;;
 x86*) _carch="x86" archopts="LLVM=1" ;;
 riscv64*) _carch="riscv" archopts="LLVM=1" ;;
 *) error "Unsupported architecture" ;;

@@ -1,0 +1,25 @@
+pkgname=samurai
+pkgver=1.1
+pkgrel=0
+pkgdesc="
+ninja-compatible build tool written in C"
+url="https://github.com/michaelforney/samurai"
+arch="all"
+license="Apache-2.0"
+checkdepends="gtest"
+source="https://github.com/michaelforney/samurai/releases/download/$pkgver/samurai-$pkgver.tar.gz"
+subpackages="$pkgname-doc"
+builddir="$srcdir"/${pkgname}-${pkgver}
+provides="ninja"
+replaces="ninja"
+
+build() {
+	make
+}
+
+package() {
+	make install PREFIX="/usr" DESTDIR="$pkgdir"
+	ln -s samu "$pkgdir"/usr/bin/ninja
+}
+
+b2sums="6e596ea7b95cb9b12a88bff963aa972a4e5fd05bdab68f322759bd33a0809b65324d894c24a1dda0c24e2d97d026dabf281ce010d5592e14ea0de018cf7cb89f  samurai-1.1.tar.gz"

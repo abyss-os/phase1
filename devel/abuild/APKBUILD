@@ -1,5 +1,5 @@
 pkgname=abuild
-pkgver=4.0.46
+pkgver=4.0.47
 pkgrel=0
 pkgdesc="Script to build Alpine Packages"
 url="https://git.alpinelinux.org/cgit/abuild/"
@@ -44,4 +44,4 @@ _rootbld() {
 	mkdir -p "$subpkgdir"
 }
 
-b2sums="aba972f14e6f79635f93cec4393dd5623d2c995f7aa21b55c7ecbbe19df6390d31bc385f6ba1641af1c65e0465119db0b7585879fb955756e2762c356da93a08  abuild-v4.0.46.tar.gz"
+b2sums="9910e0384cc53cee11fa03cd1d9a8f863599ea3676362d1c08f51f92e2f422129bac32f7b9d651df2c371b6bb080277992bf1b4fa6f34954fb412962165557bb  abuild-v4.0.47.tar.gz"

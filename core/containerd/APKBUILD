@@ -10,7 +10,7 @@ arch="all"
 license="Apache-2.0"
 depends="runc"
 makedepends="btrfs-progs-dev go go-md2man libseccomp-dev"
-subpackages="$pkgname-doc"
+#subpackages="$pkgname-doc"
 source="containerd-$pkgver.tar.gz::https://github.com/containerd/containerd/archive/v$pkgver.tar.gz"
 builddir="$srcdir/src/github.com/containerd/containerd"
 
@@ -22,7 +22,7 @@ build() {
 	cd "$builddir"
 	make VERSION="v$pkgver" REVISION="$_commit"
 	# new generated manpages
-	make genman
+	#make genman
 }
 
 check() {

@@ -1,7 +1,7 @@
 pkgname=openssl
 pkgver=1.1.1e
 _abiver=${pkgver%.*}
-pkgrel=0
+pkgrel=1
 pkgdesc="Toolkit for Transport Layer Security (TLS)"
 url="https://www.openssl.org"
 arch="all"
@@ -48,7 +48,6 @@ build() {
 
 check() {
 	cd "$builddir"
-	return 0
 	make test
 }
 
@@ -57,11 +56,11 @@ package() {
 	make DESTDIR="$pkgdir" install
 	# remove the script c_rehash
 	rm "$pkgdir"/usr/bin/c_rehash
-}
 
-dev() {
-	default_dev
-	replaces="libressl-dev"
+	# XXX: jwh: this conflicts with shadow, no intention of fixing it.
+	# More likely to just stop packaging documentation entirely as it serves
+	# very little purpose.
+	rm -fv $pkgdir/usr/share/man/man1/passwd.1.gz
 }
 
 _libcrypto() {

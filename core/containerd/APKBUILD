@@ -32,8 +32,6 @@ check() {
 package() {
 	install -d "$pkgdir"/usr/bin/
 	install -Dsm755 "$builddir"/bin/* "$pkgdir"/usr/bin/
-	install -d "$pkgdir"/usr/share/man/man1/
-	install -Dm644 "$builddir"/man/*.1 "$pkgdir"/usr/share/man/man1/
 	install -d "$pkgdir"/usr/share/man/man5/
 	install -Dm644 "$builddir"/man/*.5 "$pkgdir"/usr/share/man/man5/
 }

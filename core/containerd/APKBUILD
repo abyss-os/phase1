@@ -23,8 +23,6 @@ build() {
 	make VERSION="v$pkgver" REVISION="$_commit"
 	# new generated manpages
 	make genman
-	# older non-generated manpages
-	make MANPAGES="containerd-config.1 containerd-config.toml.5" man
 }
 
 check() {

@@ -2,9 +2,9 @@ pkgname=runc
 pkgdesc="CLI tool for spawning and running containers according to the OCI specification"
 url="https://www.opencontainers.org"
 
-_commit=d736ef14f0288d6993a1845745d6756cfc9ddd5a
-pkgver=1.0.0_rc9
-pkgrel=2
+_commit=dc9208a3303feef5b3839f4323d9beb36df0a9dd
+pkgver=1.0.0_rc10
+pkgrel=0
 
 _ver=v${pkgver/_rc/-rc}
 # if we're building against an explicit commit beyond pkgver, use this instead:
@@ -17,12 +17,6 @@ subpackages="$pkgname-doc"
 source="runc-$_ver.tar.gz::https://github.com/opencontainers/runc/archive/$_ver.tar.gz"
 builddir="$srcdir/src/github.com/opencontainers/runc"
 options="!check"
-
-# secfixes:
-#   1.0.0_rc9:
-#     - CVE-2019-16884
-#   1.0.0_rc7:
-#     - CVE-2019-5736
 
 build() {
 	cd "$srcdir"
@@ -41,4 +35,4 @@ package() {
 	install -Dm644 "$builddir"/man/man8/* "$pkgdir"/usr/share/man/man8/
 }
 
-b2sums="c54c2e88f75d2552eee551c20cca84554391f82b878fb5ddc22d5265496387feecb4f00826804effb29161fa735d22e1472dffa3df813a82130a76f5602aa27e  runc-v1.0.0-rc9.tar.gz"
+b2sums="78717d3c7bebba9308abb8fdc6dbbf6d55df21604e6f8fb3b64368340b65f0b4a95f50c612348767d48498ee2ab5783b153f1a66ee9aae8535433b7bd90a15b8  runc-v1.0.0-rc10.tar.gz"

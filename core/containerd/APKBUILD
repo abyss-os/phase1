@@ -13,6 +13,7 @@ makedepends="btrfs-progs-dev go go-md2man libseccomp-dev"
 #subpackages="$pkgname-doc"
 source="containerd-$pkgver.tar.gz::https://github.com/containerd/containerd/archive/v$pkgver.tar.gz"
 builddir="$srcdir/src/github.com/containerd/containerd"
+options="!strip"
 
 build() {
 	cd "$srcdir"

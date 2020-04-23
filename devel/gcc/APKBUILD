@@ -1,7 +1,7 @@
 pkgname=gcc
 pkgver=9.3.0
 pkgname="$pkgname$_target"
-pkgrel=0
+pkgrel=1
 pkgdesc="The GNU Compiler Collection"
 url="http://gcc.gnu.org"
 arch="all"

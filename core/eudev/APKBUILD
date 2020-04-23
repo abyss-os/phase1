@@ -1,6 +1,6 @@
 pkgname=eudev
 pkgver=3.2.9
-pkgrel=5
+pkgrel=6
 pkgdesc="OpenRC compatible fork of systemd-udev"
 url="https://wiki.gentoo.org/wiki/Project:Eudev"
 arch="all"
@@ -9,8 +9,7 @@ license="GPL-2.0"
 depends="udev-init-scripts"
 replaces="udev"
 provides="udev=176"
-makedepends="gperf glib-dev linux-dev kmod-dev gobject-introspection-dev
-	util-linux-dev"
+makedepends="gperf linux-dev kmod-dev util-linux-dev"
 checkdepends="tree xz perl"
 subpackages="$pkgname-dev $pkgname-doc $pkgname-openrc"
 triggers="eudev.trigger=/usr/lib/udev/rules.d"

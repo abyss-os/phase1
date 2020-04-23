@@ -1,5 +1,5 @@
 pkgname=gcc
-pkgver=9.2.0
+pkgver=9.3.0
 pkgname="$pkgname$_target"
 pkgrel=0
 pkgdesc="The GNU Compiler Collection"
@@ -244,7 +244,7 @@ libgomp() {
 	mv "$pkgdir"/usr/${_target:+$CTARGET/}lib/libgomp.so.* "$subpkgdir"/usr/lib/
 }
 
-b2sums="41a5e148f9a6857d6599679964c203533f76f330ad527fbe7c5e746d78f6f6f6d6d0f330a67cb1e794e155be8d1cd6e986bcc8a116d620dca410b78f0bcdd453  gcc-9.2.0.tar.xz
+b2sums="21efb1432aefad5ed9b9b395e88ef2adfda3a8ea6e3e808cd151da6e66df9fed1bafdc8b8ff055d4b2272ac786d8b7ddc4293bb6b51c55c40a261a0eda0e7cb4  gcc-9.3.0.tar.xz
 2a0a7b8a36a74e2d093ec34e93640b486a656d1e8b5d5408751799fab3359283d9e934f3a00deeb8e02e97f1d5cd7a47a30f2bcedf2a8da9b64b2c5717018126  002_all_default-relro.patch
 f375f417bfdaa96aeafe327bf35bf26bf1d350ecc4b5db2ad735bb4e9b636d6f9d06c6a9c1359ccd1c1f6113db8ae3ab2f06ea9f0c72f292d8d5cfbb18c9d4da  003_all_default-fortify-source.patch
 c54506ca5b06c7417ba4db30a413d82baa60b6f992598bd5a6bb49aa767a66bd7f32d5030c643be3a478ee0983a19a0eef866107f52c5dfed2cb4b2dfeb111ac  005_all_default-as-needed.patch

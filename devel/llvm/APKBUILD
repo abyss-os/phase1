@@ -33,7 +33,7 @@ _builddir="$srcdir/build"
 _projects="libunwind;libcxxabi;libcxx;compiler-rt;llvm;lld;clang"
 
 depends="libcxx elfutils-libelf libffi libedit ncurses zlib"
-makedepends="cmake clang lld ncurses-dev libedit-dev swig ninja elfutils-libelf elfutils-dev libffi-dev perl python3-dev zlib-dev linux-dev"
+makedepends="cmake clang lld ncurses-dev libedit-dev swig samurai elfutils-libelf elfutils-dev libffi-dev perl python3-dev zlib-dev linux-dev"
 
 provides="clang compiler-rt llvm-bootstrap"
 

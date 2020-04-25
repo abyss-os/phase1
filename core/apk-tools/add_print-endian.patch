@@ -1,0 +1,91 @@
+diff --git a/src/apk.c b/src/apk.c
+index 626da6d..e1baf31 100644
+--- a/src/apk.c
++++ b/src/apk.c
+@@ -58,7 +58,7 @@ time_t apk_time(void)
+ 
+ static void version(void)
+ {
+-	printf("apk-tools " APK_VERSION ", compiled for " APK_DEFAULT_ARCH ".\n"
++	printf("apk-tools " APK_VERSION ", compiled for " APK_DEFAULT_ARCH "/" APK_DEFAULT_ENDIAN ".\n"
+ #ifdef TEST_MODE
+ 		"TEST MODE BUILD. NOT FOR PRODUCTION USE.\n"
+ #endif
+@@ -173,6 +173,9 @@ static int option_parse_global(void *ctx, struct apk_db_options *dbopts, int opt
+ 	case 0x114:
+ 		puts(APK_DEFAULT_ARCH);
+ 		return -ESHUTDOWN;
++	case 0x130:
++		puts(APK_DEFAULT_ENDIAN);
++		return -ESHUTDOWN;
+ #ifdef TEST_MODE
+ 	case 0x200:
+ 		*apk_string_array_add(&test_repos) = (char*) optarg;
+@@ -230,6 +233,7 @@ static const struct apk_option options_global[] = {
+ 	{ 0x112, "arch",	"Use architecture with --root",
+ 				required_argument, "ARCH" },
+ 	{ 0x114, "print-arch",	"Print default arch and exit" },
++	{ 0x120, "print-endian", "Print default endian and exit" },
+ #ifdef TEST_MODE
+ 	{ 0x200, "test-repo",	"Repository", required_argument, "REPO" },
+ 	{ 0x201, "test-instdb",	"Installed db", required_argument, "INSTALLED" },
+diff --git a/src/apk_defines.h b/src/apk_defines.h
+index 520e626..a525d33 100644
+--- a/src/apk_defines.h
++++ b/src/apk_defines.h
+@@ -87,37 +87,53 @@ extern char **apk_argv;
+ 
+ /* default architecture for APK packages. */
+ #if defined(__x86_64__)
+-#define APK_DEFAULT_ARCH        "x86_64"
++#define APK_DEFAULT_ARCH	"x86_64"
++#define APK_DEFAULT_ENDIAN	"little"
+ #elif defined(__i386__)
+-#define APK_DEFAULT_ARCH        "x86"
++#define APK_DEFAULT_ARCH	"x86"
++#define APK_DEFAULT_ENDIAN	"little"
+ #elif defined(__powerpc__) && !defined(__powerpc64__)
+ #define APK_DEFAULT_ARCH	"ppc"
++#define APK_DEFAULT_ENDIAN	"big"
+ #elif defined(__powerpc64__) && __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+ #define APK_DEFAULT_ARCH	"ppc64"
++#define APK_DEFAULT_ENDIAN	"big"
+ #elif defined(__powerpc64__) && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+ #define APK_DEFAULT_ARCH	"ppc64le"
++#define APK_DEFAULT_ENDIAN	"little"
+ #elif defined(__arm__) && defined(__ARM_PCS_VFP) && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__ && __ARM_ARCH>=7
+ #define APK_DEFAULT_ARCH	"armv7"
++#define APK_DEFAULT_ENDIAN	"little"
+ #elif defined(__arm__) && defined(__ARM_PCS_VFP) && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+ #define APK_DEFAULT_ARCH	"armhf"
++#define APK_DEFAULT_ENDIAN	"little"
+ #elif defined(__arm__) && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+ #define APK_DEFAULT_ARCH	"armel"
++#define APK_DEFAULT_ENDIAN	"little"
+ #elif defined(__aarch64__) && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+ #define APK_DEFAULT_ARCH	"aarch64"
++#define APK_DEFAULT_ENDIAN	"little"
+ #elif defined(__s390x__)
+ #define APK_DEFAULT_ARCH	"s390x"
++#define APK_DEFAULT_ENDIAN	"big"
+ #elif defined(__mips64) && __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+ #define APK_DEFAULT_ARCH	"mips64"
++#define APK_DEFAULT_ENDIAN	"big"
+ #elif defined(__mips64) && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+ #define APK_DEFAULT_ARCH	"mips64el"
++#define APK_DEFAULT_ENDIAN	"little"
+ #elif defined(__mips__) && __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+ #define APK_DEFAULT_ARCH	"mips"
++#define APK_DEFAULT_ENDIAN	"big"
+ #elif defined(__mips__) && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+ #define APK_DEFAULT_ARCH	"mipsel"
++#define APK_DEFAULT_ENDIAN	"little"
+ #elif defined(__riscv) && __riscv_xlen == 32
+ #define APK_DEFAULT_ARCH	"riscv32"
++#define APK_DEFAULT_ENDIAN	"little"
+ #elif defined(__riscv) && __riscv_xlen == 64
+ #define APK_DEFAULT_ARCH	"riscv64"
++#define APK_DEFAULT_ENDIAN	"little"
+ #else
+ #error APK_DEFAULT_ARCH not detected for this architecture
+ #endif

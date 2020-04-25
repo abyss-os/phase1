@@ -1,7 +1,7 @@
 pkgname=linux
-pkgver=5.7_rc1
+pkgver=5.7_rc2
 _pkgver=${pkgver/_/-}
-pkgrel=2
+pkgrel=3
 pkgdesc="Linux kernel"
 url="http://kernel.org"
 #depends="mkinitfs"
@@ -24,11 +24,11 @@ _builddir="$srcdir"/build
 
 _carch=${CARCH}
 case "$_carch" in
-aarch64*) _carch="arm64" archopts="LLVM=1" ;;
-mips*) _carch="mips" archopts="LLVM=0 HOSTAS=gnu-as HOSTLD=gnu-ld LD=gnu-ld" ;;
-ppc*) _carch="powerpc" archopts="LLVM=0 HOSTAS=gnu-as HOSTLD=gnu-ld LD=gnu-ld" ;;
 x86*) _carch="x86" archopts="LLVM=1" ;;
 riscv64*) _carch="riscv" archopts="LLVM=1" ;;
+aarch64*) _carch="arm64" archopts="LLVM=1" ;;
+mips*) _carch="mips" archopts="LLVM=0 LLVM_IAS=0 HOSTLD=gnu-ld LD=gnu-ld HOSTCC=gnu-gcc CC=gnu-gcc makedepends="$makedepends gcc" ;;
+ppc*) _carch="powerpc" archopts="LLVM=0 LLVM_IAS=0 HOSTLD=gnu-ld LD=gnu-ld HOSTCC=gnu-gcc CC=gnu-gcc makedepends="$makedepends gcc" ;;
 *) error "Unsupported architecture" ;;
 esac
 
@@ -95,7 +95,7 @@ _menuconfig() {
 	mv -v .config "$startdir"/newconfig."$CARCH"
 }
 
-b2sums="4bbf2758b0b9bb8156af63baf64e3b9b4762da53bd860f678686e18388d1456c02c43ddf19a27dda593ed58212a3f0f34e17ad6e9ff45c455e35c2d356c8d666  linux-5.7-rc1.tar.gz
+b2sums="cdafe3e6278cac5a08b7ef8c8b26dc6e4278e9eafbb07b42ac4d5416f5b1318c2f2a84812c475e5a8ea3d9b151f5b7f84eaccd49740f48aeeb8a4164347cc610  linux-5.7-rc2.tar.gz
 f4ced3fbc0b7f68d268b808e669a8c2ab161f4bf0597f66eecacb4d7537faab8ce42df3456ec3eed1520674c381b67e136fa90cc4971b12cd801e72cffde1ded  config.aarch64
 442744a573d9eaaccabe0f5302c6ac3c9b66e15cd573c0cf494776c7d6fa9101b7911a0c93e2d321adf1bf2fff2de3cbebbf1c5e442b0944af7bfbde1669830a  config.x86_64
 d7c54880b8af226309cbcd2492ab2f2f3dd8b8facf9caad4eb7c097e7ff8c9c3c88802f65d7f5c738b3d173fe550a6662a56c68a024107ded1a8fcf11a17a572  config.riscv64

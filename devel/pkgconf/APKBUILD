@@ -1,7 +1,6 @@
-# Maintainer: Drew DeVault <sir@cmpwn.com>
 pkgname=pkgconf
-pkgver=1.6.1
-pkgrel=2
+pkgver=1.6.3
+pkgrel=0
 pkgdesc="development framework configuration tools"
 url="https://git.dereferenced.org/pkgconf/pkgconf"
 arch="all"
@@ -51,4 +50,4 @@ dev() {
 	mv "$subpkgdir"/usr/share/aclocal/pkg.m4 "$pkgdir"/usr/share/aclocal/
 }
 
-b2sums="ec370782736f8dcc0ecd407c580ba6c1c4452fe8639fe2a66fa11194a77ddab6f6bfd8ad9026bd35ab5d9d916b2445ed104841a53eadf9d9f190dc77cf1a6427  pkgconf-1.6.1.tar.xz"
+b2sums="04bf58590e2f0b37bac7b24b3d595ad08680e85647548cbd642495398d95706f9f738af5c6f9b9ad8801567caa20ade85d4c4d74179f08313420683cb1b34263  pkgconf-1.6.3.tar.xz"

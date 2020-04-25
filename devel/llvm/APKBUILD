@@ -3,7 +3,7 @@ case $CARCH in
 	*) pkgver=10.0.0;;
 esac
 
-pkgrel=0
+pkgrel=1
 pkgdesc="$pkgname"
 arch="all"
 url=.
@@ -24,7 +24,8 @@ source="https://github.com/llvm/llvm-project/archive/llvmorg-${pkgver/_/-}.tar.g
 		clang-pie-ssp.patch
 		lld-znow.patch
 		riscv_relax.patch
-		tmp-kernel.patch"
+		tmp-kernel.patch
+		mips_fix_syscall_warning.patch"
 
 subpackages="lld llvm-binutils:binutils $pkgname-dev"
 
@@ -204,4 +205,5 @@ b2sums="6b0254f5b913398cdcf2b2ec1ff219888706d2b79d5296590934714e42ac79f6a6547941
 7991221eca8a3f32607de7da91c02928d95cfae8d2af3516d403d2edd1a43bf7bb97280b6584146cd9ed51123b2bfe686a460ac1035131d115207d55a7debcfa  clang-pie-ssp.patch
 ada8faf1f1bbdfc52b0493ba563b91de954e6613b8be0af7deeabdf0b621a69a45e5acc753ecb487f461360bb2ec99b4f510a8872bff3afe90e9e7b91de12997  lld-znow.patch
 c99d536538e3e4830c618e11214f4fdda6cf377c9ea565b254e2484e52b68202b19b921b09ef4b784897bceac8a3b7bb9331b4b0087a5cafb8a1a3518fb1a1c4  riscv_relax.patch
-66835dfc1460df303d26fe7c5d630b836cbb0e1ef7c39d59695f73f69e2d12af59db72ce16b1ee16f9ff5ea7bd530a9d39b7c98c0f7c89d74c03ab212d17db9a  tmp-kernel.patch"
+66835dfc1460df303d26fe7c5d630b836cbb0e1ef7c39d59695f73f69e2d12af59db72ce16b1ee16f9ff5ea7bd530a9d39b7c98c0f7c89d74c03ab212d17db9a  tmp-kernel.patch
+4fa8f10fa7d6d219fc88e21d6959c2c0e54508d533e7455660ccc9c1df8dcec286bb59ad54c5c65385803683c4b331eb1977a8c5107f786959550747ca96b0db  mips_fix_syscall_warning.patch"

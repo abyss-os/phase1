@@ -27,8 +27,8 @@ case "$_carch" in
 x86*) _carch="x86" archopts="LLVM=1" ;;
 riscv64*) _carch="riscv" archopts="LLVM=1" ;;
 aarch64*) _carch="arm64" archopts="LLVM=1" ;;
-mips*) _carch="mips" archopts="LLVM=0 LLVM_IAS=0 HOSTLD=gnu-ld LD=gnu-ld HOSTCC=gnu-gcc CC=gnu-gcc makedepends="$makedepends gcc" ;;
-ppc*) _carch="powerpc" archopts="LLVM=0 LLVM_IAS=0 HOSTLD=gnu-ld LD=gnu-ld HOSTCC=gnu-gcc CC=gnu-gcc makedepends="$makedepends gcc" ;;
+mips*) _carch="mips" archopts="LLVM=0 LLVM_IAS=0 HOSTLD=gnu-ld LD=gnu-ld HOSTCC=gnu-gcc CC=gnu-gcc" makedepends="$makedepends gcc" ;;
+ppc*) _carch="powerpc" archopts="LLVM=0 LLVM_IAS=0 HOSTLD=gnu-ld LD=gnu-ld HOSTCC=gnu-gcc CC=gnu-gcc" makedepends="$makedepends gcc" ;;
 *) error "Unsupported architecture" ;;
 esac
 

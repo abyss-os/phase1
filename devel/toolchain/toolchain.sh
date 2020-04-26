@@ -68,12 +68,12 @@ if [ "$binutils" != "none" ]; then
 	echo "linking binutils..."
 	# setup binutils
 	for link in $binutils_links; do
-		ln -vs /usr/bin/${binutils}-${link} /usr/bin/${link}
+		ln -fvs /usr/bin/${binutils}-${link} /usr/bin/${link}
 	done
 	# special case for ld due to lld
 	case $binutils in
-		llvm) ln -vs /usr/bin/ld.lld /usr/bin/ld && ln -sv /usr/bin/clang /usr/bin/as;;
-		*) ln -sv /usr/bin/${binutils}-ld /usr/bin/ld && ln -sv /usr/bin/gnu-as /usr/bin/as;;
+		llvm) ln -fvs /usr/bin/ld.lld /usr/bin/ld && ln -fsv /usr/bin/clang /usr/bin/as;;
+		*) ln -fsv /usr/bin/${binutils}-ld /usr/bin/ld && ln -fsv /usr/bin/gnu-as /usr/bin/as;;
 	esac
 fi
 
@@ -83,13 +83,13 @@ if [ "$compiler" != "none" ]; then
 	case $compiler in
 		llvm)
 			for link in $compiler_links; do
-				ln -vs /usr/bin/clang /usr/bin/${link}
+				ln -fvs /usr/bin/clang /usr/bin/${link}
 			done
-			ln -vs /usr/bin/clang-cpp /usr/bin/cpp;;
+			ln -fvs /usr/bin/clang-cpp /usr/bin/cpp;;
 		gnu)
 			for link in $compiler_links $gnu_extra; do
-				ln -vs /usr/bin/gnu-${link} /usr/bin/${link}
+				ln -fvs /usr/bin/gnu-${link} /usr/bin/${link}
 			done
-			ln -vs /usr/bin/gnu-cpp /usr/bin/cpp;;
+			ln -fvs /usr/bin/gnu-cpp /usr/bin/cpp;;
 	esac
 fi

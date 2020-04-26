@@ -1,6 +1,6 @@
 pkgname=musl
 pkgver=1.2.0
-pkgrel=2
+pkgrel=3
 pkgdesc="the musl c library (libc) implementation"
 url="http://www.musl-libc.org/"
 arch="all"
@@ -20,10 +20,11 @@ source="http://www.musl-libc.org/releases/musl-$pkgver.tar.gz
 	sys-tree.h
 	tryldflags-cflags.patch
 	"
-provides="bsd-compat-headers"
-replaces="libc-dev"
 builddir="$srcdir"/musl-$pkgver
-_cflags=""
+
+case $CARCH in
+	riscv64) makedepends="$makedepends gcc"
+esac
 
 build() {
 	cd "$builddir"

@@ -1,6 +1,6 @@
 pkgname=abyss-base
-pkgver=1
-pkgrel=3
+pkgver=2
+pkgrel=1
 pkgdesc="Abyss OS base package"
 url="https://abyss.run"
 arch="all"
@@ -19,13 +19,12 @@ builddir="$srcdir/build"
 case "$CARCH" in
     x86_64) depends_arch="" ;;
     aarch64) depends_arch="" ;;
-    mips64) depends_arch="" ;;
+    mips64*) depends_arch="" ;;
     riscv64) depends_arch="" ;;
+    ppc64le) depends_arch="" ;;
 esac
 
 depends="musl abyss-keyring apk-tools busybox ca-certificates dhcpcd openrc $depends_arch"
-provides="filesystem"
-replaces="filesystem"
 
 prepare() {
 	mkdir -p "$builddir"
@@ -115,12 +114,8 @@ package() {
 		# content of this file will override /etc/sysctl.d/*
 	EOF
 	cat > "$pkgdir"/etc/sysctl.d/00-abyss.conf <<-EOF
-		# Restarts computer after 120 seconds after kernel panic
 		kernel.panic = 120
 
-		# Users should not be able to create soft or hard links to files
-		# which they do not own. This mitigates several privilege
-		# escalation vulnerabilities.
 		fs.protected_hardlinks = 1
 		fs.protected_symlinks = 1
 	EOF
@@ -143,7 +138,10 @@ package() {
 		PRETTY_NAME="Abyss OS rolling"
 		HOME_URL="https://abyss.run"
 		BUG_REPORT_URL="https://github.com/abyss-os/phase1/issues"
+		ABYSS_ARCH=$CTARGET_ARCH
+		ABYSS_ENDIAN=$CTARGET_ENDIAN
 	EOF
+	# ^ these make little sense being ABYSS_ prefixed, but if we follow the spec they should be, apparently
 
 	echo rolling > "$pkgdir"/etc/abyss-release
 

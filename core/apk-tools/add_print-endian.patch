@@ -25,7 +25,7 @@ index 626da6d..e1baf31 100644
  	{ 0x112, "arch",	"Use architecture with --root",
  				required_argument, "ARCH" },
  	{ 0x114, "print-arch",	"Print default arch and exit" },
-+	{ 0x120, "print-endian", "Print default endian and exit" },
++	{ 0x130, "print-endian", "Print default endian and exit" },
  #ifdef TEST_MODE
  	{ 0x200, "test-repo",	"Repository", required_argument, "REPO" },
  	{ 0x201, "test-instdb",	"Installed db", required_argument, "INSTALLED" },

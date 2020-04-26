@@ -1,13 +1,12 @@
 pkgname=musl
 pkgver=1.2.0
-pkgrel=1
+pkgrel=2
 pkgdesc="the musl c library (libc) implementation"
 url="http://www.musl-libc.org/"
 arch="all"
 license="MIT"
-depends="filesystem"
+depends="abyss-base"
 subpackages="$pkgname-dev $pkgname-utils"
-makedepends="musl-dev filesystem"
 source="http://www.musl-libc.org/releases/musl-$pkgver.tar.gz
 	__stack_chk_fail_local.c
 	handle-aux-at_base.patch

@@ -23,7 +23,7 @@ source="http://www.musl-libc.org/releases/musl-$pkgver.tar.gz
 builddir="$srcdir"/musl-$pkgver
 
 case $CARCH in
-	riscv64) makedepends="$makedepends gcc"
+	riscv64) makedepends="$makedepends gcc" CC=gcc ;;
 esac
 
 build() {
@@ -43,7 +43,7 @@ build() {
 
 	# note: not autotools
 	LDFLAGS="$LDFLAGS -Wl,-soname,libc.musl-${CARCH}.so.1" \
-	CC=$CC CXX=$CXX ./configure \
+	CC=$CC ./configure \
 		--build=$CBUILD \
 		--host=$CHOST \
 		--target=$CTARGET \

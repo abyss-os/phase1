@@ -80,8 +80,6 @@ _set_options() {
 		runtime-link=shared
 		link=shared,static
 		cflags=$CFLAGS
-		cxxflags=$CXXFLAGS
-		linkflags=$LDFLAGS
 		--layout=system
 		-j${JOBS:-2}
 		$_options_carch

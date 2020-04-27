@@ -117,7 +117,7 @@ package() {
 	# those are provided by python3-tkinter
 	rm -rf $pkgdir/usr/bin/idle* $pkgdir/usr/lib/python*/idlelib \
 		$pkgdir/usr/lib/python*/tkinter $pkgdir/usr/lib/python*/*/test \
-		$pkgdir/usr/lib/python*/*/tests
+		$pkgdir/usr/lib/python*/*/tests \
 		$pkgdir/usr/lib/python*/distutils/command/*.exe
 
 	ln -sv /usr/bin/python3 $pkgdir/usr/bin/python

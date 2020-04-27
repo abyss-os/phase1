@@ -1,7 +1,7 @@
 pkgname=boost
 pkgver=1.72.0
 _pkgver="${pkgver//./_}"
-pkgrel=0
+pkgrel=1
 pkgdesc="Free peer-reviewed portable C++ source libraries"
 url="http://www.boost.org/"
 arch="all"
@@ -79,9 +79,9 @@ _set_options() {
 		threading=multi
 		runtime-link=shared
 		link=shared,static
-		cflags=\"$CFLAGS\"
-		cxxflags=\"$CXXFLAGS\"
-		linkflags=\"$LDFLAGS\"
+		cflags=$CFLAGS
+		cxxflags=$CXXFLAGS
+		linkflags=$LDFLAGS
 		--layout=system
 		-j${JOBS:-2}
 		$_options_carch

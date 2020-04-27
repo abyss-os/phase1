@@ -1,17 +1,15 @@
 pkgname=python3
 pkgver=3.8.2
 _basever="${pkgver%.*}"
-pkgrel=0
+pkgrel=1
 pkgdesc="A high-level scripting language"
 url="https://www.python.org"
 arch="all"
 license="custom"
 provides="python py-pip"
-subpackages="$pkgname-dev $pkgname-doc $pkgname-tests::noarch
-	$pkgname-wininst"
+subpackages="$pkgname-dev $pkgname-doc"
 makedepends="expat-dev openssl-dev zlib-dev ncurses-dev bzip2-dev xz-dev
-	sqlite-dev libffi-dev tcl-dev linux-dev gdbm-dev readline-dev
-	!gettext-dev"
+	sqlite-dev libffi-dev tcl-dev linux-dev gdbm-dev readline-dev"
 source="https://www.python.org/ftp/python/$pkgver/Python-$pkgver.tar.xz
 	musl-find_library.patch
 	"
@@ -118,29 +116,11 @@ package() {
 	install -Dm644 LICENSE "$pkgdir"/usr/share/licenses/$pkgname/LICENSE
 	# those are provided by python3-tkinter
 	rm -r "$pkgdir"/usr/bin/idle* "$pkgdir"/usr/lib/python*/idlelib \
-		"$pkgdir"/usr/lib/python*/tkinter
+		"$pkgdir"/usr/lib/python*/tkinter $pkgdir/usr/lib/python$_basever/test \
+		$pkgdir/usr/lib/python$_basever/test $pkgdir/usr/lib/python$_basever/tests \
+		$pkgdir/usr/lib/python$_basever/distutils/command/*.exe
 
 	ln -sv /usr/bin/python3 $pkgdir/usr/bin/python
-}
-
-tests() {
-	pkgdesc="The test modules from the main python package"
-
-	cd "$pkgdir"/usr/lib/python$_basever
-	local i; for i in */test */tests; do
-		mkdir -p "$subpkgdir"/usr/lib/python$_basever/"$i"
-		mv "$i"/* "$subpkgdir"/usr/lib/python$_basever/"$i"
-		rm -rf "$i"
-	done
-	mv "$pkgdir"/usr/lib/python$_basever/test \
-		"$subpkgdir"/usr/lib/python$_basever/
-}
-
-wininst() {
-	pkgdesc="Python wininst files"
-	mkdir -p "$subpkgdir"/usr/lib/python$_basever/distutils/command
-	mv "$pkgdir"/usr/lib/python$_basever/distutils/command/*.exe \
-		"$subpkgdir"/usr/lib/python$_basever/distutils/command
 }
 
 b2sums="f42b35bea5e65f1f0a3fa6f1fd3d749fba3fa46d958608a314c1a98d0e3ca890e856da4d40ee489fe546fc02ce0fc9fa2daaaba96a8928d92ae7eb3d2dda3fe4  Python-3.8.2.tar.xz

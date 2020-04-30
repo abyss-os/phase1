@@ -1,10 +1,10 @@
 pkgname=icu
-pkgver=65.1
+pkgver=67.1
 
 # convert x.y.z to x_y_z
 _ver=${pkgver//./_}
 
-pkgrel=1
+pkgrel=0
 pkgdesc="International Components for Unicode library"
 url="http://www.icu-project.org/"
 arch="all"
@@ -67,4 +67,4 @@ package() {
 		"$pkgdir"/usr/share/licenses/icu/license.html
 }
 
-b2sums="3c62781201c02a2b1027c9b6db4586f8ccdfb339c0765301a381242d5218f3503a1cdbdc1dc9a1a23ffa657096adc4bf7f0b7fe702461f14beba293a7e82e02c  icu4c-65_1-src.tgz"
+b2sums="f8a263b5c3e5e8ffea88a3bb766cb265aac026b5f9b2f45a1f06076f99f9f0dc3a4512487652d774ccfc8dc65f8f4c40a974e0aa2aa4381ee0c9885f6b871779  icu4c-67_1-src.tgz"

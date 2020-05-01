@@ -4,7 +4,7 @@ url="https://www.opencontainers.org"
 
 _commit=dc9208a3303feef5b3839f4323d9beb36df0a9dd
 pkgver=1.0.0_rc10
-pkgrel=0
+pkgrel=1
 
 _ver=v${pkgver/_rc/-rc}
 # if we're building against an explicit commit beyond pkgver, use this instead:
@@ -18,14 +18,24 @@ source="runc-$_ver.tar.gz::https://github.com/opencontainers/runc/archive/$_ver.
 builddir="$srcdir/src/github.com/opencontainers/runc"
 options="!check"
 
+case "$CARCH" in
+	riscv64) _flags="" ;;
+	mips64*) _flags="" ;;
+	*) _flags="-buildmode=pie" ;;
+esac
+
 build() {
 	cd "$srcdir"
 	export GOPATH="$PWD"
 	mkdir -p "$(dirname "$builddir")"
 	ln -s "$PWD/$pkgname-${_ver#v}" "$builddir"
 	cd "$builddir"
-	make COMMIT="$_commit"
-	make man
+	msg "go build runc"
+	go build $_flags -ldflags "-X main.gitCommit=${_commit} -X main.version=${pkgver}" -tags seccomp -o runc .
+	msg "go build recvtty"
+	#go build $_flags -ldflags "-X main.gitCommit=${_commit} -X main.version=${pkgver}" -tags seccomp -o contrib/cmd/recvtty/recvtty ./contrib/cmd/recvtty
+        msg "man pages"
+        make man
 }
 
 package() {

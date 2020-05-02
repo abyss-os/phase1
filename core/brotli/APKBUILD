@@ -1,0 +1,42 @@
+pkgname=brotli
+pkgver=1.0.7
+pkgrel=0
+pkgdesc="Generic lossless compressor"
+url="https://github.com/google/brotli"
+arch="all"
+license="MIT"
+makedepends="cmake python3-dev"
+checkdepends="bash"
+subpackages="$pkgname-doc $pkgname-dev"
+source="$pkgname-$pkgver.tar.gz::https://github.com/google/brotli/archive/v$pkgver.tar.gz
+	optimize-mips-s390x.patch"
+
+build() {
+	cmake -B build \
+		-DCMAKE_BUILD_TYPE=None \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_SHARED_LIBS=True \
+		-DCMAKE_C_FLAGS="$CFLAGS"
+	make -C build
+}
+
+check() {
+	make -C build test
+}
+
+package() {
+	make -C build DESTDIR="$pkgdir" install
+
+	local man; for man in docs/*.?; do
+		install -D -m644 $man "$pkgdir"/usr/share/man/man${man##*.}/${man##*/}
+	done
+}
+
+py3() {
+	cd "$builddir"
+	python3 setup.py install --prefix=/usr --root="$subpkgdir"
+}
+
+b2sums="b9fc554cd23c8387b648638b6f9bb2d29fa87035856d03cf284662f9281984f3bf8e40109e61155ece18673f4391bc0fff704f8ab800a2041d3ce1824478d2ae  brotli-1.0.7.tar.gz
+ed294b53f2f28754f05a5aecc63dd7c06294c6da7f5d4d0dac32e93ac53c325b434ca038c5b757c711429576ef389f5081d5869a63e1406e14f5a49134fb28fd  optimize-mips-s390x.patch"

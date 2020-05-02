@@ -1,43 +1,39 @@
 pkgname=nodejs
-pkgver=13.11.0
+pkgver=14.1.0
 pkgrel=0
 pkgdesc="JavaScript runtime built on V8 engine"
 url="https://nodejs.org/"
 arch="all"
 license="MIT"
 depends="ca-certificates"
-depends_dev="libuv"
-makedepends="linux-dev python3 zlib-dev libuv-dev openssl-dev c-ares-dev nghttp2-dev"
+makedepends="linux-dev python3 libuv-dev c-ares-dev nghttp2-dev openssl-dev"
 subpackages="$pkgname-dev $pkgname-doc"
-source="https://nodejs.org/dist/v$pkgver/node-v$pkgver.tar.gz
-	dont-run-gyp-files-for-bundled-deps.patch"
+source="https://nodejs.org/dist/v$pkgver/node-v$pkgver.tar.gz"
 builddir="$srcdir/node-v$pkgver"
-
-prepare() {
-	default_prepare
-
-	# Remove bundled dependencies that we're not using.
-	#rm -rf deps/cares deps/openssl deps/uv deps/zlib
-}
 
 build() {
 	cd "$builddir"
 
 	case "$CARCH" in
-	mips*) _carchflags="--with-mips-arch-variant=r1 --with-mips-float-abi=soft";;
+		mips*) _carchflags="--with-mips-arch-variant=r2 --with-mips-float-abi=soft";;
 	esac
+
+	# soon (tm)
+	# --shared-brotli \
 
 	./configure --prefix=/usr \
 		$_carchflags \
 		--shared-zlib \
 		--shared-libuv \
-		--shared-openssl \
 		--shared-cares \
 		--shared-nghttp2 \
-		--openssl-use-def-ca-store
+		--shared-openssl \
+		--openssl-use-def-ca-store \
+		--with-intl=small-icu
 
-	make
+	make BUILDTYPE=Release
 }
+
 
 # TODO Run provided test suite.
 check() {
@@ -57,5 +53,4 @@ package() {
 	rm "$pkgdir"/usr/bin/npm "$pkgdir"/usr/bin/npx
 }
 
-b2sums="4a12ce64ffa062aea43434680bef3c95884956dd743d2218832a5842927c6f4daaa98b4d843852bf8bdc31e59335cae08c0bf83ec6b9864b5668cc896e629d01  node-v13.11.0.tar.gz
-8be9fdee4efab555a61de769fe2d243f37cb4a2286b39c2e7ea24fc7b8abe8c95e105a5214cea2a57b8df635b06d1cb717ea2521711922c3c85d284bf20ed22d  dont-run-gyp-files-for-bundled-deps.patch"
+b2sums="25b03f412ea36470cb9e454dbe583349a8230bd8f2fc540f4de089f54c7189f130c99241e42578c9708310caee45c157a29fcf2848c08c5319995d4de516e7f3  node-v14.1.0.tar.gz"

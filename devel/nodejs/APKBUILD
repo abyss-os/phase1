@@ -6,32 +6,32 @@ url="https://nodejs.org/"
 arch="all"
 license="MIT"
 depends="ca-certificates"
-makedepends="linux-dev python3 libuv-dev c-ares-dev nghttp2-dev openssl-dev"
+makedepends="linux-dev python3 libuv-dev c-ares-dev nghttp2-dev openssl-dev icu-dev brotli-dev samurai"
 subpackages="$pkgname-dev $pkgname-doc"
-source="https://nodejs.org/dist/v$pkgver/node-v$pkgver.tar.gz"
+source="https://nodejs.org/dist/v$pkgver/node-v$pkgver.tar.gz
+	restore-mips64-configure_py.patch"
 builddir="$srcdir/node-v$pkgver"
 
 build() {
 	cd "$builddir"
 
 	case "$CARCH" in
-		mips*) _carchflags="--with-mips-arch-variant=r2 --with-mips-float-abi=soft";;
+		mips64) _carchflags="--with-mips-float-abi=soft";;
 	esac
-
-	# soon (tm)
-	# --shared-brotli \
 
 	./configure --prefix=/usr \
 		$_carchflags \
+		--shared-brotli \
 		--shared-zlib \
 		--shared-libuv \
 		--shared-cares \
 		--shared-nghttp2 \
 		--shared-openssl \
 		--openssl-use-def-ca-store \
-		--with-intl=small-icu
+		--with-intl=system-icu \
+		--ninja
 
-	make BUILDTYPE=Release
+	ninja -C out/Release -j${JOBS}
 }
 
 
@@ -46,11 +46,12 @@ check() {
 package() {
 	cd "$builddir"
 
-	make DESTDIR="$pkgdir" install
+	ninja DESTDIR="$pkgdir" install
 
 	# Remove npm, it's provided by main/nodejs package.
 	rm -r "$pkgdir"/usr/lib/node_modules
 	rm "$pkgdir"/usr/bin/npm "$pkgdir"/usr/bin/npx
 }
 
-b2sums="25b03f412ea36470cb9e454dbe583349a8230bd8f2fc540f4de089f54c7189f130c99241e42578c9708310caee45c157a29fcf2848c08c5319995d4de516e7f3  node-v14.1.0.tar.gz"
+b2sums="25b03f412ea36470cb9e454dbe583349a8230bd8f2fc540f4de089f54c7189f130c99241e42578c9708310caee45c157a29fcf2848c08c5319995d4de516e7f3  node-v14.1.0.tar.gz
+892c6ef8def9693f471ac77c708573a7991bb532bbc33afa4741b34ebe0a64565bf926cd405c659124a1fa679b2d016d72b30121b7da8a5b31d0717168dba33a  restore-mips64-configure_py.patch"

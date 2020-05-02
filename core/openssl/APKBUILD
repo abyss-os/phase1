@@ -6,10 +6,7 @@ pkgdesc="Toolkit for Transport Layer Security (TLS)"
 url="https://www.openssl.org"
 arch="all"
 license="OpenSSL"
-replaces="libressl"
-makedepends_build="perl"
-makedepends_host="linux-dev"
-makedepends="$makedepends_host $makedepends_build"
+makedepends="perl linux-dev"
 subpackages="$pkgname-dev $pkgname-doc libcrypto$_abiver:_libcrypto libssl$_abiver:_libssl"
 source="https://www.openssl.org/source/openssl-$pkgver.tar.gz
 	dgst.patch"
@@ -60,7 +57,7 @@ package() {
 	# XXX: jwh: this conflicts with shadow, no intention of fixing it.
 	# More likely to just stop packaging documentation entirely as it serves
 	# very little purpose.
-	rm -fv $pkgdir/usr/share/man/man1/passwd.1.gz
+	rm -fv $pkgdir/usr/share/man/man1/passwd.1*
 }
 
 _libcrypto() {

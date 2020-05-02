@@ -44,9 +44,7 @@ check() {
 }
 
 package() {
-	cd "$builddir"
-
-	ninja DESTDIR="$pkgdir" install
+	ninja -C out/Release DESTDIR="$pkgdir" install
 
 	# Remove npm, it's provided by main/nodejs package.
 	rm -r "$pkgdir"/usr/lib/node_modules

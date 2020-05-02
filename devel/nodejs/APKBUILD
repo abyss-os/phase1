@@ -6,7 +6,7 @@ url="https://nodejs.org/"
 arch="all"
 license="MIT"
 depends="ca-certificates"
-makedepends="linux-dev python3 libuv-dev c-ares-dev nghttp2-dev openssl-dev icu-dev brotli-dev samurai"
+makedepends="linux-dev python3 libuv-dev c-ares-dev nghttp2-dev openssl-dev icu-dev brotli-dev ninja"
 subpackages="$pkgname-dev $pkgname-doc"
 source="https://nodejs.org/dist/v$pkgver/node-v$pkgver.tar.gz
 	restore-mips64-configure_py.patch"

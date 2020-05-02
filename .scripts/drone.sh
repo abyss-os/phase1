@@ -28,6 +28,9 @@ esac
 apk --force-overwrite -U upgrade -a
 apk add git minio-client
 
+echo "=> nproc: $(nproc)"
+echo "=> mem: $(grep MemTotal /proc/meminfo|awk '{print $2/1024}')"
+
 for PKG in $(git log ...${DRONE_COMMIT_BEFORE} --format=format: --name-only | grep -e 'APKBUILD$' | tac); do
 	if [ -f "${PKG}" ]; then
 		apk --force-overwrite -U upgrade -a

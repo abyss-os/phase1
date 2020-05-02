@@ -6,13 +6,8 @@ url="http://git.kernel.org/?p=utils/kernel/kmod/kmod.git;a=summary"
 arch="all"
 options="!check"  # https://bugs.gentoo.org/408915#c3
 license="GPL-2.0-or-later"
-depends=""
-depends_dev=""
 # gnu sed is needed for symlink
-makedepends_build="gsed libxslt"
-makedepends_host="$depends_dev zlib-dev xz-dev"
-makedepends="$makedepends_build $makedepends_host"
-install=""
+makedepends="gsed libxslt zlib-dev xz-dev"
 triggers="$pkgname.trigger=/usr/lib/modules/*"
 subpackages="$pkgname-dev $pkgname-doc $pkgname-openrc
 	$pkgname-bash-completion:bashcomp:noarch"

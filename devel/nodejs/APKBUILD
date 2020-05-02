@@ -31,7 +31,7 @@ build() {
 		--with-intl=system-icu \
 		--ninja
 
-	ninja -C out/Release
+	make BUILDTYPE=Release
 }
 
 
@@ -44,7 +44,7 @@ check() {
 }
 
 package() {
-	ninja -C out/Release DESTDIR="$pkgdir" install
+	make DESTDIR="$pkgdir" BUILDTYPE=Release install
 
 	# Remove npm, it's provided by main/nodejs package.
 	rm -r "$pkgdir"/usr/lib/node_modules

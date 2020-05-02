@@ -31,7 +31,7 @@ build() {
 		--with-intl=system-icu \
 		--ninja
 
-	ninja -C out/Release -j${JOBS}
+	ninja -C out/Release
 }
 
 

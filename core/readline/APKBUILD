@@ -7,7 +7,7 @@ url="https://tiswww.cwru.edu/php/chet/readline/rltop.html"
 arch="all"
 options="!check"
 license="GPL"
-makedepends_host="ncurses-dev gnugrep"
+makedepends="ncurses-dev gnugrep"
 subpackages="$pkgname-dev $pkgname-doc libhistory"
 source="https://ftp.gnu.org/gnu/$pkgname/$pkgname-$_myver.tar.gz
 	fix-ncurses-underlinking.patch

@@ -7,9 +7,7 @@ url="https://www.openssh.com/portable.html"
 arch="all"
 license="BSD"
 options="!check suid" # FIXME: tests fails. disable for now
-makedepends_build="linux-pam-dev"
-makedepends_host="openssl-dev zlib-dev libedit-dev linux-dev"
-makedepends="$makedepends_build $makedepends_host"
+makedepends="openssl-dev zlib-dev libedit-dev linux-dev linux-pam-dev"
 # Add more packages support here e.g. kerberos
 _pkgsupport=""
 [ -z "$BOOTSTRAP" ] && _pkgsupport="pam"
@@ -19,17 +17,11 @@ source="https://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/$pkgname-$_myver.ta
 	fix-utmp.patch
 	sftp-interactive.patch
 	disable-forwarding-by-default.patch
-
 	sshd.initd
 	sshd.confd
 	"
 
 builddir="$srcdir"/$pkgname-$_myver
-
-prepare() {
-	cd "$builddir"
-	default_prepare
-}
 
 build() {
 	cd "$builddir"

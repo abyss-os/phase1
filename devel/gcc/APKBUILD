@@ -269,7 +269,9 @@ gdc() {
 	mv "$pkgdir"/$_gcclibdir/include/d/* "$subpkgdir"/$_gcclibdir/include/d/
 	mv "$pkgdir"/usr/lib/libgdruntime.a "$subpkgdir"/usr/lib/
 	mv "$pkgdir"/usr/lib/libgphobos.a "$subpkgdir"/usr/lib/
-	mv "$pkgdir"/usr/bin/gdc "$subpkgdir"/usr/bin/
+	mv "$pkgdir"/usr/bin/gnu-gdc "$subpkgdir"/usr/bin/
+
+	ln -s /usr/bin/gnu-gdc ${pkgdir}/usr/bin/gdc
 }
 
 b2sums="21efb1432aefad5ed9b9b395e88ef2adfda3a8ea6e3e808cd151da6e66df9fed1bafdc8b8ff055d4b2272ac786d8b7ddc4293bb6b51c55c40a261a0eda0e7cb4  gcc-9.3.0.tar.xz

@@ -1,7 +1,7 @@
 pkgname=gcc
 pkgver=9.3.0
 pkgname="$pkgname$_target"
-pkgrel=2
+pkgrel=3
 pkgdesc="The GNU Compiler Collection"
 url="http://gcc.gnu.org"
 arch="all"
@@ -54,6 +54,11 @@ source="https://gcc.gnu.org/pub/gcc/releases/gcc-${_pkgbase:-$pkgver}/gcc-${_pkg
 	320-libffi-gnulinux.patch
 
 	400-dlang-phobos.patch
+	401-dlang-32bits.patch
+	402-dlang-stat.patch
+	403-dlang-ibmz.patch
+	404-dlang-zlib.patch
+	405-dlang-mips.patch
 
 	gcc-pure64-mips.patch
 	0016-invalid_tls_model.patch
@@ -304,6 +309,11 @@ cb426359267544796cc950b72cb0571d8e69e0927677d4a0996467fec7dda7c1f926e9a5374eb49a
 a7458adba9d1a8a3537d0a0e3335ac7ee65081a364f95be1f144d2a2aaba3317412ae05a484c1412da57c55affd67c951f38df1cf8577b9d7121f076ad5a6030  libgnarl-musl.patch
 31788bf24ffa306914306c9f1cce0b4a0e6b65824c3129208bdccde5846d9eb47de5ef2a6efb7a11108c8b5fa48a2fa9bb53c1967cbe9a8a3f1002b60f3081b0  320-libffi-gnulinux.patch
 8bf749b9f37ba92cc77de976cf0b0adc6a741afbea9f9f9aca847147cdf15f2108a1ebf0d31d0170bd6caa2b071bcb0cdcf3936189682380c1aaff82ccee9080  400-dlang-phobos.patch
+8c2c4488733f9bdf79f815dbfdd26decb8e07581de7ef7b3c126b06998066a01a5cd93ee37cfdf8f6aa2c2d5ed6956d3f7f44b146e4678b3b71633c848daaea1  401-dlang-32bits.patch
+fdbf03bb3c914a1de72e0c1f333caf299ccb828264ba1d718ca8934ba7688a4c3f809f27739fb51eee89026933ff411c950073852f7d3debf53e8c49f1e84189  402-dlang-stat.patch
+03f068e73754b28f76701dce141eac86242c8118c5809fc0c80b8cedcab8fa096717998cb9633a52cd1ee441b0b33c4186713bc51a94afedbd02fd5884148be8  403-dlang-ibmz.patch
+a5ea52118eb0caa0c5388132bd5d53ff69f61cec421d7def57e1d7a6a03cd98fc44b3e507078d01522da45d95c3846c80a934db415e139b25b38113e855d6cc1  404-dlang-zlib.patch
+7d0b2c5eece0b9a7ec31eb781db4da7c6e1dfea2a6907394d65d9b57075d1ec4056ea520ba2189f6549ddfedfc38341d9b239b19629e9fcae7fe5b4265fd0edf  405-dlang-mips.patch
 c2e8e33eb88bba6453f0645092cc2a6b3adfb07788d7f71a3f97e4f09f95934b6dfac929b72f34c7e515d8d07b1f6db2a2bee2bb1158c85e9c41e4246bdafd41  gcc-pure64-mips.patch
 16514a213270411737a6ae1fa6bff7a4b6637b99fc20a9ca9a2ce202c8342d15766c51abb25b163e984604a9044cc006e3609a6a2682e67cfbfb7aea40f455c2  0016-invalid_tls_model.patch
 afd9fefe687b7cd3c3a483e183f366348e34f58f5d713e2f6b38da16e2e382248b446d9da01ea89fe7202b795b08929b7c42c89c2c1e9a57482faf01ee697beb  mpc-1.1.0.tar.gz

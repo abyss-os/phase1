@@ -31,7 +31,7 @@ build() {
 		--with-intl=system-icu \
 		--ninja
 
-	make BUILDTYPE=Release
+	make BUILDTYPE=Release -j${JOBS}
 }
 
 

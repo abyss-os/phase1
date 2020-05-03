@@ -12,7 +12,7 @@ _mpfr=4.0.2
 _isl=0.22
 _mpc=1.1.0
 makedepends="bison flex texinfo gawk zip zlib-dev linux-dev binutils"
-subpackages="$pkgname-doc libatomic libgcc libgomp libstdc++:libcxx gdc"
+subpackages="$pkgname-doc libatomic libgcc libgomp libstdc++:libcxx libgphobos gdc"
 
 provides="$pkgname-bootstrap"
 #depends="$pkgname-bootstrap"
@@ -245,6 +245,32 @@ libgomp() {
 
 	mkdir -p "$subpkgdir"/usr/lib
 	mv "$pkgdir"/usr/${_target:+$CTARGET/}lib/libgomp.so.* "$subpkgdir"/usr/lib/
+}
+
+libgphobos() {
+	pkgdesc="D programming language standard library for GCC"
+	depends=
+
+	mkdir -p "$subpkgdir"/usr/lib
+	mv "$pkgdir"/usr/lib/libgdruntime.so.* "$subpkgdir"/usr/lib/
+	mv "$pkgdir"/usr/lib/libgphobos.so.*  "$subpkgdir"/usr/lib/
+}
+
+gdc() {
+	pkgdesc="GCC-based D language compiler"
+	depends="gcc=$_gccrel libgphobos=$_gccrel musl-dev"
+	depends="$depends libucontext-dev"
+
+	mkdir -p "$subpkgdir"/$_gcclibdir/include/d/ \
+		"$subpkgdir"/usr/lib \
+		"$subpkgdir"/usr/bin
+	# Copy: The installed '.d' files, the static lib, the binary itself
+	# The shared libs are part of 'libgphobos' so one can run program
+	# without installing the compiler
+	mv "$pkgdir"/$_gcclibdir/include/d/* "$subpkgdir"/$_gcclibdir/include/d/
+	mv "$pkgdir"/usr/lib/libgdruntime.a "$subpkgdir"/usr/lib/
+	mv "$pkgdir"/usr/lib/libgphobos.a "$subpkgdir"/usr/lib/
+	mv "$pkgdir"/usr/bin/gdc "$subpkgdir"/usr/bin/
 }
 
 b2sums="21efb1432aefad5ed9b9b395e88ef2adfda3a8ea6e3e808cd151da6e66df9fed1bafdc8b8ff055d4b2272ac786d8b7ddc4293bb6b51c55c40a261a0eda0e7cb4  gcc-9.3.0.tar.xz

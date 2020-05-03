@@ -3,7 +3,7 @@ pkgver=1.43.0
 pkgrel=0
 pkgdesc="The Rust Programming Language"
 url="https://www.rust-lang.org"
-arch="all"
+arch="!all"
 license="Apache-2.0 AND MIT"
 
 config_helper() {

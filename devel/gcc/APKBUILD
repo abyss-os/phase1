@@ -1,7 +1,7 @@
 pkgname=gcc
 pkgver=9.3.0
 pkgname="$pkgname$_target"
-pkgrel=1
+pkgrel=2
 pkgdesc="The GNU Compiler Collection"
 url="http://gcc.gnu.org"
 arch="all"
@@ -12,7 +12,7 @@ _mpfr=4.0.2
 _isl=0.22
 _mpc=1.1.0
 makedepends="bison flex texinfo gawk zip zlib-dev linux-dev binutils"
-subpackages="$pkgname-doc libatomic libgcc libgomp libstdc++:libcxx"
+subpackages="$pkgname-doc libatomic libgcc libgomp libstdc++:libcxx gdc"
 
 provides="$pkgname-bootstrap"
 #depends="$pkgname-bootstrap"
@@ -52,6 +52,8 @@ source="https://gcc.gnu.org/pub/gcc/releases/gcc-${_pkgbase:-$pkgver}/gcc-${_pkg
 	libgnarl-musl.patch
 
 	320-libffi-gnulinux.patch
+
+	400-dlang-phobos.patch
 
 	gcc-pure64-mips.patch
 	0016-invalid_tls_model.patch
@@ -115,7 +117,7 @@ build() {
 
 	case "$CTARGET" in
 	aarch64-*-*-*)		_arch_configure="--with-arch=armv8-a --with-abi=lp64";;
-	mips64-*-*-*)		_arch_configure="--with-arch=mips64 --with-tune=mips64 --with-mips-plt --with-float=soft --with-abi=64";;
+	mips64*-*-*-*)		_arch_configure="--with-arch=mips64 --with-tune=mips64 --with-mips-plt --with-float=soft --with-abi=64";;
 	powerpc64*-*-*-*)	_arch_configure="--with-abi=elfv2 --enable-secureplt --enable-decimal-float=no --enable-targets=powerpcle-linux";;
 	riscv64-*-*-*)		_arch_configure="--with-arch=rv64gc --with-abi=lp64d";;
 	esac
@@ -125,7 +127,7 @@ build() {
 	*)	_hash_style_configure="--with-linker-hash-style=gnu" ;;
 	esac
 
-	_languages=c,c++
+	_languages=c,c++,d
 
 	msg "Building the following:"
 	echo ""
@@ -168,6 +170,7 @@ build() {
 		--disable-libmudflap \
 		--disable-libsanitizer \
 		--disable-symvers \
+		--disable-bootstrap \
 		$_arch_configure \
 		$_hash_style_configure \
 		libat_cv_have_ifunc=no
@@ -273,6 +276,7 @@ a9dc1b4085a3779e1e37e616321e1d727b13d032e8ce3e893420854e37a27efd89477ffb79c0d799
 cb426359267544796cc950b72cb0571d8e69e0927677d4a0996467fec7dda7c1f926e9a5374eb49aa529892e4f5764a7fff33820f7d0f3ad62d497f1b8ae0e24  ada-musl.patch
 a7458adba9d1a8a3537d0a0e3335ac7ee65081a364f95be1f144d2a2aaba3317412ae05a484c1412da57c55affd67c951f38df1cf8577b9d7121f076ad5a6030  libgnarl-musl.patch
 31788bf24ffa306914306c9f1cce0b4a0e6b65824c3129208bdccde5846d9eb47de5ef2a6efb7a11108c8b5fa48a2fa9bb53c1967cbe9a8a3f1002b60f3081b0  320-libffi-gnulinux.patch
+8bf749b9f37ba92cc77de976cf0b0adc6a741afbea9f9f9aca847147cdf15f2108a1ebf0d31d0170bd6caa2b071bcb0cdcf3936189682380c1aaff82ccee9080  400-dlang-phobos.patch
 c2e8e33eb88bba6453f0645092cc2a6b3adfb07788d7f71a3f97e4f09f95934b6dfac929b72f34c7e515d8d07b1f6db2a2bee2bb1158c85e9c41e4246bdafd41  gcc-pure64-mips.patch
 16514a213270411737a6ae1fa6bff7a4b6637b99fc20a9ca9a2ce202c8342d15766c51abb25b163e984604a9044cc006e3609a6a2682e67cfbfb7aea40f455c2  0016-invalid_tls_model.patch
 afd9fefe687b7cd3c3a483e183f366348e34f58f5d713e2f6b38da16e2e382248b446d9da01ea89fe7202b795b08929b7c42c89c2c1e9a57482faf01ee697beb  mpc-1.1.0.tar.gz

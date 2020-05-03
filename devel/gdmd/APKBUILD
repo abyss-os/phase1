@@ -1,0 +1,18 @@
+pkgname=gdmd
+pkgver=0.1.0
+pkgrel=0
+pkgdesc="Wrapper providing DMD-like CLI interface to gdc"
+url="https://github.com/D-Programming-GDC/gdmd"
+arch="all"
+license="GPL-3.0-or-later"
+depends="perl gdc"
+options="!check"
+source="$pkgname-$pkgver.zip::https://github.com/D-Programming-GDC/gdmd/archive/script-$pkgver.zip"
+builddir="$srcdir/gdmd-script-$pkgver/"
+
+package() {
+	# gdmd needs to be in the same directory as GDC
+	install -D "dmd-script" "$pkgdir/usr/bin/gdmd"
+}
+
+b2sums="3307cc57bfee93f5dddf0530a792bdcbab03ce2b343bd3aa156e9a1ba451d8c67a844bdea65a054d48adc5e5b9e17c00b99dcbc428ba91539f731cd68c1d278b  gdmd-0.1.0.zip"

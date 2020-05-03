@@ -170,7 +170,6 @@ build() {
 		--disable-libmudflap \
 		--disable-libsanitizer \
 		--disable-symvers \
-		--disable-bootstrap \
 		$_arch_configure \
 		$_hash_style_configure \
 		libat_cv_have_ifunc=no

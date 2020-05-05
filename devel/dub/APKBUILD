@@ -1,0 +1,53 @@
+pkgname=dub
+pkgver=1.20.1
+pkgrel=0
+pkgdesc="Package and build management system for D"
+url="http://code.dlang.org/"
+arch="all"
+license="MIT"
+depends="libcurl"
+makedepends="gdc gdmd bash curl-dev"
+subpackages="$pkgname-zsh-completion:zsh:noarch $pkgname-doc:doc:noarch"
+source="$pkgname-$pkgver.tar.gz::https://github.com/dlang/dub/archive/v$pkgver.tar.gz"
+
+build() {
+	DMD=gdmd GITVER="v$pkgver" gdmd -run "$builddir/build.d"
+
+	# Build man pages
+	"$builddir/bin/dub" scripts/man/gen_man.d
+}
+
+check() {
+	bin/dub test
+}
+
+package() {
+	install -s -D "$builddir/bin/dub" "$pkgdir/usr/bin/dub"
+	install -Dm644 "$builddir/scripts/zsh-completion/_dub" "$pkgdir/usr/share/zsh/site-functions/_dub"
+	mkdir -p "$pkgdir/usr/share/man/man1/"
+	cp "$builddir"/scripts/man/*.1 "$pkgdir/usr/share/man/man1/"
+}
+
+zsh() {
+	pkgdesc="Zsh completion for dub"
+	depends=""
+	install_if="$pkgname=$pkgver-r$pkgrel zsh"
+
+	mkdir -p "$subpkgdir"/usr/share/zsh/site-functions
+	mv "$pkgdir"/usr/share/zsh/site-functions/* \
+		"$subpkgdir"/usr/share/zsh/site-functions
+}
+
+doc() {
+	pkgdesc="Man pages for dub"
+	depends=""
+	install_if="$pkgname=$pkgver-r$pkgrel docs"
+
+	gzip -9 "$pkgdir"/usr/share/man/man1/*
+	mkdir -p "$subpkgdir"/usr/share/man/man1
+	mv "$pkgdir"/usr/share/man/man1/* "$subpkgdir"/usr/share/man/man1/
+	# Satisfy the linter
+	rmdir "$pkgdir"/usr/share/man/man1/
+}
+
+b2sums="15f0e3042249687eb35d9e54b97bb22ba9db4184f54fd5154849aff952d667cd38cbb15a9d349573bd984fd1b30459c22003fab7d647961355c30498fa0b2203  dub-1.20.1.tar.gz"

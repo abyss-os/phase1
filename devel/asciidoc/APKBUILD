@@ -1,7 +1,7 @@
 pkgname=asciidoc
 pkgver=8.6.10
 _hash=544574e66ca89c898151c1c6d34b88a76e44343f
-pkgrel=2
+pkgrel=3
 pkgdesc="Text based documentation"
 url="http://asciidoc.org/"
 arch="noarch"

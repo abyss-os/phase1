@@ -1,6 +1,6 @@
 pkgname=dmd-bootstrap
 pkgver=2.069.20180305
-pkgrel=0
+pkgrel=1
 _dmdhash=75266348c8a2368945a339ab86d7c8960a9bfc08
 _rthash=33ae38cef41564b12864470afaf8430eb7334d3b
 _phoboshash=30ac23a0889dd183221ce531a057171dd45296c4
@@ -32,11 +32,11 @@ prepare() {
 
 build() {
 	msg dmd
-	make -C "$srcdir/dmd/" -f posix.mak HOST_CXX=$CXX HOST_CC=$CC CC=$CC ENABLE_RELEASE=1
+	make -C "$srcdir/dmd/" -f posix.mak HOST_CXX=$CXX HOST_CC=$CC CC=$CC ENABLE_RELEASE=1 MODEL=64
 	msg druntime
-	make -C "$srcdir/druntime/" -f posix.mak HOST_CXX=$CXX HOST_CC=$CC CC=$CC ENABLE_RELEASE=1
+	make -C "$srcdir/druntime/" -f posix.mak HOST_CXX=$CXX HOST_CC=$CC CC=$CC ENABLE_RELEASE=1 MODEL=64
 	msg phobos
-	make -C "$srcdir/phobos/" -f posix.mak HOST_CXX=$CXX HOST_CC=$CC CC=$CC ENABLE_RELEASE=1
+	make -C "$srcdir/phobos/" -f posix.mak HOST_CXX=$CXX HOST_CC=$CC CC=$CC ENABLE_RELEASE=1 MODEL=64
 }
 
 package() {

@@ -1,0 +1,27 @@
+diff --git a/dmd/src/posix.mak b/dmd/src/posix.mak
+index 20b17cb..f18c381 100644
+--- a/dmd/src/posix.mak
++++ b/dmd/src/posix.mak
+@@ -116,7 +116,8 @@ WARNINGS += \
+ 	-Wno-self-assign \
+ 	-Wno-unused-const-variable \
+ 	-Wno-constant-conversion \
+-	-Wno-overloaded-virtual
++	-Wno-overloaded-virtual \
++	-Wno-c++11-narrowing
+ endif
+ else
+ # Default Warnings
+diff --git a/dmd/src/posix.mak b/dmd/src/posix.mak
+index f18c381..03bcd28 100644
+--- a/dmd/src/posix.mak
++++ b/dmd/src/posix.mak
+@@ -121,7 +121,7 @@ WARNINGS += \
+ endif
+ else
+ # Default Warnings
+-WARNINGS := -Wno-deprecated -Wstrict-aliasing
++WARNINGS := -Wno-deprecated -Wstrict-aliasing -Wno-c++11-narrowing
+ # Frontend specific
+ DMD_WARNINGS := -Wuninitialized
+ ROOT_WARNINGS :=

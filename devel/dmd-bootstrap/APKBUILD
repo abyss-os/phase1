@@ -1,0 +1,70 @@
+pkgname=dmd-bootstrap
+pkgver=2.069.20180305
+pkgrel=0
+_dmdhash=75266348c8a2368945a339ab86d7c8960a9bfc08
+_rthash=33ae38cef41564b12864470afaf8430eb7334d3b
+_phoboshash=30ac23a0889dd183221ce531a057171dd45296c4
+pkgdesc="D Programming Language reference compiler"
+url="https://github.com/dlang/dmd"
+arch="all"
+license="BSL-1.0"
+depends="tzdata"
+checkdepends="bash diffutils gdb"
+source="dmd-$pkgver.tar.gz::https://github.com/dlang/dmd/archive/${_dmdhash}.tar.gz
+		druntime-$pkgver.tar.gz::https://github.com/dlang/druntime/archive/${_rthash}.tar.gz
+        phobos-$pkgver.tar.gz::https://github.com/dlang/phobos/archive/${_phoboshash}.tar.gz
+		musl.patch
+		musl-math.patch
+		clang.patch
+		"
+builddir="$srcdir"
+conflicts="dmd"
+
+prepare() {
+	mv "$srcdir/dmd-${_dmdhash}" "$srcdir/dmd"
+	mv "$srcdir/druntime-${_rthash}/" "$srcdir/druntime"
+	mv "$srcdir/phobos-${_phoboshash}/" "$srcdir/phobos"
+	cd $builddir
+	patch -p0 < $srcdir/musl.patch
+	patch -p0 < $srcdir/musl-math.patch
+	patch -p1 < $srcdir/clang.patch
+}
+
+build() {
+	msg dmd
+	make -C "$srcdir/dmd/" -f posix.mak HOST_CXX=$CXX HOST_CC=$CC CC=$CC ENABLE_RELEASE=1
+	msg druntime
+	make -C "$srcdir/druntime/" -f posix.mak HOST_CXX=$CXX HOST_CC=$CC CC=$CC ENABLE_RELEASE=1
+	msg phobos
+	make -C "$srcdir/phobos/" -f posix.mak HOST_CXX=$CXX HOST_CC=$CC CC=$CC ENABLE_RELEASE=1
+}
+
+package() {
+	mkdir -p "$pkgdir/usr/bin/" "$pkgdir/usr/lib/" "$pkgdir/etc/" "$pkgdir/usr/include/dlang/dmd/"
+
+	# dmd
+	cp -v $srcdir/dmd/src/dmd $pkgdir/usr/bin/dmd
+
+	# phobos
+	cp -rv $srcdir/phobos/generated/linux/release/64/* $pkgdir/usr/lib/
+	cp -rv $srcdir/phobos/*.d $pkgdir/usr/include/dlang/dmd
+	cp -rv $srcdir/phobos/etc $pkgdir/usr/include/dlang/dmd
+	cp -rv $srcdir/phobos/std $pkgdir/usr/include/dlang/dmd
+
+	# druntime
+	cp -rv $srcdir/druntime/import/* $pkgdir/usr/include/dlang/dmd
+
+	cat > $pkgdir/etc/dmd.conf <<EOF
+[Environment]
+DFLAGS=-I/usr/include/dlang/dmd -L-L/usr/lib -L--export-dynamic
+EOF
+
+    chmod +x "$pkgdir"/usr/bin/dmd
+}
+
+b2sums="51b2cdb6db972e3ab358f4a17046b90fa1e0f168c6af4d81544677ea6f51d2d701a8a72cff6b324abdc353f01e2bb6b04e1ca7d8b6306f52f30153f6037adab0  dmd-2.069.20180305.tar.gz
+afa0fd199ed51b7fe4050f8ba4c30d3456314cc26ba3829a4f35db14e5edfce5d400fb89c9b28a3d6f4bd02a8631eb053503f3006f701b7148a73dc6f6839330  druntime-2.069.20180305.tar.gz
+61f5fb547bac09d04a7f7f5497540f416006ee94224ccad07218373f9a470163fda2d9fdf90a37c6e043d66b8db4e88717a3ca304713950fc56b637d89365792  phobos-2.069.20180305.tar.gz
+a0e299b5022f320454c99972191ed070b8aeb663b57d319586245cc17bf2e3084b0cfd8445ce27bcd71b81dfb4405fa6075b35aa122e96d55c96c5421deb0e7b  musl.patch
+ed1eae7520c271ddec3efb7766e809f71ff417a6d64c05cb2ca4265b92feaa4e722344d9d7681cf33d4721ad909eaabcfb4a8e9b16c28b7d9db68878a9e702d6  musl-math.patch
+fd570a69fe47c8d5d23dc830f16d8df1dc70f094de4988f4a8a3a3743b53e6815f41cd51d54a1f2eb64277fd919986b695c1ff22d699e5a82cf8caa8cfbdaf97  clang.patch"

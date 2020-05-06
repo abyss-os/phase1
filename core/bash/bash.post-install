@@ -1,6 +1,2 @@
-#!/bin/bash
-echo '/bin/bash' >> /etc/shells
-if [ ! -f /bin/sh ]; then
-	ln -sfv /bin/bash /bin/sh
-fi
-exit 0
+#!/usr/bin/busybox ash
+/usr/bin/busybox add-shell /bin/bash

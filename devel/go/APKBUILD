@@ -25,7 +25,6 @@ GOROOT_FINAL=/usr/lib/go
 GOROOT_BOOTSTRAP=$GOROOT_FINAL
 
 build() {
-	apk add go
 	cd src
 	env GO_LDSO=/usr/lib/ld-musl-$(uname -m).so.1 ./make.bash
 }

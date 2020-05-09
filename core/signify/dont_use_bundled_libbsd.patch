@@ -1,0 +1,13 @@
+diff --git a/Makefile b/Makefile
+index f908451..956a157 100644
+--- a/Makefile
++++ b/Makefile
+@@ -249,7 +249,7 @@ check: signify
+ .PHONY: check
+ 
+ static:
+-	$(MAKE) EXTRA_CFLAGS='$(EXTRA_CFLAGS) -pthread' EXTRA_LDFLAGS='$(EXTRA_LDFLAGS) -pthread -static' BUNDLED_LIBBSD=1
++	$(MAKE) EXTRA_CFLAGS='$(EXTRA_CFLAGS) -pthread' EXTRA_LDFLAGS='$(EXTRA_LDFLAGS) -pthread -static' BUNDLED_LIBBSD=0
+ 
+ static-musl:
+ 	$(MAKE) EXTRA_CFLAGS='$(EXTRA_CFLAGS) -pthread' EXTRA_LDFLAGS='$(EXTRA_LDFLAGS) -pthread -static' MUSL=1 CC=musl-gcc LD=musl-gcc

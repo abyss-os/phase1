@@ -1,21 +1,22 @@
 pkgname="signify"
-pkgver="29"
-pkgrel=0
+pkgver=29
+pkgrel=1
 pkgdesc="signify, from openbsd"
 url="https://github.com/aperezdc/signify"
 arch="all"
 license="BSD"
-depends="libbsd"
 makedepends="libbsd-dev"
-source="https://github.com/aperezdc/signify/releases/download/v${pkgver}/signify-${pkgver}.tar.xz"
+source="https://github.com/aperezdc/signify/releases/download/v${pkgver}/signify-${pkgver}.tar.xz
+	dont_use_bundled_libbsd.patch"
 subpackages="$pkgname-doc"
 
 build() {
-	make
+	make BUNDLED_LIBBSD=0 MUSL=0 BUNDLED_LIBBSD_VERIFY_GPG=0 EXTRA_CFLAGS="$CFLAGS -I.." EXTRA_LDFLAGS="$LDFLAGS" CPP=$CPP static
 }
 
 package() {
 	make PREFIX=usr DESTDIR=${pkgdir}/ install
 }
 
-b2sums="450bc688748a6e350d9ade60361aeafd1379b8a298bb3d9c49884762ba2439021690b6e70e5922bed3fb56bf57f476d07ca36899d05a8b4c1c9255e850fbbb20  signify-29.tar.xz"
+b2sums="450bc688748a6e350d9ade60361aeafd1379b8a298bb3d9c49884762ba2439021690b6e70e5922bed3fb56bf57f476d07ca36899d05a8b4c1c9255e850fbbb20  signify-29.tar.xz
+ab9c0e98b970c5cfd23b64a034e8a8c65846ba33272706dfa0a84a69d5cc14fc3898998e342a61c6130f08fd59e32b3b7fad5f50ade793ca8abd65e18dc1b941  dont_use_bundled_libbsd.patch"

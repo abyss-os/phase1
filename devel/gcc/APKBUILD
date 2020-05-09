@@ -81,10 +81,6 @@ _gcclibexec=/usr/libexec/gcc/${CTARGET}/$pkgver
 _builddir="$srcdir/build"
 
 prepare() {
-	$CC -c "$srcdir"/__stack_chk_fail_local.c -o __stack_chk_fail_local.o
-	#$AR r libssp_nonshared.a __stack_chk_fail_local.o
-	#cp -v libssp_nonshared.a /usr/lib/
-
 	cd "$_gccdir"
 
 	_err=
@@ -184,6 +180,10 @@ build() {
 package() {
 	cd "$_builddir"
 	make -j1 DESTDIR="${pkgdir}" install
+
+	CC -c "$srcdir"/__stack_chk_fail_local.c -o $builddir/__stack_chk_fail_local.o
+	$AR r $builddir/libssp_nonshared.a $builddir/__stack_chk_fail_local.o
+	cp -v $builddir/libssp_nonshared.a $pkgdir/usr/lib
 
 	ln -s /usr/bin/gnu-gcc ${pkgdir}/usr/bin/gcc
 	ln -s /usr/bin/gnu-c++ ${pkgdir}/usr/bin/g++

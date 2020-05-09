@@ -11,13 +11,12 @@ _gmp=6.1.2
 _mpfr=4.0.2
 _isl=0.22
 _mpc=1.1.0
-makedepends="bison flex texinfo gawk zip zlib-dev linux-dev binutils"
+makedepends="bison flex texinfo gawk zip zlib-dev linux-dev binutils gcc-bootstrap"
 subpackages="$pkgname-doc libatomic libgcc libgomp libstdc++:libcxx libgphobos gdc"
 
 provides="$pkgname-bootstrap"
-#depends="$pkgname-bootstrap"
 
-#export CC=gcc CXX=g++ AS=gnu-as LD=gnu-ld AR=gnu-ar
+export CC=gcc CXX=g++ AS=gnu-as LD=gnu-ld AR=gnu-ar
 
 source="https://gcc.gnu.org/pub/gcc/releases/gcc-${_pkgbase:-$pkgver}/gcc-${_pkgbase:-$pkgver}.tar.xz
 	002_all_default-relro.patch
@@ -180,10 +179,6 @@ build() {
 package() {
 	cd "$_builddir"
 	make -j1 DESTDIR="${pkgdir}" install
-
-	CC -c "$srcdir"/__stack_chk_fail_local.c -o $builddir/__stack_chk_fail_local.o
-	$AR r $builddir/libssp_nonshared.a $builddir/__stack_chk_fail_local.o
-	cp -v $builddir/libssp_nonshared.a $pkgdir/usr/lib
 
 	ln -s /usr/bin/gnu-gcc ${pkgdir}/usr/bin/gcc
 	ln -s /usr/bin/gnu-c++ ${pkgdir}/usr/bin/g++

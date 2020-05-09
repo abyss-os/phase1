@@ -82,8 +82,8 @@ _builddir="$srcdir/build"
 
 prepare() {
 	$CC -c "$srcdir"/__stack_chk_fail_local.c -o __stack_chk_fail_local.o
-	llvm-ar r libssp_nonshared.a __stack_chk_fail_local.o
-	cp -v libssp_nonshared.a /usr/lib/
+	#$AR r libssp_nonshared.a __stack_chk_fail_local.o
+	#cp -v libssp_nonshared.a /usr/lib/
 
 	cd "$_gccdir"
 

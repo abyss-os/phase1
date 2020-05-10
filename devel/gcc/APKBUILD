@@ -1,7 +1,7 @@
 pkgname=gcc
 pkgver=9.3.0
 pkgname="$pkgname$_target"
-pkgrel=3
+pkgrel=4
 pkgdesc="The GNU Compiler Collection"
 url="http://gcc.gnu.org"
 arch="all"
@@ -12,7 +12,7 @@ _mpfr=4.0.2
 _isl=0.22
 _mpc=1.1.0
 makedepends="bison flex texinfo gawk zip zlib-dev linux-dev binutils gcc-bootstrap"
-subpackages="$pkgname-doc libatomic libgcc libgomp libstdc++:libcxx libgphobos gdc"
+subpackages="$pkgname-doc libatomic libgcc libgomp libstdc++:libcxx libgphobos gdc gcc-go"
 
 provides="$pkgname-bootstrap"
 
@@ -127,7 +127,7 @@ build() {
 	*)	_hash_style_configure="--with-linker-hash-style=gnu" ;;
 	esac
 
-	_languages=c,c++,d
+	_languages=c,c++,d,go
 
 	msg "Building the following:"
 	echo ""

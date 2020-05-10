@@ -1,9 +1,9 @@
 pkgname=abyss-base
 pkgver=2
-pkgrel=1
+pkgrel=2
 pkgdesc="Abyss OS base package"
 url="https://abyss.run"
-arch="all"
+arch="noarch"
 license="MIT"
 options="!fhs !check"
 source="crontab

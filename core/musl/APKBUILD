@@ -1,6 +1,6 @@
 pkgname=musl
 pkgver=1.2.0
-pkgrel=4
+pkgrel=5
 pkgdesc="the musl c library (libc) implementation"
 url="http://www.musl-libc.org/"
 arch="all"
@@ -19,7 +19,6 @@ source="http://www.musl-libc.org/releases/musl-$pkgver.tar.gz
 	sys-queue.h
 	sys-tree.h
 	tryldflags-cflags.patch
-	gcompat.patch
 	qsort_r.patch
 	"
 builddir="$srcdir"/musl-$pkgver
@@ -132,5 +131,4 @@ ed500b8e32a9c99b879c89925a65f21a292918cf40f7c27b7201eaf5af59ed9e1319568990563ab4
 aecac845baf529553acf24bcc3a20eb6b127b11e291ac655b1e0b84f51ba2a3d7a36479a2b1a3561d6ce1854471db4af3abfd460f866caf2c1f17a6db8b9f4d1  sys-queue.h
 8b53aa32fbc576c405a4d53a45de42f9b7dd59a2b5501158aad208ded7c3f3a392f07bcc12d0f180e868e3c4905b30222206a52d59599d5027044f552a487b90  sys-tree.h
 9b50e080654a0ea666209e8871fa24f45beb31e5eacc3e964b15e797c1a980cc865d5eef0ecdf1a584cfe5a57224e1e323376585e1220dae1591617ab7905bbb  tryldflags-cflags.patch
-0877da8d29548f1d7d29838237076bf65d57ca0f9c01e3223fc6fdc1c4fa36cc139798f9bd6eea2bf9dc669fc92ffab024083f171a974c3824249bb3b1f17b04  gcompat.patch
 db41ecdcbaf9b6a4f095109b0bde87a0b9ddd44268498eeb9568170678d2f9d6c55b063d525ad3d41f10f871e81e3e046a90996d6761a3b251669c0917caa519  qsort_r.patch"

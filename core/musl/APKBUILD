@@ -6,7 +6,7 @@ url="http://www.musl-libc.org/"
 arch="all"
 license="MIT"
 depends="abyss-base"
-subpackages="$pkgname-dev $pkgname-utils"
+subpackages="$pkgname-dev $pkgname-utils libssp_nonshared"
 source="http://www.musl-libc.org/releases/musl-$pkgver.tar.gz
 	__stack_chk_fail_local.c
 	handle-aux-at_base.patch
@@ -33,8 +33,8 @@ build() {
 	[ "$BOOTSTRAP" = "nocc" ] && return 0
 
 	# only needed for first stage bootstrap
-	#$CC $CPPFLAGS $CFLAGS -c "$srcdir"/__stack_chk_fail_local.c -o __stack_chk_fail_local.o
-	#ar r libssp_nonshared.a __stack_chk_fail_local.o
+	$CC $CPPFLAGS $CFLAGS -c "$srcdir"/__stack_chk_fail_local.c -o $srcdir/__stack_chk_fail_local.o
+	ar r $srcdir/libssp_nonshared.a $srcdir/__stack_chk_fail_local.o
 
 	# getconf/getent/iconv
 	local i
@@ -117,6 +117,12 @@ utils() {
 		"$subpkgdir"/usr/bin
 
 	install -D -m755 "$srcdir"/ldconfig "$subpkgdir"/usr/bin
+}
+
+libssp_nonshared()
+{
+	mkdir -p $subpkgdir/usr/lib
+	cp -v $srcdir/libssp_nonshared.a $subpkgdir/usr/lib/
 }
 
 b2sums="0a47e0f438cca0f3ce31ae024c19358160214842115b560efc48e66228055c9147d9550957a79425322d510ba773f197d0944bb844bf6addbbf698088a3358a9  musl-1.2.0.tar.gz

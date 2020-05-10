@@ -9,7 +9,7 @@ depends="sudo pax-utils openssl apk-tools bsdtar
 	 attr pkgconf patch bzip2 xz zlib lzip diffutils flex
 	 bison unzip gmake file musl-utils pigz gzip
 	 libcxx-dev llvm-dev openrsync libtool curl pkgconf zlib-dev
-	 openssl-dev musl-dev automake autoconf signify"
+	 openssl-dev musl-dev automake autoconf signify gtar"
 subpackages="abuild-rootbld:_rootbld:noarch $pkgname-doc"
 # tests in abuild aren't released yet
 options="suid !check"

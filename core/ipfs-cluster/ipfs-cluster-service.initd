@@ -1,0 +1,15 @@
+#!/sbin/openrc-run
+
+export IPFS_PATH=${IPFS_PATH:-/var/lib/ipfs/.ipfs}
+
+pidfile="/run/ipfs-cluster-service.pid"
+command="/usr/bin/ipfs-cluster-service"
+command_args="daemon"
+command_user="ipfs:ipfs"
+start_stop_daemon_args="--wait 1000 -b \
+			-1 /var/log/ipfs/ipfs-cluster-service.log \
+			-2 /var/log/ipfs/ipfs-cluster-service.log"
+
+depend() {
+	need net
+}

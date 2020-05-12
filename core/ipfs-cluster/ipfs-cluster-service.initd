@@ -11,5 +11,5 @@ start_stop_daemon_args="--wait 1000 -b \
 			-2 /var/log/ipfs/ipfs-cluster-service.log"
 
 depend() {
-	need net
+	need net ipfs
 }

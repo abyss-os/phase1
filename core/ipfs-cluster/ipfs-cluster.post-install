@@ -1,0 +1,6 @@
+#!/usr/bin/busybox ash
+
+echo 'To be able to use the ipfs-cluster service you will need to create the ipfs-cluster config'
+echo '(eg: su -s /bin/sh -c "ipfs-cluster-service init" ipfs)'
+
+exit 0

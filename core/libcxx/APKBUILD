@@ -12,7 +12,7 @@ subpackages="$pkgname-dev"
 builddir="$srcdir/llvm-project-llvmorg-${pkgver/_/-}"
 _builddir="$srcdir/build"
 
-makedepends="cmake clang lld ninja llvm-dev linux-dev python3"
+makedepends="cmake clang lld samurai llvm-dev linux-dev python3"
 
 prepare() {
 	default_prepare

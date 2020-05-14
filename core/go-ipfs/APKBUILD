@@ -1,6 +1,6 @@
 pkgname=go-ipfs
 pkgver=0.5.1
-pkgrel=0
+pkgrel=1
 pkgdesc="Inter Platnetary File System (IPFS), a peer-to-peer hypermedia distribution protocol"
 url="https://ipfs.io/"
 arch="all"
@@ -10,33 +10,20 @@ pkggroups="ipfs"
 options="chmod-clean !check" # No test suite from upstream
 makedepends="go"
 install="$pkgname.pre-install $pkgname.post-install"
-subpackages="$pkgname-doc $pkgname-openrc $pkgname-bash-completion:bashcomp:noarch"
+subpackages="$pkgname-openrc $pkgname-bash-completion:bashcomp:noarch"
 source="$pkgname-$pkgver.tar.gz::https://github.com/ipfs/go-ipfs/archive/v$pkgver.tar.gz
 	ipfs.initd
-	ipfs.confd"
-builddir="$srcdir/src/github.com/ipfs/go-ipfs"
-
-prepare() {
-	export GOPATH="$srcdir"
-
-	mkdir -p  "$(dirname $builddir)"
-	mv "$srcdir"/$pkgname-$pkgver "$builddir"/
-
-	default_prepare
-}
+	ipfs.confd
+	fix_boltdb_mips64.patch"
 
 build() {
 	export GOPATH="$srcdir"
-	export GOBIN="$GOPATH/bin"
-
 	make build
 }
 
 package() {
 	install -m755 -D cmd/ipfs/ipfs \
 		"$pkgdir"/usr/bin/ipfs
-
-	install -m644 -D -t "$pkgdir/usr/share/doc/$pkgname" README.md
 
 	install -m755 -D "$srcdir"/ipfs.initd \
 		"$pkgdir"/etc/init.d/ipfs
@@ -58,4 +45,5 @@ bashcomp() {
 
 b2sums="3e5c7e255853040cb5d6c40d5a18f871cdbecbbc44a7cd72d3c11b54feec4e4f2ad2e3f52b73b1c7f2f930b947ae65efb29601b71cc8de518f3547f970d6102d  go-ipfs-0.5.1.tar.gz
 57c1a12bc333fe7f0ae9cd95253197e1fd953942928c6ed16dc11d615e4f9a3e4e8113eee930f791fdd640f9805e4d666ff2614e456d628e4d744632434c9e90  ipfs.initd
-7ecaa40f2a4097690f9d8091da5891e0bbfb0f298bed4a59769c8d0ef978a2471865a01177950da5869b61f3b8c124f43eab97daf297c06efecdc25785a5846d  ipfs.confd"
+7ecaa40f2a4097690f9d8091da5891e0bbfb0f298bed4a59769c8d0ef978a2471865a01177950da5869b61f3b8c124f43eab97daf297c06efecdc25785a5846d  ipfs.confd
+c103de2ee9f072511a95c77b696b9efb39e34259c97093f710c2438c01f6d2a0b959276ce426e285856fbdb3b60cb5971288d5ad72a6ea2d760efd2078a1a037  fix_boltdb_mips64.patch"

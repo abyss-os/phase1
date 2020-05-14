@@ -13,8 +13,7 @@ install="$pkgname.pre-install $pkgname.post-install"
 subpackages="$pkgname-openrc $pkgname-bash-completion:bashcomp:noarch"
 source="$pkgname-$pkgver.tar.gz::https://github.com/ipfs/go-ipfs/archive/v$pkgver.tar.gz
 	ipfs.initd
-	ipfs.confd
-	fix_boltdb_mips64.patch"
+	ipfs.confd"
 
 build() {
 	export GOPATH="$srcdir"

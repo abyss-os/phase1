@@ -16,6 +16,10 @@ source="$pkgname-$pkgver.tar.gz::https://github.com/ipfs/$pkgname/archive/v$pkgv
 build() {
 	export GOPATH="$srcdir"
 
+	# upstream needs to switch to bbolt
+	go get github.com/boltdb/bolt
+	patch -p1 -d $GOPATH/pkg/mod < $srcdir/../fix_boltdb_mips64.patch
+
 	go build ./cmd/ipfs-cluster-service
 	go build ./cmd/ipfs-cluster-ctl
 	go build ./cmd/ipfs-cluster-follow

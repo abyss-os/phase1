@@ -1,6 +1,6 @@
 pkgname=ipfs-cluster
 pkgver=0.12.1
-pkgrel=1
+pkgrel=2
 pkgdesc="Inter Platnetary File System (IPFS), a peer-to-peer hypermedia distribution protocol"
 url="https://ipfs.io/"
 arch="all"
@@ -17,9 +17,11 @@ build() {
 	export GOPATH="$srcdir"
 
 	# upstream needs to switch to bbolt
-	go get github.com/boltdb/bolt
-	patch -p1 -d $GOPATH/pkg/mod < $srcdir/../fix_boltdb_mips64.patch
-
+	msg get
+	go get -d -v github.com/boltdb/bolt
+	msg patch
+	patch -p1 -d $GOPATH/pkg/mod/github.com/boltdb/bolt@v1.3.1 < $srcdir/../fix_boltdb_mips.patch
+	msg build
 	go build ./cmd/ipfs-cluster-service
 	go build ./cmd/ipfs-cluster-ctl
 	go build ./cmd/ipfs-cluster-follow

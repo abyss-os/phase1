@@ -1,0 +1,68 @@
+diff --git a/bolt_mips.go b/bolt_mips.go
+new file mode 100644
+index 0000000..1c06342
+--- /dev/null
++++ b/bolt_mips.go
+@@ -0,0 +1,11 @@
++// +build mips
++package bolt
++
++// maxMapSize represents the largest mmap size supported by Bolt.
++const maxMapSize = 0x40000000 // 1GB
++
++// maxAllocSize is the size used when creating array pointers.
++const maxAllocSize = 0xFFFFFFF
++
++// brokenUnaligned Are unaligned load/stores broken on this arch?
++var brokenUnaligned = false
+diff --git a/bolt_mips64.go b/bolt_mips64.go
+new file mode 100644
+index 0000000..7146c3a
+--- /dev/null
++++ b/bolt_mips64.go
+@@ -0,0 +1,11 @@
++// +build mips64
++package bolt
++
++// maxMapSize represents the largest mmap size supported by Bolt.
++const maxMapSize = 0x80000000
++
++// maxAllocSize is the size used when creating array pointers.
++const maxAllocSize = 0xFFFFFFF
++
++// brokenUnaligned Are unaligned load/stores broken on this arch?
++var brokenUnaligned = false
+diff --git a/bolt_mips64le.go b/bolt_mips64le.go
+new file mode 100644
+index 0000000..deae93a
+--- /dev/null
++++ b/bolt_mips64le.go
+@@ -0,0 +1,11 @@
++// +build mips64le
++package bolt
++
++// maxMapSize represents the largest mmap size supported by Bolt.
++const maxMapSize = 0x80000000
++
++// maxAllocSize is the size used when creating array pointers.
++const maxAllocSize = 0xFFFFFFF
++
++// brokenUnaligned Are unaligned load/stores broken on this arch?
++var brokenUnaligned = false
+diff --git a/bolt_mipsle.go b/bolt_mipsle.go
+new file mode 100644
+index 0000000..d5af4d1
+--- /dev/null
++++ b/bolt_mipsle.go
+@@ -0,0 +1,11 @@
++// +build mipsle
++package bolt
++
++// maxMapSize represents the largest mmap size supported by Bolt.
++const maxMapSize = 0x40000000 // 1GB
++
++// maxAllocSize is the size used when creating array pointers.
++const maxAllocSize = 0xFFFFFFF
++
++// brokenUnaligned Are unaligned load/stores broken on this arch?
++var brokenUnaligned = false

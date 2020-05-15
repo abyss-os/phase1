@@ -1,6 +1,6 @@
 pkgname=go
-pkgrel=4
-pkgver=1.14.2
+pkgrel=0
+pkgver=1.14.3
 pkgdesc="Go programming language compiler"
 url="https://golang.org/"
 arch="all"
@@ -8,7 +8,8 @@ license="BSD-3-Clause"
 makedepends="bash go-bootstrap"
 subpackages="$pkgname-doc"
 source="https://golang.org/dl/go${pkgver/_/}.src.tar.gz
-	dont_use_gold_arm64.patch"
+	dont_use_gold_arm64.patch
+	go_is_so_bad.patch"
 options="!check !strip"
 
 case "$CTARGET_ARCH" in
@@ -58,5 +59,6 @@ package() {
 	cp -a doc/* "$ddoc"
 }
 
-b2sums="edd8a1081e7da6988532b9fefe6d6f789a7d336562d61d5e585a8b881fb45d77721bee9837ae79318295471aea138e175650c2138175a587f0b7957988e8e209  go1.14.2.src.tar.gz
-6a99a1806eec94eae49de269f7ac572b28c79a758863bbec2800cb458eb6861437002e5cfc5fa7d7966de495ea520329d410def7a374dfc191f7beae7fbf41d3  dont_use_gold_arm64.patch"
+b2sums="986ee88ac89a6ad8c492d7311271fadf5a0df5763f79ca0688dc94e2c49c36ea808f2184b7d57df2cfd24948d74e45103ef2171c5c6cdc2e0b6d5237cf78dc6a  go1.14.3.src.tar.gz
+6a99a1806eec94eae49de269f7ac572b28c79a758863bbec2800cb458eb6861437002e5cfc5fa7d7966de495ea520329d410def7a374dfc191f7beae7fbf41d3  dont_use_gold_arm64.patch
+77b0beef8f22a0339f3584954555d61ea6194d29faf6902f0f6a65f095131a82a239133ddc64f8d2f70532fea551bcf1be2cba77c0a8e912910ec66fccebb580  go_is_so_bad.patch"

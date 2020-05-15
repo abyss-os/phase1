@@ -12,7 +12,7 @@ license=.
 case $CARCH in
         aarch64) _targets="AArch64" _linker="lld" lld="ON";;
         x86_64) _targets="X86" _linker="lld" lld="ON";;
-        mips64) _targets="Mips" _linker="gnu-ld" lld="OFF";;
+        mips64*) _targets="Mips" _linker="gnu-ld" lld="OFF";;
         riscv64) _targets="RISCV" _linker="lld" lld="ON";;
         ppc64le) _targets="PowerPC" _linker="gnu-ld" lld="OFF";;
         *) echo "Unknown arch" ; return 1 ;;

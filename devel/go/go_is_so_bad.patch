@@ -1,0 +1,13 @@
+diff --git a/src/syscall/syscall_linux_mips64x.go b/src/syscall/syscall_linux_mips64x.go
+index 157c323..67b41d0 100644
+--- a/src/syscall/syscall_linux_mips64x.go
++++ b/src/syscall/syscall_linux_mips64x.go
+@@ -144,7 +144,7 @@ type stat_t struct {
+ 	Nlink      uint32
+ 	Uid        uint32
+ 	Gid        uint32
+-	Rdev       uint32
++	Rdev       uint64
+ 	Pad1       [3]uint32
+ 	Size       int64
+ 	Atime      uint32

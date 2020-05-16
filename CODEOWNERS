@@ -1,0 +1,22 @@
+# Policy:
+#   - Generally all PRs need to be reviewed by someone with commit access
+#   - "Critical" packages etc may be assigned to a specific person
+#   - Changes to CODEOWNERS must be reviewed and approved by the "core" team.
+
+# default
+*		@abyss-os/contributors
+
+# require core to review and approve for merge
+/CODEOWNERS	@abyss-os/core
+
+# critical packages which need non-default approval
+/core/apk-tools		@abyss-os/core
+/core/busybox		@abyss-os/core
+/core/libarchive	@abyss-os/core
+/core/linux		@abyss-os/core
+/core/musl		@abyss-os/core
+/devel/abuild		@joewholden
+/devel/binutils		@abyss-os/core
+/devel/gcc		@abyss-os/core
+/devel/go		@5paceToast
+/devel/llvm		@joewholden

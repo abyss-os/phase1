@@ -1,0 +1,60 @@
+pkgname=nim
+pkgver=1.2.0
+pkgrel=0
+pkgdesc="A systems and applications programming language"
+url="https://nim-lang.org/"
+arch="all"
+license="MIT"
+subpackages="$pkgname-dev"
+depends="libucontext-dev"
+#makedepends="nim-bootstrap"
+source="https://nim-lang.org/download/$pkgname-$pkgver.tar.xz
+	nim-config-fix-paths.patch
+	fix-cc.patch
+	niminst-fix-paths.patch"
+builddir="$srcdir/$pkgname-$pkgver"
+
+build() {
+	./build.sh
+	./bin/nim c koch
+	./koch boot -d:release
+	./koch tools -d:release
+}
+
+package() {
+	cd "$builddir"
+	mkdir -p $pkgdir/usr/bin
+	DESTDIR="$pkgdir" ./install.sh /usr/bin
+
+	for f in nimble nimsuggest nimgrep; do
+		cp ./bin/$f $pkgdir/usr/bin/;
+	done
+
+	cd "$pkgdir"
+	mkdir -p usr/include
+	local file; for file in usr/lib/nim/*.h; do
+		mv $file usr/include/
+		ln -s ../../include/${file##*/} usr/lib/nim/${file##*/}
+	done
+
+	rm -rf $pkgdir/usr/share/doc
+}
+
+nimsuggest() {
+	pkgdesc="idetools for the nim language"
+
+	install -D -m 755 "$builddir"/nimsuggest/nimsuggest \
+		"$subpkgdir"/usr/bin/nimsuggest
+}
+
+niminst() {
+	pkgdesc="A tool to generate an installer for a Nim program"
+
+	install -D -m 755 "$builddir"/tools/niminst/niminst \
+		"$subpkgdir"/usr/bin/niminst
+}
+
+b2sums="7bc979cc6c0170dd4c320cc9fae6f992463e828c11c33133d9afa2e7022f8f6f09bc54efdf9648b22b244df00b0d6d86892cdfc2e0a9e1718a068abaffac235f  nim-1.2.0.tar.xz
+c83f7996545989b09ac87b0ca835bd95c66e13c61948b158fe9bfb3f8144fe5698eb0ea742e9453f0d91a4ab096cd6e0e75d7c81d3de8b0063f09e4c9c13e301  nim-config-fix-paths.patch
+a85e2122398ef66a69a80489e53e6ba1060f6cfde0ec87b36a0b37a79bcc7cf55ac4cb2501f64b6b0ea9a33f874192c5183c88cb8ed78d21a789c0acb65f7583  fix-cc.patch
+60e57844ec0c84e1baeb17552f75dcf0fe971d8f4a4f02459cc9648f1a3b5e74474b4f8b313bd0830e1935ad51186b7f20022bc596bbd2e0d2ca9cce0a217104  niminst-fix-paths.patch"

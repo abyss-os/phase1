@@ -1,0 +1,13 @@
+diff --git a/config/nim.cfg b/config/nim.cfg
+index 3e0e277..2efde3e 100644
+--- a/config/nim.cfg
++++ b/config/nim.cfg
+@@ -8,7 +8,7 @@
+ # Environment variables can be accessed like so:
+ #  gcc.path %= "$CC_PATH"
+ 
+-cc = gcc
++cc = clang
+ 
+ # additional options always passed to the compiler:
+ --parallel_build: "0" # 0 to auto-detect number of processors

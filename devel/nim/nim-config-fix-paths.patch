@@ -1,0 +1,11 @@
+--- a/config/nim.cfg
++++ b/config/nim.cfg
+@@ -41,7 +41,7 @@
+ @if nimbabel:
+   nimblepath="$home/.nimble/pkgs/"
+   @if not windows:
+-    nimblepath="/opt/nimble/pkgs/"
++    nimblepath="/usr/share/nimble/pkgs/"
+   @else:
+     # TODO:
+   @end

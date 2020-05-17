@@ -1,0 +1,54 @@
+pkgname=kbd
+pkgver=2.2.0
+pkgrel=0
+pkgdesc="Tools for configuring the console (keyboard, virtual terminals, etc.)"
+url="http://kbd-project.org/"
+arch="all"
+license="GPL-2.0-or-later"
+makedepends="linux-dev linux-pam-dev"
+subpackages="$pkgname-doc"
+source="https://www.kernel.org/pub/linux/utils/kbd/kbd-$pkgver.tar.gz
+	error.h
+	fix-tests.patch
+	0001-libkbdfile-Check-compression-suffix-even-if-the-suff.patch
+	0001-libkeymap-Fix-the-compatibility-with-the-busybox-s-l.patch
+	"
+
+_datadir=/usr/share
+_bmapdir="$_datadir"/bkeymaps
+_badmaps="pk-ara"
+
+prepare() {
+	default_prepare
+
+	# 0001-libkeymap-Fix-the-compatibility-with-the-busybox-s-l.patch
+	# makes this test fail because changes to tests were not backported.
+	# Remove the following line when the patch is removed.
+	truncate -s0 "$builddir"/tests/dumpkeys-bkeymap.in
+
+	cd "$builddir"
+	cp "$srcdir"/error.h .
+}
+
+build() {
+	cd "$builddir"
+	./configure \
+		--build=$CBUILD \
+		--host=$CHOST \
+		--disable-nls \
+		--prefix=/usr \
+		--datadir="$_datadir" \
+		--htmldir=/usr/share/html/$pkgname
+	make
+}
+
+package() {
+	cd "$builddir"
+	make DESTDIR="$pkgdir" install
+}
+
+b2sums="5c4772b523141642f7cc4a887b8878d569ec14ae888b215a50d1a00e751bc5fc6fb0e167d61da887f434c1b436fe523da695b83ecfe86bfac53f7aeb8ec19e16  kbd-2.2.0.tar.gz
+9a6799b50454695991b6b0789e4f0d3f080aa43c713afeadb65d6d793f602f0f3de38f02f6c438eb65e17890cf248a58752cf62e29c357c8322f66efb9dfa7b2  error.h
+a2156b46458e59a6d0af56609223f15950e5dd98bbd8b4143a08f89a1f8f0e48db3ae8bb6c05f4bbaeda31b2b8b202342379ae8d24f5e97a77be3fd9b356b0ad  fix-tests.patch
+02ab96af675b11591ad29cdf9786eb2d73b698724ae647781ccf210a0ff8b14becd51c422ea9c74ada52aad48b9d6e40ba4509fbc20236092aa2516626a0da2e  0001-libkbdfile-Check-compression-suffix-even-if-the-suff.patch
+42cc1e8b7ac051d72b91aaea57bfb0f6bcb5377cae4ecbe39b451e59174d7babdc157d03a76ef1a870af50c08e98df5dd7072a92948c0ae685aaf7ae50fd583e  0001-libkeymap-Fix-the-compatibility-with-the-busybox-s-l.patch"

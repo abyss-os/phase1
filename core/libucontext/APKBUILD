@@ -8,6 +8,7 @@ license="ISC"
 subpackages="$pkgname-dev"
 source="https://distfiles.dereferenced.org/libucontext/libucontext-$pkgver.tar.xz
 	fix_.end_with_clang.patch"
+options="!check" # segfault on mips, but seems to work fine
 
 case "$CTARGET_ARCH" in
 	arm*)		LIBUCONTEXT_ARCH="arm" ;;

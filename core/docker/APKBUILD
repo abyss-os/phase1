@@ -1,29 +1,21 @@
 pkgname=docker
-pkgver=19.03.5
-_gitcommit=633a0ea838f10e000b7c6d6eed1623e6e988b5bb	# https://github.com/docker/docker-ce/commits/v$pkgver
-pkgrel=3
+pkgver=19.03.8
+_gitcommit=afacb8b7f0d8d4f9d2a8e8736e9c993e672b41f3
+pkgrel=0
 pkgdesc="Pack, ship and run any application as a lightweight container"
 url="https://www.docker.io/"
 arch="all"
 license="Apache-2.0"
 depends="docker-engine docker-cli containerd runc"
-makedepends="go go-md2man btrfs-progs-dev bash linux-dev coreutils lvm2-dev lvm2 libtool
+makedepends="go btrfs-progs-dev bash linux-dev coreutils lvm2-dev lvm2 libtool
 	libseccomp-dev libseccomp"
 install="$pkgname.pre-install"
 
 # from components/engine/vendor.conf:
 #    grep libnetwork components/engine/vendor.conf
 #    grep cobra components/engine/vendor.conf
-_libnetwork_ver=3eb39382bfa6a3c42f83674ab080ae13b0e34e5d
+_libnetwork_ver=9fd385be8302dbe1071a3ce124891893ff27f90f
 _cobra_ver="0.0.3"
-
-# secfixes:
-#   19.03.1:
-#     - CVE-2019-14271
-#   18.09.8:
-#     - CVE-2019-13509
-#   18.09.7:
-#     - CVE-2018-15664
 
 subpackages="
 	$pkgname-engine:engine
@@ -91,15 +83,15 @@ build() {
 	ln -vsf "$PWD"/cobra-$_cobra_ver "$GOPATH"/src/github.com/spf13/cobra
 
 	# convert md to man pages
-	msg "generating man pages"
-	cd "$_cli_builddir"
+	#msg "generating man pages"
+	#cd "$_cli_builddir"
 	# make manpages (from cli/Makefile, but using installed go-md2man)
-	mkdir -p ./man/man1
+	#mkdir -p ./man/man1
 	# Generate man pages from cobra commands
-	go build -o /tmp/gen-manpages github.com/docker/cli/man
-	/tmp/gen-manpages --root "$(pwd)" --target "$(pwd)/man/man1"
+	#go build -o /tmp/gen-manpages github.com/docker/cli/man
+	#/tmp/gen-manpages --root "$(pwd)" --target "$(pwd)/man/man1"
 	# generate legacy manpages from markdown
-	./man/md2man-all.sh -q
+	#./man/md2man-all.sh -q
 }
 
 # docker itself is a meta package
@@ -170,8 +162,8 @@ cli_zshcomp() {
 		"$subpkgdir"/usr/share/zsh/site-functions/_$pkgname
 }
 
-b2sums="7326ba17c0eef7bcebb5df1484992a30f696d2f238d149dbaf964004b725badfc1e9c85ed3ba76ac95b566cda9cb7018fe4fa7d282af1d1e36f4765e1445f25b  docker-19.03.5.tar.gz
-10dd1817ffa65dc75855daba5efbe6dc7c8a048e8868354d2ad7c2cc4e99dcedb95ba4c5e37a54d60e4bd89c5f5bcac5fde4db8d21b7cc903fd42e4224a084e0  libnetwork-3eb39382bfa6a3c42f83674ab080ae13b0e34e5d.tar.gz
+b2sums="f9c50fb376b37b19de79f52f10425432f5042bdc25a581e1f2cf7524d2e89dd6bd5ac8181f23a7ee00e36b07e3ce62b631aff28844963f8b05e21ce7671bfe6c  docker-19.03.8.tar.gz
+49ff583a601a99ce2a9041add50f605332e0700da20ddc9da847d38d94f54788df53f8a60d2bd82a11445adf23b899c7264037f7c6b68c6306723bf7981b9b85  libnetwork-9fd385be8302dbe1071a3ce124891893ff27f90f.tar.gz
 8613eccdd5bbd31429b7aa8260ee9367e34a5cc78075b394b09db91a97445ed1dadfb53a86105b55cb6ea3b4c2f9d50553e9198d64dfb6033dd1db2805984a2c  cobra-0.0.3.tar.gz
 a934c20e2f92cb5101336cd16e1f74b2f831901aa672d3fa62c09e216953ddfd7dd1edd06a7c14521145a3bf2ebb53592a3a85ae0c3331eaafc35ad79b02413b  docker-openrc-fixes.patch
 08ea5c9013822531eb513baa928bd68ccc2c2de41eb7a48b1672e6d0a807f7877a274c2241ad05a9b7268ab0ae931de36b1b8263ffb5190363149009a3870038  hipsters.patch"

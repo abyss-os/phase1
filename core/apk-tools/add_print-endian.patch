@@ -2,15 +2,6 @@ diff --git a/src/apk.c b/src/apk.c
 index 626da6d..e1baf31 100644
 --- a/src/apk.c
 +++ b/src/apk.c
-@@ -58,7 +58,7 @@ time_t apk_time(void)
- 
- static void version(void)
- {
--	printf("apk-tools " APK_VERSION ", compiled for " APK_DEFAULT_ARCH ".\n"
-+	printf("apk-tools " APK_VERSION ", compiled for " APK_DEFAULT_ARCH "/" APK_DEFAULT_ENDIAN ".\n"
- #ifdef TEST_MODE
- 		"TEST MODE BUILD. NOT FOR PRODUCTION USE.\n"
- #endif
 @@ -173,6 +173,9 @@ static int option_parse_global(void *ctx, struct apk_db_options *dbopts, int opt
  	case 0x114:
  		puts(APK_DEFAULT_ARCH);

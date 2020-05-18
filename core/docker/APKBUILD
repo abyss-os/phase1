@@ -21,7 +21,6 @@ subpackages="
 	$pkgname-engine:engine
 	$pkgname-openrc:engine_openrc:noarch
 	$pkgname-cli:cli
-	$pkgname-doc:cli_doc:noarch
 	$pkgname-bash-completion:cli_bashcomp:noarch
 	$pkgname-zsh-completion:cli_zshcomp:noarch
 	"

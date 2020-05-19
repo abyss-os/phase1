@@ -9,7 +9,7 @@ options="!check"  # No test suite.
 license="BSD-3-Clause"
 depends=
 install="$pkgname.pre-install $pkgname.pre-upgrade"
-makedepends="libtirpc-dev autoconf automake bsd-compat-headers"
+makedepends="libtirpc-dev autoconf automake"
 subpackages="$pkgname-doc $pkgname-openrc"
 source="rpcbind-$pkgver.tar.gz::http://git.linux-nfs.org/?p=steved/rpcbind.git;a=snapshot;h=${_hash};sf=tgz
 	0001-rpcinfo-Fix-stack-buffer-overflow.patch

@@ -1,0 +1,25 @@
+From 43b913776738a7f8d5e8033718259d079f086dea Mon Sep 17 00:00:00 2001
+From: Joe Holden <jwh@zorins.us>
+Date: Tue, 19 May 2020 18:26:49 +0000
+Subject: [PATCH] lxd/device/device_utils_unix.go: cast Rdev uint64 for mips
+
+Signed-off-by: Joe Holden <jwh@zorins.us>
+---
+ lxd/device/device_utils_unix.go | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/lxd/device/device_utils_unix.go b/lxd/device/device_utils_unix.go
+index 810e77dc99..dcde09495c 100644
+--- a/_dist/src/github.com/lxc/lxd/lxd/device/device_utils_unix.go
++++ b/_dist/src/github.com/lxc/lxd/lxd/device/device_utils_unix.go
+@@ -41,8 +41,8 @@ func unixDeviceAttributes(path string) (string, uint32, uint32, error) {
+ 	}
+ 
+ 	// Return the device information
+-	major := unix.Major(stat.Rdev)
+-	minor := unix.Minor(stat.Rdev)
++	major := unix.Major(uint64(stat.Rdev))
++	minor := unix.Minor(uint64(stat.Rdev))
+ 	return dType, major, minor, nil
+ }
+ 

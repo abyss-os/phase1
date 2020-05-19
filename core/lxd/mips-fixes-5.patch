@@ -1,0 +1,25 @@
+From 95d213e414aa945070072df2c6836fa99849e37c Mon Sep 17 00:00:00 2001
+From: Joe Holden <jwh@zorins.us>
+Date: Tue, 19 May 2020 18:27:53 +0000
+Subject: [PATCH] lxd/device/gpu.go: cast Rdev uint64 for mips
+
+Signed-off-by: Joe Holden <jwh@zorins.us>
+---
+ lxd/device/gpu.go | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/lxd/device/gpu.go b/lxd/device/gpu.go
+index 9bb4c39c71..3c111b9cac 100644
+--- a/_dist/src/github.com/lxc/lxd/lxd/device/gpu.go
++++ b/_dist/src/github.com/lxc/lxd/lxd/device/gpu.go
+@@ -263,8 +263,8 @@ func (d *gpu) getNvidiaNonCardDevices() ([]nvidiaNonCardDevice, error) {
+ 
+ 		tmpNividiaGpu := nvidiaNonCardDevice{
+ 			path:  nvidiaPath,
+-			major: unix.Major(stat.Rdev),
+-			minor: unix.Minor(stat.Rdev),
++			major: unix.Major(uint64(stat.Rdev)),
++			minor: unix.Minor(uint64(stat.Rdev)),
+ 		}
+ 
+ 		nvidiaDevices = append(nvidiaDevices, tmpNividiaGpu)

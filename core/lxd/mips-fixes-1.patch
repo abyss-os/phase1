@@ -1,0 +1,63 @@
+From 25e7a11c4b4daa08636dc75bff8578271fdbd342 Mon Sep 17 00:00:00 2001
+From: Joe Holden <jwh@zorins.us>
+Date: Sun, 17 May 2020 11:29:50 +0000
+Subject: [PATCH 1/2] shared: build fs_{32,64}bit.go on mips*
+
+Signed-off-by: Joe Holden <jwh@zorins.us>
+---
+ shared/fs_32bit.go | 2 +-
+ shared/fs_64bit.go | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/shared/fs_32bit.go b/shared/fs_32bit.go
+index 703bf82cd4..5da5fd13f5 100644
+--- a/_dist/src/github.com/lxc/lxd/shared/fs_32bit.go
++++ b/_dist/src/github.com/lxc/lxd/shared/fs_32bit.go
+@@ -1,4 +1,4 @@
+-// +build 386 arm ppc s390
++// +build 386 arm ppc s390 mips mipsle
+ 
+ package shared
+ 
+diff --git a/shared/fs_64bit.go b/shared/fs_64bit.go
+index 7c04ad13ad..3c56887e9d 100644
+--- a/_dist/src/github.com/lxc/lxd/shared/fs_64bit.go
++++ b/_dist/src/github.com/lxc/lxd/shared/fs_64bit.go
+@@ -1,4 +1,4 @@
+-// +build amd64 ppc64 ppc64le arm64 s390x
++// +build amd64 ppc64 ppc64le arm64 s390x mips64 mips64le
+ 
+ package shared
+ 
+
+From 08e739fcbb6d14aca75d3b7ff3a1b8f6d47465b1 Mon Sep 17 00:00:00 2001
+From: Joe Holden <jwh@zorins.us>
+Date: Sun, 17 May 2020 11:32:05 +0000
+Subject: [PATCH 2/2] lxd/util: build fs_{32,64}bit.go on mips*
+
+Signed-off-by: Joe Holden <jwh@zorins.us>
+---
+ lxd/util/fs_32bit.go | 2 +-
+ lxd/util/fs_64bit.go | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/lxd/util/fs_32bit.go b/lxd/util/fs_32bit.go
+index 3747d0e126..08d1dd8059 100644
+--- a/_dist/src/github.com/lxc/lxd/lxd/util/fs_32bit.go
++++ b/_dist/src/github.com/lxc/lxd/lxd/util/fs_32bit.go
+@@ -1,4 +1,4 @@
+-// +build 386 arm ppc s390
++// +build 386 arm ppc s390 mips mipsle
+ 
+ package util
+ 
+diff --git a/lxd/util/fs_64bit.go b/lxd/util/fs_64bit.go
+index 88ba4c4081..5525ff921a 100644
+--- a/_dist/src/github.com/lxc/lxd/lxd/util/fs_64bit.go
++++ b/_dist/src/github.com/lxc/lxd/lxd/util/fs_64bit.go
+@@ -1,4 +1,4 @@
+-// +build amd64 ppc64 ppc64le arm64 s390x
++// +build amd64 ppc64 ppc64le arm64 s390x mips64 mips64le
+ 
+ package util
+ 

@@ -1,0 +1,25 @@
+From e17b282282d9a4e411efb2648c6fbce961e0d892 Mon Sep 17 00:00:00 2001
+From: Joe Holden <jwh@zorins.us>
+Date: Tue, 19 May 2020 18:17:40 +0000
+Subject: [PATCH] lxd/storage/quota/projectquota.go: cast Rdev uint64 for mips
+
+Signed-off-by: Joe Holden <jwh@zorins.us>
+---
+ lxd/storage/quota/projectquota.go | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/lxd/storage/quota/projectquota.go b/lxd/storage/quota/projectquota.go
+index c1b6b1ad1b..8db4b988c6 100644
+--- a/_dist/src/github.com/lxc/lxd/lxd/storage/quota/projectquota.go
++++ b/_dist/src/github.com/lxc/lxd/lxd/storage/quota/projectquota.go
+@@ -164,8 +164,8 @@ func devForPath(path string) (string, error) {
+ 		return "", err
+ 	}
+ 
+-	devMajor := unix.Major(stat.Dev)
+-	devMinor := unix.Minor(stat.Dev)
++	devMajor := unix.Major(uint64(stat.Dev))
++	devMinor := unix.Minor(uint64(stat.Dev))
+ 
+ 	// Parse mountinfo for it
+ 	mountinfo, err := os.Open("/proc/self/mountinfo")

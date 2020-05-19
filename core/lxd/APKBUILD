@@ -1,6 +1,6 @@
 pkgname=lxd
 pkgver=4.1
-pkgrel=0
+pkgrel=1
 pkgdesc="a container hypervisor and a new user experience for LXC"
 url="https://linuxcontainers.org/lxd/"
 arch="all"
@@ -59,11 +59,20 @@ source="https://linuxcontainers.org/downloads/$pkgname/$pkgname-$pkgver.tar.gz
 	unused-var.patch
 	unused-function.patch
 	wot.patch
+	fix-boltdb-mips.patch
+	mips-fixes-1.patch
+	mips-fixes-2.patch
+	mips-fixes-3.patch
+	mips-fixes-4.patch
+	mips-fixes-5.patch
 	"
 _project="github.com/lxc/lxd"
 
 build() {
 	export GOPATH="$builddir/_dist"
+
+	# have to fetch bbolt, as upstream will not accept this change
+	go get -d go.etcd.io/bbolt
 
 	cd "$builddir"
 	go install -v -x -tags libsqlite3 $_project/lxd
@@ -73,6 +82,8 @@ build() {
 }
 
 package() {
+	export GOPATH="$builddir/_dist"
+
 	cd ${GOPATH}
 	install -Dm755 bin/$pkgname "$pkgdir"/usr/bin/$pkgname
 	install -Dm755 bin/lxc "$pkgdir"/usr/bin/lxc
@@ -113,4 +124,10 @@ b638fca189b270567f8077890d7820e3d9e82b0a29e9c665a4f4b1a5454d1df627d7849ae2e7e838
 7e6d3bf71a4d5a4b7fa46fe2e45c815782bb6337528c2c3026c1619abcae9ca89fc073a62b5ffaa6f84fe46650028e74a98fd40ed7e68a31df9c97b4a73474a6  add-missing-includes.patch
 5f8bd24e65f5ecb66a64a07735d03112a3f4037406604be9f3adb14d037021d7f92aae3bc83d1931e12a4a2ca81022173163171c406507f609b5fc45f37fd076  unused-var.patch
 d3db61e25760bcdcc4a4b7a615ab90569e7a9e6b3cfba864018f5a21f71303a331f75c7c3dacda66f76d454db43db3ce4112f082eac8a20639d8694c8d113ad3  unused-function.patch
-e5554d7cc8804b87c3e7952d1c403a575c578a2fe063f50d41d03f5da3d735a88dddc250729146da87e0d925620c756f533c9d980a508600439728804c011d51  wot.patch"
+e5554d7cc8804b87c3e7952d1c403a575c578a2fe063f50d41d03f5da3d735a88dddc250729146da87e0d925620c756f533c9d980a508600439728804c011d51  wot.patch
+7792f49ac0e4108c88ce94b7b9a3935b93bb601c92fae846d5dd839a46298b4eec199f8392c37fb410b4bb6825db460cad05192aff82d46a5c3558268c56ae5d  fix-boltdb-mips.patch
+41d48e1530db10b98b76fb3a1c19851f3ef41c6c8531601d8c0b2988006d1ab703e50a151c7a35aef1b63899da76a6540fe53b1e1f3db9c2724e3858cac7660b  mips-fixes-1.patch
+25a3cff11fa932bf11cccd28b49c0f8cc8ef29eaedf6dd9d82ec18b0f707512a5210e61b90fd08a21d8c6e27f328490f5fa3df02f726d67c35ee26f1698f19e8  mips-fixes-2.patch
+68201e36af1be9e47ddf2867d2223558cc971dbfd643e86ce85db0cf0c482008be3339ff3bc3b19cf9d8a00d458868842a40227671857d1fc0aa5179a5c11830  mips-fixes-3.patch
+c3f0f7f30415073b9c3cf74e7332fd674d20e1618b90adfdef833d4dfad9e9b56d731d9a06c802d075393dcee857f90807da6d185548b6bb3207589662a4aaef  mips-fixes-4.patch
+67b98c7755d244f5945c2734d67b2e09235dfc029894641a81669e977f9d497b46126cb916c5af3329656ced655875f7608614e46660e02876db294413e99612  mips-fixes-5.patch"

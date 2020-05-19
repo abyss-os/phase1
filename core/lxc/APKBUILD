@@ -1,7 +1,7 @@
 pkgname=lxc
 pkgver=4.0.2
 _pkgver=${pkgver/_rc/.rc}
-pkgrel=0
+pkgrel=1
 pkgdesc="Userspace interface for the Linux kernel containment features"
 url="https://linuxcontainers.org/lxc/"
 arch="all"
@@ -88,7 +88,7 @@ py() {
 
 _download() {
 	pkgdesc="LXC container image downloader template"
-	depends="$pkgname gnupg1 tar wget"
+	depends="$pkgname gtar"
 
 	mkdir -p "$subpkgdir"/$_tmpldir
 	mv "$pkgdir"/$_tmpldir/lxc-download "$subpkgdir"/$_tmpldir/
@@ -96,7 +96,7 @@ _download() {
 
 templates() {
 	pkgdesc="Templates for LXC (except alpine and download)"
-	depends="tar"
+	depends="gtar"
 	mkdir -p "$subpkgdir"/$_tmpldir
 	mv "$pkgdir"/$_tmpldir/* "$subpkgdir"/$_tmpldir/
 }

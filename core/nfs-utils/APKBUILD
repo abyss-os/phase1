@@ -7,7 +7,7 @@ arch="all"
 license="GPL-2.0-or-later BSD-3-Clause"
 depends="rpcbind"
 options="suid"
-makedepends="autoconf automake bsd-compat-headers keyutils-dev
+makedepends="autoconf automake keyutils-dev
 	libcap-dev libevent-dev libtirpc-dev libtool lvm2-dev
 	sqlite-dev util-linux-dev"
 subpackages="$pkgname-dev $pkgname-doc $pkgname-openrc rpcgen

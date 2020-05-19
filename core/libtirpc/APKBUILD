@@ -1,17 +1,14 @@
 pkgname=libtirpc
-pkgver=1.2.5
+pkgver=1.2.6
 pkgrel=0
 pkgdesc="Transport Independent RPC library (SunRPC replacement)"
 url="https://sourceforge.net/projects/libtirpc"
 arch="all"
 license="BSD-3-Clause"
 options="!check"
-depends=
-depends_dev="bsd-compat-headers"
-makedepends="$depends_dev autoconf automake libtool linux-dev"
+makedepends="autoconf automake libtool linux-dev"
 subpackages="$pkgname-dev $pkgname-doc"
-source="https://sourceforge.net/projects/$pkgname/files/$pkgname/$pkgver/$pkgname-$pkgver.tar.bz2
-	musl.patch"
+source="https://sourceforge.net/projects/$pkgname/files/$pkgname/$pkgver/$pkgname-$pkgver.tar.bz2"
 builddir="$srcdir/$pkgname-$pkgver"
 
 prepare() {
@@ -37,5 +34,4 @@ package() {
 	make DESTDIR="$pkgdir" install
 }
 
-b2sums="732e4832f3440d9fa08c45c01c56135ff1b96564c55d33e9b3f16c8361a4f02e49a35638b73110bb72da4bfb78107ccb1b4d475d1ecbdd62dcc156529a372c3e  libtirpc-1.2.5.tar.bz2
-88626247993e92f2a27350291707d0a243a59cf9bd915ee55f4fe44afaa8a85faf2864c65074af4619086f5b91ec303f1f5704b851f24f6aee6d1f1384c4de9d  musl.patch"
+b2sums="81ca8d1897b84897b31bd81c17e446213b798e00de80f03736f73eaf6b2e9e436b1569243bf9a8c5ad22de7da51339432decd2a8d3f1b8135151fd7e0f703e54  libtirpc-1.2.6.tar.bz2"

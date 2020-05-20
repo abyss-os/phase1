@@ -1,0 +1,13 @@
+diff --git a/common.gypi b/common.gypi
+index fec140bb..4e7433ac 100644
+--- a/common.gypi
++++ b/common.gypi
+@@ -366,7 +366,7 @@
+             'ldflags': [ '-m32' ],
+           }],
+           [ 'target_arch=="ppc64" and OS!="aix"', {
+-            'cflags': [ '-m64', '-mminimal-toc' ],
++            'cflags': [ '-m64' ],
+             'ldflags': [ '-m64' ],
+           }],
+           [ 'target_arch=="s390x"', {

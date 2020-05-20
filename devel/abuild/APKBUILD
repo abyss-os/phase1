@@ -1,14 +1,14 @@
 pkgname=abuild
 pkgver=4.0.62
-pkgrel=0
-pkgdesc="Script to build Alpine Packages"
-url="https://git.alpinelinux.org/cgit/abuild/"
+pkgrel=1
+pkgdesc="Script to build Abyss OS packages"
+url="https://github.com/abyss-os/abuild"
 arch="all"
 license="GPL-2.0"
 depends="sudo pax-utils openssl apk-tools bsdtar
 	 attr pkgconf patch bzip2 xz zlib lzip diffutils flex
 	 bison unzip gmake file musl-utils pigz gzip
-	 libcxx-dev llvm-dev openrsync libtool curl pkgconf zlib-dev
+	 libcxx-dev llvm-dev libtool curl pkgconf zlib-dev
 	 openssl-dev musl-dev automake autoconf signify gtar"
 subpackages="abuild-rootbld:_rootbld:noarch $pkgname-doc"
 # tests in abuild aren't released yet

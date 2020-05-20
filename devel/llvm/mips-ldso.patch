@@ -31,7 +31,7 @@ index f29a7437c..3aa24018b 100644
          (Triple.getEnvironment() == llvm::Triple::MuslEABIHF ||
           tools::arm::getARMFloatABI(*this, Args) == tools::arm::FloatABI::Hard))
        ArchName += "hf";
-+    if (IsMips && tools::mips::getMipsFloatABI(*this, Args) == tools::mips::FloatABI::Soft))
++    if (IsMips && tools::mips::getMipsFloatABI(getDriver(), Args, getTriple()) == tools::mips::FloatABI::Soft)
 +      ArchName += "-sf";
  
      return "/lib/ld-musl-" + ArchName + ".so.1";

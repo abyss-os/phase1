@@ -21,7 +21,7 @@ case "$CARCH" in
     aarch64) depends_arch="" ;;
     mips64*) depends_arch="" ;;
     riscv64) depends_arch="" ;;
-    ppc64le) depends_arch="" ;;
+    powerpc64*) depends_arch="" ;;
 esac
 
 depends="musl abyss-keyring apk-tools busybox ca-certificates dhcpcd openrc $depends_arch"

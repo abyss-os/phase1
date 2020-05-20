@@ -96,11 +96,11 @@ EOF
 	fail="$fail test_fcntl"					# wants DNOTIFY, we don't have it
 
 	# just a single subtest test_memoryview_struct_module is breaking on pc64le.
-	if [ "$CARCH" = "ppc64le" ]; then
+	if [ "$CARCH" = "powerpc64le" ]; then
 		fail="$fail test_buffer"			# fail on ppc64le
 	fi
 	case "$CARCH" in
-		s390x|ppc64le)	fail="$fail test_threading" ;;	# FIXME: hangs
+		s390x|powerpc64le)	fail="$fail test_threading" ;;	# FIXME: hangs
 	esac
 
 	# FIXME: tests that fail after openssl 1.1

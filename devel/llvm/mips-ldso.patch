@@ -1,0 +1,38 @@
+diff --git a/clang/lib/Driver/ToolChains/Linux.cpp b/clang/lib/Driver/ToolChains/Linux.cpp
+index f29a7437c..3aa24018b 100644
+--- a/clang/lib/Driver/ToolChains/Linux.cpp
++++ b/clang/lib/Driver/ToolChains/Linux.cpp
+@@ -519,6 +519,7 @@ std::string Linux::getDynamicLinker(const ArgList &Args) const {
+   if (Triple.isMusl()) {
+     std::string ArchName;
+     bool IsArm = false;
++    bool IsMips = false;
+ 
+     switch (Arch) {
+     case llvm::Triple::arm:
+@@ -531,6 +532,16 @@ std::string Linux::getDynamicLinker(const ArgList &Args) const {
+       ArchName = "armeb";
+       IsArm = true;
+       break;
++    case llvm::Triple::mips:
++    case llvm::Triple::mipsel:
++      ArchName = "mips";
++      IsMips = true;
++      break;
++    case llvm::Triple::mips64:
++    case llvm::Triple::mips64el:
++      ArchName = "mips64";
++      IsMips = true;
++      break;
+     default:
+       ArchName = Triple.getArchName().str();
+     }
+@@ -538,6 +549,8 @@ std::string Linux::getDynamicLinker(const ArgList &Args) const {
+         (Triple.getEnvironment() == llvm::Triple::MuslEABIHF ||
+          tools::arm::getARMFloatABI(*this, Args) == tools::arm::FloatABI::Hard))
+       ArchName += "hf";
++    if (IsMips && tools::mips::getMipsFloatABI(*this, Args) == tools::mips::FloatABI::Soft))
++      ArchName += "-sf";
+ 
+     return "/lib/ld-musl-" + ArchName + ".so.1";
+   }

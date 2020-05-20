@@ -3,7 +3,7 @@ case $CARCH in
 	*) pkgver=10.0.0;;
 esac
 
-pkgrel=1
+pkgrel=2
 pkgdesc="$pkgname"
 arch="all"
 url=.
@@ -14,18 +14,19 @@ case $CARCH in
         x86_64) _targets="X86" _linker="lld" lld="ON";;
         mips64*) _targets="Mips" _linker="gnu-ld" lld="OFF";;
         riscv64) _targets="RISCV" _linker="lld" lld="ON";;
-        ppc64le) _targets="PowerPC" _linker="gnu-ld" lld="OFF";;
+        powerpc64*) _targets="PowerPC" _linker="lld" lld="ON";;
         *) echo "Unknown arch" ; return 1 ;;
 esac
 
 source="https://github.com/llvm/llvm-project/archive/llvmorg-${pkgver/_/-}.tar.gz
 		mips_softfloat.patch
-		mips64_crt.patch
+		mips_ppc_crt.patch
 		clang-pie-ssp.patch
 		lld-znow.patch
 		riscv_relax.patch
 		tmp-kernel.patch
-		mips_fix_syscall_warning.patch"
+		mips_fix_syscall_warning.patch
+		mips-ldso.patch"
 
 subpackages="lld llvm-binutils:binutils $pkgname-dev"
 
@@ -33,24 +34,13 @@ builddir=$srcdir/llvm-project-llvmorg-${pkgver/_/-}
 _builddir="$srcdir/build"
 _projects="libunwind;libcxxabi;libcxx;compiler-rt;llvm;lld;clang"
 
-depends="libcxx elfutils-libelf libffi libedit ncurses zlib"
-makedepends="cmake clang lld ncurses-dev libedit-dev swig samurai elfutils-libelf elfutils-dev libffi-dev perl python3-dev zlib-dev linux-dev"
+depends="libcxx elfutils libffi libedit ncurses zlib"
+makedepends="cmake clang lld ncurses-dev libedit-dev swig samurai elfutils elfutils-dev libffi-dev perl python3-dev zlib-dev linux-dev"
 
 provides="clang compiler-rt llvm-bootstrap"
 
 prepare() {
-	config_helper
-	mkdir -p $_builddir && cd $_builddir
-
-	patch -p1 -d $builddir -i $srcdir/mips_softfloat.patch
-	patch -p1 -d $builddir -i $srcdir/mips64_crt.patch
-
-	patch -p1 -d $builddir -i $srcdir/clang-pie-ssp.patch
-	patch -p1 -d $builddir -i $srcdir/lld-znow.patch
-
-	patch -p1 -d $builddir -i $srcdir/riscv_relax.patch
-
-	patch -p1 -d $builddir -i $srcdir/tmp-kernel.patch
+	default_prepare
 
 	cmake -G Ninja -Wno-dev \
 			-DCMAKE_C_COMPILER=$CC \
@@ -201,9 +191,9 @@ lld_aalt() {
 
 b2sums="6b0254f5b913398cdcf2b2ec1ff219888706d2b79d5296590934714e42ac79f6a6547941ac2b1d2c4e6313dd18b6c7068e748aa6ac033e49fccbf5d355aa8191  llvmorg-10.0.0.tar.gz
 8e23d19518bc2bba4009c30ba6d8c981e94b6e293a95a29ebbb9be7c9a7a40b21900a7e526529149847a42bd98899306a1af9b99c819e290d4a67e34f4ea32c3  mips_softfloat.patch
-916376a80bde2f7c009a8ce2f8663f95c2e87271047a5476dc429ab014141fdd45689ebc5e3c4ca1cb11d3cd3255ef84d5425a8725cb91cb95f08ee6b56136c5  mips64_crt.patch
+b1784c607ad18ab83c0287dd22401c818046fb29c57ced4ea5399e691222ec18b20f5bcb3b6a745f569e738904aaf3ff98a1a01543277d1f5ed6534a19594c1f  mips_ppc_crt.patch
 7991221eca8a3f32607de7da91c02928d95cfae8d2af3516d403d2edd1a43bf7bb97280b6584146cd9ed51123b2bfe686a460ac1035131d115207d55a7debcfa  clang-pie-ssp.patch
 ada8faf1f1bbdfc52b0493ba563b91de954e6613b8be0af7deeabdf0b621a69a45e5acc753ecb487f461360bb2ec99b4f510a8872bff3afe90e9e7b91de12997  lld-znow.patch
 c99d536538e3e4830c618e11214f4fdda6cf377c9ea565b254e2484e52b68202b19b921b09ef4b784897bceac8a3b7bb9331b4b0087a5cafb8a1a3518fb1a1c4  riscv_relax.patch
 66835dfc1460df303d26fe7c5d630b836cbb0e1ef7c39d59695f73f69e2d12af59db72ce16b1ee16f9ff5ea7bd530a9d39b7c98c0f7c89d74c03ab212d17db9a  tmp-kernel.patch
-4fa8f10fa7d6d219fc88e21d6959c2c0e54508d533e7455660ccc9c1df8dcec286bb59ad54c5c65385803683c4b331eb1977a8c5107f786959550747ca96b0db  mips_fix_syscall_warning.patch"
+bad67cfe2f509010d9cff29b361239ae67cc726941b940a5acd7365af4a581e4734a5ca7f9840481be227189c44ce6ae93137c2400036829b41aa4639cef13b4  mips_fix_syscall_warning.patch"

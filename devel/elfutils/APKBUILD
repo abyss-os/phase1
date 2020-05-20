@@ -16,6 +16,7 @@ source="https://sourceware.org/elfutils/ftp/$pkgver/elfutils-$pkgver.tar.bz2
 	no-werror.patch
 	"
 builddir="$srcdir/elfutils-$pkgver"
+provides="elfutils-libelf"
 
 prepare() {
 	cd "$builddir"

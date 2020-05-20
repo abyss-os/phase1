@@ -1,0 +1,66 @@
+pkgname=rsync
+pkgver=3.1.3
+pkgrel=0
+pkgdesc="A file transfer program to keep remote files in sync"
+url="https://rsync.samba.org/"
+arch="all"
+license="GPL-3.0-or-later"
+makedepends="perl acl-dev attr-dev popt-dev zlib-dev"
+subpackages="$pkgname-doc $pkgname-openrc rrsync"
+source="https://download.samba.org/pub/rsync/rsync-$pkgver.tar.gz
+	rsyncd.initd
+	rsyncd.confd
+	rsyncd.conf
+	rsyncd.logrotate
+	"
+
+# delete the itemize test because it is flawed and depends on filesystem-specific behavior
+prepare() {
+	default_prepare
+	rm testsuite/itemize.test
+}
+
+build() {
+	# Force IPv6 enabled, upstream bug https://bugzilla.samba.org/show_bug.cgi?id=10715
+	CFLAGS="$CFLAGS -DINET6" \
+
+	./configure \
+		--build=$CBUILD \
+		--host=$CHOST \
+		--prefix=/usr \
+		--sbindir=/usr/bin \
+		--sysconfdir=/etc \
+		--mandir=/usr/share/man \
+		--localstatedir=/var \
+		--enable-acl-support \
+		--enable-xattr-support
+	make
+}
+
+check() {
+	make check
+}
+
+package() {
+	make DESTDIR="$pkgdir" install
+
+	install -Dm755 "$srcdir"/rsyncd.initd "$pkgdir"/etc/init.d/rsyncd
+	install -Dm644 "$srcdir"/rsyncd.conf "$pkgdir"/etc/rsyncd.conf
+	install -Dm644 "$srcdir"/rsyncd.confd "$pkgdir"/etc/conf.d/rsyncd
+	install -Dm644 "$srcdir"/rsyncd.logrotate "$pkgdir"/etc/logrotate.d/rsyncd
+}
+
+rrsync() {
+	pkgdesc="Restricted rsync, restricts rsync to a subdir declared in .ssh/authorized_keys"
+	depends="rsync perl"
+	arch="noarch"
+
+	cd "$builddir"
+	install -D -m 755 ./support/rrsync "$subpkgdir"/usr/bin/rrsync
+}
+
+b2sums="616a1f3239327a28b881310f5f249c90b8bcdb05091279cd62f9cb4e35a8428c7cdd9b89e711ba124601a738f0deb9bfbebafba7fd88b72866476138a9f8c75a  rsync-3.1.3.tar.gz
+acf9fc10e87736a026aceec8a8d3405c9ca16be64310c26dde586e0f4f746e724a6c4efa55cb08a274f902ca97e440bf384b62ac086cda0b27e9ecba887ac938  rsyncd.initd
+2a8a49ae5ff8ab6c3f37e4d8c16ee8197e781087770c4f21e8f9945203aab9451406064a5f44b57efe36c0db28c026596b64346c1296efe772df820e97fd33bd  rsyncd.confd
+813ff21aa1d444c311a52fa07de75efb2d2d4efcdfc1a44e00b67a8913c5b41cfcd063909f485caf21d237e8e99b818b60a7dcb684581a1939790430e77168db  rsyncd.conf
+82430036a5ca123ba20bc80040e98869734b3b397440968909e9ee0f109b9151de8157427b0aa8fb0ed89fa6cc4cab6ac6e0a9986c076531cd4aa87bea4e2d25  rsyncd.logrotate"

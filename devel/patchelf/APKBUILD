@@ -23,7 +23,7 @@ build() {
 
 check() {
 	case "$CARCH" in
-		ppc64le) ;;
+		powerpc64*) ;;
 		x86) ;;
 		*) make -C tests -j1 check ;;
 	esac

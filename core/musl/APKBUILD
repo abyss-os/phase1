@@ -66,7 +66,7 @@ package() {
 	case "$CARCH" in
 	aarch64*)	ARCH="aarch64" ;;
 	x86_64)		ARCH="x86_64" ;;
-	ppc64*)		ARCH="powerpc64" ;;
+	powerpc64*)	ARCH="powerpc64" ;;
 	mips64*)	ARCH="mips64-sf" ;;
 	riscv64)	ARCH="riscv64" ;;
 	esac

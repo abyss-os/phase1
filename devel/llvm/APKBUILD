@@ -42,6 +42,8 @@ provides="clang compiler-rt llvm-bootstrap"
 prepare() {
 	default_prepare
 
+	mkdir -p $_builddir && cd $_builddir
+
 	cmake -G Ninja -Wno-dev \
 			-DCMAKE_C_COMPILER=$CC \
 			-DCMAKE_CXX_COMPILER=$CXX \

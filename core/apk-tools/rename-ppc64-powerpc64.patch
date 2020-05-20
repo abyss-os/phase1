@@ -1,0 +1,17 @@
+diff --git a/src/apk_defines.h b/src/apk_defines.h
+index a525d33..4c987b4 100644
+--- a/src/apk_defines.h
++++ b/src/apk_defines.h
+@@ -96,10 +96,10 @@ extern char **apk_argv;
+ #define APK_DEFAULT_ARCH	"ppc"
+ #define APK_DEFAULT_ENDIAN	"big"
+ #elif defined(__powerpc64__) && __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+-#define APK_DEFAULT_ARCH	"ppc64"
++#define APK_DEFAULT_ARCH	"powerpc64"
+ #define APK_DEFAULT_ENDIAN	"big"
+ #elif defined(__powerpc64__) && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+-#define APK_DEFAULT_ARCH	"ppc64le"
++#define APK_DEFAULT_ARCH	"powerpc64le"
+ #define APK_DEFAULT_ENDIAN	"little"
+ #elif defined(__arm__) && defined(__ARM_PCS_VFP) && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__ && __ARM_ARCH>=7
+ #define APK_DEFAULT_ARCH	"armv7"

@@ -1,9 +1,13 @@
 diff --git a/src/apk_defines.h b/src/apk_defines.h
-index a525d33..4c987b4 100644
+index a525d33..09de79f 100644
 --- a/src/apk_defines.h
 +++ b/src/apk_defines.h
-@@ -96,10 +96,10 @@ extern char **apk_argv;
- #define APK_DEFAULT_ARCH	"ppc"
+@@ -93,13 +93,13 @@ extern char **apk_argv;
+ #define APK_DEFAULT_ARCH	"x86"
+ #define APK_DEFAULT_ENDIAN	"little"
+ #elif defined(__powerpc__) && !defined(__powerpc64__)
+-#define APK_DEFAULT_ARCH	"ppc"
++#define APK_DEFAULT_ARCH	"powerpc"
  #define APK_DEFAULT_ENDIAN	"big"
  #elif defined(__powerpc64__) && __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
 -#define APK_DEFAULT_ARCH	"ppc64"

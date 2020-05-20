@@ -21,7 +21,7 @@ x86)		flavors="efi bios";;
 x86_64)		flavors="efi bios";;
 aarch64|arm*)	flavors="efi";;
 mips*)		flavors="qemu_mips";;
-ppc*)		flavors="ieee1275"; makedepends="$makedepends powerpc-utils" ;;
+powerpc*)	flavors="ieee1275"; makedepends="$makedepends powerpc-utils" ;;
 esac
 for f in $flavors; do
 	subpackages="$subpackages $pkgname-$f"

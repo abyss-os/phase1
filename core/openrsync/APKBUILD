@@ -1,7 +1,7 @@
 pkgname=openrsync
 pkgver=0.5.0.20200330
 _hash=8b612161bd6c251485725af08d352ae1a7d82eca
-pkgrel=0
+pkgrel=1
 pkgdesc="A file transfer program to keep remote files in sync"
 url="https://rsync.samba.org/"
 arch="all"
@@ -10,8 +10,6 @@ license="GPL-3.0"
 subpackages="$pkgname-doc"
 source="$pkgname-$pkgver.tar.gz::https://github.com/kristapsdz/openrsync/archive/8b612161bd6c251485725af08d352ae1a7d82eca.tar.gz"
 builddir="$srcdir/$pkgname-$_hash"
-provides="rsync"
-replaces="rsync"
 
 build() {
 	./configure
@@ -20,7 +18,7 @@ build() {
 
 package() {
 	make DESTDIR="$pkgdir" BINDIR="/usr/bin" MANDIR="/usr/share/man" install
-	ln -sv /usr/bin/openrsync $pkgdir/usr/bin/rsync
+	#ln -sv /usr/bin/openrsync $pkgdir/usr/bin/rsync
 }
 
 b2sums="ff9fb22c9a0e834696a4849a989518013cf80b52a737d37089127cc097a8167ee1a5797e33a31839f2112eb89038f59e97c3b928b701f8cc15a6b9b2d3e55c11  openrsync-0.5.0.20200330.tar.gz"

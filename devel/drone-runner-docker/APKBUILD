@@ -1,0 +1,38 @@
+pkgname=drone-runner-docker
+pkgver=1.3.0
+pkgrel=0
+pkgdesc="Drone Docker runner"
+url="https://drone.io/"
+arch="all"
+license="Apache-2.0"
+makedepends="go"
+source="$pkgname-$pkgver.tar.gz::https://github.com/drone-runners/drone-runner-docker/archive/v$pkgver.tar.gz
+	$pkgname.initd
+	$pkgname.confd"
+builddir="$srcdir/$pkgname-$pkgver"
+options="net"
+subpackages="$pkgname-openrc"
+
+build() {
+	export GOPATH="$srcdir"
+	cd $builddir
+	go build -tags "oss nolimit"
+}
+
+package() {
+	install -Dm755 $builddir/drone-runner-docker \
+		"$pkgdir"/usr/bin/drone-runner-docker
+	install -Dm755 "$srcdir"/"$pkgname".initd \
+		"$pkgdir"/etc/init.d/"$pkgname"
+	install -Dm644 "$srcdir"/"$pkgname".confd \
+		"$pkgdir"/etc/conf.d/"$pkgname"
+}
+
+cleanup_srcdir() {
+	go clean -modcache
+	default_cleanup_srcdir
+}
+
+b2sums="9bca4355966d96747911909cd7e366b31e94076d12d6a89340916d21ecb4f47d4cf2f7d964eda150da149b7759b8ec3f7f77bcdff2a4fff5dbe2ba2cde4c9eaf  drone-runner-docker-1.3.0.tar.gz
+bf26fdffb17f856cba7ec2b8d4d7c7a85167d10d5c4998c7feb5356aa91a2eb617cae9b051a22ce827dc0956e11c5be898a00f94ccca09439eece8ced14b3b50  drone-runner-docker.initd
+a1e4a9d94d58267b04e1a65977c9e3d43a1b1bb020b41e5cecc0f5483bd656ade025e09df1e2e74aab795e124112e3cf8daa454d2ffd08a2596819b8f4148ea9  drone-runner-docker.confd"

@@ -55,7 +55,7 @@ steps:
 ---
 kind: pipeline
 type: docker
-name: ppc64le
+name: powerpc64le
 
 platform:
   os: linux

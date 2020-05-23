@@ -1,6 +1,6 @@
 pkgname=distcc
 pkgver=3.3.3
-pkgrel=0
+pkgrel=1
 pkgdesc="Distributed C, C++, Obj C compiler"
 url="https://github.com/distcc/distcc"
 arch="all"
@@ -48,10 +48,9 @@ package() {
 
 	local d="$pkgdir/usr/lib/$pkgname/bin"
 	mkdir -p "$d"
-	ln -sf /usr/bin/$pkgname "$d"/cc
-	ln -sf /usr/bin/$pkgname "$d"/gcc
-	ln -sf /usr/bin/$pkgname "$d"/g++
-	ln -sf /usr/bin/$pkgname "$d"/cpp
+	for i in cc gcc g++ cpp clang clang++; do
+		ln -sf /usr/bin/$pkgname "$d"/${i}
+	done
 }
 
 pump() {

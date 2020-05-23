@@ -1,0 +1,67 @@
+pkgname=distcc
+pkgver=3.3.3
+pkgrel=0
+pkgdesc="Distributed C, C++, Obj C compiler"
+url="https://github.com/distcc/distcc"
+arch="all"
+license="GPL-2.0"
+makedepends="autoconf automake popt-dev python3-dev"
+options="!check"
+install="$pkgname.pre-install"
+subpackages="$pkgname-doc $pkgname-pump"
+source="https://github.com/distcc/distcc/releases/download/v$pkgver/distcc-$pkgver.tar.gz
+	distcc-hardened.patch
+	distccd.initd
+	distccd.confd
+	"
+
+prepare() {
+	default_prepare
+
+	./autogen.sh
+}
+
+build() {
+	./configure \
+		--build=$CBUILD \
+		--host=$CHOST \
+		--prefix=/usr \
+		--sbindir=/usr/bin \
+		--without-gtk \
+		--sysconfdir=/etc \
+		--disable-Werror \
+		--without-libiberty \
+		--mandir=/usr/share/man
+
+	make
+}
+
+check() {
+	make check
+}
+
+package() {
+	make DESTDIR="$pkgdir" install
+
+	install -D -m644 ../distccd.confd "$pkgdir"/etc/conf.d/distccd
+	install -D -m755 ../distccd.initd "$pkgdir"/etc/init.d/distccd
+
+	local d="$pkgdir/usr/lib/$pkgname/bin"
+	mkdir -p "$d"
+	ln -sf /usr/bin/$pkgname "$d"/cc
+	ln -sf /usr/bin/$pkgname "$d"/gcc
+	ln -sf /usr/bin/$pkgname "$d"/g++
+	ln -sf /usr/bin/$pkgname "$d"/cpp
+}
+
+pump() {
+	pkgdesc="pump mode for distcc a distributed compiler client and server"
+	mkdir -p "$subpkgdir"/usr/lib "$subpkgdir"/usr/bin
+	mv "$pkgdir"/usr/bin/pump "$subpkgdir"/usr/bin/
+	mv "$pkgdir"/usr/lib/python* "$subpkgdir"/usr/lib/
+}
+
+b2sums="b393fdb20eb555dec794bf55c1287dd804a576e0a5db9f2fa84c3924a40185a193231aea807353918430297c9c83c7592aaaafd521cf73c92a72bf30b8a69caa  distcc-3.3.3.tar.gz
+4b78fce2ab19b3832006a8b0092d3d38df07ce8225eb367c90256a158a41121e09269cd4bf59a1fc450db58eafe09e757f6e3ca4ae074a4567676701228c8289  distcc-hardened.patch
+1cbaddb3380de9aeb1828758900ae3e8ebbee1d1d87da6a9d157b5754669c7a242e69832c51409c0744cb12a9589dd3de3fba031d786ba50b7b03b9539aba380  distccd.initd
+08c76a6da566ce80ef6c4a94cf98c22340380c08877b7f425b270253a321c94b21a34b08c567cd9f6b28991733155da472401e6d819c64fcf7f34b424caa965d  distccd.confd"

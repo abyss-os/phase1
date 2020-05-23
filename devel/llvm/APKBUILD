@@ -14,7 +14,7 @@ case $CARCH in
         x86_64) _targets="X86" _linker="lld" lld="ON";;
         mips64*) _targets="Mips" _linker="gnu-ld" lld="OFF";;
         riscv64) _targets="RISCV" _linker="lld" lld="ON";;
-        powerpc64*) _targets="PowerPC" _linker="lld" lld="ON";;
+        ppc64*) _targets="PowerPC" _linker="lld" lld="ON";;
         *) echo "Unknown arch" ; return 1 ;;
 esac
 

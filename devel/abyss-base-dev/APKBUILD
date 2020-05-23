@@ -12,7 +12,7 @@ case "$CARCH" in
 	aarch64) depends_arch="llvm-binutils lld" ;;
 	mips64*) depends_arch="binutils" ;;
 	riscv64) depends_arch="llvm-binutils lld" ;;
-	powerpc64*) depends_arch="llvm-binutils lld" ;;
+	ppc64*) depends_arch="llvm-binutils lld" ;;
 esac
 
 depends="abyss-base llvm-dev clang abuild linux-dev musl-dev toolchain git bash $depends_arch"

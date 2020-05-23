@@ -21,7 +21,7 @@ replaces="$pkgname-libs"
 case "$CARCH" in
 	arm*|aarch64) _boostarch=arm ;;
 	mips*) _boostarch=mips ;;
-	powerpc*) _boostarch=ppc ;;
+	ppc*) _boostarch=ppc ;;
 	*) _boostarch=$CARCH ;;
 esac
 _enginedir="tools/build/src/engine"

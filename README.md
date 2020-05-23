@@ -1,7 +1,7 @@
 Abyss OS "official" packages
 ======
 
-[![Build Status](https://cloud.drone.io/api/badges/abyss-os/phase1/status.svg)](https://cloud.drone.io/abyss-os/phase1) [![Docker Pulls](https://img.shields.io/docker/pulls/abyssos/abyss.svg)](https://hub.docker.com/r/abyssos/abyss)
+[![Build Status](https://drone.abyss.run/api/badges/abyss-os/phase1/status.svg)](https://drone.abyss.run/abyss-os/phase1) [![Docker Pulls](https://img.shields.io/docker/pulls/abyssos/abyss.svg)](https://hub.docker.com/r/abyssos/abyss)
 
 To contribute:
 1. If you haven't contributed before, add yourself to the list of AUTHORS.

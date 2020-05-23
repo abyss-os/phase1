@@ -32,6 +32,8 @@ source="
 	docker-openrc-fixes.patch
 	hipsters.patch
 	lol_netns.patch
+	configurable_buildmode.patch
+	lol_go.patch
 	"
 
 builddir="$srcdir"/docker-ce-$pkgver
@@ -40,6 +42,12 @@ _daemon_builddir="$builddir"/components/engine
 _buildtags="seccomp"
 
 _libnetwork_builddir="$srcdir"/libnetwork-$_libnetwork_ver
+
+case "$CARCH" in
+	mips64*) _buildmode=exe ;;
+	riscv64) _buildmode=exe ;;
+	*) _buildmode=pie ;;
+esac
 
 build() {
 	export AUTO_GOPATH=1
@@ -62,36 +70,15 @@ build() {
 	ln -fvs "$_daemon_builddir" src/github.com/docker/docker
 	GOPATH="$PWD" VERSION="$pkgver" hack/make.sh dynbinary
 
-	# Required for building man-pages
-	export GOPATH="$_cli_builddir"
-	export GOBIN="$GOPATH/bin"
-	export PATH="$GOBIN:$PATH"
-
 	# cli
+	export GOPATH="$_cli_builddir"
 	msg "building cli"
 	cd "$_cli_builddir"
 	mkdir -p "$GOPATH"/src/github.com/docker/
 	rm -fv "$GOPATH"/src/github.com/docker/cli
 	ln -fvs "$_cli_builddir" "$GOPATH"/src/github.com/docker/cli
-	DISABLE_WARN_OUTSIDE_CONTAINER=1 LDFLAGS="" make VERSION="$pkgver" dynbinary
+	DISABLE_WARN_OUTSIDE_CONTAINER=1 LDFLAGS="" make VERSION="$pkgver" BUILDMODE=$_buildmode dynbinary
 
-	# docker man
-	msg "building docker man pages"
-	cd "$srcdir"
-	# cobra
-	mkdir -p "$GOPATH"/src/github.com/spf13/
-	ln -vsf "$PWD"/cobra-$_cobra_ver "$GOPATH"/src/github.com/spf13/cobra
-
-	# convert md to man pages
-	#msg "generating man pages"
-	#cd "$_cli_builddir"
-	# make manpages (from cli/Makefile, but using installed go-md2man)
-	#mkdir -p ./man/man1
-	# Generate man pages from cobra commands
-	#go build -o /tmp/gen-manpages github.com/docker/cli/man
-	#/tmp/gen-manpages --root "$(pwd)" --target "$(pwd)/man/man1"
-	# generate legacy manpages from markdown
-	#./man/md2man-all.sh -q
 }
 
 # docker itself is a meta package
@@ -167,4 +154,6 @@ b2sums="f9c50fb376b37b19de79f52f10425432f5042bdc25a581e1f2cf7524d2e89dd6bd5ac818
 8613eccdd5bbd31429b7aa8260ee9367e34a5cc78075b394b09db91a97445ed1dadfb53a86105b55cb6ea3b4c2f9d50553e9198d64dfb6033dd1db2805984a2c  cobra-0.0.3.tar.gz
 a934c20e2f92cb5101336cd16e1f74b2f831901aa672d3fa62c09e216953ddfd7dd1edd06a7c14521145a3bf2ebb53592a3a85ae0c3331eaafc35ad79b02413b  docker-openrc-fixes.patch
 08ea5c9013822531eb513baa928bd68ccc2c2de41eb7a48b1672e6d0a807f7877a274c2241ad05a9b7268ab0ae931de36b1b8263ffb5190363149009a3870038  hipsters.patch
-7af6c7083eef84f2ff61973379a5aa86afb6dbed71125bd3cf632c252609879cd00b5049d49b3383f42b22fdeb69216af3fa643fa7798a14e4d7fdf5b84501dd  lol_netns.patch"
+7af6c7083eef84f2ff61973379a5aa86afb6dbed71125bd3cf632c252609879cd00b5049d49b3383f42b22fdeb69216af3fa643fa7798a14e4d7fdf5b84501dd  lol_netns.patch
+efbbb9cb201442fd7c911834da1c13908436d5181b779285a89f186946ce206658e63bba52d68127a9630c5fa442ef88ac047f51a8348b89d8425f4dcb98cd65  configurable_buildmode.patch
+ec6adf2dfd37a771ceb00d99ca5c9fea455e37ed861bcea023afd3a46a33754645d3f8d6b2ad1e77de5bee692ae1e7dc683aa0249009798983d9f993cfa43453  lol_go.patch"

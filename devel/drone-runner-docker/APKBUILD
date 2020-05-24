@@ -8,7 +8,8 @@ license="Apache-2.0"
 makedepends="go"
 source="$pkgname-$pkgver.tar.gz::https://github.com/drone-runners/drone-runner-docker/archive/v$pkgver.tar.gz
 	$pkgname.initd
-	$pkgname.confd"
+	$pkgname.confd
+	drone-git_image.patch"
 builddir="$srcdir/$pkgname-$pkgver"
 options="net"
 subpackages="$pkgname-openrc"
@@ -33,6 +34,7 @@ cleanup_srcdir() {
 	default_cleanup_srcdir
 }
 
-b2sums="9bca4355966d96747911909cd7e366b31e94076d12d6a89340916d21ecb4f47d4cf2f7d964eda150da149b7759b8ec3f7f77bcdff2a4fff5dbe2ba2cde4c9eaf  drone-runner-docker-1.3.0.tar.gz
+b2sums="60ed70cedaee589eaddbcdd8151e02a1f2dd4ae207b1bd0b5cde5bb3c0cdfef44eb361718f8cab0a76beffa2a96258dd1b03dc31b027755a317d79c3cf752081  drone-runner-docker-1.3.0.tar.gz
 bf26fdffb17f856cba7ec2b8d4d7c7a85167d10d5c4998c7feb5356aa91a2eb617cae9b051a22ce827dc0956e11c5be898a00f94ccca09439eece8ced14b3b50  drone-runner-docker.initd
-a1e4a9d94d58267b04e1a65977c9e3d43a1b1bb020b41e5cecc0f5483bd656ade025e09df1e2e74aab795e124112e3cf8daa454d2ffd08a2596819b8f4148ea9  drone-runner-docker.confd"
+94fcbd3e9418ad64d48273221ed2595c04432db9c8b828c8ea157dc5bb539a20dac9426b44f9faa25326ca7c3805f1be95914be7f0cf9e625596280f18778b21  drone-runner-docker.confd
+cec7e7607b4e8d79f6552d434f0ffc3d8dd8ea91fd820dcaad7b81b15ddbb987e620400171b505fd56cfa00868e8aaf4142cb5c7739ac8720b3b9c7f026aa700  drone-git_image.patch"

@@ -1,6 +1,6 @@
 pkgname=abuild
-pkgver=4.0.62
-pkgrel=1
+pkgver=4.0.66
+pkgrel=0
 pkgdesc="Script to build Abyss OS packages"
 url="https://github.com/abyss-os/abuild"
 arch="all"
@@ -34,4 +34,4 @@ _rootbld() {
 	mkdir -p "$subpkgdir"
 }
 
-b2sums="47d070fb801e835a0a72d32807e291d4cce741ac80589c57d48dbf4cd38ed7791cac0581d2f1fda5e773bb8811d128aaba5eeb5da13b02b9b129238d2d142a8a  abuild-v4.0.62.tar.gz"
+b2sums="8077b41682f84506e3f5e47db211214507c65b0fdb8d83ac2c81c4901ff5cb0d339f49fd0cebdb195f614b8d1d7bbccaaf130defc3416cbfa59b8638ca3a4dce  abuild-v4.0.66.tar.gz"

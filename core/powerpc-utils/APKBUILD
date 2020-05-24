@@ -24,6 +24,7 @@ build() {
 		--build=$CBUILD \
 		--host=$CHOST \
 		--prefix=/usr \
+		--sbindir=/usr/bin \
 		--mandir=/usr/share/man \
 		--without-librtas
 	make

@@ -1,48 +1,24 @@
 pkgname=runc
 pkgdesc="CLI tool for spawning and running containers according to the OCI specification"
 url="https://www.opencontainers.org"
-
-_commit=dc9208a3303feef5b3839f4323d9beb36df0a9dd
+# use commit until next release
+_commit=be66519c261d9d0d5b18b5bb0b5fcf42d04535b9 
 pkgver=1.0.0_rc10
-pkgrel=1
-
-_ver=v${pkgver/_rc/-rc}
-# if we're building against an explicit commit beyond pkgver, use this instead:
-#_ver=${_commit}
+pkgrel=2
 
 arch="all"
 license="Apache-2.0"
-makedepends="go go-md2man libseccomp-dev libtool linux-dev bash"
-subpackages="$pkgname-doc"
-source="runc-$_ver.tar.gz::https://github.com/opencontainers/runc/archive/$_ver.tar.gz"
-builddir="$srcdir/src/github.com/opencontainers/runc"
+makedepends="go libseccomp-dev libtool linux-dev bash"
+source="runc-${pkgver/_rc/-rc}.tar.gz::https://github.com/opencontainers/runc/archive/${_commit}.tar.gz"
+builddir="$srcdir/$pkgname-${_commit}"
 options="!check"
 
-case "$CARCH" in
-	riscv64) _flags="-buildmode=exe" ;;
-	mips64*) _flags="-buildmode=exe" ;;
-	*) _flags="-buildmode=pie" ;;
-esac
-
 build() {
-	cd "$srcdir"
-	export GOPATH="$PWD"
-	mkdir -p "$(dirname "$builddir")"
-	ln -s "$PWD/$pkgname-${_ver#v}" "$builddir"
-	cd "$builddir"
-	msg "go build runc"
-	go build $_flags -ldflags "-X main.gitCommit=${_commit} -X main.version=${pkgver}" -tags seccomp -o runc .
-	#msg "go build recvtty"
-	#go build $_flags -ldflags "-X main.gitCommit=${_commit} -X main.version=${pkgver}" -tags seccomp -o contrib/cmd/recvtty/recvtty ./contrib/cmd/recvtty
-        msg "man pages"
-        make man
+	make COMMIT="$_commit"
 }
 
 package() {
-	cd "$builddir"
 	install -Dsm755 "$builddir"/runc "$pkgdir"/usr/bin/runc
-	install -d "$pkgdir"/usr/share/man/man8/
-	install -Dm644 "$builddir"/man/man8/* "$pkgdir"/usr/share/man/man8/
 }
 
-b2sums="78717d3c7bebba9308abb8fdc6dbbf6d55df21604e6f8fb3b64368340b65f0b4a95f50c612348767d48498ee2ab5783b153f1a66ee9aae8535433b7bd90a15b8  runc-v1.0.0-rc10.tar.gz"
+b2sums="6abfdcbf554d047721c72c6f7f296957891442a60ea94ef7b64de0a22d0b9ca139aaf9f74960402e433ce299c5214864987b6092ef23f87c8619e1dde35c8400  runc-1.0.0-rc10.tar.gz"

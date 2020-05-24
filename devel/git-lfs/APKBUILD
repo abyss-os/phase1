@@ -1,0 +1,43 @@
+pkgname=git-lfs
+pkgver=2.11.0
+pkgrel=0
+pkgdesc="Git extension for versioning large files"
+url="https://git-lfs.github.io/"
+arch="all"
+license="MIT"
+depends="git"
+makedepends="go"
+checkdepends="bash coreutils git-daemon perl-utils"
+install="$pkgname.post-install $pkgname.pre-deinstall"
+source="$pkgname-$pkgver.tar.gz::https://github.com/git-lfs/$pkgname/archive/v$pkgver.tar.gz
+	makefile-extra_go_flags.patch
+	"
+[ "$CARCH" = "x86" ] && options="!check" # tests broken on x86
+
+# -tags netcgo - use system's DNS resolver by default. Go's built-in DNS
+#   resolver is buggy; it resolved localhost to totally wrong IP
+#   address on ARM builders and so caused test failures.
+_goflags="-v -tags netcgo"
+
+build() {
+	make \
+		EXTRA_GO_FLAGS="$_goflags" \
+		GIT_LFS_SHA="v$pkgver" \
+		VERSION="v$pkgver"
+}
+
+check() {
+	make integration EXTRA_GO_FLAGS="$_goflags"
+}
+
+package() {
+	install -Dm755 bin/$pkgname "$pkgdir"/usr/bin/$pkgname
+}
+
+cleanup_srcdir() {
+	go clean -modcache
+	default_cleanup_srcdir
+}
+
+b2sums="e9d0e8ea37f19617a4f727abdc93c3c937052ad98b6ac40de27ced6b250789701797d04f1bf795b259e83155e5d8a1ca122dbf8b40503c2c41d6d891a3ecf096  git-lfs-2.11.0.tar.gz
+7df9915b47201a98e7f0d569511bbd70c5083b45ceeafacebdb26e5a3d30085c48b97953a401f9945e83a10a514660614f9494cd5e55388b9fb798005244373d  makefile-extra_go_flags.patch"

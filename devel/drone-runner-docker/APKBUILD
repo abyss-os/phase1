@@ -1,6 +1,6 @@
 pkgname=drone-runner-docker
 pkgver=1.3.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Drone Docker runner"
 url="https://drone.io/"
 arch="all"

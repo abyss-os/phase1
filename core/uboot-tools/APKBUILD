@@ -1,0 +1,36 @@
+pkgname=uboot-tools
+pkgver=2020.04
+pkgrel=0
+pkgdesc="U-Boot bootloader utility tools"
+url="https://www.denx.de/wiki/U-Boot/WebHome"
+arch="all"
+license="GPL"
+makedepends="bison flex openssl-dev linux-dev"
+options="!check" # No test suite
+source="http://ftp.denx.de/pub/u-boot/u-boot-$pkgver.tar.bz2
+	fix-ulong-typedef.patch
+	defang-efi-bootcmd.patch
+	"
+builddir="$srcdir/u-boot-$pkgver"
+
+build() {
+	cd "$builddir"
+	make HOSTCC=$CC CC=$CC defconfig
+	make HOSTCC=$CC CC=$CC tools-all
+}
+
+package() {
+	cd "$builddir"
+	for tool in bmp_logo dumpimage env/fw_printenv \
+		fit_check_sign fit_info gdb/gdbcont gdb/gdbsend gen_eth_addr img2srec \
+		mkenvimage mkimage ncb proftool ubsha1 xway-swap-bytes env/fw_printenv; do
+			install -D tools/$tool \
+				$pkgdir/usr/bin/$(basename $tool)
+	done
+	cd "$pkgdir"/usr/bin
+	ln -sf fw_printenv fw_setenv
+}
+
+b2sums="29cf8be6027ce46e3bf3fae9b6736e6aba46dba2904112f845d79f50b52b7c7ff3437c71dac6ab22d112347467fb5baaa3ec421cb842ba3ae9b547e4f8378d03  u-boot-2020.04.tar.bz2
+e80d822af31634d5e461ce4117b6eb01ee1b231d91c7db2f0601dc265219b64f01cb7af116f367a0fcf3e4bc68316ac2ef9e8867f010998373ee396db20c192d  fix-ulong-typedef.patch
+39449bcb5f666312597a5d62e0ae2c37e63e8598058598a0b13e42660571db7545d397ff82b95f125ed656f1432b4c4a48a0d3dec9f93d4747db1a6ca94056ce  defang-efi-bootcmd.patch"

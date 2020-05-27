@@ -1,0 +1,26 @@
+pkgname=dtc
+pkgver=1.6.0
+pkgrel=0
+pkgdesc="Device Tree Compiler"
+url="https://git.kernel.org/pub/scm/utils/dtc/dtc.git/"
+arch="all"
+license="GPL-2.0-or-later"
+makedepends="bison flex"
+subpackages="$pkgname-dev"
+source="https://kernel.org/pub/software/utils/dtc/dtc-$pkgver.tar.xz"
+options="!check"
+
+prepare() {
+	default_prepare
+	sed -i s:-Werror::g "$builddir"/Makefile
+}
+
+build() {
+	make
+}
+
+package() {
+	make -j1 DESTDIR="$pkgdir" PREFIX=/usr install
+}
+
+b2sums="47b15b5df7f5d87369d6daaad87f2989a80865f2fab19f89d050d390a9f8319bcd86a36e12f7cc8d62947bb4d1335769071d0e3ea0a6e16861aea163e78f4696  dtc-1.6.0.tar.xz"

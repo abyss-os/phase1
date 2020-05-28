@@ -1,13 +1,12 @@
 pkgname=libucontext
-pkgver=0.10
-pkgrel=1
+pkgver=0.11
+pkgrel=0
 pkgdesc="ucontext function implementations"
 url="https://github.com/kaniini/libucontext"
 arch="all"
 license="ISC"
 subpackages="$pkgname-dev"
-source="https://distfiles.dereferenced.org/libucontext/libucontext-$pkgver.tar.xz
-	fix_.end_with_clang.patch"
+source="https://distfiles.dereferenced.org/libucontext/libucontext-$pkgver.tar.xz"
 options="!check" # segfault on mips, but seems to work fine
 
 case "$CTARGET_ARCH" in
@@ -26,8 +25,7 @@ check() {
 
 package() {
 	make ARCH="$LIBUCONTEXT_ARCH" DESTDIR="$pkgdir" install
-	mkdir -p pkgdir/usr && mv $pkgdir/lib $pkgdir/usr/
+	mkdir -p $pkgdir/usr && mv $pkgdir/lib $pkgdir/usr/
 }
 
-b2sums="04960575e25573c395aa9e8d215025db2ef372c6194ffdd39d7ff0aa8424b0b493a4d3bd3ec6c40c0fb284a8f7a5c47c3b94f8ff29613283218d7dbb08a83adf  libucontext-0.10.tar.xz
-e696b5ca07fde757c37cf9d14e30b4c6e2116fd32bcb9c8d58dae33a617a92f0dc72c3d89cee8b0a87980e3666895569b39e9103107e602e124e907d73394461  fix_.end_with_clang.patch"
+b2sums="300ec96902653e2af7b12f3110231232442f466bcf7c9986905df2e2d42a3b59214e6ec74fd9c0ea59fc3b6ca9cea20075c9f855ee40b6f0e557e4e5f47f7a32  libucontext-0.11.tar.xz"

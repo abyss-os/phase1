@@ -2,8 +2,8 @@ pkgname=containerd
 # NOTE: containerd's Makefile tries to get REVISION from git, but we're building from a tarball.
 _commit=32985949d4f2f38a484c5021766251250764322b
 pkgver=1.4.0
-_pkgver=1.4.0-beta.0
-pkgrel=0
+_pkgver=1.4.0-beta.1
+pkgrel=1
 pkgdesc="An open and reliable container runtime"
 url="https://containerd.io"
 arch="all"

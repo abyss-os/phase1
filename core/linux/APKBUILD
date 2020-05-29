@@ -48,7 +48,7 @@ prepare() {
 
 build() {
 	cd "$_builddir"
-	_make zImage
+	_make
 	msg "Reverting buildenv ($OTC)..."
 	toolchain $OTC
 }

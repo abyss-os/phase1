@@ -1,5 +1,5 @@
 pkgname=dhcpcd
-pkgver=8.1.5
+pkgver=9.0.2
 pkgrel=0
 pkgdesc="RFC2131 compliant DHCP client"
 url="https://roy.marples.name/projects/dhcpcd"
@@ -43,7 +43,7 @@ package() {
 		"$pkgdir"/etc/init.d/dhcpcd
 }
 
-b2sums="64181b90b675633f4cda9f81613e50835f66cc752ac44faec77244424c8fcf9899a78c7c66e3976ebc9e9f17dfc16545ac9146aa6041372802a9d92749d493b2  dhcpcd-8.1.5.tar.gz
+b2sums="f71c5c1189e7d94fdaabaf17c12cf92363596c44ef55ce309d7c720d5c07c6c22b44b7ebfd5867b4564f73a18dbe4913a1baf6c4d1b65c8707306c36115501cd  dhcpcd-9.0.2.tar.gz
 5805107f747302eddedc456df8b24669510931f5a0a8d84444e81d714238fe783a5ce118e42569a1debbe4eddb621d2e7d948fe8e03070a5bb2f8af7d7d798c6  busybox-logger.patch
 28afd72488bfd59bd62fd9ed51544a7439472a040cd9f225af34b342d5040b9bfef5eb9f1dc812f88d51fb2e97ddd2c75cc00f97decfc8f2163f10511949c5be  fix-chrony-conf-location.patch
 79052ccc6a585df4c7c9139235a5718183ad86cee9c2a4314853fc902660717a1155d60398cb5e1f0ff6f07d1acbe5cb3246d6c75758cabccc6f830b33613c09  dhcpcd.initd"

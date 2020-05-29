@@ -1,5 +1,5 @@
 pkgname=linux
-pkgver=5.7_rc2
+pkgver=5.7_rc7
 _pkgver=${pkgver/_/-}
 pkgrel=7
 pkgdesc="Linux kernel"
@@ -48,7 +48,7 @@ prepare() {
 
 build() {
 	cd "$_builddir"
-	_make
+	_make zImage
 	msg "Reverting buildenv ($OTC)..."
 	toolchain $OTC
 }
@@ -75,7 +75,7 @@ package() {
 }
 # DO NOT USE THESE FUNCTIONS UNLESS YOU'RE A DEV AND KNOW WHAT YOU'RE DOING AND WHY
 _make() {
-	make -C "$builddir" O="$_builddir" \
+	make -j${JOBS} -C "$builddir" O="$_builddir" \
 		$archopts \
 		KBUILD_BUILD_VERSION="$(( pkgrel + 1 ))-abyss" \
 		INSTALL_MOD_PATH="$pkgdir"/usr \
@@ -91,13 +91,13 @@ _oldconfig() {
 }
 _menuconfig() {
 	cd "$_builddir"
-	cp -v "$srcdir"/config."$CARCH" .config
+#	cp -v "$srcdir"/config."$CARCH" .config
 	_make menuconfig
-	mv -v .config "$startdir"/newconfig."$CARCH"
+	cp -v .config "$startdir"/newconfig."$CARCH"
 }
 
-b2sums="cdafe3e6278cac5a08b7ef8c8b26dc6e4278e9eafbb07b42ac4d5416f5b1318c2f2a84812c475e5a8ea3d9b151f5b7f84eaccd49740f48aeeb8a4164347cc610  linux-5.7-rc2.tar.gz
-f4ced3fbc0b7f68d268b808e669a8c2ab161f4bf0597f66eecacb4d7537faab8ce42df3456ec3eed1520674c381b67e136fa90cc4971b12cd801e72cffde1ded  config.aarch64
+b2sums="c924a0dbc9e1cb3dcaf6de9a57cc48ce2cbe904a3d0ba6ec3602991a0f2cfbcd8f24d1ee025934c3bab4444da1c4dfff99db5fbd3bc2b44110090905d077abdc  linux-5.7-rc7.tar.gz
+1063bc7859f497de2b29176bc368b4bc5bfb12e40749b8b90e72fdb49bf35ffacb0c982145808e1ed37ecd63224802fc18364d3eef8c04698affee07bda6866f  config.aarch64
 442744a573d9eaaccabe0f5302c6ac3c9b66e15cd573c0cf494776c7d6fa9101b7911a0c93e2d321adf1bf2fff2de3cbebbf1c5e442b0944af7bfbde1669830a  config.x86_64
 d7c54880b8af226309cbcd2492ab2f2f3dd8b8facf9caad4eb7c097e7ff8c9c3c88802f65d7f5c738b3d173fe550a6662a56c68a024107ded1a8fcf11a17a572  config.riscv64
 f7ec2129f67b2f3656484e5933a4eea1e15b4f3bcdc477d045d7f152621709c8d5c44d575f0c1cbb80eda6af1b409b3a9688a415fa1b7f1ed47f8bf2ec01493b  config.mips64

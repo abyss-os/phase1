@@ -7,6 +7,10 @@ healthcheck_timer=30
 name='Drone docker runner'
 command=/usr/bin/drone-runner-docker
 
+depend() {
+    need docker
+}
+
 start_pre() {
     # the conf.d file might contain secrets!
     [ -f "/etc/conf.d/${RC_SVCNAME}" ] && checkpath --file --mode 0600 --owner root:root "/etc/conf.d/${RC_SVCNAME}"

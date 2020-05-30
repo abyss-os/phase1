@@ -1,6 +1,6 @@
 pkgname=docker
-pkgver=19.03.9
-_gitcommit=9d988398e765e4b97f27f93c4d04b272ac64c9c7
+pkgver=19.03.10
+_gitcommit=9424aeaee927a5ddd19ee10702159cd91cc3f48e
 pkgrel=0
 pkgdesc="Pack, ship and run any application as a lightweight container"
 url="https://www.docker.io/"
@@ -14,7 +14,7 @@ install="$pkgname.pre-install"
 # from components/engine/vendor.conf:
 #    grep libnetwork components/engine/vendor.conf
 #    grep cobra components/engine/vendor.conf
-_libnetwork_ver=b9bcf0c3fba9ef8897c9676c5b70ba0345b84b17
+_libnetwork_ver=71d4d82a5ce50453b1121d95544f0a2ae95bef9b
 _cobra_ver="0.0.3"
 
 subpackages="
@@ -149,8 +149,8 @@ cli_zshcomp() {
 		"$subpkgdir"/usr/share/zsh/site-functions/_$pkgname
 }
 
-b2sums="ef87fb1db124cdfd710730b8902b880a5c39b8ed9abc94d3418c03c3eeaf9a790d3d44f450490b0d780744c26b8996f99301579987035b4f616dea8ac0c99575  docker-19.03.9.tar.gz
-6743d18ec01b24b57ec537d32197c369fcda7ade7157aab3213335610b475294fb4f4bed700312cee9a7d1ce46b5c20dadd8eac2836bec217ba8a2d7c7fbee99  libnetwork-b9bcf0c3fba9ef8897c9676c5b70ba0345b84b17.tar.gz
+b2sums="cd0faf713a9507c5ad634cfe2202bfc2e51bc131fce63a582f4e951647370c9c5d8510c5de0fc914013e13bf35b584c87bea807dd2be76fd6558ca0a5186efbd  docker-19.03.10.tar.gz
+a4abedc4078d69013e18e5c88cf0a04844923a2092dc719d0e04f1f8f6d4195cb8b784eb010ebe6de33584028b6f33c5edb4ece81b127f8040a205573c4318e5  libnetwork-71d4d82a5ce50453b1121d95544f0a2ae95bef9b.tar.gz
 8613eccdd5bbd31429b7aa8260ee9367e34a5cc78075b394b09db91a97445ed1dadfb53a86105b55cb6ea3b4c2f9d50553e9198d64dfb6033dd1db2805984a2c  cobra-0.0.3.tar.gz
 a934c20e2f92cb5101336cd16e1f74b2f831901aa672d3fa62c09e216953ddfd7dd1edd06a7c14521145a3bf2ebb53592a3a85ae0c3331eaafc35ad79b02413b  docker-openrc-fixes.patch
 08ea5c9013822531eb513baa928bd68ccc2c2de41eb7a48b1672e6d0a807f7877a274c2241ad05a9b7268ab0ae931de36b1b8263ffb5190363149009a3870038  hipsters.patch

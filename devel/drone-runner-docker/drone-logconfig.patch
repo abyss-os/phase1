@@ -1,13 +1,20 @@
 diff --git a/engine/convert.go b/engine/convert.go
-index 4b42404..b172664 100644
+index 4b42404..3101c9a 100644
 --- a/engine/convert.go
 +++ b/engine/convert.go
-@@ -51,7 +51,7 @@ func toConfig(spec *Spec, step *Step) *container.Config {
+@@ -49,9 +49,14 @@ func toConfig(spec *Spec, step *Step) *container.Config {
+ 
+ // returns a container host configuration.
  func toHostConfig(spec *Spec, step *Step) *container.HostConfig {
++	logconfig := "json-file"
++	if (spec.Platform.Arch == "mips64" || spec.Platform.Arch == "mips64el") {
++		logconfig = "local"
++	}
++
  	config := &container.HostConfig{
  		LogConfig: container.LogConfig{
 -			Type: "json-file",
-+			Type: "local",
++			Type: logconfig,
  		},
  		Privileged: step.Privileged,
  		ShmSize:    step.ShmSize,

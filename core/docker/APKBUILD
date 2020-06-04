@@ -1,7 +1,7 @@
 pkgname=docker
 pkgver=19.03.11
 _gitcommit=42e35e61f352e527082521280d5ea3761f0dee50
-pkgrel=0
+pkgrel=1
 pkgdesc="Pack, ship and run any application as a lightweight container"
 url="https://www.docker.io/"
 arch="all"
@@ -28,8 +28,6 @@ source="docker-$pkgver.tar.gz::https://github.com/docker/docker-ce/archive/v$pkg
 	lol_netns.patch
 	configurable_buildmode.patch
 	lol_go.patch
-	nologs.patch
-	nojsonlog.patch
 	"
 
 builddir="$srcdir"/docker-ce-$pkgver
@@ -105,6 +103,4 @@ a934c20e2f92cb5101336cd16e1f74b2f831901aa672d3fa62c09e216953ddfd7dd1edd06a7c1452
 08ea5c9013822531eb513baa928bd68ccc2c2de41eb7a48b1672e6d0a807f7877a274c2241ad05a9b7268ab0ae931de36b1b8263ffb5190363149009a3870038  hipsters.patch
 7af6c7083eef84f2ff61973379a5aa86afb6dbed71125bd3cf632c252609879cd00b5049d49b3383f42b22fdeb69216af3fa643fa7798a14e4d7fdf5b84501dd  lol_netns.patch
 efbbb9cb201442fd7c911834da1c13908436d5181b779285a89f186946ce206658e63bba52d68127a9630c5fa442ef88ac047f51a8348b89d8425f4dcb98cd65  configurable_buildmode.patch
-ec6adf2dfd37a771ceb00d99ca5c9fea455e37ed861bcea023afd3a46a33754645d3f8d6b2ad1e77de5bee692ae1e7dc683aa0249009798983d9f993cfa43453  lol_go.patch
-0483adfb61b1cf2cc1c2e94728c8431d6496137328fdbcfe94e140a2d97c4e1d03618ace6b2f4fadacbea3c331caea4a484c2f7d4240ef35c1c95cce38f5caed  nologs.patch
-3baf85f1cb00b4e923cc71c4502e7ef0de1ff260e710a3818778a136c22ceb2de642b05fbab7690838fe48f6c6df87ecaafcf1d3de7889ec674ab2cf98e8d41e  nojsonlog.patch"
+ec6adf2dfd37a771ceb00d99ca5c9fea455e37ed861bcea023afd3a46a33754645d3f8d6b2ad1e77de5bee692ae1e7dc683aa0249009798983d9f993cfa43453  lol_go.patch"

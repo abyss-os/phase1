@@ -4,12 +4,8 @@ respawn_delay=5
 respawn_max=0
 healthcheck_timer=30
 
-name='Drone docker runner'
-command=/usr/bin/drone-runner-docker
-
-depend() {
-    need docker
-}
+name='Drone exec runner'
+command=/usr/bin/drone-runner-exec
 
 start_pre() {
     # the conf.d file might contain secrets!

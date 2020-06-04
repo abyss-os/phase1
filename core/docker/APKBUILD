@@ -1,12 +1,12 @@
 pkgname=docker
-pkgver=19.03.10
-_gitcommit=9424aeaee927a5ddd19ee10702159cd91cc3f48e
+pkgver=19.03.11
+_gitcommit=42e35e61f352e527082521280d5ea3761f0dee50
 pkgrel=0
 pkgdesc="Pack, ship and run any application as a lightweight container"
 url="https://www.docker.io/"
 arch="all"
 license="Apache-2.0"
-depends="docker-engine docker-cli containerd runc"
+depends="ca-certificates containerd iptables tini-static runc"
 makedepends="go btrfs-progs-dev bash linux-dev coreutils lvm2-dev lvm2 libtool
 	libseccomp-dev libseccomp"
 install="$pkgname.pre-install"
@@ -14,19 +14,13 @@ install="$pkgname.pre-install"
 # from components/engine/vendor.conf:
 #    grep libnetwork components/engine/vendor.conf
 #    grep cobra components/engine/vendor.conf
-_libnetwork_ver=71d4d82a5ce50453b1121d95544f0a2ae95bef9b
+_libnetwork_ver=2e24aed516bd5c836e11378bb457dd612aa868ed
 _cobra_ver="0.0.3"
 
-subpackages="
-	$pkgname-engine:engine
-	$pkgname-openrc:engine_openrc:noarch
-	$pkgname-cli:cli
-	$pkgname-bash-completion:cli_bashcomp:noarch
-	$pkgname-zsh-completion:cli_zshcomp:noarch
+subpackages="$pkgname-openrc $pkgname-bash-completion:cli_bashcomp:noarch $pkgname-zsh-completion:cli_zshcomp:noarch
 	"
 
-source="
-	docker-$pkgver.tar.gz::https://github.com/docker/docker-ce/archive/v$pkgver.tar.gz
+source="docker-$pkgver.tar.gz::https://github.com/docker/docker-ce/archive/v$pkgver.tar.gz
 	libnetwork-$_libnetwork_ver.tar.gz::https://github.com/docker/libnetwork/archive/$_libnetwork_ver.tar.gz
 	cobra-$_cobra_ver.tar.gz::https://github.com/spf13/cobra/archive/v$_cobra_ver.tar.gz
 	docker-openrc-fixes.patch
@@ -34,101 +28,56 @@ source="
 	lol_netns.patch
 	configurable_buildmode.patch
 	lol_go.patch
+	nologs.patch
+	nojsonlog.patch
 	"
 
 builddir="$srcdir"/docker-ce-$pkgver
-_cli_builddir="$builddir"/components/cli
-_daemon_builddir="$builddir"/components/engine
-_buildtags="seccomp"
-
-_libnetwork_builddir="$srcdir"/libnetwork-$_libnetwork_ver
-
-case "$CARCH" in
-	mips64*) _buildmode=exe ;;
-	riscv64) _buildmode=exe ;;
-	*) _buildmode=pie ;;
-esac
 
 build() {
-	export AUTO_GOPATH=1
-	export GITCOMMIT=$_gitcommit		# for cli
-	export DOCKER_GITCOMMIT=$_gitcommit	# for engine
-	export DOCKER_BUILDTAGS=$_buildtags
-	unset CC # prevent possible ccache issues
+	export GOPATH=$srcdir/go
+	export GOMAXPROCS=1
 
 	# libnetwork (docker-proxy)
 	msg "building docker-proxy"
-	cd "$_libnetwork_builddir"
-	mkdir -p src/github.com/docker/
-	ln -fvs "$_libnetwork_builddir" src/github.com/docker/libnetwork
-	GOPATH="$PWD" go build -v -ldflags="-linkmode=external" -o docker-proxy github.com/docker/libnetwork/cmd/proxy
+	export GOPATH=${srcdir}/libnetwork-${_libnetwork_ver}
+	mkdir -p ${GOPATH}/src/github.com/docker/
+	rm -fv src/github.com/docker/libnetwork && ln -vs ${GOPATH} ${GOPATH}/src/github.com/docker/libnetwork
+	go build -v -ldflags="-linkmode=external" -o docker-proxy github.com/docker/libnetwork/cmd/proxy
 
 	# daemon
 	msg "building daemon"
-	cd "$_daemon_builddir"
-	mkdir -p src/github.com/docker/
-	ln -fvs "$_daemon_builddir" src/github.com/docker/docker
-	GOPATH="$PWD" VERSION="$pkgver" hack/make.sh dynbinary
+	export GOPATH=${builddir}/components/engine
+	mkdir -p ${GOPATH}/src/github.com/docker
+	rm -fv ${GOPATH}/src/github.com/docker/docker && ln -vs ${builddir}/components/engine ${GOPATH}/src/github.com/docker/docker
+	go build -v -tags seccomp -ldflags="-linkmode=external" -o dockerd github.com/docker/docker/cmd/dockerd
 
 	# cli
-	export GOPATH="$_cli_builddir"
 	msg "building cli"
-	cd "$_cli_builddir"
-	mkdir -p "$GOPATH"/src/github.com/docker/
-	rm -fv "$GOPATH"/src/github.com/docker/cli
-	ln -fvs "$_cli_builddir" "$GOPATH"/src/github.com/docker/cli
-	DISABLE_WARN_OUTSIDE_CONTAINER=1 LDFLAGS="" make VERSION="$pkgver" BUILDMODE=$_buildmode dynbinary
-
+	export GOPATH=${builddir}/components/cli
+	mkdir -p ${GOPATH}/src/github.com/docker
+	rm -fv ${GOPATH}/src/github.com/docker/cli && ln -vs ${builddir}/components/cli ${GOPATH}/src/github.com/docker/cli
+	go build -v -ldflags="-linkmode=external" -o docker github.com/docker/cli/cmd/docker
 }
 
 # docker itself is a meta package
 package() {
-	mkdir -p "$pkgdir"
-}
+	install -Dm755 ${builddir}/dockerd \
+		"$pkgdir"/usr/bin/dockerd
 
-engine() {
-	pkgdesc="Docker Engine (dockerd)"
-	depends="ca-certificates containerd iptables tini-static"
+	install -Dm755 ${builddir}/docker \
+		"$pkgdir"/usr/bin/docker
 
-	install -Dm755 "$_daemon_builddir"/bundles/dynbinary-daemon/dockerd \
-		"$subpkgdir"/usr/bin/dockerd
-
-	install -Dm755 "$_libnetwork_builddir"/docker-proxy \
-		"$subpkgdir"/usr/bin/docker-proxy
+#	install -Dm755 "$_libnetwork_builddir"/docker-proxy \
+#		"$pkgdir"/usr/bin/docker-proxy
 
 	# symlink externally provided tini-static binary
-	ln -sfv /sbin/tini-static "$subpkgdir"/usr/bin/docker-init
-}
+#	ln -sfv /sbin/tini-static "$subpkgdir"/usr/bin/docker-init
 
-engine_openrc() {
-	pkgdesc="OpenRC init scripts for Docker"
-	depends=""
-	install_if="openrc $pkgname-engine=$pkgver-r$pkgrel"
-
-	install -Dm755 "$_daemon_builddir"/contrib/init/openrc/docker.initd \
-		"$subpkgdir"/etc/init.d/docker
-	install -Dm644 "$_daemon_builddir"/contrib/init/openrc/docker.confd \
-		"$subpkgdir"/etc/conf.d/docker
-}
-
-cli() {
-	pkgdesc="Docker CLI"
-	depends="ca-certificates"
-
-	# 'build/docker' is a symlink to 'docker-linux-$arch' e.g. 'docker-linux-amd64'
-	install -Dm755 "$_cli_builddir"/build/docker \
-		"$subpkgdir"/usr/bin/docker
-}
-
-cli_doc() {
-	pkgdesc="Documentation for Docker"
-	depends=""
-	install_if="docs $pkgname-cli=$pkgver-r$pkgrel"
-
-	mkdir -p "$subpkgdir"/usr/share/man/man1
-	gzip -9 "$_cli_builddir"/man/man1/*
-	install -Dm644 "$_cli_builddir"/man/man1/* \
-		"$subpkgdir"/usr/share/man/man1
+	install -Dm755 ${builddir}/components/engine/contrib/init/openrc/docker.initd \
+		"$pkgdir"/etc/init.d/docker
+	install -Dm644 ${builddir}/components/engine/contrib/init/openrc/docker.confd \
+		"$pkgdir"/etc/conf.d/docker
 }
 
 cli_bashcomp() {
@@ -136,7 +85,7 @@ cli_bashcomp() {
 	depends=""
 	install_if="bash-completion $pkgname-cli=$pkgver-r$pkgrel"
 
-	install -Dm644 "$_cli_builddir"/contrib/completion/bash/$pkgname \
+	install -Dm644 ${builddir}/components/cli/contrib/completion/bash/$pkgname \
 		"$subpkgdir"/usr/share/bash-completion/completions/$pkgname
 }
 
@@ -145,15 +94,17 @@ cli_zshcomp() {
 	depends=""
 	install_if="zsh $pkgname-cli=$pkgver-r$pkgrel"
 
-	install -Dm644 "$_cli_builddir"/contrib/completion/zsh/_$pkgname \
+	install -Dm644 ${builddir}/components/cli/contrib/completion/zsh/_$pkgname \
 		"$subpkgdir"/usr/share/zsh/site-functions/_$pkgname
 }
 
-b2sums="cd0faf713a9507c5ad634cfe2202bfc2e51bc131fce63a582f4e951647370c9c5d8510c5de0fc914013e13bf35b584c87bea807dd2be76fd6558ca0a5186efbd  docker-19.03.10.tar.gz
-a4abedc4078d69013e18e5c88cf0a04844923a2092dc719d0e04f1f8f6d4195cb8b784eb010ebe6de33584028b6f33c5edb4ece81b127f8040a205573c4318e5  libnetwork-71d4d82a5ce50453b1121d95544f0a2ae95bef9b.tar.gz
+b2sums="e0d227f00e9444b2b561d17f1ed78989fdcb9ce6f7c70176648e4f80d3e226b788a21bfbc72bfdd759621f5aebfd44c4afb1952b01a16ce3fcbc1fe086477dcf  docker-19.03.11.tar.gz
+6f0ea3147a0dd1339bc366fbdbf4a1d8d38947c2f60d42ecc2cb4820b6333c11cb44154c07f0de794392338ea46d52aa409e40da5a08fa1b69a80492fad5619c  libnetwork-2e24aed516bd5c836e11378bb457dd612aa868ed.tar.gz
 8613eccdd5bbd31429b7aa8260ee9367e34a5cc78075b394b09db91a97445ed1dadfb53a86105b55cb6ea3b4c2f9d50553e9198d64dfb6033dd1db2805984a2c  cobra-0.0.3.tar.gz
 a934c20e2f92cb5101336cd16e1f74b2f831901aa672d3fa62c09e216953ddfd7dd1edd06a7c14521145a3bf2ebb53592a3a85ae0c3331eaafc35ad79b02413b  docker-openrc-fixes.patch
 08ea5c9013822531eb513baa928bd68ccc2c2de41eb7a48b1672e6d0a807f7877a274c2241ad05a9b7268ab0ae931de36b1b8263ffb5190363149009a3870038  hipsters.patch
 7af6c7083eef84f2ff61973379a5aa86afb6dbed71125bd3cf632c252609879cd00b5049d49b3383f42b22fdeb69216af3fa643fa7798a14e4d7fdf5b84501dd  lol_netns.patch
 efbbb9cb201442fd7c911834da1c13908436d5181b779285a89f186946ce206658e63bba52d68127a9630c5fa442ef88ac047f51a8348b89d8425f4dcb98cd65  configurable_buildmode.patch
-ec6adf2dfd37a771ceb00d99ca5c9fea455e37ed861bcea023afd3a46a33754645d3f8d6b2ad1e77de5bee692ae1e7dc683aa0249009798983d9f993cfa43453  lol_go.patch"
+ec6adf2dfd37a771ceb00d99ca5c9fea455e37ed861bcea023afd3a46a33754645d3f8d6b2ad1e77de5bee692ae1e7dc683aa0249009798983d9f993cfa43453  lol_go.patch
+0483adfb61b1cf2cc1c2e94728c8431d6496137328fdbcfe94e140a2d97c4e1d03618ace6b2f4fadacbea3c331caea4a484c2f7d4240ef35c1c95cce38f5caed  nologs.patch
+3baf85f1cb00b4e923cc71c4502e7ef0de1ff260e710a3818778a136c22ceb2de642b05fbab7690838fe48f6c6df87ecaafcf1d3de7889ec674ab2cf98e8d41e  nojsonlog.patch"

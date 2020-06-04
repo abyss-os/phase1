@@ -1,0 +1,13 @@
+diff --git a/engine/convert.go b/engine/convert.go
+index 4b42404..b172664 100644
+--- a/engine/convert.go
++++ b/engine/convert.go
+@@ -51,7 +51,7 @@ func toConfig(spec *Spec, step *Step) *container.Config {
+ func toHostConfig(spec *Spec, step *Step) *container.HostConfig {
+ 	config := &container.HostConfig{
+ 		LogConfig: container.LogConfig{
+-			Type: "json-file",
++			Type: "local",
+ 		},
+ 		Privileged: step.Privileged,
+ 		ShmSize:    step.ShmSize,

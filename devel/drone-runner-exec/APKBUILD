@@ -1,0 +1,34 @@
+pkgname=drone-runner-exec
+pkgver=1.0.0_beta9
+_pkgver=1.0.0-beta.9
+pkgrel=0
+pkgdesc="Drone exec runner"
+url="https://drone.io/"
+arch="all"
+license="Apache-2.0"
+makedepends="go"
+source="$pkgname-${_pkgver}.tar.gz::https://github.com/drone-runners/drone-runner-exec/archive/v${_pkgver}.tar.gz
+	$pkgname.initd
+	$pkgname.confd"
+builddir="$srcdir/$pkgname-${_pkgver}"
+options="net"
+subpackages="$pkgname-openrc"
+
+build() {
+	export GOPATH="$srcdir"
+	cd $builddir
+	go build -tags "oss nolimit"
+}
+
+package() {
+	install -Dm755 $builddir/$pkgname \
+		"$pkgdir"/usr/bin/$pkgname
+	install -Dm755 "$srcdir"/"$pkgname".initd \
+		"$pkgdir"/etc/init.d/"$pkgname"
+	install -Dm644 "$srcdir"/"$pkgname".confd \
+		"$pkgdir"/etc/conf.d/"$pkgname"
+}
+
+b2sums="93004282c7956cbf4b8683170001029504e8c1c21415b0cf06a80d46b572685a12c493adfb832b5d531c60fdab4246997de1efdd88a255e0be31edbf134f0d08  drone-runner-exec-1.0.0-beta.9.tar.gz
+a2e61030d94ca5995a9233933ca3080f4dc43d955695ee78f13c53b27016b6351941935591bfb279fb9b570e72475a8dcf50c08e040154d41f9c8c5a1af41377  drone-runner-exec.initd
+94fcbd3e9418ad64d48273221ed2595c04432db9c8b828c8ea157dc5bb539a20dac9426b44f9faa25326ca7c3805f1be95914be7f0cf9e625596280f18778b21  drone-runner-exec.confd"

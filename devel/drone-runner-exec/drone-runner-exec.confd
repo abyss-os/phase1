@@ -1,0 +1,9 @@
+# secrets
+export DRONE_RPC_PROTO=
+export DRONE_RPC_HOST=
+export DRONE_RPC_SECRET=
+export DRONE_UI_USERNAME=
+export DRONE_UI_PASSWORD=
+export DRONE_RUNNER_CAPACITY=1
+export DRONE_LIMIT_EVENTS=push
+export DRONE_PLATFORM_ARCH=$(uname -m)

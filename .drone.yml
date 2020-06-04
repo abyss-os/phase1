@@ -80,7 +80,7 @@ steps:
 
 ---
 kind: pipeline
-type: docker
+type: exec
 name: mips64
 
 platform:
@@ -89,7 +89,6 @@ platform:
 
 steps:
   - name: build
-    image: abyssos/abyss:dev
     commands:
       - ./.scripts/drone.sh
     environment:

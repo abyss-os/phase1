@@ -1,6 +1,6 @@
 pkgname=apk-tools
 pkgver=2.10.4
-pkgrel=11
+pkgrel=12
 pkgdesc="Alpine Package Keeper - package manager for alpine"
 makedepends="openssl zlib-dev openssl-dev linux-dev"
 if [ "$CBUILD" = "$CHOST" ]; then
@@ -21,7 +21,6 @@ source="https://dev.alpinelinux.org/archive/$pkgname/$pkgname-$pkgver.tar.xz
 	https_libfetch.patch
 	consist-untrust.patch
 	add_print-endian.patch
-	rename-ppc64-powerpc64.patch
 	"
 
 url="https://git.alpinelinux.org/cgit/apk-tools/"
@@ -107,5 +106,4 @@ f1b654c42b1aa4abb341c4d7358c22985fe5fa4fdb507ef902f7f2603cbdd8635b227814ccc17e5b
 2d1c5bd0ef457a9174bbcec601f2478afa19bb442d3fa00a4e5e9b7b19377cff394840d36b6123735a0192d02d9ed76c439070d1f463e45e8388557a5ac0f429  repositories
 876ab7c9bea3a5ecd18b71135040df1076ef433c5915f72eb5812c753ad04748771eefe817dd36bddc38a97b8a08b4567e4b3a34ed174afd5334c7f9468ef628  https_libfetch.patch
 e1389de375e25a47c7ccc0c6e9c3d0bc5850a4a4885b77bbe38b574eecffce04010de0a3abdde3251daeb085b2e009f4a759d490c2fa0ba03a983a8509d19462  consist-untrust.patch
-a64df00f0ad5ea43814d3f049d7d55dc33c0569475db6217852ce1580ec729b4022623dd86c8dbc3a0c60667117f4864fd21187907330c8461006b338a0a53c7  add_print-endian.patch
-55582c40e6c7554bc85d396903be2ac0c0b5a30ac115edffcbf44f17a55b619c94e906fd9c6a3e7703b144cc3e1ba7cad8a20e7a8129c1f1552fffbe5d33ca35  rename-ppc64-powerpc64.patch"
+a64df00f0ad5ea43814d3f049d7d55dc33c0569475db6217852ce1580ec729b4022623dd86c8dbc3a0c60667117f4864fd21187907330c8461006b338a0a53c7  add_print-endian.patch"

@@ -1,7 +1,7 @@
 pkgname=openssh
-pkgver=8.2_p1
+pkgver=8.3_p1
 _myver=${pkgver%_*}${pkgver#*_}
-pkgrel=2
+pkgrel=0
 pkgdesc="Port of OpenBSD's free SSH release"
 url="https://www.openssh.com/portable.html"
 arch="all"
@@ -77,7 +77,7 @@ _pkg_flavour() {
 	done
 }
 
-b2sums="8b95cdebc87e8d14f655ed13c12b91b122adf47161071aa81d0763f81b12fe4bc3d409c260783d995307d4e4ed2d16080fd74b15e4dc6dcc5648d7e66720c3ed  openssh-8.2p1.tar.gz
+b2sums="0b53d92caa4a0f4cb40eee671ac889753d320b7c8e44df159a81dd8163c3663f07fa648f5dc506fb27d31893acf9701b997598c50bf204acf54172d72825a4d8  openssh-8.3p1.tar.gz
 7a561f2ac629a31d7a6a679dffbc5991e0a46fb926e12c2b62dc0bedcea89cbaa15129b4e57018f9aa391d26516a234c7dd0e455b8b9e87d66509630bd3ecc89  fix-utmp.patch
 5bceac66a1396b688ee7f9215fb7cbb9c23f811bcb23760980683b4130ab1e251ce974c4e28036452c8f6b42fd8b6c24e0df3121598e6db777a169133d4a2d84  sftp-interactive.patch
 a4aee6b228220906227a246542944336eaaa55d77870b84f87112c70ac2d35708e9cf81cc19fdb41ec9b783d6dc00cf8dce307e45d2c4f05543e1ac7ef88778b  disable-forwarding-by-default.patch

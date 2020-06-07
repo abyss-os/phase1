@@ -1,7 +1,7 @@
 pkgname=drone-runner-exec
 pkgver=1.0.0_beta9
 _pkgver=1.0.0-beta.9
-pkgrel=1
+pkgrel=2
 pkgdesc="Drone exec runner"
 url="https://drone.io/"
 arch="all"
@@ -31,4 +31,4 @@ package() {
 
 b2sums="93004282c7956cbf4b8683170001029504e8c1c21415b0cf06a80d46b572685a12c493adfb832b5d531c60fdab4246997de1efdd88a255e0be31edbf134f0d08  drone-runner-exec-1.0.0-beta.9.tar.gz
 18b4c7df3ca543bf22ea6bd95d0eac539b808c9f794d6077b155fa92cb6ba9ffb7530d453eb2921fc74fdf7776728fa45fb258d4eae685c6b655d3866d2ebb9e  drone-runner-exec.initd
-94fcbd3e9418ad64d48273221ed2595c04432db9c8b828c8ea157dc5bb539a20dac9426b44f9faa25326ca7c3805f1be95914be7f0cf9e625596280f18778b21  drone-runner-exec.confd"
+6b59b89c220384e2cffa848c60d948b6f35a7c15e4912b837ace3775b938e0472ba120fa399143868d8b485e49714c8fbd4a6cefcf2c4046cff413fd96a6143c  drone-runner-exec.confd"

@@ -12,7 +12,7 @@ index f03439e..6dd9ddd 100644
 -	default:
 -		return "drone/git:latest"
 -	}
-+	return "abyssos/junk:drone-git"
++	return "abyssos/abyss-archive:drone-git"
  }
  
  // helper function configures the clone depth parameter,

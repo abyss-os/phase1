@@ -1,6 +1,6 @@
 pkgname=drone-runner-docker
 pkgver=1.3.0
-pkgrel=5
+pkgrel=6
 pkgdesc="Drone Docker runner"
 url="https://drone.io/"
 arch="all"
@@ -10,8 +10,7 @@ source="$pkgname-$pkgver.tar.gz::https://github.com/drone-runners/drone-runner-d
 	$pkgname.initd
 	$pkgname.confd
 	drone-git_image.patch
-	drone-plugins-docker.patch
-	drone-logconfig.patch"
+	drone-plugins-docker.patch"
 builddir="$srcdir/$pkgname-$pkgver"
 options="net"
 subpackages="$pkgname-openrc"
@@ -38,7 +37,6 @@ cleanup_srcdir() {
 
 b2sums="60ed70cedaee589eaddbcdd8151e02a1f2dd4ae207b1bd0b5cde5bb3c0cdfef44eb361718f8cab0a76beffa2a96258dd1b03dc31b027755a317d79c3cf752081  drone-runner-docker-1.3.0.tar.gz
 a2e61030d94ca5995a9233933ca3080f4dc43d955695ee78f13c53b27016b6351941935591bfb279fb9b570e72475a8dcf50c08e040154d41f9c8c5a1af41377  drone-runner-docker.initd
-94fcbd3e9418ad64d48273221ed2595c04432db9c8b828c8ea157dc5bb539a20dac9426b44f9faa25326ca7c3805f1be95914be7f0cf9e625596280f18778b21  drone-runner-docker.confd
-cec7e7607b4e8d79f6552d434f0ffc3d8dd8ea91fd820dcaad7b81b15ddbb987e620400171b505fd56cfa00868e8aaf4142cb5c7739ac8720b3b9c7f026aa700  drone-git_image.patch
-9f05250919f7ddf4660ca65b9c198e4945ba16ea6fdf0a703e37c22b3f6f752430a2fc99d4866051f23482938a9fb387f7e2edb1d0b32514efeaea32bbe73640  drone-plugins-docker.patch
-1a9726f90677bd92a28cb272051d1c67d04ca8a1d1baa541bc082ee4465fa2b06f4ee4f7940497872a5a1a5e87ae8891d45eb7cbf6d707895e9cdaa2f9248217  drone-logconfig.patch"
+6b59b89c220384e2cffa848c60d948b6f35a7c15e4912b837ace3775b938e0472ba120fa399143868d8b485e49714c8fbd4a6cefcf2c4046cff413fd96a6143c  drone-runner-docker.confd
+e5b4b746ed5749010ba63f03c5c40525eba0fbbdb4f0bc2386158264fc4df4a27bbd99af879b6228be97840fecd298da1a94124479d78a43d56ed72884837afc  drone-git_image.patch
+f6fd40841a044aa7cf854125ff00b936be4a13628504ffd2d3fe3a9953236043aff19933e3de2a9ca90dc90fc1ab66bf7eb08a6b15aab7117671867d75aed4b9  drone-plugins-docker.patch"

@@ -3,7 +3,7 @@ case $CARCH in
 	*) pkgver=10.0.0;;
 esac
 
-pkgrel=2
+pkgrel=3
 pkgdesc="$pkgname"
 arch="all"
 url=.
@@ -26,7 +26,8 @@ source="https://github.com/llvm/llvm-project/archive/llvmorg-${pkgver/_/-}.tar.g
 		riscv_relax.patch
 		tmp-kernel.patch
 		mips_fix_syscall_warning.patch
-		mips-ldso.patch"
+		mips-ldso.patch
+		mips-reloc.patch"
 
 subpackages="lld llvm-binutils:binutils $pkgname-dev"
 
@@ -200,4 +201,5 @@ ada8faf1f1bbdfc52b0493ba563b91de954e6613b8be0af7deeabdf0b621a69a45e5acc753ecb487
 c99d536538e3e4830c618e11214f4fdda6cf377c9ea565b254e2484e52b68202b19b921b09ef4b784897bceac8a3b7bb9331b4b0087a5cafb8a1a3518fb1a1c4  riscv_relax.patch
 66835dfc1460df303d26fe7c5d630b836cbb0e1ef7c39d59695f73f69e2d12af59db72ce16b1ee16f9ff5ea7bd530a9d39b7c98c0f7c89d74c03ab212d17db9a  tmp-kernel.patch
 bad67cfe2f509010d9cff29b361239ae67cc726941b940a5acd7365af4a581e4734a5ca7f9840481be227189c44ce6ae93137c2400036829b41aa4639cef13b4  mips_fix_syscall_warning.patch
-8bb803c012fa69ec7eba0f4d5105392d13c12a466935c5ba2a2c079770b0def90672610ab2ff9bf85603b39994ae0299aa63e19cb200cfabb0212ce26948d87d  mips-ldso.patch"
+5669318224dd77fd3274f510dedf3f8d07308d4da7530ea3f65b26ddef016c8013b14acde053a6c002ef53b3d27bf413b024c8e02941de235f70bd03b62d2a94  mips-ldso.patch
+958a92b921fc8cd1f8b1b1c7c2afd70f41a4a898a8505b55ba3437eba13c78be69a0277bf97732273ba8f6308444ba0822c9fca7858dbe4193306285bc6f61ae  mips-reloc.patch"

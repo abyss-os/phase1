@@ -11,7 +11,7 @@ index 81782d8..9fa5778 100644
 -	"plugins/ecr",
 -	"plugins/gcr",
 -	"plugins/heroku",
-+	"abyssos/abyss-archive:plugins-docker",
++	"abyssos/abyss:drone-plugins-docker",
  }
  
  // Resources defines container resource constraints. These

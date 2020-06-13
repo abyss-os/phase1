@@ -1,5 +1,5 @@
 pkgname=nodejs
-pkgver=14.1.0
+pkgver=14.4.0
 pkgrel=0
 pkgdesc="JavaScript runtime built on V8 engine"
 url="https://nodejs.org/"
@@ -46,12 +46,8 @@ check() {
 
 package() {
 	make DESTDIR="$pkgdir" BUILDTYPE=Release install
-
-	# Remove npm, it's provided by main/nodejs package.
-	rm -r "$pkgdir"/usr/lib/node_modules
-	rm "$pkgdir"/usr/bin/npm "$pkgdir"/usr/bin/npx
 }
 
-b2sums="25b03f412ea36470cb9e454dbe583349a8230bd8f2fc540f4de089f54c7189f130c99241e42578c9708310caee45c157a29fcf2848c08c5319995d4de516e7f3  node-v14.1.0.tar.gz
+b2sums="23981ac3255cc28764542be728b571575869d5954600b7aba471bde487e5cda07ba6f790624a2ff9e9408e0e77d7f6e1c9c3e3a978d7dd02051ea7a8f6b5cd5f  node-v14.4.0.tar.gz
 892c6ef8def9693f471ac77c708573a7991bb532bbc33afa4741b34ebe0a64565bf926cd405c659124a1fa679b2d016d72b30121b7da8a5b31d0717168dba33a  restore-mips64-configure_py.patch
 f6601a8b2d15fd5b61f74898360cc9fde290f5e85316e2262f309284404b076a7b99f3ee4c8d46a2ac052b1e4c00746a635ca87c108ee9e1477b3f416f74c41f  ppc64-no-minimal-toc.patch"

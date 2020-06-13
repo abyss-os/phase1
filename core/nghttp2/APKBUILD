@@ -1,5 +1,5 @@
 pkgname=nghttp2
-pkgver=1.40.0
+pkgver=1.41.0
 pkgrel=0
 pkgdesc="Experimental HTTP/2 client, server and proxy"
 url="https://nghttp2.org"
@@ -47,5 +47,5 @@ package() {
 	make DESTDIR="$pkgdir" install
 }
 
-b2sums="7735ba06cd0655450a6379ea33cc79e557f73b5b4b2ba746564a53e6c305aa656b62da7c3b00dbb70472dffc471271f73af0bcbfadab99406d217d1989ad052a  nghttp2-1.40.0.tar.xz
+b2sums="8dbd5f80bb9617d792e2eece09f6cae82907ad3a14a90084578b213191015c32ac38de87d9a39246651087b5d0e9c6c624ff806a0690973b5faa8624ee033d8f  nghttp2-1.41.0.tar.xz
 901343a623a23e32eaae28eb18c0297a60919c8fe185e0a884dd9f9ac411108d45947300ad509c4386ad78a92157b1ca1a2d7430246c0bca26ca882c5046e20a  remove-mruby-tests.patch"

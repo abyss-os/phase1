@@ -1,19 +1,17 @@
 pkgname=fuse3
 _pkgname=fuse
-pkgver=3.9.0
+pkgver=3.9.2
 pkgrel=0
 pkgdesc="The reference implementation of the Linux FUSE (Filesystem in Userspace) interface"
 url="https://github.com/libfuse/libfuse"
 arch="all"
 license="GPL-2.0-only LGPL-2.1-only"
 depends="fuse-common"
-makedepends="linux-dev meson eudev-dev python3
-	py-six py-pluggy py-attrs py-py"
+makedepends="linux-dev meson eudev-dev python3 py-six py-pluggy py-attrs py-py"
 checkdepends="py-pytest"
-subpackages="$pkgname-dev $pkgname-doc fuse-common:_common fuse-openrc:_openrc $pkgname-libs"
+subpackages="$pkgname-dev $pkgname-doc"
 source="https://github.com/libfuse/libfuse/releases/download/fuse-$pkgver/fuse-$pkgver.tar.xz
 	fix-realpath.patch
-	add-includes.patch
 	fuse.initd
 	dev_fuse_no_create.patch"
 options="suid !check" # check is currently broken: https://github.com/libfuse/libfuse/issues/293
@@ -50,17 +48,6 @@ package() {
 #
 #user_allow_other
 _EOF_
-}
-
-_common() {
-	pkgdesc="Common files for fuse2 and fuse3"
-	mkdir -p "$subpkgdir"/etc/
-	mv "$pkgdir"/etc/fuse.conf "$subpkgdir"/etc/
-}
-
-_openrc() {
-	default_openrc
-	install_if="openrc fuse-common=$pkgver-r$pkgrel"
 }
 
 b2sums="2fff93431e59e370189fb1527de7bff3863d20e1a62628bb56a6671077a1c919b394ddac66537a1ef7c2991556b1817b2c7f6a92c161ebfffbc804466e19e5e7  fuse-3.9.0.tar.xz

@@ -1,0 +1,59 @@
+From 64390d3c8f00d6704b01a68eac21639a05a9e9c5 Mon Sep 17 00:00:00 2001
+From: Joe Holden <jwh@zorins.us>
+Date: Sat, 13 Jun 2020 17:44:16 +0000
+Subject: [PATCH] Teach the Go linker not to entirely suck
+
+On mips, .debug* sections should be DWARF but apparently as well as not finishing the linker, nobody bothered to read the spec properly either.
+---
+ src/cmd/link/internal/ld/elf.go | 6 ++++++
+ src/debug/elf/elf.go            | 3 +++
+ 2 files changed, 9 insertions(+)
+
+diff --git a/src/cmd/link/internal/ld/elf.go b/src/cmd/link/internal/ld/elf.go
+index 69cad38..6077464 100644
+--- a/src/cmd/link/internal/ld/elf.go
++++ b/src/cmd/link/internal/ld/elf.go
+@@ -214,6 +214,8 @@ const (
+ 	SHT_HIPROC           = 0x7fffffff
+ 	SHT_LOUSER           = 0x80000000
+ 	SHT_HIUSER           = 0xffffffff
++	/* MIPS DWARF info because Go sucks */
++	SHT_MIPS_DWARF       = 0x7000001e
+ 	SHF_WRITE            = 0x1
+ 	SHF_ALLOC            = 0x2
+ 	SHF_EXECINSTR        = 0x4
+@@ -1264,6 +1266,10 @@ func elfshbits(linkmode LinkMode, sect *sym.Section) *ElfShdr {
+ 	}
+ 	if strings.HasPrefix(sect.Name, ".debug") || strings.HasPrefix(sect.Name, ".zdebug") {
+ 		sh.flags = 0
++		switch objabi.GOARCH {
++			case "mips64", "mips64le", "mips", "mipsle":
++				sh.type_ = SHT_MIPS_DWARF
++		}
+ 	}
+ 
+ 	if linkmode != LinkExternal {
+diff --git a/src/debug/elf/elf.go b/src/debug/elf/elf.go
+index 96a67ce..2aaf09f 100644
+--- a/src/debug/elf/elf.go
++++ b/src/debug/elf/elf.go
+@@ -644,6 +644,8 @@ const (
+ 	SHT_GNU_VERSYM     SectionType = 0x6fffffff /* GNU version symbol table */
+ 	SHT_HIOS           SectionType = 0x6fffffff /* Last of OS specific semantics */
+ 	SHT_LOPROC         SectionType = 0x70000000 /* reserved range for processor */
++	/* MIPS DWARF */
++	SHT_MIPS_DWARF     SectionType = 0x7000001e /* .debug* on MIPS should always be DWARF, Go people can't read the elf spec */
+ 	SHT_HIPROC         SectionType = 0x7fffffff /* specific section header types */
+ 	SHT_LOUSER         SectionType = 0x80000000 /* reserved range for application */
+ 	SHT_HIUSER         SectionType = 0xffffffff /* specific indexes */
+@@ -675,6 +677,7 @@ var shtStrings = []intName{
+ 	{0x6ffffffe, "SHT_GNU_VERNEED"},
+ 	{0x6fffffff, "SHT_GNU_VERSYM"},
+ 	{0x70000000, "SHT_LOPROC"},
++	{0x7000001e, "SHT_MIPS_DWARF"},
+ 	{0x7fffffff, "SHT_HIPROC"},
+ 	{0x80000000, "SHT_LOUSER"},
+ 	{0xffffffff, "SHT_HIUSER"},
+-- 
+2.25.1
+

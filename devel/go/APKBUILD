@@ -1,5 +1,5 @@
 pkgname=go
-pkgrel=0
+pkgrel=1
 pkgver=1.14.4
 pkgdesc="Go programming language compiler"
 url="https://golang.org/"
@@ -8,7 +8,8 @@ license="BSD-3-Clause"
 makedepends="bash go-bootstrap"
 subpackages="$pkgname-doc"
 source="https://golang.org/dl/go${pkgver/_/}.src.tar.gz
-	dont_use_gold_arm64.patch"
+	dont_use_gold_arm64.patch
+	mips-fix-linker.patch"
 options="!check !strip"
 
 case "$CTARGET_ARCH" in

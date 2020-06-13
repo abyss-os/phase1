@@ -1,7 +1,7 @@
 pkgname=python3
-pkgver=3.8.2
+pkgver=3.8.3
 _basever="${pkgver%.*}"
-pkgrel=1
+pkgrel=0
 pkgdesc="A high-level scripting language"
 url="https://www.python.org"
 arch="all"
@@ -123,5 +123,5 @@ package() {
 	ln -sv /usr/bin/python3 $pkgdir/usr/bin/python
 }
 
-b2sums="f42b35bea5e65f1f0a3fa6f1fd3d749fba3fa46d958608a314c1a98d0e3ca890e856da4d40ee489fe546fc02ce0fc9fa2daaaba96a8928d92ae7eb3d2dda3fe4  Python-3.8.2.tar.xz
+b2sums="9c415823f70bad97936e0472fc53a1b7650cbf0082da714266095dec74e0cd4a48c9477ad03fbb75fdc2cd8e41ef3aa5839e38fc69751720f5cb5c7fc77cce17  Python-3.8.3.tar.xz
 e05b5e9fdc01baa063f7dc64ec47a14d9658233df32146a79944fdd20a70d4604539c24bf6fca977555f15fe322f3dbee7c8d7e1fc64ed0238981a4e9b88e5d6  musl-find_library.patch"

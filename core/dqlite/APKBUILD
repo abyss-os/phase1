@@ -1,5 +1,5 @@
 pkgname="dqlite"
-pkgver="1.4.0"
+pkgver="1.4.4"
 pkgrel=0
 pkgdesc="libco is a cooperative multithreading library written in C89."
 url="https://dqlite.io"
@@ -23,4 +23,4 @@ package() {
 	make DESTDIR=$pkgdir install
 }
 
-b2sums="251b1596e7ca25ec4fe66444994298994b9acb44350ac28ba8c85459458236368b3748122db4da72abede850f944109e305e2eaebf760b568fd57de958d70459  dqlite-1.4.0"
+b2sums="4a516c56f506b5eebf4b199339a92afb05b6928027498e8a34d8b346abaf78312d181a706f5943958983696c495b58281e56264c355b27d4fc41891d30085dce  dqlite-1.4.4"

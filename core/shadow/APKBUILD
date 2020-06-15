@@ -1,6 +1,6 @@
 pkgname=shadow
-pkgver=4.7
-pkgrel=1
+pkgver=4.8.1
+pkgrel=0
 pkgdesc="PAM-using login and passwd utilities (usermod, useradd, ...)"
 url="http://pkg-shadow.alioth.debian.org/"
 arch="all"
@@ -84,7 +84,7 @@ package() {
 	rm -rf $pkgdir/bin $pkgdir/usr/sbin
 }
 
-b2sums="83b926fd8136647b004bcb8afe252ad60e0f5820cba8ff0ff4bd9f7918b5e9996ffa51c05774e64e83aaf062b0fb826865492d237c0ff9abeb0927a9ff33bf7e  shadow-4.7.tar.xz
+b2sums="952707cdd55dc6c00dcbc60dbc3bf84ac618dbe916b36d993802b3ce42594de332a9bc22933a28881af3d317a340eab017ada55511b4e4fbc3ca6b422c4bc254  shadow-4.8.1.tar.xz
 f46c3b60ab056e58c18dd08d99f633290814874efc9ff53b20b8c54490f3a1fbef5f00d141d9c8c52f8f09da869594e92d379f54ec5ad580171682a3b239461f  chpasswd.pamd
 1928a52605da8a769c766b6576dbc45427d3bb1aaa3b92cbe0af6b4381fb209bf6357a745ca1d3ae0ba07f88e4f368768d7cd7f5cf768e1911e87ae672f5dd01  login.pamd
 16c5cce84a3df9612b8452b205692d7f311b335b897a74b4d94bae48fc71eefaac11af8f486e1e0f73b36d55a7a2beff33a41252bc7448c34f4021b85ec6d3c3  defaults.patch

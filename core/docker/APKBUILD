@@ -1,7 +1,7 @@
 pkgname=docker
 pkgver=19.03.11
 _gitcommit=42e35e61f352e527082521280d5ea3761f0dee50
-pkgrel=2
+pkgrel=3
 pkgdesc="Pack, ship and run any application as a lightweight container"
 url="https://www.docker.io/"
 arch="all"
@@ -70,7 +70,7 @@ package() {
 		"$pkgdir"/usr/bin/docker-proxy
 
 	# symlink externally provided tini-static binary
-	ln -sfv /usr/bin/tini-static "$subpkgdir"/usr/bin/docker-init
+	ln -sfv /usr/bin/tini-static $pkgdir/usr/bin/docker-init
 
 	install -Dm755 ${builddir}/components/engine/contrib/init/openrc/docker.initd \
 		"$pkgdir"/etc/init.d/docker

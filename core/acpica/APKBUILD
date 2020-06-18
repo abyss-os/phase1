@@ -3,14 +3,12 @@ pkgver=20200528
 pkgrel=0
 pkgdesc="ACPI Component Architecture utilities"
 url="https://www.acpica.org"
-arch="all !mips64"
+arch="all"
 license="GPL-2.0-only OR BSD-3-Clause OR Intel-ACPI"
 makedepends="flex bison"
-subpackages="iasl"
 options="!check"
 source="https://acpica.org/sites/acpica/files/acpica-unix-$pkgver.tar.gz
-	disable-werror.patch
-	"
+		disable-werror.patch"
 
 builddir="$srcdir"/acpica-unix-$pkgver
 build() {
@@ -19,12 +17,6 @@ build() {
 
 package() {
 	make install DESTDIR="$pkgdir"
-}
-
-iasl() {
-	pkgdesc="ACPI ASL compiler"
-	mkdir -p "$subpkgdir"/usr/bin
-	mv "$pkgdir"/usr/bin/iasl "$subpkgdir"/usr/bin/
 }
 
 b2sums="0c0e302ff56c05c17d88152df3883967a3571aa45eb66c3890dda1244c259f4c196856341219b68f34b2dcd7338d92b463d26feb58e7292568f67088409967be  acpica-unix-20200528.tar.gz

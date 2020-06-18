@@ -1,0 +1,24 @@
+diff --git a/src/libcore/cell.rs b/src/libcore/cell.rs
+index 9ebb3176..b6d5c6ae 100644
+--- a/src/libcore/cell.rs
++++ b/src/libcore/cell.rs
+@@ -1538,7 +1538,6 @@ impl<T: ?Sized + fmt::Display> fmt::Display for RefMut<'_, T> {
+ #[lang = "unsafe_cell"]
+ #[stable(feature = "rust1", since = "1.0.0")]
+ #[repr(transparent)]
+-#[cfg_attr(not(bootstrap), repr(no_niche))] // rust-lang/rust#68303.
+ pub struct UnsafeCell<T: ?Sized> {
+     value: T,
+ }
+diff --git a/src/libcore/lib.rs b/src/libcore/lib.rs
+index 81a3c419..dd1c6138 100644
+--- a/src/libcore/lib.rs
++++ b/src/libcore/lib.rs
+@@ -140,7 +140,6 @@
+ #![feature(associated_type_bounds)]
+ #![feature(const_type_id)]
+ #![feature(const_caller_location)]
+-#![cfg_attr(not(bootstrap), feature(no_niche))] // rust-lang/rust#68303
+ 
+ #[prelude_import]
+ #[allow(unused)]

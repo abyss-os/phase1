@@ -3,7 +3,7 @@ pkgver=1.43.0
 pkgrel=0
 pkgdesc="The Rust Programming Language"
 url="https://www.rust-lang.org"
-arch="!all"
+arch="x86_64"
 license="Apache-2.0 AND MIT"
 
 config_helper() {
@@ -49,7 +49,11 @@ source="https://static.rust-lang.org/dist/rustc-$pkgver-src.tar.gz
 	install-template-shebang.patch
 	check-rustc
 	link-musl-dynamically.patch
-	libunwind.patch"
+	libunwind.patch
+	morons.patch
+	more_morons.patch
+	even_more_morons.patch
+	how_even.patch"
 builddir="$srcdir/rustc-$pkgver-src"
 
 case "$CARCH" in
@@ -62,8 +66,6 @@ _rlibdir="usr/lib/rustlib/$_target/lib"
 _sharedir="usr/share/rust"
 
 ldpath="/$_rlibdir"
-
-export RUST_BACKTRACE=1
 
 # rust checksums files in vendor/, but we have to patch a few files...
 _clear_vendor_checksums() {
@@ -83,10 +85,9 @@ prepare() {
 }
 
 build() {
-#		--llvm-root="/usr" \
 
 	# override LD for now, since rustc doesn't bother passing -L/usr/lib
-	export LD=clang
+	export LD=$CC RUSTFLAGS="-C linker=$CC"
 	./configure \
 		--build="$_build" \
 		--host="$_build" \
@@ -98,24 +99,22 @@ build() {
 		--enable-option-checking \
 		--enable-extended \
 		--tools="cargo" \
-		--set="target.$_build.crt-static=false" \
-		--set="target.$_build.linker=$LD" \
-		--set="target.$_build.llvm-config=/usr/bin/llvm-config" \
 		--set="build.local-rebuild=true" \
-		--set="build.full-bootstrap=false" \
 		--set="build.fast-submodules=true" \
 		--set="build.docs=false" \
 		--set="build.locked-deps=true" \
 		--set="build.vendor=true" \
-		--set="rust.debug=false" \
-		--set="rust.parallel-compiler=true" \
-		--set="rust.debuginfo-level=0" \
-		--set="rust.codegen-units=0" \
-		--set="rust.codegen-tests=false" \
-		--set="rust.deny-warnings=false" \
 		--set="llvm.skip-rebuild=true" \
-		--set="llvm.link-shared=true"
-	make
+		--set="llvm.link-shared=true" \
+		--set="target.$_build.crt-static=false" \
+		--set="target.$_build.linker=$CC" \
+		--set="target.$_build.llvm-config=/usr/bin/llvm-config" \
+		--set="rust.deny-warnings=false" \
+		--llvm-root="/usr"
+
+	sed 's|deny(warnings,|deny(|' -i src/bootstrap/lib.rs
+
+	./x.py build --jobs ${JOBS}
 }
 
 package() {
@@ -242,4 +241,8 @@ dcd184c205eb90591fa88aa69e80cbdd2c18ac8f22040ce20b9a638979ac4d8aa82460d187e5ee28
 4de9b6c3afcbc649eb3b9147d52e78cc87f32f794cb10ec22ff272f7d3edd8b9acd11a64c47dff85de090215b3493c97f39cdc7524d81f8e45df4ced22fa3879  install-template-shebang.patch
 03e1b320d2b24f09d348a5301c5fdcc88d41037cdfde36da5f92caf95b687a8c245997f8917b0bc7c4bde9ad09afcb43343df5faf1e356a3535504f2ed7e7587  check-rustc
 3762c2d820cb6fa7d5c03971e8130b33317dfc28349df99841613b5cfd5aca67d0cf22117cac42ba6b111821892fbfb8ddf2998ba4da92a67f7a1efd9ab9e883  link-musl-dynamically.patch
-5e360514afbe81212a6b50dbcc0ec3f569f89752e321322b2151911ba0d14d8b86b0378fc4a7ecf875c9da1db0ae20ff0a51d45c4e0889c8d7768c785e9ece39  libunwind.patch"
+5e360514afbe81212a6b50dbcc0ec3f569f89752e321322b2151911ba0d14d8b86b0378fc4a7ecf875c9da1db0ae20ff0a51d45c4e0889c8d7768c785e9ece39  libunwind.patch
+ced05579bce427a9a913864d454c4b8cf98f93db31fba3c9fb301b4b53c5e42fade93fd9acbeac0613ce5639109a471eb670baf9b0104a75bff7a28d2f8f89e0  morons.patch
+2bf84996d30e1d8ea2a6aca6a22fc0a87c7407ced0c0f529e971aa979531c91501ae67e72d0014c4f810c4241f386209ae2386b96f8824fbace8eb40c4191108  more_morons.patch
+0d606e447e1092eddea1c78808510de1647f9e446d1f1e71429bde5e42b6a67c94ea3b84facb506a73ca52312400b3e341d082c67db0474029c2c201503d2dae  even_more_morons.patch
+413b48424624f6e3de01c086eb2717f2d8c4d3750ed44180986145de73b6e2130ef88a9d155b0ffa62e45dba34047c729f583b528051891f07a48d7883a876c4  how_even.patch"

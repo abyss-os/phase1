@@ -1,0 +1,20 @@
+diff --git a/src/bootstrap/builder.rs b/src/bootstrap/builder.rs
+index eb0199fd..77fdd13e 100644
+--- a/src/bootstrap/builder.rs
++++ b/src/bootstrap/builder.rs
+@@ -851,13 +851,8 @@ impl<'a> Builder<'a> {
+             rustflags.arg("-Zforce-unstable-if-unmarked");
+         }
+ 
+-        // cfg(bootstrap): the flag was renamed from `-Zexternal-macro-backtrace`
+-        // to `-Zmacro-backtrace`, keep only the latter after beta promotion.
+-        if stage == 0 {
+-            rustflags.arg("-Zexternal-macro-backtrace");
+-        } else {
+-            rustflags.arg("-Zmacro-backtrace");
+-        }
++		// lol, these morons
++       // rustflags.arg("-Zexternal-macro-backtrace");
+ 
+         let want_rustdoc = self.doc_tests != DocTests::No;
+ 

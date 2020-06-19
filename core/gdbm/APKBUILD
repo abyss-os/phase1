@@ -1,6 +1,6 @@
 pkgname=gdbm
-pkgver=1.13
-pkgrel=1
+pkgver=1.18.1
+pkgrel=0
 pkgdesc="GNU dbm is a set of database routines that use extensible hashing"
 url="https://www.gnu.org/software/gdbm/"
 arch="all"
@@ -37,4 +37,4 @@ package() {
 	make DESTDIR="$pkgdir" install
 }
 
-b2sums="f73cb89aeed140a584c5a8bce9c2324cc39a7647ee288364af66fbe1c1cd8662e53f7cb82a208e795a6d27adc048018153671d964ecad518407eb888283e17c5  gdbm-1.13.tar.gz"
+b2sums="b7717224e966321d7499a90214bfb62d0402e867db475ed4eddacfe3944d8d9cca1052e41d625f447936bfb3cbd7f1b79cfe6ff435a018efed3d5a7c5eae52d7  gdbm-1.18.1.tar.gz"

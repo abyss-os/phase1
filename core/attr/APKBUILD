@@ -1,6 +1,6 @@
 pkgname=attr
 pkgver=2.4.48
-pkgrel=1
+pkgrel=2
 pkgdesc="Utilities for managing filesystem extended attributes"
 options="checkroot"
 url="https://savannah.nongnu.org/projects/attr"

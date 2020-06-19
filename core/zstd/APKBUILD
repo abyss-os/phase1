@@ -1,6 +1,6 @@
 pkgname=zstd
-pkgver=1.4.4
-pkgrel=1
+pkgver=1.4.5
+pkgrel=0
 pkgdesc="Zstandard - Fast real-time compression algorithm"
 url="https://www.zstd.net"
 arch="all"
@@ -32,4 +32,4 @@ package() {
 	make PREFIX="/usr" DESTDIR="$pkgdir" install
 }
 
-b2sums="e21841a53b6c60703e5500cfc2a02923c4c3e57975aa57e1060310171e0d83d7c8eda1bd0510d5736db5c310d76847d2105ac5f614867fc3a9dc3086a035dfd7  zstd-1.4.4.tar.gz"
+b2sums="1497d4e87040e5c71466468ebf1a57f4073666f2b005229925bc1d95a4b4fcb2a51d88bb79be20f21860e5750da42f8aac21d2997421d07ba37bd6bb12a28b55  zstd-1.4.5.tar.gz"

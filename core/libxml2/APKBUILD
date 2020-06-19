@@ -1,6 +1,6 @@
 pkgname=libxml2
-pkgver=2.9.9
-pkgrel=1
+pkgver=2.9.10
+pkgrel=0
 pkgdesc="XML parsing library, version 2"
 url="http://www.xmlsoft.org/"
 arch="all"
@@ -10,9 +10,7 @@ checkdepends="perl"
 makedepends="$depends_dev zlib-dev"
 subpackages="$pkgname-doc $pkgname-dev"
 options="!strip"
-source="http://xmlsoft.org/sources/$pkgname-$pkgver.tar.gz
-	fix-null-pointer-dereference.patch
-	"
+source="http://xmlsoft.org/sources/$pkgname-$pkgver.tar.gz"
 builddir="$srcdir/$pkgname-$pkgver"
 
 prepare() {
@@ -54,5 +52,4 @@ dev() {
 	mv "$pkgdir"/usr/lib/*.sh "$subpkgdir"/usr/lib/
 }
 
-b2sums="00a67c38084f2effd5d68d7d3e68f0c96cf4f52eab6d8d9b96dc91f03a84baa132abeaf303a836ff9bbf04f832432a036077316c464398e433c9779d8519074b  libxml2-2.9.9.tar.gz
-5aa3bef4955edb7f1a20e2942f77daef413945ecd2cdd38699db213a8a0ca9b52c1e14df3b6a86dcfb870dc5f8862e988807892304bb4916a5105f9fcbe5a246  fix-null-pointer-dereference.patch"
+b2sums="a9958bd7db17fbfb8259b64d66548eb19d28f1aecf40cf66752fcec5720855d31cea9941d52963badd8c18ea1770485f1c11da6213149458336ce0273418f421  libxml2-2.9.10.tar.gz"

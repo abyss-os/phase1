@@ -12,6 +12,7 @@ source="https://download.savannah.nongnu.org/releases/attr/attr-$pkgver.tar.gz
 	fix-tests.patch
 	"
 replaces="${pkgname}-libs"
+options="!check"
 
 prepare() {
 	default_prepare

@@ -1,6 +1,6 @@
 pkgname=coreutils
-pkgver=8.31
-pkgrel=3
+pkgver=8.32
+pkgrel=0
 pkgdesc="The basic file, shell and text manipulation utilities"
 url="https://www.gnu.org/software/coreutils/"
 arch="all"
@@ -41,4 +41,4 @@ check() {
 	make check
 }
 
-b2sums="e3ae6be8edbe9df9164b4c9ac8bf14dc23b147fa665f20669e18ac4c6e45ba839dc0dc99e05670eb006d22133475a4a717a5f40b00ebaedfd6e1fbab887674d5  coreutils-8.31.tar.xz"
+b2sums="0ad99c176c19ec214fcfd0845523e5362f0151827707c759bd46c0fe8d2501c6ad1c29c5b71266f6525857bc0d56c472db0d7fe29953b6c65e2e6c76bdf3c515  coreutils-8.32.tar.xz"

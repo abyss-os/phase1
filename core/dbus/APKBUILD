@@ -1,6 +1,6 @@
 pkgname=dbus
-pkgver=1.12.16
-pkgrel=1
+pkgver=1.13.16
+pkgrel=0
 pkgdesc="Freedesktop.org message bus system"
 url="https://www.freedesktop.org/Software/dbus"
 pkggroups="messagebus"
@@ -12,13 +12,9 @@ triggers="$pkgname.trigger=/etc/dbus-1/system.d"
 depends_dev="util-linux-dev"
 makedepends="$depends_dev expat-dev autoconf automake libtool xmlto"
 install="$pkgname.pre-install $pkgname.post-install"
-source="https://dbus.freedesktop.org/releases/dbus/dbus-$pkgver.tar.gz
+source="https://dbus.freedesktop.org/releases/dbus/dbus-$pkgver.tar.xz
 	$pkgname.initd
 	"
-
-# secfixes:
-#   1.12.16-r0:
-#   - CVE-2019-12749
 
 build() {
 	cd "$srcdir"/$pkgname-$pkgver
@@ -52,5 +48,5 @@ package() {
 	rm -rf "$pkgdir"/usr/lib/systemd
 }
 
-b2sums="46c4f0d384d76dffd31c18a2d2df03d0658479d8f5b2d14b1db2bf0941fecdc023307ec035e3f977fde570a9f6493bbabd020ac2cd81b0577597e355f5a72522  dbus-1.12.16.tar.gz
+b2sums="b4f257b973089845f71b13528a4ebf1c6812ccca3cd211776c97c6ac9be1715cc182e8b28a3eb3c9aa2522c054b491ea6fe5cf72b060e11407d60917d94eef2e  dbus-1.13.16.tar.xz
 e0fd2c24b1cc33187f6ee6ff46d6e5b4221b703e939e28d0449480ec7e988c822e6d0106f6e934ccbc01d9471b0c9f3928214982e9d448884bbed50b472f4aea  dbus.initd"

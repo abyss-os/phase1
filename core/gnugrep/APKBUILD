@@ -1,6 +1,6 @@
 pkgname=gnugrep
-pkgver=3.3
-pkgrel=1
+pkgver=3.4
+pkgrel=0
 pkgdesc="Searches input files for lines containing a match to a specified pattern"
 url="https://www.gnu.org/software/grep/grep.html"
 arch="all"
@@ -47,5 +47,5 @@ package() {
 	rmdir -p "$pkgdir"/usr/lib 2>/dev/null || true
 }
 
-b2sums="e1592b623d1f32d1b21d127b0d28f8f6501d4b854ff2de810d12d43292c00e6af887b038f22d0c4c45c314b6e9d73a82dec6d737519c674bb139c2ef70511aa0  grep-3.3.tar.xz
+b2sums="4e1924d6d5eb66faca93b405cce9784d726a476f26a384c3b44375cb09f817008aeedaa701a30b6c1f21c030902d603a80ec80105b2d5d76eadf09b910d573a7  grep-3.4.tar.xz
 cec51c2b634e06a372321e175e4bf950407a24a9c73d5abfc8d5eb3daf3427de994f61d0e58b87c8d9c7560f59459c0543c47f1c61ac85ec316b6b69ac207fdc  fix-tests.patch"

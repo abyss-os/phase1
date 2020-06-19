@@ -1,14 +1,13 @@
 pkgname=libgpg-error
-pkgver=1.36
-pkgrel=1
+pkgver=1.38
+pkgrel=0
 pkgdesc="Support library for libgcrypt"
 url="http://www.gnupg.org"
 arch="all"
 license="GPL-2.0-or-later LGPL-2.1-or-later"
 subpackages="$pkgname-dev $pkgname-doc $pkgname-lisp:lisp:noarch"
 makedepends="automake autoconf"
-source="https://gnupg.org/ftp/gcrypt/$pkgname/$pkgname-$pkgver.tar.bz2
-	gawk5.patch"
+source="https://gnupg.org/ftp/gcrypt/$pkgname/$pkgname-$pkgver.tar.bz2"
 
 prepare() {
 	default_prepare
@@ -45,5 +44,4 @@ lisp() {
 	mv "$pkgdir"/usr/share "$subpkgdir"/usr/share/
 }
 
-b2sums="81684f6e47192c50cfa408977d53dc3812befca28733b531d51dffa0a6799a47366a50f64755557a7b3111a179ac4aba9e6a527418461cdbcccea80ae6bed4fa  libgpg-error-1.36.tar.bz2
-ca0b6f2d97513f7cab9ccd6cd338b85c4e2800553932288cdb4abd6eea1fd3bfecee16d14b67bb514c636031ab57ff7f0324ca045f991b778ced43361c3deae6  gawk5.patch"
+b2sums="9532402466748503805366b94c82c9adfe5b448f885c26b33ebf7ba9957161ca046b4057f5ca862224accb9f2af731652a55d20e7a4ab69107190a58c8e11ad6  libgpg-error-1.38.tar.bz2"

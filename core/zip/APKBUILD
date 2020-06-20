@@ -1,9 +1,7 @@
-# Contributor: Carlo Landmeter <clandmeter@gmail.com>
-# Maintainer: Haelwenn (lanodan) Monnier <contact+abyss@hacktivis.me>
 pkgname=zip
 pkgver=3.0
 _pkgver=${pkgver%.*}${pkgver##*.}
-pkgrel=8
+pkgrel=9
 pkgdesc="Creates PKZIP-compatible .zip files"
 url="http://www.info-zip.org/pub/infozip/Zip.html"
 arch="all"

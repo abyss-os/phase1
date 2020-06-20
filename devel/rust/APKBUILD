@@ -1,5 +1,5 @@
 pkgname=rust
-pkgver=1.43.0
+pkgver=1.44.0
 pkgrel=0
 pkgdesc="The Rust Programming Language"
 url="https://www.rust-lang.org"
@@ -231,7 +231,7 @@ _mv() {
 	mv "$@"
 }
 
-b2sums="a247a326f264ab329f153b0ac6e624cd100372b1214707d4a8ac6bd1dc20448b9b5b8b4accf76396ab67a3ee0d7f10d84a8a4c07195239c4e53c32d3a222ebd1  rustc-1.43.0-src.tar.gz
+b2sums="7d3a30ccb08c66babe808e25b8ea5cab85d4f9b5aec2fe7ae21d5fbe3194473ee97d9589c8a146fbac15e7409610ad5070db0b0d5701b072c9203e8e09687acc  rustc-1.44.0-src.tar.gz
 443371a1ce3e3e89469336f51414e3ada7c4cc21e567b4ee0e047d5e64c88b730ed23fc72676584da7d9949326b1736db4cad617758b650304a5fe6d28edfa40  musl-fix-static-linking.patch
 d43d643d2e7520cfe666b4dd22570838340dca2da6d8f79fc2b4b95111b32d40bff12a1a4da1ab7b000a73ae374b111e6478c5083676c6aa482831dfd66615f4  musl-fix-linux_musl_base.patch
 07edaea52281deb861d0319bc9762590b02ecd5c539becd552845e77562888ad8e3f82e6d4b9212f8719df86bce7cbacf70148f3ffe8ea1d597759ab56bda427  static-pie.patch

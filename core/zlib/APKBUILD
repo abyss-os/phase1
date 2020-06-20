@@ -1,6 +1,6 @@
 pkgname=zlib
 pkgver=1.2.11
-pkgrel=1
+pkgrel=2
 pkgdesc="A compression/decompression Library"
 arch="all"
 license="zlib"

@@ -3,7 +3,7 @@ case $CARCH in
 	*) pkgver=10.0.0;;
 esac
 
-pkgrel=4
+pkgrel=5
 pkgdesc="$pkgname"
 arch="all"
 url=.
@@ -12,7 +12,7 @@ license=.
 case $CARCH in
         aarch64) _targets="AArch64" _linker="lld" lld="ON";;
         x86_64) _targets="X86" _linker="lld" lld="ON";;
-        mips64*) _targets="Mips" _linker="gnu-ld" lld="OFF";;
+        mips64*) _targets="Mips" _linker="lld" lld="ON";;
         riscv64) _targets="RISCV" _linker="lld" lld="ON";;
         ppc64*) _targets="PowerPC" _linker="lld" lld="ON";;
         *) echo "Unknown arch" ; return 1 ;;

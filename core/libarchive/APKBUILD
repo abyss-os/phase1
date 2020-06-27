@@ -1,6 +1,6 @@
 pkgname=libarchive
 pkgver=3.4.3
-pkgrel=0
+pkgrel=1
 pkgdesc="library that can create and read several streaming archive formats"
 url="https://libarchive.org/"
 arch="all"

@@ -1,6 +1,6 @@
 pkgname=libev
-pkgver=4.27
-pkgrel=1
+pkgver=4.33
+pkgrel=0
 pkgdesc="event dispatch library"
 url="http://software.schmorp.de/pkg/libev.html"
 arch="all"
@@ -35,5 +35,5 @@ package() {
 	rm "$pkgdir"/usr/include/event.h
 }
 
-b2sums="a4cd33aa9320c0c81912b50c0f03cd338e09e9c1c63f14d682317322a3c875229b2317af00a48e65be9e56b165b994a385692b103cae7c44012a1281e764f27a  libev-4.27.tar.gz
+b2sums="8a6cae25ffde10b24a5bbf084f6a8559af326b37acdbdf47dda34b7f0c7955f3ebd26958594444a574cfa3e2b4011e4be93ad2bd994ffd4c094bf36620e67ba5  libev-4.33.tar.gz
 de3ecef46521cdfba5dc2c317a87745e766b9bc6ecc805284cdae8841ae8cde7cce07e78d5b7b7f3ed5ff21821b1c463db4550045a00da1cdd2c04c8300f7972  libev-4.11-Add-pkgconfig-support.patch"

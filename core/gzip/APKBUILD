@@ -1,6 +1,6 @@
 pkgname=gzip
 pkgver=1.10
-pkgrel=2
+pkgrel=3
 pkgdesc="A popular data compression program"
 subpackages="$pkgname-doc"
 url="https://www.gnu.org/software/gzip/"

@@ -1,11 +1,11 @@
 pkgname=sudo
-pkgver=1.8.27
+pkgver=1.9.1
 if [ "${pkgver%_*}" != "$pkgver" ]; then
 	_realver=${pkgver%_*}${pkgver#*_}
 else
 	_realver=$pkgver
 fi
-pkgrel=1
+pkgrel=0
 pkgdesc="Give certain users the ability to run some commands as root"
 url="https://www.sudo.ws/sudo/"
 arch="all"
@@ -14,10 +14,7 @@ makedepends="zlib-dev bash mandoc"
 depends=
 subpackages="$pkgname-doc $pkgname-dev"
 source="https://www.sudo.ws/dist/sudo-${_realver}.tar.gz
-	fix-tests.patch
-	libcrypt.patch
-	sudo-cvtsudoers.patch
-	"
+	fix-tests.patch"
 options="suid"
 
 # secfixes:
@@ -59,7 +56,5 @@ package() {
 	rm -rf "$pkgdir"/var/run
 }
 
-b2sums="174d63ece5c24309dc0d237fadfc4131243aca333491ffa6dcdb3c44b53cb8149d3bf2f3aea2aa49529ea811d4727a11ac1909305e342b858a4c14f923f12956  sudo-1.8.27.tar.gz
-b9e8f03cc64e1b53ec1ebb168ab8010b911fd9d8d3cb49fc5a4fabca714b4456f3443f2d115a2f8846b965092a8c87250d042457b3fedd87d0a052bb218ab370  fix-tests.patch
-8556a5006ef8e3495ec52c73c21948ea6f6bf551059fe1ee7d17f2e5e0d7ffd84ff6cf10da513bd3af86ea7901a73b6549bf9c6cfb4e849610cd27871b3ff38c  libcrypt.patch
-8b03e9d11c0cfa35d3c7d145d47e1a8cc2339da4f11262f3480c89b791846690c09e1b3b4186ed3c52d301979e72a3bd96de0f67af4c6c37d9fec1a704c7f2a3  sudo-cvtsudoers.patch"
+b2sums="835eaae5b61627da65f40f04646b261093c56f77bdfb1b64f746e569a4bfafcfbb31d88ab301bf8544a8714f43d3416a792ee8b0fdcb75d81dbc6fcf29551f0b  sudo-1.9.1.tar.gz
+b9e8f03cc64e1b53ec1ebb168ab8010b911fd9d8d3cb49fc5a4fabca714b4456f3443f2d115a2f8846b965092a8c87250d042457b3fedd87d0a052bb218ab370  fix-tests.patch"

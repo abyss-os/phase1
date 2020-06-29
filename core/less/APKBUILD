@@ -1,6 +1,6 @@
 pkgname=less
 pkgver=551
-pkgrel=1
+pkgrel=2
 pkgdesc="File pager"
 url="http://www.greenwoodsoftware.com/less/"
 arch="all"

@@ -10,9 +10,9 @@ pkgdesc="Give certain users the ability to run some commands as root"
 url="https://www.sudo.ws/sudo/"
 arch="all"
 license="custom ISC"
-makedepends="zlib-dev bash mandoc"
+makedepends="zlib-dev bash"
 depends=
-subpackages="$pkgname-doc $pkgname-dev"
+subpackages="$pkgname-dev $pkgname-doc"
 source="https://www.sudo.ws/dist/sudo-${_realver}.tar.gz
 	fix-tests.patch"
 options="suid"

@@ -1,5 +1,5 @@
 kind: pipeline
-type: docker
+type: exec
 name: x86_64
 
 platform:
@@ -8,7 +8,6 @@ platform:
 
 steps:
   - name: build
-    image: abyssos/abyss:dev
     commands:
       - ./.scripts/drone.sh
     environment:
@@ -22,7 +21,6 @@ steps:
         from_secret: ABYSS_PRIVKEY
       ABYSS_PUBKEY:
         from_secret: ABYSS_PUBKEY
-    pull: always
 
 ---
 kind: pipeline

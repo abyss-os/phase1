@@ -4,10 +4,8 @@ pkgrel=0
 pkgdesc="An asynchronously DNS/names resolver library"
 url="https://c-ares.haxx.se/"
 arch="all"
-options="!checkroot"
+options="!checkroot !check"
 license="MIT"
-depends=""
-makedepends=""
 subpackages="$pkgname-doc $pkgname-dev"
 source="https://c-ares.haxx.se/download/$pkgname-$pkgver.tar.gz"
 

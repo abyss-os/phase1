@@ -1,6 +1,6 @@
 pkgname=lzo
 pkgver=2.10
-pkgrel=3
+pkgrel=4
 pkgdesc="LZO -- a real-time data compression library"
 url="http://www.oberhumer.com/opensource/lzo"
 arch="all"

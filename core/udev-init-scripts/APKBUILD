@@ -1,6 +1,6 @@
 pkgname=udev-init-scripts
 pkgver=33
-pkgrel=1
+pkgrel=2
 pkgdesc="udev startup scripts for openrc"
 url="https://gitweb.gentoo.org/repo/gentoo.git/tree/sys-fs/udev-init-scripts"
 arch="noarch"

@@ -1,5 +1,5 @@
 pkgname=abyss-base-dev
-pkgver=1
+pkgver=2
 pkgrel=0
 pkgdesc="devel metapackage"
 url="https://abyss.run"
@@ -7,15 +7,9 @@ arch="noarch"
 license="MIT"
 options="!check"
 
-case "$CARCH" in
-	x86_64) depends_arch="llvm-binutils lld" ;;
-	aarch64) depends_arch="llvm-binutils lld" ;;
-	mips64*) depends_arch="llvm-binutils binutils lld" ;;
-	riscv64) depends_arch="llvm-binutils lld" ;;
-	ppc64*) depends_arch="llvm-binutils lld" ;;
-esac
+depends_arch=""
 
-depends="abyss-base llvm-dev clang abuild linux-dev musl-dev toolchain git bash $depends_arch"
+depends="abyss-base llvm-dev clang abuild linux-dev musl-dev toolchain git bash llvm-binutils lld $depends_arch"
 
 package() {
 	mkdir -p $pkgdir

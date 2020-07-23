@@ -1,6 +1,6 @@
 pkgname=curl
-pkgver=7.70.0
-pkgrel=1
+pkgver=7.71.0
+pkgrel=0
 pkgdesc="URL retrival utility and library"
 url="https://curl.haxx.se/"
 arch="all"
@@ -52,4 +52,4 @@ libcurl() {
 	mv "$pkgdir"/usr/lib "$subpkgdir"/usr
 }
 
-b2sums="6b505d87242bcaa554c4ee6994eb97ca70453521c1e77b5e757677475328c70f41e23e22b3a0eb9be7a299a94d4f1f85a46f7f999f3db8439072626320352ecf  curl-7.70.0.tar.xz"
+b2sums="50d7369e4335823c3032b8801b270f7d8e687b0552f25ed5f9752549483cf68870e0422132ecf86e756e1c7c27cdf60048a7765850608c3a1b734cffb1fe7b99  curl-7.71.0.tar.xz"

@@ -1,5 +1,5 @@
 pkgname=cmake
-pkgver=3.17.3
+pkgver=3.18.0
 pkgrel=0
 pkgdesc="Cross-platform, open-source make system"
 url="https://www.cmake.org"
@@ -9,8 +9,9 @@ makedepends="bzip2-dev curl-dev expat-dev libarchive-dev linux-dev
 	libuv-dev ncurses-dev rhash-dev xz-dev zlib-dev"
 options="!checkroot !check" # disable for now
 checkdepends="file musl-utils"
-subpackages="$pkgname-doc $pkgname-bash-completion:bashcomp:noarch
-	"
+subpackages="$pkgname-doc $pkgname-bash-completion:bashcomp:noarch"
+provides="${pkgname}-bootstrap"
+
 case $pkgver in
 *.*.*.*) _v=v${pkgver%.*.*};;
 *.*.*) _v=v${pkgver%.*};;
@@ -76,4 +77,4 @@ bashcomp() {
 		"$subpkgdir"/usr/share/bash-completion/
 }
 
-b2sums="a4c863e0cf7105eb47e1bba7641ab3431506f0a4f5c84a4de203cb996e629d1ee236d91ba5e1439f0123ab3c8b3871ef4e3b1c21940aa97c125cc7ab2a3f9873  cmake-3.17.3.tar.gz"
+b2sums="3eba331eaa6b1d85baa5898836fc6106f2b5fcb10af85121806c429f41d09d4fde49bf87ef833c0e538ae5ccdf994e9cc86efa39b571ebcd429459ea37205c66  cmake-3.18.0.tar.gz"

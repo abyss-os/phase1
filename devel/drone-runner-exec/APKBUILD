@@ -1,7 +1,7 @@
 pkgname=drone-runner-exec
 pkgver=1.0.0_beta9
 _pkgver=1.0.0-beta.9
-pkgrel=3
+pkgrel=4
 pkgdesc="Drone exec runner"
 url="https://drone.io/"
 arch="all"
@@ -9,7 +9,8 @@ license="Apache-2.0"
 makedepends="go"
 source="$pkgname-${_pkgver}.tar.gz::https://github.com/drone-runners/drone-runner-exec/archive/v${_pkgver}.tar.gz
 	$pkgname.initd
-	$pkgname.confd"
+	$pkgname.confd
+	go-isatty-12.patch"
 builddir="$srcdir/$pkgname-${_pkgver}"
 options="net"
 subpackages="$pkgname-openrc"
@@ -31,4 +32,5 @@ package() {
 
 b2sums="93004282c7956cbf4b8683170001029504e8c1c21415b0cf06a80d46b572685a12c493adfb832b5d531c60fdab4246997de1efdd88a255e0be31edbf134f0d08  drone-runner-exec-1.0.0-beta.9.tar.gz
 18b4c7df3ca543bf22ea6bd95d0eac539b808c9f794d6077b155fa92cb6ba9ffb7530d453eb2921fc74fdf7776728fa45fb258d4eae685c6b655d3866d2ebb9e  drone-runner-exec.initd
-16baa517598299d1342a33518e76b3168069ac17c4fe5a515ca4539666aed93d4650fdb7a62f943741ee4db58a85ebcae4e28310987143cf5dff9c463cf308ce  drone-runner-exec.confd"
+16baa517598299d1342a33518e76b3168069ac17c4fe5a515ca4539666aed93d4650fdb7a62f943741ee4db58a85ebcae4e28310987143cf5dff9c463cf308ce  drone-runner-exec.confd
+70df04b104b5190e93cded7e9963bc8403eab9f24a69bbe3d18a32c393e1c20db45dd70dab1a6007e48581a83fb5608342382cfd606db0f772221e2ec8cbee2e  go-isatty-12.patch"

@@ -1,0 +1,14 @@
+diff --git a/go.mod b/go.mod
+index b178ef4..6d1f2f3 100644
+--- a/go.mod
++++ b/go.mod
+@@ -21,7 +21,7 @@ require (
+	github.com/joho/godotenv v1.3.0
+	github.com/kardianos/service v1.0.0
+	github.com/kelseyhightower/envconfig v1.3.0
+-	github.com/mattn/go-isatty v0.0.8
++	github.com/mattn/go-isatty v0.0.12
+	github.com/natessilva/dag v0.0.0-20180124060714-7194b8dcc5c4
+	github.com/orandin/lumberjackrus v1.0.1
+	github.com/rainycape/unidecode v0.0.0-20150907023854-cb7f23ec59be // indirect
+

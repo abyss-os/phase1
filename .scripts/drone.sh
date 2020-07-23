@@ -25,8 +25,6 @@ case $DRONE_STAGE_ARCH in
 	*) buildarch=$DRONE_STAGE_ARCH;;
 esac
 
-apk --no-cache update
-apk --force-overwrite -U upgrade -a
 apk add git minio-client
 
 echo "=> nproc: $(nproc)"
@@ -34,7 +32,7 @@ echo "=> mem: $(grep MemTotal /proc/meminfo|awk '{print $2/1024}')"
 
 for PKG in $(git log ...${DRONE_COMMIT_BEFORE} --format=format: --name-only | grep -e 'APKBUILD$' | tac); do
 	if [ -f "${PKG}" ]; then
-		apk --no-cache --force-overwrite -U upgrade -a
+		apk --force-refresh --force-overwrite -U upgrade -a
 		buildpkg=${PKG%APKBUILD}
 		cd ${OPWD}/${buildpkg} || exit 1
 		abuild -ri || exit 1

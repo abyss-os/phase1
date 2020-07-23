@@ -1,5 +1,5 @@
 pkgname=git
-pkgver=2.25.1
+pkgver=2.27.0
 pkgrel=0
 pkgdesc="Distributed version control system"
 url="https://www.git-scm.com/"
@@ -246,6 +246,6 @@ _perl_config() {
 	perl -e "use Config; print \$Config{$1};"
 }
 
-b2sums="582da3d4ac996d7b9ce6cf505661496ab1a2cd061f058745350498121956b33d79739b567fb5fea0b4e298303261256034aa0b8da0b842feab04ae67a7d5b142  git-2.25.1.tar.xz
+b2sums="72c992ee35a50cdeb2363f04edfab65358216b8415f31f217b6e837d1f7bc28b90e49850006596a8f5f1932fd3011c4253df287d445dca58e335d2f6e7bab8c2  git-2.27.0.tar.xz
 825983b676ae5c6aa0b25457d0461113ff83f8d5b2c092972693c2219b8d2b11fabb9d6ab0b9d18b1bcca021bf32fea949d733fd007d1775eecc173f170925ea  git-daemon.initd
 aee2e1493bb67c09b87497724df90cb74e9a5a7f123101ae96374145eb81076cc2018e73141aa9dc8c4e50b7f1087e8265f4bcd56d761c60375607268d470437  git-daemon.confd"

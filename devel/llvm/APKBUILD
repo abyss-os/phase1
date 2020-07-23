@@ -1,12 +1,9 @@
 pkgname=llvm
-case $CARCH in
-	*) pkgver=10.0.0;;
-esac
-
-pkgrel=5
+pkgver=10.0.1
+pkgrel=0
 pkgdesc="$pkgname"
 arch="all"
-url=.
+url=https://llvm.org
 license=.
 
 case $CARCH in
@@ -193,7 +190,7 @@ lld_aalt() {
     DESTDIR=$subpkgdir aalt-bin -R -g llvm -p ld -f /usr/bin/lld
 }
 
-b2sums="6b0254f5b913398cdcf2b2ec1ff219888706d2b79d5296590934714e42ac79f6a6547941ac2b1d2c4e6313dd18b6c7068e748aa6ac033e49fccbf5d355aa8191  llvmorg-10.0.0.tar.gz
+b2sums="30f19f56c4d1f6abcda5fec76256219d1e3c8a6ff1a1f152f94bfe362c07884339fe571ff7fe903ed3b3deb150b2fa868c387887a0dea2930dc08b81db71a5b1  llvmorg-10.0.1.tar.gz
 8e23d19518bc2bba4009c30ba6d8c981e94b6e293a95a29ebbb9be7c9a7a40b21900a7e526529149847a42bd98899306a1af9b99c819e290d4a67e34f4ea32c3  mips_softfloat.patch
 b1784c607ad18ab83c0287dd22401c818046fb29c57ced4ea5399e691222ec18b20f5bcb3b6a745f569e738904aaf3ff98a1a01543277d1f5ed6534a19594c1f  mips_ppc_crt.patch
 7991221eca8a3f32607de7da91c02928d95cfae8d2af3516d403d2edd1a43bf7bb97280b6584146cd9ed51123b2bfe686a460ac1035131d115207d55a7debcfa  clang-pie-ssp.patch

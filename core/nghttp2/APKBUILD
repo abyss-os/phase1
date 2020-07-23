@@ -1,13 +1,13 @@
 pkgname=nghttp2
 pkgver=1.41.0
-pkgrel=0
+pkgrel=1
 pkgdesc="Experimental HTTP/2 client, server and proxy"
 url="https://nghttp2.org"
 arch="all"
 license="MIT"
 makedepends="autoconf automake libtool libev-dev openssl-dev zlib-dev c-ares-dev"
 subpackages="$pkgname-doc $pkgname-dev"
-source="https://github.com/tatsuhiro-t/$pkgname/releases/download/v$pkgver/nghttp2-$pkgver.tar.xz
+source="https://github.com/nghttp2/$pkgname/releases/download/v$pkgver/nghttp2-$pkgver.tar.xz
 	remove-mruby-tests.patch"
 builddir="$srcdir"/$pkgname-$pkgver
 
@@ -38,7 +38,8 @@ build() {
 		--without-neverbleed \
 		--without-jemalloc \
 		--disable-python-bindings \
-		--enable-static
+		--enable-static \
+		--enable-lib-only
 	make
 }
 

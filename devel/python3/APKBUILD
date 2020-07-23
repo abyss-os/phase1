@@ -1,7 +1,7 @@
 pkgname=python3
-pkgver=3.8.3
+pkgver=3.8.5
 _basever="${pkgver%.*}"
-pkgrel=1
+pkgrel=0
 pkgdesc="A high-level scripting language"
 url="https://www.python.org"
 arch="all"
@@ -37,15 +37,13 @@ build() {
 	./configure \
 		--prefix=/usr \
 		--libdir=/usr/lib \
-		--disable-rpath \
 		--enable-ipv6 \
 		--enable-loadable-sqlite-extensions \
 		--enable-shared \
 		--with-computed-gotos \
 		--with-dbmliborder=gdbm:ndbm \
 		--with-system-expat \
-		--with-system-ffi \
-		--with-threads
+		--with-system-ffi
 
 	# set thread stack size to 1MB so we don't segfault before we hit
 	# sys.getrecursionlimit()
@@ -123,5 +121,5 @@ package() {
 	ln -sv /usr/bin/python3 $pkgdir/usr/bin/python
 }
 
-b2sums="9c415823f70bad97936e0472fc53a1b7650cbf0082da714266095dec74e0cd4a48c9477ad03fbb75fdc2cd8e41ef3aa5839e38fc69751720f5cb5c7fc77cce17  Python-3.8.3.tar.xz
+b2sums="bb3e0566afe28759e4ab129ad0986a0fc5103514f2e2b22ff4aa3973c3173ebdd24d4267fbaf903841814a611fd9ea122673e5a1918934366e5c0efaef9d7517  Python-3.8.5.tar.xz
 e05b5e9fdc01baa063f7dc64ec47a14d9658233df32146a79944fdd20a70d4604539c24bf6fca977555f15fe322f3dbee7c8d7e1fc64ed0238981a4e9b88e5d6  musl-find_library.patch"

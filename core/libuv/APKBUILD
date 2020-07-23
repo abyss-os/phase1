@@ -1,5 +1,5 @@
 pkgname=libuv
-pkgver=1.38.0
+pkgver=1.38.1
 pkgrel=0
 pkgdesc="Cross-platform asychronous I/O"
 url="https://libuv.org"
@@ -50,4 +50,4 @@ package() {
 		"$pkgdir"/usr/share/licenses/$pkgname/LICENSE
 }
 
-b2sums="f936a94668d27d92dbbfac7badef0fe8765e39532a58a8e9426ffa83b49a638d1e658af87921c5ff990ccbf334471156c2214c54e549c14ba5eab12811d30b72  libuv-v1.38.0.tar.gz"
+b2sums="cc7b6a576dd2fc94a97b5ae0969e4f79a06f729b419c7e263c5adc4a629eb006e20bfb3e48be36351b8b28e1a3a4b027d8685f8c731de182418d822a9ee65c2a  libuv-v1.38.1.tar.gz"

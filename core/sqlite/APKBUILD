@@ -1,5 +1,5 @@
 pkgname=sqlite
-pkgver=3.32.1
+pkgver=3.32.3
 _pkgver=replication4
 pkgrel=0
 pkgdesc="C library that implements an SQL database engine"
@@ -49,5 +49,5 @@ package() {
 		"$pkgdir"/usr/share/licenses/$pkgname/license.txt
 }
 
-b2sums="94578227539eae7f33848623910963577a646fe8acee1733db799ccb6f2052fb545b1d22d06f14ee17a8bb3daf764392906c8b7265027fa862d1a4ecf0e63f03  sqlite-3.32.1.tar.gz
+b2sums="b5a53f876b4fcc121a102956159199160814d5702ae1baa1be025e5a6641febf3f819a21b4259166aab3500ceac481a6d6454ddba9514208b59609670369cd5a  sqlite-3.32.3.tar.gz
 847d2f10831a4a7a2dfb12c142c418fffc74829f3fde24f9a343bb6e0f7b7de110a909ca97da77aaa7462056f8ce009ffbcb86d7ecd3a4f36fa80ee598ca921e  license.txt"

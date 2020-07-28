@@ -2,9 +2,9 @@ pkgname=runc
 pkgdesc="CLI tool for spawning and running containers according to the OCI specification"
 url="https://www.opencontainers.org"
 # use commit until next release
-_commit=be66519c261d9d0d5b18b5bb0b5fcf42d04535b9 
-pkgver=1.0.0_rc10
-pkgrel=2
+_commit=24a3cf88a7ae5f4995f6750654c0e2ca61ef4bb2
+pkgver=1.0.0_rc91
+pkgrel=0
 
 arch="all"
 license="Apache-2.0"
@@ -21,4 +21,4 @@ package() {
 	install -Dsm755 "$builddir"/runc "$pkgdir"/usr/bin/runc
 }
 
-b2sums="6abfdcbf554d047721c72c6f7f296957891442a60ea94ef7b64de0a22d0b9ca139aaf9f74960402e433ce299c5214864987b6092ef23f87c8619e1dde35c8400  runc-1.0.0-rc10.tar.gz"
+b2sums="bb09304c9ec82d39ccc7ceac4cc325883c0cdc669e89bae7f24ac957b7636f0d3604ce5b31a79009551a20f441b97986072734ce5b7e3b0d52e8b1ae2137a672  runc-1.0.0-rc91.tar.gz"

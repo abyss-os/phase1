@@ -1,9 +1,9 @@
 pkgname=containerd
 # NOTE: containerd's Makefile tries to get REVISION from git, but we're building from a tarball.
-_commit=32985949d4f2f38a484c5021766251250764322b
+_commit=5d470fa23bf969e16b25212703b7a9902dd6cda7
 pkgver=1.4.0
-_pkgver=1.4.0-beta.1
-pkgrel=1
+_pkgver=1.4.0-beta.2
+pkgrel=2
 pkgdesc="An open and reliable container runtime"
 url="https://containerd.io"
 arch="all"
@@ -35,4 +35,4 @@ package() {
 	install -Dsm755 "$builddir"/bin/* "$pkgdir"/usr/bin/
 }
 
-b2sums="f15131afd5fb329b4adbbf3ba5b223671e15f39f1922a14483b25776a2e134b1cd4980737e044ec5b84b644128f5fa1cca40f7ca4880ec6f7e02fdd711c90893  containerd-1.4.0.tar.gz"
+b2sums="52a61544916e412e0f706a6232a44bff387e337997155a1a3a94b3b6c2434dc159fd4c813e2e2ad7c34ca38bc4a115964aa9390eb6d94cc8157eafa1481d5be6  containerd-1.4.0.tar.gz"

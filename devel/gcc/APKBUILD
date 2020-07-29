@@ -1,5 +1,5 @@
 pkgname=gcc
-pkgver=10.1.0
+pkgver=10.2.0
 pkgrel=0
 pkgdesc="The GNU Compiler Collection"
 url="http://gcc.gnu.org"
@@ -91,12 +91,11 @@ prepare() {
 		rm -f $srcdir/$i
 		ln -sfv $srcdir/$i-$(eval echo "\$_$i") $srcdir/gcc-$pkgver/$i
 	done
+
+	cd $srcdir
 	config_helper
 
 	local _arch_configure=
-
-	cd "$_gccdir"
-
 	case "$CTARGET" in
 	aarch64-*-*-*)		_arch_configure="--with-arch=armv8-a --with-abi=lp64";;
 	mips64*-*-*-*)		_arch_configure="--with-arch=mips64 --with-tune=mips64 --with-mips-plt --with-float=soft --with-abi=64";;
@@ -109,7 +108,7 @@ prepare() {
 	*)	_hash_style_configure="--with-linker-hash-style=gnu" ;;
 	esac
 
-	_languages=c,c++,d
+	_languages=c,c++
 
 	export AS=gnu-as CC=gcc CXX=g++ LD=gnu-ld
 
@@ -132,9 +131,9 @@ prepare() {
 		--program-prefix=gnu- \
 		--mandir=/usr/share/man \
 		--infodir=/usr/share/info \
-               --build=${CBUILD} \
-               --host=${CHOST} \
-               --target=${CTARGET} \
+        --build=${CBUILD} \
+        --host=${CHOST} \
+        --target=${CTARGET} \
 		--with-pkgversion="Abyss OS" \
 		--disable-fixed-point \
 		--disable-libstdcxx-pch \
@@ -262,7 +261,7 @@ gdc() {
 	ln -s /usr/bin/gnu-gdc ${pkgdir}/usr/bin/gdc
 }
 
-b2sums="d64cf01beaaff7af9e7d5b1d5e6fdfb37cce5667b4455c1c9bbfd190e631f03555d63d52d31e7be5ac232256be11058f89d5bc7d0dcb01de44e90a52645ad87f  gcc-10.1.0.tar.xz
+b2sums="1d79397330354e61439283cac96a109bf78ffc726265442e6d3ec131f107589ab7349d6612836edd8c8512f7bcc1d901a65a0d5d925d28a5bf3ef5cc3f9787ee  gcc-10.2.0.tar.xz
 2a0a7b8a36a74e2d093ec34e93640b486a656d1e8b5d5408751799fab3359283d9e934f3a00deeb8e02e97f1d5cd7a47a30f2bcedf2a8da9b64b2c5717018126  002_all_default-relro.patch
 f375f417bfdaa96aeafe327bf35bf26bf1d350ecc4b5db2ad735bb4e9b636d6f9d06c6a9c1359ccd1c1f6113db8ae3ab2f06ea9f0c72f292d8d5cfbb18c9d4da  003_all_default-fortify-source.patch
 c54506ca5b06c7417ba4db30a413d82baa60b6f992598bd5a6bb49aa767a66bd7f32d5030c643be3a478ee0983a19a0eef866107f52c5dfed2cb4b2dfeb111ac  005_all_default-as-needed.patch

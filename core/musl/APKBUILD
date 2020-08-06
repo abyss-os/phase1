@@ -1,6 +1,6 @@
 pkgname=musl
-pkgver=1.2.0
-pkgrel=10
+pkgver=1.2.1
+pkgrel=0
 pkgdesc="the musl c library (libc) implementation"
 url="http://www.musl-libc.org/"
 arch="all"
@@ -126,7 +126,7 @@ libssp_nonshared()
 	cp -v $srcdir/libssp_nonshared.a $subpkgdir/usr/lib/
 }
 
-b2sums="0a47e0f438cca0f3ce31ae024c19358160214842115b560efc48e66228055c9147d9550957a79425322d510ba773f197d0944bb844bf6addbbf698088a3358a9  musl-1.2.0.tar.gz
+b2sums="5ccdee248d4caa1b433ab9c56cce3842fb46a269fd6a53d0880ba5eaad208997306e6b56fd345917e5076714fbfac0804ea226e6dc3f0f2e75f8c824a7155535  musl-1.2.1.tar.gz
 a70433fea40342429ef7e21fc4338a4d600e902c44c21765434104c5d602267695c403da33479d352328f84c41c99bc46757e5ae18e42f6a0479789bf04323ea  __stack_chk_fail_local.c
 5edec5b375218e2c8c7692fc592d80a6905e1949dbdf3c8375f64821a15bcb9212266155dbd2fad2d14cb9de583646be8f61c5ba50c817f0bef6352dbb81fa70  handle-aux-at_base.patch
 535d64c6883883ad7d8efbfa67d76a9f2120ee126fe69a06e29513a68c8c2a2cff27f2fddfb4bddb19e9d8c4c3a56314dd1dd96ec25d1759829df97fa32d191f  ldconfig

@@ -1,5 +1,5 @@
 pkgname=llvm
-pkgver=10.0.1
+pkgver=11.0.0_rc1
 pkgrel=0
 pkgdesc="$pkgname"
 arch="all"
@@ -23,8 +23,7 @@ source="https://github.com/llvm/llvm-project/archive/llvmorg-${pkgver/_/-}.tar.g
 		riscv_relax.patch
 		tmp-kernel.patch
 		mips_fix_syscall_warning.patch
-		mips-ldso.patch
-		mips-reloc.patch"
+		mips-ldso.patch"
 
 subpackages="lld llvm-binutils:binutils $pkgname-dev"
 
@@ -190,7 +189,7 @@ lld_aalt() {
     DESTDIR=$subpkgdir aalt-bin -R -g llvm -p ld -f /usr/bin/lld
 }
 
-b2sums="30f19f56c4d1f6abcda5fec76256219d1e3c8a6ff1a1f152f94bfe362c07884339fe571ff7fe903ed3b3deb150b2fa868c387887a0dea2930dc08b81db71a5b1  llvmorg-10.0.1.tar.gz
+b2sums="10ff3f08ff3780abb1d86ac67942e6aac52ff5daf820a2e3d23d8b79dbade1c5b1d398d0a577028d2d7c8759ab9a8b552a0305b5750310a015585c06cdadf844  llvmorg-11.0.0-rc1.tar.gz
 8e23d19518bc2bba4009c30ba6d8c981e94b6e293a95a29ebbb9be7c9a7a40b21900a7e526529149847a42bd98899306a1af9b99c819e290d4a67e34f4ea32c3  mips_softfloat.patch
 b1784c607ad18ab83c0287dd22401c818046fb29c57ced4ea5399e691222ec18b20f5bcb3b6a745f569e738904aaf3ff98a1a01543277d1f5ed6534a19594c1f  mips_ppc_crt.patch
 7991221eca8a3f32607de7da91c02928d95cfae8d2af3516d403d2edd1a43bf7bb97280b6584146cd9ed51123b2bfe686a460ac1035131d115207d55a7debcfa  clang-pie-ssp.patch
@@ -198,5 +197,4 @@ ada8faf1f1bbdfc52b0493ba563b91de954e6613b8be0af7deeabdf0b621a69a45e5acc753ecb487
 c99d536538e3e4830c618e11214f4fdda6cf377c9ea565b254e2484e52b68202b19b921b09ef4b784897bceac8a3b7bb9331b4b0087a5cafb8a1a3518fb1a1c4  riscv_relax.patch
 66835dfc1460df303d26fe7c5d630b836cbb0e1ef7c39d59695f73f69e2d12af59db72ce16b1ee16f9ff5ea7bd530a9d39b7c98c0f7c89d74c03ab212d17db9a  tmp-kernel.patch
 bad67cfe2f509010d9cff29b361239ae67cc726941b940a5acd7365af4a581e4734a5ca7f9840481be227189c44ce6ae93137c2400036829b41aa4639cef13b4  mips_fix_syscall_warning.patch
-5669318224dd77fd3274f510dedf3f8d07308d4da7530ea3f65b26ddef016c8013b14acde053a6c002ef53b3d27bf413b024c8e02941de235f70bd03b62d2a94  mips-ldso.patch
-958a92b921fc8cd1f8b1b1c7c2afd70f41a4a898a8505b55ba3437eba13c78be69a0277bf97732273ba8f6308444ba0822c9fca7858dbe4193306285bc6f61ae  mips-reloc.patch"
+5669318224dd77fd3274f510dedf3f8d07308d4da7530ea3f65b26ddef016c8013b14acde053a6c002ef53b3d27bf413b024c8e02941de235f70bd03b62d2a94  mips-ldso.patch"

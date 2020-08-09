@@ -1,14 +1,13 @@
 pkgname=linux
-pkgver=5.7_rc7
+pkgver=5.7.14
 _pkgver=${pkgver/_/-}
-pkgrel=7
+pkgrel=0
 pkgdesc="Linux kernel"
 url="http://kernel.org"
 #depends="mkinitfs"
-makedepends="perl elfutils-dev bash flex bison gsed bc linux-dev openssl-dev binutils findutils rsync"
+makedepends="perl elfutils-dev bash flex bison gsed bc linux-dev openssl-dev findutils rsync"
 options="!strip"
-#source="https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/linux-$pkgver.tar.xz
-source="https://git.kernel.org/torvalds/t/linux-${_pkgver}.tar.gz
+source="https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/linux-$pkgver.tar.xz
 	config.aarch64
 	config.x86_64
 	config.riscv64
@@ -23,25 +22,10 @@ license="GPL-2.0"
 builddir="$srcdir"/linux-"$_pkgver"
 _builddir="$srcdir"/build
 
-_carch=${CARCH}
-case "$_carch" in
-x86*) _carch="x86" archopts="LLVM=1" ;;
-riscv64*) _carch="riscv" archopts="LLVM=1" ;;
-aarch64*) _carch="arm64" archopts="LLVM=1" ;;
-mips*) _carch="mips" archopts="LLVM=0 LLVM_IAS=0 HOSTLD=gnu-ld LD=gnu-ld HOSTCC=gnu-gcc CC=gnu-gcc" makedepends="$makedepends gcc" ;;
-ppc*) _carch="powerpc" archopts="LLVM=0 LLVM_IAS=0 HOSTLD=gnu-ld LD=gnu-ld HOSTCC=gnu-gcc CC=gnu-gcc" makedepends="$makedepends gcc" ;;
-*) error "Unsupported architecture" ;;
-esac
-
 prepare() {
 	default_prepare
 	mkdir -p "$_builddir" && cd "$_builddir"
 	cp -v "$srcdir"/config."$CARCH" .config
-
-	# sledgehammer, update build env
-	export OTC="$(toolchain show)"
-	msg "Updating buildenv (currently: ${OTC})..."
-	toolchain none gnu
 
 	#_make listnewconfig oldconfig
 }
@@ -49,8 +33,6 @@ prepare() {
 build() {
 	cd "$_builddir"
 	_make
-	msg "Reverting buildenv ($OTC)..."
-	toolchain $OTC
 }
 
 package() {
@@ -73,10 +55,11 @@ package() {
 	install -d "$pkgdir"/usr
 	mv -v "$pkgdir"/lib "$pkgdir"/usr/
 }
+
 # DO NOT USE THESE FUNCTIONS UNLESS YOU'RE A DEV AND KNOW WHAT YOU'RE DOING AND WHY
 _make() {
 	make -j${JOBS} -C "$builddir" O="$_builddir" \
-		$archopts \
+		LLVM=1 LLVM_IAS=1 \
 		KBUILD_BUILD_VERSION="$(( pkgrel + 1 ))-abyss" \
 		INSTALL_MOD_PATH="$pkgdir"/usr \
 		INSTALL_HDR_PATH="$pkgdir"/usr \
@@ -91,13 +74,13 @@ _oldconfig() {
 }
 _menuconfig() {
 	cd "$_builddir"
-#	cp -v "$srcdir"/config."$CARCH" .config
+	[[ ! -f .config ]] && cp -v "$srcdir"/config."$CARCH" .config
 	_make menuconfig
 	cp -v .config "$startdir"/newconfig."$CARCH"
 }
 
-b2sums="c924a0dbc9e1cb3dcaf6de9a57cc48ce2cbe904a3d0ba6ec3602991a0f2cfbcd8f24d1ee025934c3bab4444da1c4dfff99db5fbd3bc2b44110090905d077abdc  linux-5.7-rc7.tar.gz
-1063bc7859f497de2b29176bc368b4bc5bfb12e40749b8b90e72fdb49bf35ffacb0c982145808e1ed37ecd63224802fc18364d3eef8c04698affee07bda6866f  config.aarch64
+b2sums="80e7c0d398f76d136463572ad435b444a9a0dc92a6d548ad4a13dc65fde7719adc7fc35e1e2e0319a8b0c61187f33007bec69ead2c01dd0b176803e913718ecc  linux-5.7.14.tar.xz
+5e7a2d34c0bbafc07bfbaf20cf55149a7ee46fc64cbae015618cf96d095a470361c972f1e838f00949a7aa05adb1a0713245db1f1e59d46776b32bdcdf07b685  config.aarch64
 442744a573d9eaaccabe0f5302c6ac3c9b66e15cd573c0cf494776c7d6fa9101b7911a0c93e2d321adf1bf2fff2de3cbebbf1c5e442b0944af7bfbde1669830a  config.x86_64
 d7c54880b8af226309cbcd2492ab2f2f3dd8b8facf9caad4eb7c097e7ff8c9c3c88802f65d7f5c738b3d173fe550a6662a56c68a024107ded1a8fcf11a17a572  config.riscv64
 f7ec2129f67b2f3656484e5933a4eea1e15b4f3bcdc477d045d7f152621709c8d5c44d575f0c1cbb80eda6af1b409b3a9688a415fa1b7f1ed47f8bf2ec01493b  config.mips64

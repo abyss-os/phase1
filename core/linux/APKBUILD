@@ -34,7 +34,7 @@ prepare() {
 build() {
 	cd "$_builddir"
 	case $CARCH in
-		ppc64le) _make headers ;;
+		ppc64le|mips64) _make headers ;;
 		*) _make ;;
 	esac
 }
@@ -55,7 +55,7 @@ package() {
 	# modules are disabled at the moment
 	#_make install modules_install headers_install
 	case $CARCH in
-		ppc64le) _make headers_install ;;
+		ppc64le|mips64) _make headers_install ;;
 		*) _make install headers_install ;;
 	esac
 

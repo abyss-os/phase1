@@ -1,6 +1,6 @@
 pkgname=musl
 pkgver=1.2.1
-pkgrel=0
+pkgrel=1
 pkgdesc="the musl c library (libc) implementation"
 url="http://www.musl-libc.org/"
 arch="all"
@@ -24,7 +24,6 @@ source="http://www.musl-libc.org/releases/musl-$pkgver.tar.gz
 builddir="$srcdir"/musl-$pkgver
 
 case $CARCH in
-	ppc64*) makedepends="$makedepends gcc binutils" CC=gcc LD=ld.lld LD=gnu-ld ;;
 	riscv64) makedepends="$makedepends gcc binutils" CC=gcc LD=ld.lld LD=gnu-ld ;;
 esac
 

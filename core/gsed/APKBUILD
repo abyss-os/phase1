@@ -1,6 +1,6 @@
 pkgname=gsed
 pkgver=4.8
-pkgrel=0
+pkgrel=1
 subpackages="$pkgname-doc"
 pkgdesc="GNU stream editor"
 url="https://www.gnu.org/software/sed"
@@ -14,13 +14,6 @@ source="https://ftp.gnu.org/gnu/sed/sed-$pkgver.tar.xz
 	"
 options="!checkroot"
 builddir="$srcdir/sed-$pkgver"
-
-prepare() {
-	default_prepare
-
-	# Relies on unwrittable directory, which needs non-root
-	sed -i 's/testsuite\/panic-tests.sh//' Makefile.in
-}
 
 build() {
 	cd "$builddir"

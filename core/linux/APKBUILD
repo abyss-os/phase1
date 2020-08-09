@@ -5,7 +5,7 @@ pkgrel=0
 pkgdesc="Linux kernel"
 url="http://kernel.org"
 #depends="mkinitfs"
-makedepends="perl elfutils-dev bash flex bison gsed bc linux-dev openssl-dev findutils rsync"
+makedepends="perl elfutils-dev bash flex bison gsed bc linux-dev openssl-dev findutils rsync ncurses-dev"
 options="!strip"
 source="https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/linux-$pkgver.tar.xz
 	config.aarch64
@@ -13,6 +13,7 @@ source="https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/linux-$pkgver.t
 	config.riscv64
 	config.mips64
 	config.mips64el
+	config.ppc64le
 	"
 subpackages="$pkgname-dev"
 
@@ -32,7 +33,10 @@ prepare() {
 
 build() {
 	cd "$_builddir"
-	_make
+	case $CARCH in
+		ppc64le) _make headers ;;
+		*) _make ;;
+	esac
 }
 
 package() {
@@ -50,7 +54,10 @@ package() {
 
 	# modules are disabled at the moment
 	#_make install modules_install headers_install
-	_make install headers_install
+	case $CARCH in
+		ppc64le) _make headers_install ;;
+		*) _make install headers_install ;;
+	esac
 
 	install -d "$pkgdir"/usr
 	mv -v "$pkgdir"/lib "$pkgdir"/usr/
@@ -81,7 +88,8 @@ _menuconfig() {
 
 b2sums="80e7c0d398f76d136463572ad435b444a9a0dc92a6d548ad4a13dc65fde7719adc7fc35e1e2e0319a8b0c61187f33007bec69ead2c01dd0b176803e913718ecc  linux-5.7.14.tar.xz
 5e7a2d34c0bbafc07bfbaf20cf55149a7ee46fc64cbae015618cf96d095a470361c972f1e838f00949a7aa05adb1a0713245db1f1e59d46776b32bdcdf07b685  config.aarch64
-442744a573d9eaaccabe0f5302c6ac3c9b66e15cd573c0cf494776c7d6fa9101b7911a0c93e2d321adf1bf2fff2de3cbebbf1c5e442b0944af7bfbde1669830a  config.x86_64
+a7cf87e26f1bceab007d0a035800eb47bd34c66e85dba0670496aa0f982dbf61b0085029c158ab008a860ea6259d0302be63792129571f0ee7672b06ebb40c2b  config.x86_64
 d7c54880b8af226309cbcd2492ab2f2f3dd8b8facf9caad4eb7c097e7ff8c9c3c88802f65d7f5c738b3d173fe550a6662a56c68a024107ded1a8fcf11a17a572  config.riscv64
 f7ec2129f67b2f3656484e5933a4eea1e15b4f3bcdc477d045d7f152621709c8d5c44d575f0c1cbb80eda6af1b409b3a9688a415fa1b7f1ed47f8bf2ec01493b  config.mips64
-f7ec2129f67b2f3656484e5933a4eea1e15b4f3bcdc477d045d7f152621709c8d5c44d575f0c1cbb80eda6af1b409b3a9688a415fa1b7f1ed47f8bf2ec01493b  config.mips64el"
+f7ec2129f67b2f3656484e5933a4eea1e15b4f3bcdc477d045d7f152621709c8d5c44d575f0c1cbb80eda6af1b409b3a9688a415fa1b7f1ed47f8bf2ec01493b  config.mips64el
+93077fbe29ab3142f4f62f43dbd78bd078f5eebb422bdad3009b896f34d048c12a727915eb0d8db5b7bbc9addcbef1657940156171f7199f077f69a7dae50130  config.ppc64le"

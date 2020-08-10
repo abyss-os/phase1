@@ -1,6 +1,6 @@
 pkgname=go-ipfs
-pkgver=0.5.1
-pkgrel=1
+pkgver=0.6.0
+pkgrel=0
 pkgdesc="Inter Platnetary File System (IPFS), a peer-to-peer hypermedia distribution protocol"
 url="https://ipfs.io/"
 arch="all"
@@ -42,6 +42,6 @@ bashcomp() {
 		"$subpkgdir"/usr/share/bash-completion/completions/$pkgname
 }
 
-b2sums="3e5c7e255853040cb5d6c40d5a18f871cdbecbbc44a7cd72d3c11b54feec4e4f2ad2e3f52b73b1c7f2f930b947ae65efb29601b71cc8de518f3547f970d6102d  go-ipfs-0.5.1.tar.gz
+b2sums="56cfdd725365f72416770d11ec5e3e53fbff8660894179ba2017fa0b7bb996337495c2c23a2614acfd2b4f9b86c26ea8c62eee98b03f430ac8295b0b63de8d7a  go-ipfs-0.6.0.tar.gz
 57c1a12bc333fe7f0ae9cd95253197e1fd953942928c6ed16dc11d615e4f9a3e4e8113eee930f791fdd640f9805e4d666ff2614e456d628e4d744632434c9e90  ipfs.initd
 7ecaa40f2a4097690f9d8091da5891e0bbfb0f298bed4a59769c8d0ef978a2471865a01177950da5869b61f3b8c124f43eab97daf297c06efecdc25785a5846d  ipfs.confd"

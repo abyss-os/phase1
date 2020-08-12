@@ -1,5 +1,5 @@
 pkgname=meson
-pkgver=0.54.1
+pkgver=0.55.0
 pkgrel=0
 pkgdesc="Fast and user friendly build system"
 url="https://mesonbuild.com"
@@ -24,4 +24,4 @@ package() {
 	python3 setup.py install --prefix=/usr --root="$pkgdir"
 }
 
-b2sums="5bd355b35a4aa037e490615629480a194c04821fb18b137f090af89f6c33c700d0756bb2d7e9e608ecf4873886be10493bfeddce55fef3d905793ad3ccccfa68  meson-0.54.1.tar.gz"
+b2sums="5ca2c6a881a9db72532849e66a52315273033188531a446ae3571faa37d6f698562e1dbd91770156c0c959e06cc7ba62a9ff274cf0d1745e3849435418755723  meson-0.55.0.tar.gz"

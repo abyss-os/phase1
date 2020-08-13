@@ -1,5 +1,5 @@
 pkgname=glib
-pkgver=2.64.2
+pkgver=2.64.4
 pkgrel=0
 pkgdesc="Common C routines used by Gtk+ and other libs"
 url="https://developer.gnome.org/glib/"
@@ -39,7 +39,7 @@ package() {
 	DESTDIR="$pkgdir" ninja -C output install
 }
 
-b2sums="8145684ca9f966f92ed9cdafcbf46c59291dc1215fc9feae482fb33f61bd175a679fe5bc80f031190c9a0eb5eb650fab01e13bdda4bd41e9df3d21c6779681bc  glib-2.64.2.tar.xz
+b2sums="2ff69c794689c97011103459cb109e6ca7021db20a605cf3942f57e7b73eda9971034b8f65f03191f357169affb278dfa9bff309b4ca44605fd5a0ba0d135d2a  glib-2.64.4.tar.xz
 219162ba6402541d043fb06896b6169a18110a3e441cbacc42158e873184c8e51c3af3ba088ea0748b422a550ad2e6d3b05a1909e68aad2932d190dd4316db1e  0001-gquark-fix-initialization-with-c-constructors.patch
 665254dfca8422583b8980505a5aa6ef7b11c36cbc5fd522520783da89412e8a2bd71719487e8aad2200599d4dcc6612af3d512f6bc3b7eea378d924c5310dd6  deprecated-no-warn.patch
 6d6840fb33c0fef1bb61c7ab46dcb13c0d80d704bd1daaf12d7cabbd48a8cf7dcb43315d1ab96c2ff91e3696f4537379b2ffa7dba8d3c0ca16cddcd8258b195b  musl-libintl.patch"

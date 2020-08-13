@@ -12,6 +12,8 @@ subpackages="$pkgname-doc $pkgname-openrc $pkgname-bash-completion $pkgname-zsh-
 source="$pkgname-$pkgver.tar.gz::https://github.com/containers/podman/archive/v$pkgver.tar.gz
 	podman.initd
 	podman.confd
+	containers.conf
+	registries.conf
 	"
 
 build() {
@@ -25,8 +27,13 @@ package() {
 
 	install -Dm755 "$srcdir"/$pkgname.initd "$pkgdir"/etc/init.d/$pkgname
 	install -Dm644 "$srcdir"/$pkgname.confd "$pkgdir"/etc/conf.d/$pkgname
+
+	install -Dm 744 "$srcdir"/containers.conf $pkgdir"/etc/containers/containers.conf
+	install -Dm 744 "$srcdir"/registries.conf $pkgdir"/etc/containers/registries.conf
 }
 
 b2sums="a6a5760886d112b6cd69625137ec0aa9e368e8ff09f114123ff0b17ad2ef5b26b5eb645a5bbabc30a7cb900d7844587e0051969fefba9d5e8b5652a571857e09  podman-2.0.4.tar.gz
 5200eaff530f298d74a01fc5a4cf96328fb5ba364bc10cf6ff8f6e7f2ee23618b9bbbe93f3e439737d2199df6615b7c13261c6e598e47e87181553904890972e  podman.initd
-fc683e21a46e0076a315fb13f2df97c7c0942a0482998f0679a8a23315aa927818fa1f6acb2659adf16edcf000fb3020e73751916758a4dd24f73b6affc4b8b0  podman.confd"
+fc683e21a46e0076a315fb13f2df97c7c0942a0482998f0679a8a23315aa927818fa1f6acb2659adf16edcf000fb3020e73751916758a4dd24f73b6affc4b8b0  podman.confd
+99ae38131e219dd971c921328128e264bf98f4f2bee68e2a525ab168562b17778e357ff7889c3dff40897f0a07a6eb023f0227bde603ba78a3a652e383bdaec8  containers.conf
+c3d0e288e16925736b816094a613b9c34ddb86536047b281c6e21375143c8f0bc130050f6474be3e3bc3b470e18a839d0d205ab32220d86296955abbe01510de  registries.conf"

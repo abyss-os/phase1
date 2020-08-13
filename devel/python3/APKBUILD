@@ -1,7 +1,7 @@
 pkgname=python3
 pkgver=3.8.5
 _basever="${pkgver%.*}"
-pkgrel=1
+pkgrel=2
 pkgdesc="A high-level scripting language"
 url="https://www.python.org"
 arch="all"
@@ -28,11 +28,7 @@ prepare() {
 build() {
 	cd "$builddir"
 
-	# --enable-optimizations is not enabled because it
-	# is very, very slow as many tests are ran sequentially
-	# for profile guided optimizations. additionally it
-	# seems some of the training tests hang on certain
-	# e.g. architectures (x86) possibly due to grsec or musl.
+	sed -i -e "s|-flto |-flto=4 |g" configure configure.ac
 
 	./configure \
 		--prefix=/usr \
@@ -41,9 +37,12 @@ build() {
 		--enable-loadable-sqlite-extensions \
 		--enable-shared \
 		--with-computed-gotos \
+		--enable-optimizations \
 		--with-dbmliborder=gdbm:ndbm \
 		--with-system-expat \
-		--with-system-ffi
+		--with-system-ffi \
+		--with-ensurepip
+
 
 	# set thread stack size to 1MB so we don't segfault before we hit
 	# sys.getrecursionlimit()
@@ -119,6 +118,7 @@ package() {
 		$pkgdir/usr/lib/python*/distutils/command/*.exe
 
 	ln -sv /usr/bin/python3 $pkgdir/usr/bin/python
+	ln -sv /usr/bin/pip3 $pkgdir/usr/bin/pip
 }
 
 b2sums="bb3e0566afe28759e4ab129ad0986a0fc5103514f2e2b22ff4aa3973c3173ebdd24d4267fbaf903841814a611fd9ea122673e5a1918934366e5c0efaef9d7517  Python-3.8.5.tar.xz

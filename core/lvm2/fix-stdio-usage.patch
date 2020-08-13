@@ -38,12 +38,3 @@
 	/* Set in/out stream buffering before glibc */
 	if (set_buffering
  #ifdef SYS_gettid
-@@ -2254,7 +2254,7 @@
-	if (cmd->libmem)
-		dm_pool_destroy(cmd->libmem);
- 
--#ifndef VALGRIND_POOL
-+#if !defined(VALGRIND_POOL) && defined(__GLIBC__)
-	if (cmd->linebuffer) {
-	/* Reset stream buffering to defaults */
-	   if (is_valid_fd(STDIN_FILENO) &&

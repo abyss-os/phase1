@@ -1,12 +1,11 @@
 diff --git a/src/cmd/link/internal/ld/lib.go b/src/cmd/link/internal/ld/lib.go
-index 45cc872..544fe5a 100644
+index 0366bc7..4c5b3ff 100644
 --- a/src/cmd/link/internal/ld/lib.go
 +++ b/src/cmd/link/internal/ld/lib.go
-@@ -1312,28 +1312,6 @@ func (ctxt *Link) hostlink() {
- 		// can move symbols out of sections that rely on stable offsets
- 		// from the beginning of the section (like sym.STYPE).
- 		argv = append(argv, "-Wl,-znocopyreloc")
--
+@@ -1485,26 +1485,8 @@ func (ctxt *Link) hostlink() {
+ 			altLinker = "lld"
+ 		}
+ 
 -		if ctxt.Arch.InFamily(sys.ARM, sys.ARM64) && objabi.GOOS == "linux" {
 -			// On ARM, the GNU linker will generate COPY relocations
 -			// even with -znocopyreloc set.
@@ -16,7 +15,7 @@ index 45cc872..544fe5a 100644
 -			// generating COPY relocations.
 -			//
 -			// In both cases, switch to gold.
--			argv = append(argv, "-fuse-ld=gold")
+-			altLinker = "gold"
 -
 -			// If gold is not installed, gcc will silently switch
 -			// back to ld.bfd. So we parse the version information
@@ -27,7 +26,8 @@ index 45cc872..544fe5a 100644
 -					log.Fatalf("ARM external linker must be gold (issue #15696), but is not: %s", out)
 -				}
 -			}
--		}
++		if objabi.GOOS == "linux" {
++			altLinker = "lld"
+ 		}
  	}
- 
  	if ctxt.Arch.Family == sys.ARM64 && objabi.GOOS == "freebsd" {

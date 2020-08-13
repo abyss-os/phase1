@@ -1,0 +1,25 @@
+pkgname=cni-plugins
+pkgver=0.8.6
+pkgrel=0
+pkgdesc="Some standard networking plugins, maintained by the CNI team"
+options="!check"
+url="https://github.com/containernetworking/cni"
+arch="all"
+license="Apache-2.0"
+makedepends="go bash linux-dev"
+subpackages="$pkgname-doc"
+source="$pkgname-$pkgver.tar.gz::https://github.com/containernetworking/plugins/archive/v$pkgver.tar.gz"
+builddir="$srcdir/plugins-$pkgver"
+
+build() {
+	bash ./build_linux.sh
+}
+
+package() {
+	mkdir -p "$pkgdir/usr/libexec/$pkgname/"
+	cp -ar bin/* "$pkgdir/usr/libexec/$pkgname/"
+	mkdir -p $pkgdir/usr/share/licenses/$pkgname
+	install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}
+
+b2sums="89276e0f7fdbc782b30ff675abcb0f92f210771bb772269210416e17d6da443fe732774d9af8ae66f69847c8b48ee4dc6485f51e2156814cfd7e3ca8b455428f  cni-plugins-0.8.6.tar.gz"

@@ -1,5 +1,5 @@
 pkgname=libnftnl
-pkgver=1.1.5
+pkgver=1.1.7
 pkgrel=0
 pkgdesc="Netfilter library providing interface to the nf_tables subsystem"
 url="https://netfilter.org/projects/libnftnl"
@@ -40,4 +40,4 @@ package() {
 	make DESTDIR="$pkgdir" install
 }
 
-b2sums="cfd06084fb7de5dd6120a22faa43ac578f170e5209564579ff26bdf49e2b70b5b3944275861e32fcc7f6f2bb1d9f43bf51157665d0d5faea259e14cf930030c0  libnftnl-1.1.5.tar.bz2"
+b2sums="e21ca38edbc7c651a061fcd6db80278ba99b4fe0c92c1912039fd0a1cd4b7636c87e17f538eaad8c6b963748c7c77800eaa83ddb80d344865504329984ac9c96  libnftnl-1.1.7.tar.bz2"

@@ -1,0 +1,32 @@
+pkgname=podman
+pkgver=2.0.4
+pkgrel=0
+pkgdesc="Simple management tool for pods, containers, and images"
+url="https://podman.io/"
+options="!check"
+arch="all"
+license="Apache-2.0"
+depends="conmon cni-plugins runc iptables shadow skopeo"
+makedepends="go gpgme-dev libseccomp-dev libassuan-dev go-md2man btrfs-progs-dev bash"
+subpackages="$pkgname-doc $pkgname-openrc $pkgname-bash-completion $pkgname-zsh-completion"
+source="$pkgname-$pkgver.tar.gz::https://github.com/containers/podman/archive/v$pkgver.tar.gz
+	podman.initd
+	podman.confd
+	"
+
+build() {
+	export BUILDTAGS="exclude_graphdriver_devicemapper seccomp"
+	make podman docs
+}
+
+package() {
+	make install.bin install.man-nobuild install.completions install.cni \
+		PREFIX=/usr DESTDIR="$pkgdir"
+
+	install -Dm755 "$srcdir"/$pkgname.initd "$pkgdir"/etc/init.d/$pkgname
+	install -Dm644 "$srcdir"/$pkgname.confd "$pkgdir"/etc/conf.d/$pkgname
+}
+
+b2sums="a6a5760886d112b6cd69625137ec0aa9e368e8ff09f114123ff0b17ad2ef5b26b5eb645a5bbabc30a7cb900d7844587e0051969fefba9d5e8b5652a571857e09  podman-2.0.4.tar.gz
+5200eaff530f298d74a01fc5a4cf96328fb5ba364bc10cf6ff8f6e7f2ee23618b9bbbe93f3e439737d2199df6615b7c13261c6e598e47e87181553904890972e  podman.initd
+fc683e21a46e0076a315fb13f2df97c7c0942a0482998f0679a8a23315aa927818fa1f6acb2659adf16edcf000fb3020e73751916758a4dd24f73b6affc4b8b0  podman.confd"

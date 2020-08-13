@@ -1,0 +1,23 @@
+pkgname=conmon
+pkgver=2.0.20
+pkgrel=0
+pkgdesc="An OCI container runtime monitor"
+url="https://github.com/containers/conmon"
+arch="all"
+license="Apache-2.0"
+makedepends="glib-dev bash"
+source="$pkgname-$pkgver.tar.gz::https://github.com/containers/conmon/archive/v$pkgver.tar.gz"
+
+build() {
+	make
+}
+
+check() {
+	./bin/conmon --version
+}
+
+package() {
+	make install PREFIX=/usr DESTDIR="$pkgdir"
+}
+
+b2sums="30b7bf4968ebf14bb0bfd695824db3baa3648f7acec75be2b322b4ccb0cf8eca5c00eacc868f117b0118e1c9970aead9e491f3ebb10379ceb4518638b26ea4e9  conmon-2.0.20.tar.gz"

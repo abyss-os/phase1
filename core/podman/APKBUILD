@@ -1,6 +1,6 @@
 pkgname=podman
 pkgver=2.0.4
-pkgrel=1
+pkgrel=2
 pkgdesc="Simple management tool for pods, containers, and images"
 url="https://podman.io/"
 options="!check"
@@ -28,8 +28,8 @@ package() {
 	install -Dm755 "$srcdir"/$pkgname.initd "$pkgdir"/etc/init.d/$pkgname
 	install -Dm644 "$srcdir"/$pkgname.confd "$pkgdir"/etc/conf.d/$pkgname
 
-	install -Dm 744 "$srcdir"/containers.conf $pkgdir"/etc/containers/containers.conf
-	install -Dm 744 "$srcdir"/registries.conf $pkgdir"/etc/containers/registries.conf
+	install -Dm744 "$srcdir"/containers.conf "$pkgdir"/etc/containers/containers.conf
+	install -Dm744 "$srcdir"/registries.conf "$pkgdir"/etc/containers/registries.conf
 }
 
 b2sums="a6a5760886d112b6cd69625137ec0aa9e368e8ff09f114123ff0b17ad2ef5b26b5eb645a5bbabc30a7cb900d7844587e0051969fefba9d5e8b5652a571857e09  podman-2.0.4.tar.gz

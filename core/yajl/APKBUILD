@@ -1,0 +1,27 @@
+pkgname=yajl
+pkgver=2.1.0
+pkgrel=0
+pkgdesc="Yet Another JSON Library (YAJL)"
+url="http://lloyd.github.com/yajl/"
+arch="all"
+license="MIT"
+makedepends="cmake"
+subpackages="$pkgname-dev"
+source="${pkgname}-${pkgver}.tar.gz::https://github.com/lloyd/yajl/archive/${pkgver}.tar.gz"
+
+build() {
+	cmake -B build . \
+		-DCMAKE_BUILD_TYPE=None \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DCMAKE_INSTALL_PREFIX=/usr
+	make -C build
+}
+
+package() {
+	make install -C build DESTDIR="$pkgdir"
+
+	mkdir -p "$pkgdir"/usr/lib
+	mv "$pkgdir"/usr/share/pkgconfig "$pkgdir"/usr/lib/
+}
+
+b2sums="755ee1d9f8c59b730393468722dae9148cd63443a0c91f0e1894f5998b699303920b8f0748541bd280d132ee1c9dedd40ebc2a7e020a8fe65beb186f25af5402  yajl-2.1.0.tar.gz"

@@ -1,6 +1,6 @@
 pkgname=jansson
-pkgver=2.12
-pkgrel=1
+pkgver=2.13.1
+pkgrel=0
 pkgdesc="lightweight JSON library"
 url="http://www.digip.org/jansson/"
 arch="all"
@@ -34,4 +34,4 @@ package() {
 }
 
 
-b2sums="c1e1332383d3fe81f3db6b8b742a30f622a3e78656c6ef92636eb5e956f5844cc8531805a35800d204891953a0adf2fe6f3d30aebcd0f7f2a92ff485fe2ccc56  jansson-2.12.tar.bz2"
+b2sums="8f547c28d6c7e9776222448a8d7104f29b2d560851712db18a3d041e170459333216df7150be101d023ef200f6ce5c2eb91e8dfa8a2639dcb5a30556e89a8370  jansson-2.13.1.tar.bz2"

@@ -10,9 +10,9 @@ echo "current: ${DRONE_COMMIT_SHA}"
 if [ "${DRONE_BUILD_EVENT}" = "push" ]; then
 	mkdir -p ${HOME}/.abuild
 	echo "=> privkey"
-	curl -sfLo ${HOME}/.abuild/${ABYSS_PRIVKEY} ${ABYSS_KEYBASE}/${ABYSS_PRIVKEY}\?c=${DRONE_COMMIT} || exit 1
+	curl -4sfLo ${HOME}/.abuild/${ABYSS_PRIVKEY} ${ABYSS_KEYBASE}/${ABYSS_PRIVKEY}\?c=${DRONE_COMMIT} || exit 1
 	echo "=> pubkey"
-	curl -sfLo ${HOME}/.abuild/${ABYSS_PUBKEY} ${ABYSS_KEYBASE}/${ABYSS_PUBKEY}\?c=${DRONE_COMMIT} || exit 1
+	curl -4sfLo ${HOME}/.abuild/${ABYSS_PUBKEY} ${ABYSS_KEYBASE}/${ABYSS_PUBKEY}\?c=${DRONE_COMMIT} || exit 1
 	echo PACKAGER_PRIVKEY=${HOME}/.abuild/${ABYSS_PRIVKEY} > ${HOME}/.abuild/abuild.conf
 else
 	abuild-keygen -ain

@@ -1,6 +1,6 @@
 pkgname=skopeo
 pkgver=1.1.1
-pkgrel=0
+pkgrel=1
 pkgdesc="Work with remote images registries - retrieving information, images, signing content"
 url="https://github.com/containers/skopeo"
 arch="all"
@@ -16,7 +16,8 @@ makedepends="
 	ostree-dev
 	"
 subpackages="$pkgname-bash-completion"
-source="skopeo-$pkgver.tar.gz::https://github.com/containers/skopeo/archive/v$pkgver.tar.gz"
+source="skopeo-$pkgver.tar.gz::https://github.com/containers/skopeo/archive/v$pkgver.tar.gz
+		storage_mips.patch"
 builddir="$srcdir/src/github.com/containers/$pkgname"
 
 prepare() {

@@ -1,6 +1,6 @@
 pkgname=gcc
 pkgver=10.2.0
-pkgrel=1
+pkgrel=2
 pkgdesc="The GNU Compiler Collection"
 url="http://gcc.gnu.org"
 arch="all"
@@ -62,6 +62,8 @@ _gcclibdir=/usr/lib/gcc/${CTARGET}/$pkgver
 _gcclibexec=/usr/libexec/gcc/${CTARGET}/$pkgver
 
 _builddir="$srcdir/build"
+
+export PATH=/usr/$(apk --print-arch)-abyss-linux-musl/bin:${PATH}
 
 prepare() {
 	cd "$_gccdir"

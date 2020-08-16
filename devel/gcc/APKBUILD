@@ -1,6 +1,6 @@
 pkgname=gcc
 pkgver=10.2.0
-pkgrel=0
+pkgrel=1
 pkgdesc="The GNU Compiler Collection"
 url="http://gcc.gnu.org"
 arch="all"
@@ -11,7 +11,7 @@ _mpfr=4.0.2
 _isl=0.22
 _mpc=1.1.0
 makedepends="bison flex texinfo gawk zip zlib-dev linux-dev binutils gcc-bootstrap"
-subpackages="$pkgname-doc libatomic libgcc libgomp libstdc++:libcxx"
+subpackages="$pkgname-doc libatomic libatomic-dev:libatomicdev libgcc libgomp libstdc++:libcxx"
 
 provides="$pkgname-bootstrap"
 
@@ -183,8 +183,8 @@ package() {
 		-o -name libatomic.a -o -name libasan.a -o -name libtsan.a \) \
 		-a -type f`
 
-	mv "$pkgdir"/usr/lib/libgomp.spec "$pkgdir"/$_gcclibdir
-	mv "$pkgdir"/usr/lib/libitm.spec "$pkgdir"/$_gcclibdir
+	[[ -f "$pkgdir"/usr/lib/libgomp.spec ]] && mv "$pkgdir"/usr/lib/libgomp.spec "$pkgdir"/$_gcclibdir
+	[[ -f "$pkgdir"/usr/lib/libitm.spec ]] && mv "$pkgdir"/usr/lib/libitm.spec "$pkgdir"/$_gcclibdir
 
 	# remove ffi
 	rm -f "$pkgdir"/usr/lib/libffi* "$pkgdir"/usr/share/man/man3/ffi*
@@ -202,10 +202,18 @@ package() {
 libatomic() {
 	pkgdesc="GCC Atomic library"
 	depends=
-	replaces="gcc"
 
 	mkdir -p "$subpkgdir"/usr/lib
 	mv "$pkgdir"/usr/${_target:+$CTARGET/}lib/libatomic.so.* "$subpkgdir"/usr/lib/
+}
+
+libatomicdev() {
+	pkgdesc="GCC Atomic library (dev)"
+	depends="libatomic"
+
+	mkdir -p "$subpkgdir"/usr/lib
+	mv "$pkgdir"/usr/${_target:+$CTARGET/}lib/libatomic.so "$subpkgdir"/usr/lib/
+	mv "$pkgdir"/usr/${_target:+$CTARGET/}lib/libatomic.a "$subpkgdir"/usr/lib/
 }
 
 libcxx() {

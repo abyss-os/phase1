@@ -1,9 +1,9 @@
 pkgname=minio
-_pkgver='RELEASE.2020-05-16T01-33-21Z'
+_pkgver='RELEASE.2020-08-13T02-39-50Z'
 pkgver=${_pkgver#*.}
 pkgver=${pkgver%T*}
 pkgver=0.${pkgver//-}
-pkgrel=1
+pkgrel=0
 pkgdesc="An open source object storage server compatible with Amazon S3"
 pkgusers="minio"
 pkggroups="minio"
@@ -56,4 +56,4 @@ cleanup_srcdir() {
 
 b2sums="5800d387fce9587d8f5f2bc11730a96fee69138bbd10312b757bb7584d311fa8d5cd008cda7fee4a89faebae24da38b11c539edaf483b26b5fdea2b815c64719  minio.initd
 03430680488f25ded6c0feb12b73f71289915157043b2effd5b36125243e26a04957c054fec94885150cecb3e9e429342d0f89f91ad0c3fe0237d3bc596dc248  minio.confd
-a9330119597fb0da82ec4f4edccb722854d8710c11c5ed96a7da1edaa3b6cdc3450221bef367aac382f44d1f7712c21d7ae1f777e006e9055f25f863146ef2ea  minio-0.20200516.tar.gz"
+e5995a14089612cebb0a449c21fe023e9f2f7200ae9116c5c49f01dc87a2b1e38dc8e2f3e6a9bbe9febd6f2ce9e465538fb0fc474641b3aec82c774197b0f32a  minio-0.20200813.tar.gz"

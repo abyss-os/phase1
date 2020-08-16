@@ -1,15 +1,14 @@
 pkgname=nodejs
-pkgver=14.4.0
+pkgver=14.8.0
 pkgrel=0
 pkgdesc="JavaScript runtime built on V8 engine"
 url="https://nodejs.org/"
 arch="all"
 license="MIT"
 depends="ca-certificates"
-makedepends="linux-dev python3 libuv-dev c-ares-dev nghttp2-dev openssl-dev icu-dev brotli-dev ninja"
+makedepends="linux-dev python3 libuv-dev c-ares-dev nghttp2-dev openssl-dev icu-dev brotli-dev samurai"
 subpackages="$pkgname-dev $pkgname-doc"
 source="https://nodejs.org/dist/v$pkgver/node-v$pkgver.tar.gz
-	restore-mips64-configure_py.patch
 	ppc64-no-minimal-toc.patch"
 builddir="$srcdir/node-v$pkgver"
 
@@ -48,6 +47,5 @@ package() {
 	make DESTDIR="$pkgdir" BUILDTYPE=Release install
 }
 
-b2sums="23981ac3255cc28764542be728b571575869d5954600b7aba471bde487e5cda07ba6f790624a2ff9e9408e0e77d7f6e1c9c3e3a978d7dd02051ea7a8f6b5cd5f  node-v14.4.0.tar.gz
-892c6ef8def9693f471ac77c708573a7991bb532bbc33afa4741b34ebe0a64565bf926cd405c659124a1fa679b2d016d72b30121b7da8a5b31d0717168dba33a  restore-mips64-configure_py.patch
+b2sums="7b80aaabaefa21c6c3dee37c013babced18e405df9fdffd6cceaa1c0dbd7b539a584f5a6c39698af424e9568b4247265011e5a227c24c59bf117cda4b6e308b3  node-v14.8.0.tar.gz
 f6601a8b2d15fd5b61f74898360cc9fde290f5e85316e2262f309284404b076a7b99f3ee4c8d46a2ac052b1e4c00746a635ca87c108ee9e1477b3f416f74c41f  ppc64-no-minimal-toc.patch"

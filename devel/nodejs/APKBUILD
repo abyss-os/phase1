@@ -1,12 +1,12 @@
 pkgname=nodejs
 pkgver=14.8.0
-pkgrel=1
+pkgrel=2
 pkgdesc="JavaScript runtime built on V8 engine"
 url="https://nodejs.org/"
 arch="all"
 license="MIT"
 depends="ca-certificates"
-makedepends="linux-dev python3 libuv-dev c-ares-dev nghttp2-dev openssl-dev icu-dev brotli-dev ninja"
+makedepends="linux-dev python3 libuv-dev c-ares-dev nghttp2-dev openssl-dev icu-dev brotli-dev ninja libatomic-dev"
 subpackages="$pkgname-dev $pkgname-doc"
 source="https://nodejs.org/dist/v$pkgver/node-v$pkgver.tar.gz
 	ppc64-no-minimal-toc.patch"

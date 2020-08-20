@@ -112,7 +112,7 @@ prepare() {
 
 	_languages=c,c++
 
-	export AS=gnu-as CC=gcc CXX=g++ LD=gnu-ld
+#	export AS=gnu-as CC=gcc CXX=g++ LD=gnu-ld
 
 	msg "Configuring the following:"
 	echo ""

@@ -2,7 +2,7 @@
 # Maintainer:
 pkgname="wayland"
 pkgver="1.18.0"
-pkgrel=0
+pkgrel=1
 pkgdesc="Core Wayland window system code and protocol."
 url="https://wayland.freedesktop.org/"
 arch="all"

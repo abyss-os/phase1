@@ -2,7 +2,7 @@
 # Maintainer:
 pkgname="util-macros"
 pkgver="1.19.2"
-pkgrel=0
+pkgrel=1
 pkgdesc="Xorg macros."
 url="https://cgit.freedesktop.org/xorg/util/macros/"
 arch="all"

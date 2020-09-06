@@ -1,6 +1,6 @@
 pkgname="libxkbcommon"
 pkgver="0.10.0"
-pkgrel=0
+pkgrel=1
 pkgdesc="Keymap handling library for toolkits and window systems."
 url="https://xkbcommon.org/"
 arch="all"

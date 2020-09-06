@@ -2,7 +2,7 @@
 # Maintainer:
 pkgname="wayland"
 pkgver="1.18.0"
-pkgrel=1
+pkgrel=2
 pkgdesc="Core Wayland window system code and protocol."
 url="https://wayland.freedesktop.org/"
 arch="all"
@@ -16,16 +16,16 @@ builddir="$srcdir/wayland-$pkgver"
 
 build() {
 	# no docs, don't want to package doxygen and dot
-	meson \
-		--prefix=/usr \
-		--sysconfdir=/etc \
-		--mandir=/usr/share/man \
-		--localstatedir=/var \
+	local commonopts="--prefix=/usr --sysconfdir=/etc --mandir=/usr/share/man --localstatedir=/var"
+	case $CARCH in
+		mips64*) mkdir output && cd output && ../autogen.sh $commonopts --disable-documentation --enable-libraries && make -j${JOBS} ;;
+		*) meson \
+		$commonopts \
 		--buildtype=release \
 		-Ddefault_library=both \
 		-Ddocumentation=false \
-		. output
-	ninja -C output
+		. output && ninja -j${JOBS} -C output ;;
+	esac
 }
 
 check() {
@@ -34,7 +34,10 @@ check() {
 }
 
 package() {
-	DESTDIR="$pkgdir" ninja -C output install
+	case $CARCH in
+		mips64*) make DESTDIR="$pkgdir" install;;
+		*) DESTDIR="$pkgdir" ninja -C output install;;
+	esac
 }
 
 b2sums="a98da5e93aa4f3a1a11c73db5ba2381ddecb8fe905489dc8b4f5aece9d4b0be1632bbb637070209cdecd98b1cba0d07b583220892018e0ccdf807153ae297d61  wayland-1.18.0.tar.gz"

@@ -2,7 +2,7 @@
 # Maintainer:
 pkgname="xorgproto"
 pkgver="2020.1"
-pkgrel=0
+pkgrel=1
 pkgdesc="Xorg protocol headers."
 url="https://gitlab.freedesktop.org/xorg/proto/xorgproto"
 arch="all"

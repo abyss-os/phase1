@@ -1,0 +1,36 @@
+# Contributor:
+# Maintainer:
+pkgname="util-macros"
+pkgver="1.19.2"
+pkgrel=0
+pkgdesc="Xorg macros."
+url="https://cgit.freedesktop.org/xorg/util/macros/"
+arch="all"
+license="MIT"
+depends=""
+makedepends=""
+install=""
+subpackages="$pkgname-dev"
+source="https://www.x.org/releases/individual/util/util-macros-$pkgver.tar.gz"
+builddir="$srcdir/util-macros-$pkgver"
+
+build() {
+	./configure \
+		--build=$CBUILD \
+		--host=$CHOST \
+		--prefix=/usr \
+		--sysconfdir=/etc \
+		--mandir=/usr/share/man \
+		--localstatedir=/var
+	make
+}
+
+check() {
+	make check
+}
+
+package() {
+	make DESTDIR="$pkgdir" install
+}
+
+b2sums="3d2339e1048d691761bbf2a904122be342c49f414720f55b3fecb0e48c1bb0b1e50ea65d875cfd3777a9ea5c1dac363281c5082f3944921bcf2df54413bdc0d2  util-macros-1.19.2.tar.gz"

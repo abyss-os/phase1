@@ -1,0 +1,37 @@
+# Contributor:
+# Maintainer:
+pkgname="libxcb"
+pkgver="1.14"
+pkgrel=0
+pkgdesc="A replacement for Xlib."
+url="https://xcb.freedesktop.org/"
+arch="all"
+license="MIT"
+depends=""
+depends_dev=""
+makedepends="$depends_dev python3 xcb-proto-dev xcb-proto libxau-dev"
+install=""
+subpackages="$pkgname-dev $pkgname-doc"
+source="https://xorg.freedesktop.org/archive/individual/lib/libxcb-$pkgver.tar.gz"
+builddir="$srcdir/libxcb-$pkgver"
+
+build() {
+	./configure \
+		--build=$CBUILD \
+		--host=$CHOST \
+		--prefix=/usr \
+		--sysconfdir=/etc \
+		--mandir=/usr/share/man \
+		--localstatedir=/var
+	make
+}
+
+check() {
+	make check
+}
+
+package() {
+	make DESTDIR="$pkgdir" install
+}
+
+b2sums="da9c5e3d66a1601886c5562f788f02a8c4d33b128cf3d78233da0ab1c6e81d686918e8f936679fce8be28eeb9fba0a801e2bace38ae1440857c66f5e4fab0833  libxcb-1.14.tar.gz"

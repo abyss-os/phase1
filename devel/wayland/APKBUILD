@@ -1,0 +1,40 @@
+# Contributor:
+# Maintainer:
+pkgname="wayland"
+pkgver="1.18.0"
+pkgrel=0
+pkgdesc="Core Wayland window system code and protocol."
+url="https://wayland.freedesktop.org/"
+arch="all"
+license="MIT"
+depends=""
+makedepends="meson expat-dev libffi-dev libxml2-dev"
+install=""
+subpackages="$pkgname-dev"
+source="https://gitlab.freedesktop.org/wayland/wayland/-/archive/$pkgver/wayland-$pkgver.tar.gz"
+builddir="$srcdir/wayland-$pkgver"
+
+build() {
+	# no docs, don't want to package doxygen and dot
+	meson \
+		--prefix=/usr \
+		--sysconfdir=/etc \
+		--mandir=/usr/share/man \
+		--localstatedir=/var \
+		--buildtype=release \
+		-Ddefault_library=both \
+		-Ddocumentation=false \
+		. output
+	ninja -C output
+}
+
+check() {
+	# Replace with proper check command(s)
+	:
+}
+
+package() {
+	DESTDIR="$pkgdir" ninja -C output install
+}
+
+b2sums="a98da5e93aa4f3a1a11c73db5ba2381ddecb8fe905489dc8b4f5aece9d4b0be1632bbb637070209cdecd98b1cba0d07b583220892018e0ccdf807153ae297d61  wayland-1.18.0.tar.gz"

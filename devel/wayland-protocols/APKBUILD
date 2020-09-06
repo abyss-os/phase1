@@ -2,7 +2,7 @@
 # Maintainer:
 pkgname="wayland-protocols"
 pkgver="1.20"
-pkgrel=1
+pkgrel=2
 pkgdesc="Wayland protocols."
 url="https://wayland.freedesktop.org/"
 arch="all"

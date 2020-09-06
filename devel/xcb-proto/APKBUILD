@@ -2,7 +2,7 @@
 # Maintainer:
 pkgname="xcb-proto"
 pkgver="1.14"
-pkgrel=0
+pkgrel=1
 pkgdesc="xcb protocol specifications."
 url="https://xcb.freedesktop.org/"
 arch="all"

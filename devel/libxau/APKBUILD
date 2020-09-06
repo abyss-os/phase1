@@ -1,6 +1,6 @@
 pkgname="libxau"
 pkgver="1.0.9"
-pkgrel=0
+pkgrel=1
 pkgdesc="Xorg authorization library."
 url="https://www.x.org/"
 arch="all"

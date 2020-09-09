@@ -1,6 +1,6 @@
 pkgname="scdoc"
 pkgver="1.11.0"
-pkgrel=0
+pkgrel=1
 pkgdesc="A simple man page generator for POSIX systems."
 url="https://git.sr.ht/~sircmpwn/scdoc"
 arch="all"
@@ -13,7 +13,7 @@ subpackages="$pkgname-dev $pkgname-doc"
 source="scdoc-$pkgver.tar.gz::https://git.sr.ht/~sircmpwn/scdoc/archive/$pkgver.tar.gz"
 
 build() {
-	make
+	make PREFIX=/usr
 }
 
 package() {

@@ -1,6 +1,6 @@
 pkgname="fcft"
 pkgver="2.2.7"
-pkgrel=0
+pkgrel=1
 pkgdesc="A small font loading and glyph rasterization library."
 url="https://codeberg.org/dnkl/fcft"
 arch="all"
@@ -11,6 +11,7 @@ install=""
 subpackages="$pkgname-dev $pkgname-doc"
 source="$pkgname-$pkgver.tar.gz::https://codeberg.org/dnkl/fcft/archive/$pkgver.tar.gz"
 builddir="$srcdir/$pkgname"
+options="!check"
 
 build() {
 	meson \
@@ -19,13 +20,9 @@ build() {
 		--mandir=/usr/share/man \
 		--localstatedir=/var \
 		--buildtype=release \
+		--default-library=both \
 		. output
 	samu -C output
-}
-
-check() {
-	# Replace with proper check command(s)
-	:
 }
 
 package() {

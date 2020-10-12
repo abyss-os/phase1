@@ -1,6 +1,6 @@
 pkgname=llvm
-pkgver=11.0.0_rc1
-pkgrel=1
+pkgver=11.0.0
+pkgrel=0
 pkgdesc="$pkgname"
 arch="all"
 url=https://llvm.org
@@ -190,7 +190,7 @@ lld_aalt() {
     DESTDIR=$subpkgdir aalt-bin -R -g llvm -p ld -f /usr/bin/lld
 }
 
-b2sums="10ff3f08ff3780abb1d86ac67942e6aac52ff5daf820a2e3d23d8b79dbade1c5b1d398d0a577028d2d7c8759ab9a8b552a0305b5750310a015585c06cdadf844  llvmorg-11.0.0-rc1.tar.gz
+b2sums="3f95570240789fd68ddb747df817f5c6cdc9da40911bbe9ee3531c15ada9165e5002b1c2f778cf8735858485ea05a8754e3d3a5f4b15bdd6cb33d64a14692984  llvmorg-11.0.0.tar.gz
 8e23d19518bc2bba4009c30ba6d8c981e94b6e293a95a29ebbb9be7c9a7a40b21900a7e526529149847a42bd98899306a1af9b99c819e290d4a67e34f4ea32c3  mips_softfloat.patch
 b1784c607ad18ab83c0287dd22401c818046fb29c57ced4ea5399e691222ec18b20f5bcb3b6a745f569e738904aaf3ff98a1a01543277d1f5ed6534a19594c1f  mips_ppc_crt.patch
 7991221eca8a3f32607de7da91c02928d95cfae8d2af3516d403d2edd1a43bf7bb97280b6584146cd9ed51123b2bfe686a460ac1035131d115207d55a7debcfa  clang-pie-ssp.patch

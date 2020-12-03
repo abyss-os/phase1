@@ -1,5 +1,5 @@
 pkgname=cmake
-pkgver=3.18.0
+pkgver=3.19.1
 pkgrel=1
 pkgdesc="Cross-platform, open-source make system"
 url="https://www.cmake.org"

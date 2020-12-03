@@ -1,5 +1,5 @@
 pkgname=nodejs
-pkgver=14.8.0
+pkgver=14.15.1
 pkgrel=2
 pkgdesc="JavaScript runtime built on V8 engine"
 url="https://nodejs.org/"

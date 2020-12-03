@@ -1,5 +1,5 @@
 pkgname=python3
-pkgver=3.8.5
+pkgver=3.9.0
 _basever="${pkgver%.*}"
 pkgrel=2
 pkgdesc="A high-level scripting language"

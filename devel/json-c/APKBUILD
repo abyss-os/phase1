@@ -1,0 +1,39 @@
+pkgname="json-c"
+pkgver="0.15"
+_date="20200726"
+_pkgver="-$pkgver-$_date"
+pkgrel=0
+pkgdesc="A JSON implementation in C"
+url="https://github.com/json-c/json-c/"
+arch="all"
+license="MIT"
+depends=""
+makedepends="cmake"
+install=""
+subpackages="$pkgname-dev"
+source="$pkgname-$pkgver.tar.gz::https://github.com/json-c/json-c/archive/$pkgname-$pkgver.tar.gz"
+builddir="$srcdir/$pkgname-$pkgname-$pkgver"
+
+build() {
+	if [ "$CBUILD" != "$CHOST" ]; then
+		CMAKE_CROSSOPTS="-DCMAKE_SYSTEM_NAME=Linux -DCMAKE_HOST_SYSTEM_NAME=Linux"
+	fi
+	cmake \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_SHARED_LIBS=True \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_CXX_FLAGS="$CXXFLAGS" \
+		-DCMAKE_C_FLAGS="$CFLAGS" \
+		${CMAKE_CROSSOPTS} .
+	make
+}
+
+check() {
+	make test
+}
+
+package() {
+	make DESTDIR="$pkgdir" install
+}
+b2sums="407b54b9234795eb48d355501a41c1373e9471112a6c19921072a835809e1a83036ede01784d1c4abffc95cf4ec091e30f565283a7ce0b12912ac5e9c8d11aa6  json-c-0.15.tar.gz"

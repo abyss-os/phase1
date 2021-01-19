@@ -1,6 +1,6 @@
 pkgname=cmake
-pkgver=3.19.1
-pkgrel=1
+pkgver=3.19.2
+pkgrel=0
 pkgdesc="Cross-platform, open-source make system"
 url="https://www.cmake.org"
 arch="all"
@@ -62,4 +62,4 @@ package() {
 	make DESTDIR="$pkgdir" install
 }
 
-b2sums="3eba331eaa6b1d85baa5898836fc6106f2b5fcb10af85121806c429f41d09d4fde49bf87ef833c0e538ae5ccdf994e9cc86efa39b571ebcd429459ea37205c66  cmake-3.18.0.tar.gz"
+b2sums="f45727fd6b6e0e324f618577abbc7fb1830f05f01a9afea4f8713f5f62ede3a612a020ef97385cdd6ede4b575a3b6f63deb57123a222b71e2906a42cba3b3d7f  cmake-3.19.2.tar.gz"

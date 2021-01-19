@@ -1,6 +1,6 @@
 pkgname=zig
 pkgver=0.7.0
-pkgrel=0
+pkgrel=1
 pkgdesc="Zig!"
 url="https://github.com/ziglang/zig"
 arch="all"

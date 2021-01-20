@@ -1,5 +1,5 @@
 pkgname=drone-server
-pkgver=1.7.0
+pkgver=1.10.1
 pkgrel=0
 pkgdesc="Drone is a Container-Native, Continuous Delivery Platform"
 pkgusers="drone"
@@ -36,6 +36,6 @@ cleanup_srcdir() {
 	default_cleanup_srcdir
 }
 
-b2sums="6ec7f6cc71c07191bc975bfce4530e6e4433bfb413bc08a10306f3ffcba37a2a7976ff5494a10a81b163cda01ef67f3b57e18ccab0cd3bda6205648d45c5a820  drone-server-1.7.0.tar.gz
+b2sums="b777d6a3d040ce7efb5167e935c91b8d62c5a63aaebf9f78d10ca088db87bee5fbf30e541d6a02ddac281617c43afe34e67104dd5b4449e5c358042a421b6804  drone-server-1.10.1.tar.gz
 fb378888f44ef01c5b8223610057e9324f745d98c3ca938db9d229c9a66f7d94b712d575cb658f2fdd6de6df196992dc91f461c64ca3640c91e53dde4ffa10dd  drone-server.initd
 a1e4a9d94d58267b04e1a65977c9e3d43a1b1bb020b41e5cecc0f5483bd656ade025e09df1e2e74aab795e124112e3cf8daa454d2ffd08a2596819b8f4148ea9  drone-server.confd"

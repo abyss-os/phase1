@@ -1,5 +1,5 @@
 pkgname=dnsmasq
-pkgver=2.81
+pkgver=2.83
 pkgrel=0
 pkgdesc="A lightweight DNS, DHCP, RA, TFTP and PXE server"
 url="http://www.thekelleys.org.uk/dnsmasq/"
@@ -43,7 +43,7 @@ package() {
 	mv -v ${pkgdir}/usr/sbin ${pkgdir}/usr/bin
 }
 
-b2sums="e992d43d31329c3df9722da0a67dc91283b553cf21f1c297710e0c64175fa05aea631cdcbec1936433b4eace4ec0694328dbc79d5faa8b595a92d5a8cdc0ea49  dnsmasq-2.81.tar.gz
+b2sums="1047d9039284bddaaecea15c92155a0e3fcda0eb5cc18817cf947841cc76605964aed4ec34487ffcd4661f112e260265492345c7d0c0ba7d33493abe348a5d3e  dnsmasq-2.83.tar.gz
 a30d441999b78b3c53f1e5129d0a2e6e5835bc548ad53ec172e3b5c63afa7efb0e5f8c57b5104a93c45da5d151570c3a30e109c4061ea75d05afab2be1f90a39  dnsmasq.initd
 84d5cdb15236c9e1c83fa53d0e401df90e86c6687cc88f9ebba3e2a0987cad2ccf9bb82ac7b1fcd77a81fa6058a3cd3276fb8a8a76e13983628e92be95b39af1  dnsmasq.confd
 7366b5749210539a1b5d3dff4de22e2c90c7c3bca031c09a04a2fc348d0c29da57ab1e7d16e4173c8925fb6a7588cae6c894556cd2e0b3d3061f4780df31bb60  uncomment-conf-dir.patch"

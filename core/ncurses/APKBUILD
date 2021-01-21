@@ -1,20 +1,18 @@
 pkgname=ncurses
-pkgver=6.2_p20200301
+pkgver=6.2_p20210116
 _ver=${pkgver/_p/-}
-pkgrel=1
+pkgrel=0
 pkgdesc="Console display library"
 url="https://www.gnu.org/software/ncurses/"
 arch="all"
 options="!check" # "tests" are actual demo programs, not a test suite.
 license="MIT"
 subpackages="$pkgname-dev $pkgname-doc"
-source="${distfilesm}/ncurses-${_ver}.tgz"
+source="https://invisible-mirror.net/archives/ncurses/current/ncurses-${_ver}.tgz"
 builddir="$srcdir"/ncurses-$_ver
 replaces="$pkgname-libs"
 
 build() {
-	cd "$builddir"
-
 	./configure \
 		--build=$CBUILD \
 		--host=$CHOST \
@@ -37,26 +35,31 @@ build() {
 }
 
 package() {
-	cd "$builddir"
 	make -j1 DESTDIR="$pkgdir" install
 
-	# Install basic terms in /etc/terminfo
 	for i in ansi console dumb linux rxvt screen sun vt52 vt100 vt102 \
-			vt200 vt220 xterm xterm-color xterm-xfree86; do
-		local termfile=$(find "$pkgdir"/usr/share/terminfo/ -name "$i" 2>/dev/null) || true
-		local basedir=$(basename $(dirname "$termfile"))
+			vt200 vt220 xterm xterm-color xterm-xfree86 xterm-256color \
+			alacritty tmux tmux-256color terminator 'terminology*' \
+			vte vte-256color gnome gnome-256color kitty konsole konsole-256color \
+			konsole-linux putty putty-256color rxvt-256color 'st-*' \
+			screen-256color; do
+		local termfiles=$(find "$pkgdir"/usr/share/terminfo/ -name "$i" 2>/dev/null) || true
 
-		[ -z "$termfile" ] && continue
+		[ -z "$termfiles" ] && continue
 
-		install -d "$pkgdir"/etc/terminfo/$basedir
-		mv ${termfile} "$pkgdir"/etc/terminfo/$basedir/
-		ln -s ../../../../etc/terminfo/$basedir/$i \
-			"$pkgdir"/usr/share/terminfo/$basedir/$i
+		for termfile in $termfiles; do
+			local basedir=$(basename "$(dirname "$termfile")")
+			install -d "$pkgdir"/etc/terminfo/$basedir
+			mv "$termfile" "$pkgdir"/etc/terminfo/$basedir/
+			ln -s "../../../../etc/terminfo/$basedir/${termfile##*/}" \
+				"$pkgdir/usr/share/terminfo/$basedir/${termfile##*/}"
+		done
 	done
 }
 
 dev() {
 	default_dev
+
 	# force link against *w.so
 	for lib in ncurses ncurses++ form panel menu; do
 		echo "INPUT(-l${lib}w)" > "$subpkgdir"/usr/lib/lib${lib}.so
@@ -67,4 +70,4 @@ dev() {
 	ln -s libncurses.so "$subpkgdir"/usr/lib/libcurses.so
 }
 
-b2sums="81ef52ef596cef242ded75015a61926c3b8b66d94309cc54d15820b33b9f713de1d92de30f49ba7f97373c8c15880227525e57f858b7ce9acba66b6c29c60167  ncurses-6.2-20200301.tgz"
+b2sums="523ab808dc9147d564be50d20f684f162b78717428e2e6f29cb734682b5ae51c452d4a4d7f4c9d72df3ed963845c7a86b86be4f9f7c8f602b4669a5ee084c65d  ncurses-6.2-20210116.tgz"

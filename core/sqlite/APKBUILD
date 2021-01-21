@@ -1,6 +1,5 @@
 pkgname=sqlite
-pkgver=3.32.3
-_pkgver=replication4
+pkgver=3.34.1
 pkgrel=0
 pkgdesc="C library that implements an SQL database engine"
 url="https://www.sqlite.org/"
@@ -9,14 +8,28 @@ license="Public-Domain"
 makedepends="readline-dev tcl-dev"
 subpackages="$pkgname-doc $pkgname-dev"
 options="!check"
-builddir="$srcdir/sqlite-version-${pkgver}-${_pkgver}"
-source="$pkgname-$pkgver.tar.gz::https://github.com/canonical/sqlite/archive/version-${pkgver}+${_pkgver}.tar.gz
+
+_a=${pkgver%%.*}
+_b=${pkgver#$_a.}
+_b=${_b%%.*}
+_c=${pkgver#$_a.$_b.}
+_c=${_c%%.*}
+case $pkgver in
+	*.*.*.*)_d=${pkgver##*.};;
+	*.*.*)	_d=0;;
+esac
+[ $_b -lt 10 ] && _b=0$_b
+[ $_c -lt 10 ] && _c=0$_c
+[ $_d -lt 10 ] && _d=0$_d
+_ver=${_a}${_b}${_c}$_d
+
+# these variables depend on _ver being set
+builddir="$srcdir/$pkgname-autoconf-$_ver"
+source="https://www.sqlite.org/2021/sqlite-autoconf-$_ver.tar.gz
 	license.txt
 	"
 
 build() {
-	cd "$builddir"
-
 	./configure \
 		--build="$CBUILD" \
 		--host="$CHOST" \
@@ -27,20 +40,19 @@ build() {
 		--enable-static \
 		--enable-dynamic-extensions \
 		--enable-fts3 \
+		--enable-fts5 \
 		--enable-replication \
 		--disable-amalgamation \
 		--disable-tcl
 
 	# rpath removal
-#	sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
-#	sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
+	sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
+	sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 
 	make
 }
 
 package() {
-	cd "$builddir"
-
 	make -j1 DESTDIR="$pkgdir" install
 
 	install -Dm0644 sqlite3.1 \
@@ -49,5 +61,5 @@ package() {
 		"$pkgdir"/usr/share/licenses/$pkgname/license.txt
 }
 
-b2sums="b5a53f876b4fcc121a102956159199160814d5702ae1baa1be025e5a6641febf3f819a21b4259166aab3500ceac481a6d6454ddba9514208b59609670369cd5a  sqlite-3.32.3.tar.gz
+b2sums="2511175f47f58226e43010eb121208064ae7ab175d4af8094201b1d2360b670cb0de5c05d14b93f8ef3d1a198fed2fb26c3cfe54720306d6774b89e5e7d6eb7f  sqlite-autoconf-3340100.tar.gz
 847d2f10831a4a7a2dfb12c142c418fffc74829f3fde24f9a343bb6e0f7b7de110a909ca97da77aaa7462056f8ce009ffbcb86d7ecd3a4f36fa80ee598ca921e  license.txt"

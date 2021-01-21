@@ -15,8 +15,8 @@
 /core/libarchive	@abyss-os/core
 /core/linux		@abyss-os/core
 /core/musl		@abyss-os/core
-/devel/abuild		@joewholden
+/devel/abuild		@abyss-os/core
 /devel/binutils		@abyss-os/core
 /devel/gcc		@abyss-os/core
-/devel/go		@5paceToast
-/devel/llvm		@joewholden
+/devel/go		@abyss-os/core
+/devel/llvm		@abyss-os/core

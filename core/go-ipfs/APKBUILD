@@ -1,5 +1,5 @@
 pkgname=go-ipfs
-pkgver=0.6.0
+pkgver=0.7.0
 pkgrel=0
 pkgdesc="Inter Platnetary File System (IPFS), a peer-to-peer hypermedia distribution protocol"
 url="https://ipfs.io/"
@@ -8,16 +8,21 @@ license="MIT Apache-2.0"
 pkgusers="ipfs"
 pkggroups="ipfs"
 options="chmod-clean !check" # No test suite from upstream
-makedepends="go bash"
+makedepends="go bash openssl-dev"
 install="$pkgname.pre-install $pkgname.post-install"
 subpackages="$pkgname-openrc $pkgname-bash-completion:bashcomp:noarch"
 source="$pkgname-$pkgver.tar.gz::https://github.com/ipfs/go-ipfs/archive/v$pkgver.tar.gz
 	ipfs.initd
 	ipfs.confd"
+builddir="$srcdir/src/github.com/ipfs/go-ipfs"
 
 build() {
 	export GOPATH="$srcdir"
-	make build
+	export GOBIN="$GOPATH/bin"
+	mkdir -p  "$(dirname $builddir)"
+	mv "$srcdir"/$pkgname-$pkgver "$builddir"/
+	cd $builddir
+	make build GOTAGS=openssl
 }
 
 package() {
@@ -42,6 +47,6 @@ bashcomp() {
 		"$subpkgdir"/usr/share/bash-completion/completions/$pkgname
 }
 
-b2sums="56cfdd725365f72416770d11ec5e3e53fbff8660894179ba2017fa0b7bb996337495c2c23a2614acfd2b4f9b86c26ea8c62eee98b03f430ac8295b0b63de8d7a  go-ipfs-0.6.0.tar.gz
+b2sums="df6ce13348563c8362735a06adb715fec1f467359bd2be7fda4ad1d54e3bab6fa7e03573eff96245bd0e5ae470c8f9fa137b8bdf39a58fc1d896a512f336d794  go-ipfs-0.7.0.tar.gz
 57c1a12bc333fe7f0ae9cd95253197e1fd953942928c6ed16dc11d615e4f9a3e4e8113eee930f791fdd640f9805e4d666ff2614e456d628e4d744632434c9e90  ipfs.initd
 7ecaa40f2a4097690f9d8091da5891e0bbfb0f298bed4a59769c8d0ef978a2471865a01177950da5869b61f3b8c124f43eab97daf297c06efecdc25785a5846d  ipfs.confd"

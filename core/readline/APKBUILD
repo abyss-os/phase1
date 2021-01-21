@@ -1,6 +1,6 @@
 pkgname=readline
 pkgver=8.1.0
-pkgrel=0
+pkgrel=1
 _myver=${pkgver%.*}
 pkgdesc="GNU readline library"
 url="https://tiswww.cwru.edu/php/chet/readline/rltop.html"

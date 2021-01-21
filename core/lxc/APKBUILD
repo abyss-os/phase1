@@ -1,5 +1,5 @@
 pkgname=lxc
-pkgver=4.0.4
+pkgver=4.0.6
 _pkgver=${pkgver/_rc/.rc}
 pkgrel=0
 pkgdesc="Userspace interface for the Linux kernel containment features"
@@ -155,6 +155,6 @@ bashcomp() {
 	rmdir "$pkgdir"/etc/bash_completion.d
 }
 
-b2sums="0c4cc1ab53a8aecf3d4a06de3e3a4b7c9150a131db9eddd341e8eed1c7708a603eebb41298d733cb52554b3852dad5118cf674406aa35e8f68aaa208fbf95174  lxc-4.0.4.tar.gz
+b2sums="e2d9d281cf521575aeecefbcba0c7b7f336ab73193be94e760b37eb6f3423ec3520f194549def6f64c1662f22b7df5a03dfc6b4e6dac1bf229c5f726f51b4d43  lxc-4.0.6.tar.gz
 4e3382c79a203bb6d8dcf45ed77a583f0cb93f37ed04418aa060727ddd59b6038965c5a3b0355da4d10c2680e263121e808f5ae24cfbb6a08f640ee12e9729e9  lxc.initd
 279d1d9c71b273edf1ec40066e68a0c0ee7257d30f1728532a366aa0409013102dc9089680dcde5e8936710582759f9bffbb5026842f40b727ee67fcc4ef0784  lxc.confd"

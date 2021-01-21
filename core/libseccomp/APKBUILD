@@ -1,17 +1,15 @@
 pkgname=libseccomp
-pkgver=2.4.3
+pkgver=2.5.1
 pkgrel=0
 pkgdesc="An interface to the Linux Kernel's syscall filtering mechanism"
 url="https://github.com/seccomp/libseccomp"
 arch="all"
 license="LGPL-2.1"
-depends_dev="linux-dev"
-makedepends="$depends_dev"
+makedepends="linux-dev gperf"
 checkdepends="bash"
 subpackages="$pkgname-dev $pkgname-doc"
 source="https://github.com/seccomp/libseccomp/releases/download/v$pkgver/libseccomp-$pkgver.tar.gz
 	remove-redefinition-prctl.patch
-	riscv.patch
 	"
 
 build() {
@@ -37,6 +35,5 @@ package() {
 	make DESTDIR="$pkgdir" install
 }
 
-b2sums="272c9f1ca7e4059790f633a79cae8612831aa483d28630fb85b31dc2be0192907a8897819d835b61324e0b3fb0d77b8781e2a85e9750ef8d7974d8680b8cdea3  libseccomp-2.4.3.tar.gz
-59101d415f2c2b2742d38ecaccb94c9e03f13517795e5ba8420bf5dd35491cd3746e6e1a624f39cba2e415598e4d9c33f24ba6f0fd201cbafef314f0b7fb9ab5  remove-redefinition-prctl.patch
-4e7f6986f3eca31cbf57b7cd8900bf501b8eb2b1aeea5242c5374d09299ecb907f1b615dde271d50156d21b5eb67d7768aa95b0555022b4248ed76b98a160b91  riscv.patch"
+b2sums="683ae7536c0cba36f4d30640b42361171fc34b7cb04985ea56e64369df29c440361a0205385b14580cc0e481e0f9ffd0b0e8ebd4ac98817ed59298db6b274c35  libseccomp-2.5.1.tar.gz
+59101d415f2c2b2742d38ecaccb94c9e03f13517795e5ba8420bf5dd35491cd3746e6e1a624f39cba2e415598e4d9c33f24ba6f0fd201cbafef314f0b7fb9ab5  remove-redefinition-prctl.patch"

@@ -1,5 +1,5 @@
 pkgname=binutils
-pkgver=2.34
+pkgver=2.35.1
 pkgrel=0
 pkgdesc="Tools necessary to build programs"
 url="https://www.gnu.org/software/binutils/"
@@ -110,7 +110,7 @@ aalt() {
 	DESTDIR="$subpkgdir" aalt-bin -R -g gold -p ld -f /usr/bin/gnu-ld.gold
 }
 
-b2sums="11f066c4025c6aed21b06549a33baf772ddaa5d924098ddf8e3abf3aa51102c70ecb9f2cead48cd6ec96f4c4490cee0de3102c890ae839c1ed4fc0f005762946  binutils-2.34.tar.bz2
+b2sums="4e8772fcc41a2b25128c77c2846c12da5d002e8633a4875fe4e1acff542449a98d59147dfb7e7e51bacf6b73cb208c28b052a6ed692f5a800641135ab39a1484  binutils-2.35.1.tar.bz2
 ef739456181984b988abf9b6788319122284b879317868ff32750508166435f01af23839eff178e60092d55851c1cb6a2d1ca8d4e7c3a7a29be5be7997b7b5d7  binutils-ld-fix-static-linking.patch
 411da71de153a922193ba1be212c86a0e5b6e6d4247fd18d24278453720b95724408ccad797a8f57758953ad958792230778d9cf49304a3678226de379e65fe3  gold-mips.patch
 6603d36fb11d969952cd1100305d553838d3ae85e0bc6113b12b10399de1a7d50bfec732ad1f78795505b0b6a9d942764ae750bc06569616049fd82d9dcbe334  mips64_default_emul.patch"

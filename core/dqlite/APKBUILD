@@ -1,12 +1,12 @@
 pkgname="dqlite"
 pkgver="1.6.0"
-pkgrel=0
-pkgdesc="libco is a cooperative multithreading library written in C89."
+pkgrel=1
+pkgdesc="dqlite"
 url="https://dqlite.io"
 arch="all"
 license="LGPLv3"
-depends="libco sqlite raft libuv-dev"
-makedepends="autoconf automake libco-dev sqlite-dev raft-dev libuv-dev"
+depends="sqlite raft libuv-dev"
+makedepends="autoconf automake sqlite-dev raft-dev libuv-dev"
 subpackages="$pkgname-dev"
 source="$pkgname-$pkgver::https://github.com/canonical/dqlite/archive/v${pkgver}.tar.gz"
 builddir="$srcdir/$pkgname-$pkgver"

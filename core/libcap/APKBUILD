@@ -1,6 +1,6 @@
 pkgname=libcap
-pkgver=2.33
-pkgrel=1
+pkgver=2.46
+pkgrel=0
 pkgdesc="POSIX 1003.1e capabilities"
 options="checkroot"
 arch="all"
@@ -9,8 +9,7 @@ url="http://www.friedhoff.org/posixfilecaps.html"
 makedepends="linux-dev perl attr-dev"
 checkdepends="bash"
 options="!check"
-source="https://kernel.org/pub/linux/libs/security/linux-privs/libcap2/libcap-$pkgver.tar.xz
-		pthread.patch"
+source="https://kernel.org/pub/linux/libs/security/linux-privs/libcap2/libcap-$pkgver.tar.xz"
 subpackages="$pkgname-doc $pkgname-dev"
 builddir="$srcdir"/$pkgname-$pkgver
 
@@ -34,5 +33,4 @@ package() {
 	mv -v ${pkgdir}/usr/sbin ${pkgdir}/usr/bin
 }
 
-b2sums="9a34b6e871c6175da5ef665ab7a5ed8b9889f598875f58a6e0b7aef9b6b2737f2a85bb0a6e259a730a3fcea3b8ebbec793b52ee5dec7d11fcf236dfb2148eb83  libcap-2.33.tar.xz
-243fdfbde6cd14697511ffc5032d990cc06cd64cbfce69aa9831e511ddc1e677c26500bee30eafddd47df8188c1eed815bdb2777830727abbfdfbba7226ee32e  pthread.patch"
+b2sums="22df1dcf37a920e831c47edad62df2b3e35b5360605ed24bdb9199ac8ba1fd30cd20492f8a9eae25232cc042cbef9a89a3649e0d06412b84c58f12e7795844bc  libcap-2.46.tar.xz"

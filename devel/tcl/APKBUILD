@@ -1,37 +1,19 @@
 pkgname=tcl
-pkgver=8.6.10
+pkgver=8.6.11
 pkgrel=0
 pkgdesc="The Tcl scripting language"
 url="http://tcl.sourceforge.net/"
 arch="all"
 license="TCL"
-depends=""
 depends_dev="tcl"
 makedepends="zlib-dev"
 subpackages="$pkgname-doc $pkgname-dev"
-source="${distfilesm}/$pkgname$pkgver-src.tar.gz
-	tcl-stat64.patch
-	"
+source="${distfilesm}/$pkgname$pkgver-src.tar.gz"
 
 _major=${pkgver%.*}
 builddir="$srcdir"/tcl${pkgver}/unix
 
-prepare() {
-	cd "$srcdir"/tcl${pkgver}
-	for i in $source; do
-		case $i in
-		*.patch) msg "$i"; patch -p1 -i "$srcdir"/$i || return 1;;
-		esac
-	done
-	rm -r pkgs/sqlite3*
-}
-
 build() {
-	local _64bit="--disable-64bit"
-	case "$CARCH" in
-		x86_64) _64bit="--enable-64bit";;
-	esac
-	cd "$builddir"
 	./configure \
 		--build=$CBUILD \
 		--host=$CHOST \
@@ -40,13 +22,11 @@ build() {
 		--sysconfdir=/etc \
 		--mandir=/usr/share/man \
 		--localstatedir=/var \
-		--with-system-sqlite \
-		$_64bit
+		--with-system-sqlite
 	make
 }
 
 package() {
-	cd "$builddir"
 	export LD_LIBRARY_PATH="$_builddir"
 	make -j1 INSTALL_ROOT="${pkgdir}" install install-private-headers
 
@@ -76,5 +56,4 @@ dev() {
 	done
 }
 
-b2sums="a95b2fa88309c52a67722e8406b062575885504af6a45bce5ced5876b34af0856c34651ccff5d558b55fbdd012c2c46bfe268065644083854f6a634fceddece3  tcl8.6.10-src.tar.gz
-25ae7e76714ebc320d3953bb5475909596e96431d2a553b13fd4a3e3363bf735da6d2c4dc47c5b96df329f20a94422f2a2e97be98f7de9a0cf8f0498a6dbd768  tcl-stat64.patch"
+b2sums="9c6fee5ab54af610518a214822d58caa0e0dcf79b8c9735e3d3e280e4339c8484afb2599f12d71da4a6e6b37639fa1da2b62c13d30579231ca01e00dbf8d1d21  tcl8.6.11-src.tar.gz"

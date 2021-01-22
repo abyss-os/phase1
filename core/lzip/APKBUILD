@@ -1,6 +1,6 @@
 pkgname=lzip
-pkgver=1.21
-pkgrel=2
+pkgver=1.22
+pkgrel=0
 pkgdesc="Lzip is a lossless data compressor"
 url="http://www.nongnu.org/lzip/lzip.html"
 arch="all"
@@ -32,4 +32,4 @@ package() {
 	make DESTDIR=$pkgdir install
 }
 
-b2sums="07658ec901bdfc255fef5af24b62614b2db9821b9a2820daa5137fd47ede0b68bbf3eac340ad5484d2ef7011d15c2eaccf19abc9e33b5c96273fc9b9d323083e  lzip-1.21.tar.gz"
+b2sums="d6d4faaff981d64219e27364c7072f9e1309507220e80d4195d866c3429db537a9fa9b7a4ac67ef5c267cad0f6e43ce997a98f1e47a88b228bd1aa437c991140  lzip-1.22.tar.gz"

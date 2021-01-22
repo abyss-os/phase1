@@ -1,6 +1,6 @@
 pkgname=zstd
-pkgver=1.4.5
-pkgrel=1
+pkgver=1.4.8
+pkgrel=0
 pkgdesc="Zstandard - Fast real-time compression algorithm"
 url="https://www.zstd.net"
 arch="all"
@@ -8,8 +8,7 @@ license="BSD-3-Clause GPL-2.0-or-later"
 checkdepends="file"
 makedepends="gnugrep"
 subpackages="$pkgname-dev $pkgname-doc"
-source="zstd-$pkgver.tar.gz::https://github.com/facebook/zstd/archive/v$pkgver.tar.gz
-	"
+source="zstd-$pkgver.tar.gz::https://github.com/facebook/zstd/archive/v$pkgver.tar.gz"
 options="!check"
 
 build() {
@@ -18,18 +17,9 @@ build() {
 	make HAVE_PTHREAD=1 HAVE_ZLIB=0 HAVE_LZMA=0 HAVE_LZ4=0 MOREFLAGS="-O2"
 }
 
-check() {
-	cd "$builddir"
-	case "$CARCH" in
-		armhf) return 0 ;; # Fail on CI
-		arm*) make check ;;
-		*) make test ;;
-	esac
-}
-
 package() {
 	cd "$builddir"
 	make PREFIX="/usr" DESTDIR="$pkgdir" install
 }
 
-b2sums="1497d4e87040e5c71466468ebf1a57f4073666f2b005229925bc1d95a4b4fcb2a51d88bb79be20f21860e5750da42f8aac21d2997421d07ba37bd6bb12a28b55  zstd-1.4.5.tar.gz"
+b2sums="950d03c408e9d3fc2081969553c46247a1b8c13a22542effbf70373625bbfeb2a810e0adf0e1c6180cef590e7a28487191b1a577982fddc7a00d1507b461efd5  zstd-1.4.8.tar.gz"

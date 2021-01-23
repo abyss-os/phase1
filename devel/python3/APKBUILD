@@ -1,7 +1,7 @@
 pkgname=python3
 pkgver=3.9.1
 _basever="${pkgver%.*}"
-pkgrel=0
+pkgrel=1
 pkgdesc="A high-level scripting language"
 url="https://www.python.org"
 arch="all"
@@ -30,6 +30,11 @@ build() {
 
 	sed -i -e "s|-flto |-flto=4 |g" configure configure.ac
 
+	case "${CARCH}" in
+		riscv64) _opts="--disable-optimizations --disable-profiling";;
+		*) _opts="--enable-optimizations";;
+	esac
+
 	./configure \
 		--prefix=/usr \
 		--libdir=/usr/lib \
@@ -37,12 +42,11 @@ build() {
 		--enable-loadable-sqlite-extensions \
 		--enable-shared \
 		--with-computed-gotos \
-		--enable-optimizations \
 		--with-dbmliborder=gdbm:ndbm \
 		--with-system-expat \
 		--with-system-ffi \
-		--with-ensurepip
-
+		--with-ensurepip \
+		$_opts
 
 	# set thread stack size to 1MB so we don't segfault before we hit
 	# sys.getrecursionlimit()

@@ -1,38 +1,23 @@
-# this is a mess, needs to be rewritten
 pkgname=iptraf-ng
-pkgver=1.1.4
+pkgver=1.2.1
 pkgrel=0
 pkgdesc="An IP Network Monitoring tool"
-url="https://fedorahosted.org/iptraf-ng/"
+url="https://github.com/iptraf-ng/iptraf-ng"
 arch="all"
 license="GPL-2.0"
 makedepends="ncurses-dev linux-dev"
 subpackages="$pkgname-doc"
-source="http://pkgs.fedoraproject.org/repo/pkgs/iptraf-ng/$pkgname-$pkgver.tar.gz/de27cfeeede96e2acfb0edc8439b034a/$pkgname-$pkgver.tar.gz"
-
+provides="iptraf"
+source="${pkgname}-${pkgver}.tar.gz::https://github.com/iptraf-ng/iptraf-ng/archive/v${pkgver}.tar.gz"
 _builddir="$srcdir"/iptraf-ng-$pkgver
-prepare() {
-	cd "$_builddir"
-	for i in $source; do
-		case $i in
-		*.patch) msg $i; patch -p1 -i "$srcdir"/$i || return 1;;
-		esac
-	done
-}
 
 build() {
-	cd "$_builddir"
-	CFLAGS="$CFLAGS -D_GNU_SOURCE -std=gnu99" ./configure \
-		--build=$CBUILD \
-		--host=$CHOST \
-		--prefix=/usr \
-		--sbindir=/usr/bin
-	make
+	make CC=${CC} DESTDIR=/tmp/f prefix=/usr sbindir=/usr/bin
 }
 
 package() {
-	cd "$_builddir"
-	make DESTDIR="$pkgdir" install || return 1
+	make CC=${CC} DESTDIR=${pkgdir} prefix=/usr sbindir=/usr/bin install
+	ln -sv /usr/bin/iptraf-ng ${pkgdir}/usr/bin/iptraf
 }
 
-b2sums="c06fdc25838901fc5528057ade5ebe28b5679a6a545f461cef2a5f4d3cbc1346a7ab3e94f4fe317a1760067e480c3c622df1027591d978b0ac1236ba9203e9da  iptraf-ng-1.1.4.tar.gz"
+b2sums="9b8df7fa24711b401464d492993b9c27424ec7ab6230218d1b792a66e5fb60c99b5cdb92ac1b5a6da578c4b10da79333f248f14d10e74057118aadf50263a4ed  iptraf-ng-1.2.1.tar.gz"

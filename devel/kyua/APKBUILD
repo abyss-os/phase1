@@ -1,21 +1,17 @@
-# Maintainer: 
 pkgname=kyua
 pkgver=0.13
-pkgrel=4
+pkgrel=5
 pkgdesc="testing framework for infrastructure software"
 url="https://github.com/jmmv/kyua"
 arch="all"
 license="BSD"
-depends=""
 makedepends="atf-dev lutok-dev sqlite-dev"
-install=""
 options="!checkroot"
 subpackages="$pkgname-doc"
 source="https://github.com/jmmv/kyua/releases/download/kyua-$pkgver/kyua-$pkgver.tar.gz"
 builddir="$srcdir/kyua-$pkgver"
 
 build() {
-	cd "$builddir"
 	CC=$CC CXX=$CXX ./configure \
 		--build=$CBUILD \
 		--host=$CHOST \
@@ -28,7 +24,6 @@ build() {
 }
 
 package() {
-	cd "$builddir"
 	make -j1 DESTDIR="$pkgdir" install
 }
 

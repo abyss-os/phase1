@@ -1,6 +1,6 @@
 pkgname=json-c
 pkgver=0.15
-pkgrel=0
+pkgrel=1
 pkgdesc="A JSON implementation in C"
 url="https://github.com/json-c/json-c/wiki"
 arch="all"
@@ -12,7 +12,7 @@ builddir="$srcdir"/json-c-$pkgver
 
 build() {
 	mkdir -p build && cd build
-	cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=/usr/lib -DBUILD_SHARED_LIBS=On -DBUILD_STATIC_LIBS=On -DENABLE_RDRAND=On -DENABLE_THREADING=On ..
+	cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=/usr/lib -DBUILD_SHARED_LIBS=On -DBUILD_STATIC_LIBS=On -DENABLE_RDRAND=On -DENABLE_THREADING=On ${builddir}
 	cmake --build .
 }
 

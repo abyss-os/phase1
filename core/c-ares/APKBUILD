@@ -1,22 +1,19 @@
 pkgname=c-ares
-pkgver=1.16.1
-pkgrel=1
+pkgver=1.17.1
+pkgrel=0
 pkgdesc="An asynchronously DNS/names resolver library"
 url="https://c-ares.haxx.se/"
 arch="all"
-options="!checkroot !check"
 license="MIT"
 subpackages="$pkgname-doc $pkgname-dev"
 source="https://c-ares.haxx.se/download/$pkgname-$pkgver.tar.gz"
 
 prepare() {
 	default_prepare
-
 	sed -i '/^TEST_P(MockChannelTest, HostAliasUnreadable) {$/,/^}$/d' test/ares-test-mock.cc
 }
 
 build() {
-	cd "$builddir"
 	PATH_SEPARATOR=: ./configure \
 		--build=$CBUILD \
 		--host=$CHOST \
@@ -29,15 +26,12 @@ build() {
 }
 
 check() {
-	cd "$builddir"
-
 	make -C test check
 }
 
 
 package() {
-	cd "$builddir"
 	make -j1 DESTDIR="$pkgdir" install
 }
 
-b2sums="0d87538f5d6cac5b6b9c92d6ba5525af0e580e6506bee9270318f0951aaccdc7e135b446381e8150241d367789ccf2f73dbb333d45de4dbb5a87af05483063a8  c-ares-1.16.1.tar.gz"
+b2sums="31dac21ecae231e2a201dc1ba954c1a0663a06f93eb8e7e033ca3c6d385f53e07af0b04854739f1ee8a7f0693f67f620143e152ef092b49342c62279a0480905  c-ares-1.17.1.tar.gz"

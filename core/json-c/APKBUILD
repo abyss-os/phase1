@@ -1,45 +1,29 @@
 pkgname=json-c
-pkgver=0.13.1
+pkgver=0.15
 pkgrel=0
 pkgdesc="A JSON implementation in C"
 url="https://github.com/json-c/json-c/wiki"
 arch="all"
 license="MIT"
-makedepends="autoconf automake libtool"
+makedepends="cmake samurai"
 subpackages="$pkgname-dev"
 source="https://s3.amazonaws.com/${pkgname}_releases/releases/$pkgname-${pkgver}.tar.gz"
-
 builddir="$srcdir"/json-c-$pkgver
-prepare() {
-	cd "$builddir"
-	default_prepare
-	autoreconf -f -v -i
-}
 
 build() {
-	cd "$builddir"
-	export CFLAGS="$CFLAGS -Wno-implicit-int-float-conversion -Wno-string-plus-int"
-	./configure --prefix=/usr \
-		--build=$CBUILD \
-		--host=$CHOST \
-		--sysconfdir=/etc \
-		--mandir=/usr/share/man \
-		--infodir=/usr/share/info \
-		--localstatedir=/var \
-		--enable-shared \
-		ac_cv_func_malloc_0_nonnull=yes \
-		ac_cv_func_realloc_0_nonnull=yes
-	make -j1
+	mkdir -p build && cd build
+	cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=/usr/lib -DBUILD_SHARED_LIBS=On -DBUILD_STATIC_LIBS=On -DENABLE_RDRAND=On -DENABLE_THREADING=On ..
+	cmake --build .
 }
 
 check() {
-	cd "$builddir"
-	make USE_VALGRIND=0 check
+	cd build
+	cmake --check .
 }
 
 package() {
-	cd "$builddir"
-	make -j1 DESTDIR="$pkgdir" install
+	cd build
+	DESTDIR=$pkgdir cmake --install .
 }
 
-b2sums="1da310309f9ce03306a9fd4a161670e460cf0b2222348df7c006902390f74a4cf100aab1ce6ac8a361a278dd917c114a278de5b3445817f3a40ae287478add46  json-c-0.13.1.tar.gz"
+b2sums="ae34f6dd45ebee55e6413ecb234e48fa5ae1c17e6fa12462aaaa04e8801457060e176abe90d76d04ad0ee9b903ff467bc3b8ed5816792da175aad8862b9d168e  json-c-0.15.tar.gz"

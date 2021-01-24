@@ -1,6 +1,6 @@
 pkgname=lutok
 pkgver=0.4
-pkgrel=1
+pkgrel=2
 pkgdesc="lightweight C++ API for Lua"
 url="https://github.com/jmmv/lutok"
 arch="all"

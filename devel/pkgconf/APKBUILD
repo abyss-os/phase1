@@ -1,6 +1,6 @@
 pkgname=pkgconf
 pkgver=1.7.3
-pkgrel=0
+pkgrel=1
 pkgdesc="development framework configuration tools"
 url="https://git.dereferenced.org/pkgconf/pkgconf"
 arch="all"
@@ -11,6 +11,9 @@ source="https://distfiles.dereferenced.org/pkgconf/pkgconf-$pkgver.tar.xz"
 subpackages="$pkgname-doc $pkgname-dev"
 checkdepends="kyua atf"
 builddir="$srcdir/$pkgname-$pkgver"
+case "${CARCH}" in
+	ppc64*) options="!check";;
+esac
 
 build() {
 	./configure \

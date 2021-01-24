@@ -1,5 +1,5 @@
 pkgname=iproute2
-pkgver=5.8.0
+pkgver=5.10.0
 pkgrel=0
 pkgdesc="IP Routing Utilities"
 url="https://www.linuxfoundation.org/collaborate/workgroups/networking/iproute2"
@@ -54,6 +54,6 @@ bashcomp() {
 	rmdir -p "$pkgdir"/usr/share 2>/dev/null || true
 }
 
-b2sums="5d86af8d981f5e9582d5eb0aaffbe15891964a86f3a1da408ce2f46101b1bb6beac8d4492dab1865391c212ef596c9256b680bdcb346d440e38cbb636a23cdc1  iproute2-5.8.0.tar.xz
+b2sums="8c17e65f03427f45b71dc17b289b272545549a6687257498676a23e4fdc4a590a7215bfdba3c7ac4b1ccde6c38ba8e3eb222eea2532374fa9680633aa198d347  iproute2-5.10.0.tar.xz
 5c5024be6f6be97411b1284fe4f3dc5b180f7cacf79b60fa4118b95d60958252ee37ab3dd61eaa83fb4785dfcaf082bcbf37a14714a7eb6ebbae368967c6e1e6  fix-install-errors.patch
 f6b7dbe86074993aa279adef50954c6ae8cdb58a658e785db23840ac89403877eac94963b37dce95b2076bbb009a13e73a2c41458b67d6b65d0b3e6232538933  musl-fixes.patch"

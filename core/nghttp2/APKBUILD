@@ -1,6 +1,6 @@
 pkgname=nghttp2
-pkgver=1.41.0
-pkgrel=1
+pkgver=1.42.0
+pkgrel=0
 pkgdesc="Experimental HTTP/2 client, server and proxy"
 url="https://nghttp2.org"
 arch="all"
@@ -12,18 +12,13 @@ source="https://github.com/nghttp2/$pkgname/releases/download/v$pkgver/nghttp2-$
 builddir="$srcdir"/$pkgname-$pkgver
 
 check() {
-	cd "$builddir"
 	make check
-	# integration tests require go, which is only available
-	# in community at the moment of writing. Disabling until
-	# go is moved into main
 #	cd "integration-tests"
 #	make itprep
 #	make it
 }
 
 build() {
-	cd "$builddir"
 	autoreconf -vif
 	CC=$CC CXX=$CXX ./configure \
 		--build=$CBUILD \
@@ -48,5 +43,5 @@ package() {
 	make DESTDIR="$pkgdir" install
 }
 
-b2sums="8dbd5f80bb9617d792e2eece09f6cae82907ad3a14a90084578b213191015c32ac38de87d9a39246651087b5d0e9c6c624ff806a0690973b5faa8624ee033d8f  nghttp2-1.41.0.tar.xz
+b2sums="39431619bd3c9a66eb217065bb29ceba8f3fda376343687b4774ed5e73c634f51142b407f9515ae5ad4363af5cf57c0199f9bfddf5bc08dc587419ec03cf5b45  nghttp2-1.42.0.tar.xz
 901343a623a23e32eaae28eb18c0297a60919c8fe185e0a884dd9f9ac411108d45947300ad509c4386ad78a92157b1ca1a2d7430246c0bca26ca882c5046e20a  remove-mruby-tests.patch"

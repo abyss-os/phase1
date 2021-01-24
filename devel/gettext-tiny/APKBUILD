@@ -1,6 +1,6 @@
 pkgname=gettext-tiny
-pkgver=0.3.1
-pkgrel=1
+pkgver=0.3.2
+pkgrel=0
 pkgdesc="gettext-tiny"
 url="https://github.com/sabotage-linux/gettext-tiny"
 arch="all"
@@ -14,14 +14,12 @@ options="!check"
 provides="gettext"
 
 build() {
-	cd "$builddir"
 	make CC=$CC CXX=$CXX CFLAGS="$CFLAGS" CXXFLAGS="$CXXFLAGS" LIBINTL=NONE
 }
 
 package() {
-	cd "$builddir"
 	make CC=$CC CXX=$CXX CFLAGS="$CFLAGS" CXXFLAGS="$CXXFLAGS" LIBINTL=NONE DESTDIR=$pkgdir prefix=/usr install
 }
 
-b2sums="f9d439ed3f9624fe892a1216757772490bb87716ce46483fd2bd173d65cf70d9826c3c75ba79728f3fcb14a3ddcbebf393ef95e469cf0cac1969cb93e1dda303  gettext-tiny-0.3.1.tar.xz
+b2sums="ee28fc224cc6fc492e92e5010a8eb4c4da0254a67290f07f6c48484bceb33dcd95ba1e2a1bd620137d5b9706dc2401f993783b16a804f8545682f8265084d063  gettext-tiny-0.3.2.tar.xz
 fb682a71b088e62888c6f14cd0e15c08a76e4df55fcc60cc478980e3335ce76433946e18ccb057bfe519e754c1494341e3d2fa21a2a5d941a46b7d01f98f5495  fix_prefix.patch"

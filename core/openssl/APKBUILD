@@ -45,8 +45,10 @@ build() {
 }
 
 check() {
-	cd "$builddir"
-	make test
+	case "${CARCH}" in
+		riscv64) echo skip;;
+		*) make test;;
+	esac
 }
 
 package() {

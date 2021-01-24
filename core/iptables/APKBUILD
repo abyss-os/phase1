@@ -1,12 +1,12 @@
 pkgname=iptables
-pkgver=1.8.5
+pkgver=1.8.7
 pkgrel=0
 pkgdesc="Linux kernel firewall, NAT and packet mangling tools"
 url="https://www.netfilter.org/projects/iptables/index.html"
 arch="all"
 license="GPL-2.0-or-later"
 depends="libnftnl"
-makedepends="$depends_dev libnftnl-dev bison flex autoconf automake linux-dev"
+makedepends="libnftnl-dev bison flex autoconf automake linux-dev"
 subpackages="$pkgname-doc $pkgname-dev $pkgname-openrc"
 source="https://www.netfilter.org/projects/iptables/files/iptables-$pkgver.tar.bz2
 	iptables.initd

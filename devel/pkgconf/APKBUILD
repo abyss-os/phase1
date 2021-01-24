@@ -1,5 +1,5 @@
 pkgname=pkgconf
-pkgver=1.6.3
+pkgver=1.7.3
 pkgrel=0
 pkgdesc="development framework configuration tools"
 url="https://git.dereferenced.org/pkgconf/pkgconf"
@@ -13,7 +13,6 @@ checkdepends="kyua atf"
 builddir="$srcdir/$pkgname-$pkgver"
 
 build() {
-	cd "$builddir"
 	./configure \
 		--build=$CBUILD \
 		--host=$CHOST \
@@ -22,32 +21,26 @@ build() {
 		--mandir=/usr/share/man \
 		--infodir=/usr/share/info \
 		--localstatedir=/var \
-		--with-pkg-config-dir=/usr/local/lib/pkgconfig:/usr/local/share/pkgconfig:/usr/lib/pkgconfig:/usr/share/pkgconfig \
-		|| return 1
-	make || return 1
+		--with-pkg-config-dir=/usr/local/lib/pkgconfig:/usr/local/share/pkgconfig:/usr/lib/pkgconfig:/usr/share/pkgconfig
+	make
 }
 
 check() {
-	cd "$builddir"
-	make check || return 1
+	make check
 }
 
 package() {
-	cd "$builddir"
-
-	make DESTDIR="$pkgdir" install || return 1
+	make DESTDIR="$pkgdir" install
 	ln -s pkgconf "$pkgdir"/usr/bin/pkg-config
 }
 
 dev() {
-	default_dev || return 1
+	default_dev
 
-	# Move pkg-config back to main package (default_dev implicitly moves
-	# files /usr/bin/*-config to -dev).
 	mv "$subpkgdir"/usr/bin/pkg-config "$pkgdir"/usr/bin/
 
 	mkdir -p "$pkgdir"/usr/share/aclocal/
 	mv "$subpkgdir"/usr/share/aclocal/pkg.m4 "$pkgdir"/usr/share/aclocal/
 }
 
-b2sums="04bf58590e2f0b37bac7b24b3d595ad08680e85647548cbd642495398d95706f9f738af5c6f9b9ad8801567caa20ade85d4c4d74179f08313420683cb1b34263  pkgconf-1.6.3.tar.xz"
+b2sums="b0fdad9e86c7e2aaf5f268de779730e55e14d6f0ddbec50f354b888aa9ca284f6d1d4c462f00b815cd6e0e17a3b41025ce77485f66a7d527f519a7b80283774d  pkgconf-1.7.3.tar.xz"

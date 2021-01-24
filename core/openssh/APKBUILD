@@ -1,5 +1,5 @@
 pkgname=openssh
-pkgver=8.3_p1
+pkgver=8.4_p1
 _myver=${pkgver%_*}${pkgver#*_}
 pkgrel=0
 pkgdesc="Port of OpenBSD's free SSH release"
@@ -8,9 +8,6 @@ arch="all"
 license="BSD"
 options="!check suid" # FIXME: tests fails. disable for now
 makedepends="openssl-dev zlib-dev libedit-dev linux-dev linux-pam-dev"
-# Add more packages support here e.g. kerberos
-_pkgsupport=""
-[ -z "$BOOTSTRAP" ] && _pkgsupport="pam"
 subpackages="$pkgname-doc $pkgname-openrc"
 
 source="https://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/$pkgname-$_myver.tar.gz
@@ -24,7 +21,6 @@ source="https://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/$pkgname-$_myver.ta
 builddir="$srcdir"/$pkgname-$_myver
 
 build() {
-	cd "$builddir"
 	export LD="$CC"
 	export TEST_SSH_UTF8=no # utf8 test fails
 	CC=$CC CXX=$CXX ./configure \
@@ -51,12 +47,10 @@ build() {
 }
 
 check() {
-	cd "$builddir"
 	make tests
 }
 
 package() {
-	cd "$builddir"
 	make DESTDIR="$pkgdir" install
 	mkdir -p "$pkgdir"/var/empty
 	install -D -m755 "$srcdir"/sshd.initd \
@@ -68,16 +62,7 @@ package() {
 	sed -i 's/#UseDNS yes/UseDNS no/' "$pkgdir"/etc/ssh/sshd_config
 }
 
-_pkg_flavour() {
-	pkgdesc="OpenSSH server with $_flavour support"
-	depends="openssh-keygen openssh-server-common"
-	for _flavour in $_pkgsupport; do
-		cd "${builddir}"-$_flavour
-		_server "${builddir}"-$_flavour
-	done
-}
-
-b2sums="0b53d92caa4a0f4cb40eee671ac889753d320b7c8e44df159a81dd8163c3663f07fa648f5dc506fb27d31893acf9701b997598c50bf204acf54172d72825a4d8  openssh-8.3p1.tar.gz
+b2sums="4b1e60d4962095df045c3a31bbf8af725b1c07324c4aa1f6b9a3ddb7e695c98e9aa01655b268f6fd6a400f511b23be91f6b89d07b14a6a2d92f873efb4d9c146  openssh-8.4p1.tar.gz
 7a561f2ac629a31d7a6a679dffbc5991e0a46fb926e12c2b62dc0bedcea89cbaa15129b4e57018f9aa391d26516a234c7dd0e455b8b9e87d66509630bd3ecc89  fix-utmp.patch
 5bceac66a1396b688ee7f9215fb7cbb9c23f811bcb23760980683b4130ab1e251ce974c4e28036452c8f6b42fd8b6c24e0df3121598e6db777a169133d4a2d84  sftp-interactive.patch
 a4aee6b228220906227a246542944336eaaa55d77870b84f87112c70ac2d35708e9cf81cc19fdb41ec9b783d6dc00cf8dce307e45d2c4f05543e1ac7ef88778b  disable-forwarding-by-default.patch

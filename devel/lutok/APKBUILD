@@ -5,41 +5,30 @@ pkgdesc="lightweight C++ API for Lua"
 url="https://github.com/jmmv/lutok"
 arch="all"
 license="BSD"
-depends_dev="lua5.2-dev"
-makedepends="$depends_dev"
+makedepends="lua5.4-dev"
 subpackages="$pkgname-dev $pkgname-doc"
 source="https://github.com/jmmv/lutok/releases/download/lutok-$pkgver/lutok-$pkgver.tar.gz"
 builddir="$srcdir/lutok-$pkgver"
 
-prepare() {
-	cd "$builddir"
-	default_prepare
-	update_config_sub
-}
-
 build() {
-	cd "$builddir"
-
-	LUA_CFLAGS=$(pkg-config --cflags lua5.2) \
-		LUA_LIBS=$(pkg-config --libs lua5.2) \
-		CC=$CC CXX=$CXX ./configure \
-			--build=$CBUILD \
-			--host=$CHOST \
-			--prefix=/usr \
-			--sbindir=/usr/bin \
-			--sysconfdir=/etc \
-			--mandir=/usr/share/man \
-			--localstatedir=/var
+	LUA_CFLAGS=$(pkg-config --cflags lua5.4) \
+	LUA_LIBS=$(pkg-config --libs lua5.4) \
+	CC=$CC CXX=$CXX ./configure \
+		--build=$CBUILD \
+		--host=$CHOST \
+		--prefix=/usr \
+		--sbindir=/usr/bin \
+		--sysconfdir=/etc \
+		--mandir=/usr/share/man \
+		--localstatedir=/var
 	make
 }
 
 check() {
-	cd "$builddir"
 	make check
 }
 
 package() {
-	cd "$builddir"
 	make -j1 DESTDIR="$pkgdir" install
 }
 

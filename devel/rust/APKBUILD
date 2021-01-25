@@ -6,7 +6,7 @@ url="https://www.rust-lang.org"
 arch="x86_64"
 license="Apache-2.0 AND MIT"
 
-makedepends="python3 file coreutils curl-dev libgit2-dev openssl-dev zlib-dev libssp_nonshared"
+makedepends="python3 file coreutils curl-dev libgit2-dev openssl-dev zlib-dev libssp_nonshared rust-bootstrap cargo-bootstrap"
 
 provides="rust-bootstrap=$pkgver-r$pkgrel"
 options="!archcheck !check"

@@ -1,17 +1,5 @@
---- a/src/librustc_target/spec/mod.rs.orig     2019-05-23 21:05:45.173347119 +0200
-+++ b/src/librustc_target/spec/mod.rs  2019-05-23 21:06:39.006681699 +0200
-@@ -328,6 +328,9 @@ macro_rules! supported_targets {
- }
- 
- supported_targets! {
-+    ("x86_64-abyss-linux-musl", x86_64_abyss_linux_musl),
-+    ("aarch64-abyss-linux-musl", aarch64_abyss_linux_musl),
-+    ("powerpc64le-abyss-linux-musl", powerpc64le_abyss_linux_musl),
-     ("x86_64-unknown-linux-gnu", x86_64_unknown_linux_gnu),
-     ("x86_64-unknown-linux-gnux32", x86_64_unknown_linux_gnux32),
-     ("i686-unknown-linux-gnu", i686_unknown_linux_gnu),
 --- /dev/null
-+++ b/src/librustc_target/spec/aarch64_abyss_linux_musl.rs
++++ rustc-1.47.0-src/src/librustc_target/spec/aarch64_abyss_linux_musl.rs
 @@ -0,0 +1,13 @@
 +use crate::spec::TargetResult;
 +
@@ -27,7 +15,71 @@
 +    Ok(base)
 +}
 --- /dev/null
-+++ b/src/librustc_target/spec/powerpc64le_abyss_linux_musl.rs
++++ rustc-1.47.0-src/src/librustc_target/spec/mips64_abyss_linux_musl.rs
+@@ -0,0 +1,13 @@
++use crate::spec::TargetResult;
++
++pub fn target() -> TargetResult {
++    let mut base = super::mips64_unknown_linux_muslabi64::target()?;
++
++    base.llvm_target = "mips64-abyss-linux-musl".to_string();
++    base.target_vendor = "abyss".to_string();
++    base.options.crt_static_default = false;
++    base.options.static_position_independent_executables = true;
++    base.options.need_rpath = true;
++
++    Ok(base)
++}
+--- /dev/null
++++ rustc-1.47.0-src/src/librustc_target/spec/mips64el_abyss_linux_musl.rs
+@@ -0,0 +1,13 @@
++use crate::spec::TargetResult;
++
++pub fn target() -> TargetResult {
++    let mut base = super::mips64el_unknown_linux_muslabi64::target()?;
++
++    base.llvm_target = "mips64el-abyss-linux-musl".to_string();
++    base.target_vendor = "abyss".to_string();
++    base.options.crt_static_default = false;
++    base.options.static_position_independent_executables = true;
++    base.options.need_rpath = true;
++
++    Ok(base)
++}
+--- a/src/librustc_target/spec/mod.rs
++++ b/src/librustc_target/spec/mod.rs
+@@ -490,6 +490,13 @@ macro_rules! supported_targets {
+ }
+
+ supported_targets! {
++    ("x86_64-abyss-linux-musl", x86_64_abyss_linux_musl),
++    ("aarch64-abyss-linux-musl", aarch64_abyss_linux_musl),
++    ("powerpc64-abyss-linux-musl", powerpc64_abyss_linux_musl),
++    ("powerpc64le-abyss-linux-musl", powerpc64le_abyss_linux_musl),
++    ("s390x-abyss-linux-musl", s390x_abyss_linux_musl),
++    ("mips64-abyss-linux-musl", mips64_abyss_linux_musl),
++    ("mips64el-abyss-linux-musl", mips64el_abyss_linux_musl),
+     ("x86_64-unknown-linux-gnu", x86_64_unknown_linux_gnu),
+     ("x86_64-unknown-linux-gnux32", x86_64_unknown_linux_gnux32),
+     ("i686-unknown-linux-gnu", i686_unknown_linux_gnu),
+--- /dev/null
++++ rustc-1.47.0-src/src/librustc_target/spec/powerpc64_abyss_linux_musl.rs
+@@ -0,0 +1,13 @@
++use crate::spec::TargetResult;
++
++pub fn target() -> TargetResult {
++    let mut base = super::powerpc64_unknown_linux_musl::target()?;
++
++    base.llvm_target = "powerpc64-abyss-linux-musl".to_string();
++    base.target_vendor = "abyss".to_string();
++    base.options.crt_static_default = false;
++    base.options.static_position_independent_executables = true;
++    base.options.need_rpath = true;
++
++    Ok(base)
++}
+--- /dev/null
++++ rustc-1.47.0-src/src/librustc_target/spec/powerpc64le_abyss_linux_musl.rs
 @@ -0,0 +1,13 @@
 +use crate::spec::TargetResult;
 +
@@ -43,7 +95,23 @@
 +    Ok(base)
 +}
 --- /dev/null
-+++ b/src/librustc_target/spec/x86_64_abyss_linux_musl.rs
++++ rustc-1.47.0-src/src/librustc_target/spec/s390x_abyss_linux_musl.rs
+@@ -0,0 +1,13 @@
++use crate::spec::TargetResult;
++
++pub fn target() -> TargetResult {
++    let mut base = super::s390x_unknown_linux_musl::target()?;
++
++    base.llvm_target = "s390x-abyss-linux-musl".to_string();
++    base.target_vendor = "abyss".to_string();
++    base.options.crt_static_default = false;
++    base.options.static_position_independent_executables = true;
++    base.options.need_rpath = true;
++
++    Ok(base)
++}
+--- /dev/null
++++ rustc-1.47.0-src/src/librustc_target/spec/x86_64_abyss_linux_musl.rs
 @@ -0,0 +1,13 @@
 +use crate::spec::TargetResult;
 +

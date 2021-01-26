@@ -1,42 +1,34 @@
 pkgname=rust
-pkgver=1.47.0
-pkgrel=4
+pkgver=1.49.0
+pkgrel=2
 pkgdesc="The Rust Programming Language"
 url="https://www.rust-lang.org"
-arch="x86_64"
+arch="x86_64 ppc64le"
 license="Apache-2.0 AND MIT"
 
-makedepends="python3 file coreutils curl-dev libgit2-dev openssl-dev zlib-dev libssp_nonshared rust-bootstrap cargo-bootstrap"
+makedepends="python3 file coreutils curl-dev libgit2-dev openssl-dev zlib-dev rust-bootstrap cargo-bootstrap"
 
 provides="rust-bootstrap=$pkgver-r$pkgrel"
 options="!archcheck !check"
 
 subpackages="$pkgname-doc cargo cargo-bash-completions:_cargo_bashcomp:noarch cargo-zsh-completion:_cargo_zshcomp:noarch"
 
-#	$pkgname-stdlib $pkgname-analysis $pkgname-gdb::noarch $pkgname-lldb::noarch $pkgname-doc
-
 source="https://static.rust-lang.org/dist/rustc-$pkgver-src.tar.gz
-	musl-fix-linux_musl_base.patch
-	musl-add-s390x-target.patch
-	need-rpath.patch
-	need-ssp_nonshared.patch
 	alpine-move-py-scripts-to-share.patch
-	abyss-target.patch
 	install-template-shebang.patch
-	check-rustc
-	link-musl-dynamically.patch
-	musl-dont-use-crt-static.patch
 	libunwind.patch
+	libz-sys_checksum.patch
 	"
 builddir="$srcdir/rustc-$pkgver-src"
 
 case "${CARCH}" in
 	riscv64) _rustarch="riscv64gc";;
+	ppc64le) _rustarch="powerpc64le";;
 	*) _rustarch="${CARCH}";;
 esac
 
-_build="${_rustarch}-abyss-linux-musl"
-_target="${_rustarch}-abyss-linux-musl"
+_build="${_rustarch}-unknown-linux-musl"
+_target="${_rustarch}-unknown-linux-musl"
 
 _rlibdir="usr/lib/rustlib/$_target/lib"
 _sharedir="usr/share/rust"
@@ -44,7 +36,6 @@ _sharedir="usr/share/rust"
 ldpath="/$_rlibdir"
 
 export RUST_BACKTRACE=1 PKG_CONFIG_ALLOW_CROSS=1
-#export LIBGIT2_SYS_USE_PKG_CONFIG=1
 
 _clear_vendor_checksums() {
 	sed -i 's/\("files":{\)[^}]*/\1/' vendor/$1/.cargo-checksum.json
@@ -52,14 +43,13 @@ _clear_vendor_checksums() {
 
 prepare() {
 	default_prepare
-
 	sed -i /LD_LIBRARY_PATH/d src/bootstrap/bootstrap.py
-
 	_clear_vendor_checksums libc
-	rm -Rf src/llvm-project/
+	rm -rf src/llvm-project/
 }
 
 build() {
+	AR=llvm-ar
 	./configure \
 		--build="$_build" \
 		--host="$_target" \
@@ -72,34 +62,34 @@ build() {
 		--disable-docs \
 		--enable-extended \
 		--tools="cargo" \
+		--enable-vendor \
+		--enable-locked-deps \
 		--enable-llvm-link-shared \
 		--enable-option-checking \
-		--enable-locked-deps \
-		--enable-vendor \
 		--python="python3" \
 		--set="rust.musl-root=/usr" \
 		--set="target.$_target.llvm-config=/usr/bin/llvm-config" \
 		--set="target.$_target.musl-root=/usr" \
 		--set="target.$_target.crt-static=false" \
-		--set="target.$_target.cc=clang" \
-		--set="target.$_target.cxx=clang++" \
-		--set="target.$_target.ar=ar" \
-		--set="target.$_target.linker=clang" \
+		--set="target.$_target.cc=$CC" \
+		--set="target.$_target.cxx=$CXX" \
+		--set="target.$_target.ar=$AR" \
+		--set="target.$_target.linker=$CC" \
 		--set="target.$_build.musl-root=/usr" \
 		--set="target.$_build.crt-static=false" \
-		--set="target.$_build.cc=clang" \
-		--set="target.$_build.cxx=clang++" \
-		--set="target.$_build.ar=ar" \
-		--set="target.$_build.linker=clang"
+		--set="target.$_build.cc=$CC" \
+		--set="target.$_build.cxx=$CXX" \
+		--set="target.$_build.ar=$AR" \
+		--set="target.$_build.linker=$CC"
 
 	sed 's/#deny-warnings = .*/deny-warnings = false/' -i config.toml
 	sed 's|deny(warnings,|deny(|' -i src/bootstrap/lib.rs
 
-	$_python ./x.py build --jobs ${JOBS}
+	./x.py build --jobs ${JOBS}
 }
 
 package() {
-	DESTDIR="$pkgdir" $_python ./x.py install -v
+	DESTDIR="$pkgdir" ./x.py install
 
 	cd "$pkgdir"
 
@@ -189,15 +179,8 @@ _mv() {
 	mv "$@"
 }
 
-b2sums="8fef2e63ac98b44f4a74ad68c7225851d7f382aca573f9e0cab89131eea38c1f1b38c8cc267856cd2fe401621af8f7cc53fa24281365a535b0d70b32463adcb0  rustc-1.47.0-src.tar.gz
-1a3c3a508838afc985d592ea650108db7535b82b1fe4c3f83ddc4c8f847d701394d6fedd5b30ae23374bf56ea6552f75c3185c7d0c7887b1e1eddb457eb14fd4  musl-fix-linux_musl_base.patch
-47da64f1e81e81a180c03d96b850bafde26b8abd81a81805312945c376617b481ff58461472325294394299f00cfacd72525eeeb08934577854a026780bf5fa1  musl-add-s390x-target.patch
-43b00155ca96e267116cf0f94a43d2deff5ba7a0d316350a10fff8aa24147d04fb24e62d2a0151834761b594cbef1fc14e0c14e02bcae87bd0f162519957e507  need-rpath.patch
-7d28b3b82525ec1e7b5d7614ca13d5e90b08333a7efe61cbd4849d952cfb20ea366263586afee8e35e586d1530b3ce3d1a0db70134632211765f3f2853a8c28c  need-ssp_nonshared.patch
+b2sums="85095e26455b54d6d542d4a460ff0acae0e09007fc7493f58a5abe0d98fab9361f41bfb2fad4bc6d3d4365852ab30d93adb31ed1799257baf57440299f22f455  rustc-1.49.0-src.tar.gz
 5efa52ab75426ddad6c84e97713a6e792721083218638fe88b4fba4803f1902be973662cc0d3fb859a898ecceaa9bd78ee323a8446f569cd4e156ba9fc29ae60  alpine-move-py-scripts-to-share.patch
-8d8bcebb956dd929ca32297a0f8ee2423bed97c7a97ab9b6a0ea8cadc63439eb8c7ed81bc8c9fdd4838096108b6fc4c88c05f7493bb72ed8fee922ec6747f33c  abyss-target.patch
 4de9b6c3afcbc649eb3b9147d52e78cc87f32f794cb10ec22ff272f7d3edd8b9acd11a64c47dff85de090215b3493c97f39cdc7524d81f8e45df4ced22fa3879  install-template-shebang.patch
-03e1b320d2b24f09d348a5301c5fdcc88d41037cdfde36da5f92caf95b687a8c245997f8917b0bc7c4bde9ad09afcb43343df5faf1e356a3535504f2ed7e7587  check-rustc
-9b793a9db66e739b48005ec2c94e3488c9f767ad404b648f0cfb9b655b9a0395d4c93dbcd013c9e2159919ab372181a8aa4bea1f9461b36bd28916669068f3a6  link-musl-dynamically.patch
-c7aca50faa18981e932fb5ceb2cdeb53d8f5810fc90d1491f72b4d55e682f26bef8f4ae371312e2d826e787858197d7116bdf8f0d86b3da852610d7b949d79bc  musl-dont-use-crt-static.patch
-ae80dcbc42edd23a5b3bd62be85ad4b3d3e052d67f7876d9ca433385b6548e797f0a94e4967152c2d610ad6a3724c3bcfd0df74edfb79f3151b15384d1b2d478  libunwind.patch"
+16c6b43a4cbe7e678fdd9c7cfbd90e79ee2e847bb9086e77536b1a50ddba65799775a34cb229c8568d9689f8e7c36ab0c3beed04f27f74ae5a9c232ac1237dd7  libunwind.patch
+785fad915314a40e226760d0e61ba17dbecd51e91d9d4f690a8700ecf6394ae91d7d0a256ec0335f04e3b6f0a96c3d9d3433815c22f60825f4ddf18664dec1b3  libz-sys_checksum.patch"

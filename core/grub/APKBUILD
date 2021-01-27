@@ -1,9 +1,9 @@
 pkgname=grub
 pkgver=2.04
-pkgrel=0
+pkgrel=1
 pkgdesc="Bootloader with support for Linux, Multiboot and more"
 url="https://www.gnu.org/software/grub/"
-arch="all"
+arch="x86_64 aarch64 ppc64le"
 license="GPL-3.0-or-later"
 #depends="mkinitfs"
 triggers="grub.trigger=/boot"

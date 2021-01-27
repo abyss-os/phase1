@@ -1,7 +1,7 @@
 pkgname=python3
 pkgver=3.9.1
 _basever="${pkgver%.*}"
-pkgrel=1
+pkgrel=2
 pkgdesc="A high-level scripting language"
 url="https://www.python.org"
 arch="all"
@@ -35,6 +35,7 @@ build() {
 		*) _opts="--enable-optimizations";;
 	esac
 
+	export CFLAGS="-fno-semantic-interposition"
 	./configure \
 		--prefix=/usr \
 		--libdir=/usr/lib \

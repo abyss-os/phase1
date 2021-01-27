@@ -7,17 +7,21 @@ arch="all"
 license="GPL-3.0-or-later"
 #depends="mkinitfs"
 triggers="grub.trigger=/boot"
-makedepends="linux-dev xz-dev lvm2-dev python3 freetype-dev gettext-tiny"
+makedepends="linux-dev xz-dev lvm2-dev python3 freetype-dev gcc binutils gettext-tiny"
 install="$pkgname.post-upgrade"
 options="!check"  # Cannot test boot loader.
 subpackages="$pkgname-dev $pkgname-doc"
 
-    #mips*)		flavors="qemu_mips";;
+export CC=gcc CXX=g++ AS=gnu-as LD=gnu-ld
 
+# currently grub only builds on x86*, aarch64 and ppc* systems
 flavors=""
 case "$CARCH" in
-	x86_64|aarch64)		flavors="efi";;
-	ppc64le)	flavors="ieee1275"; makedepends="$makedepends powerpc-utils" ;;
+x86)		flavors="efi bios";;
+x86_64)		flavors="efi bios";;
+aarch64|arm*)	flavors="efi";;
+mips*)		flavors="qemu_mips";;
+ppc*)		flavors="ieee1275"; makedepends="$makedepends powerpc-utils" ;;
 esac
 for f in $flavors; do
 	subpackages="$subpackages $pkgname-$f"
@@ -55,7 +59,7 @@ _build_flavor() {
 		--disable-werror \
 		--sbindir=/usr/bin \
 		$_configure
-	make -j${JOBS}
+	make
 }
 
 build() {

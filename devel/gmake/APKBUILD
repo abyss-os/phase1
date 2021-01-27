@@ -1,15 +1,27 @@
 pkgname=gmake
-pkgver=4.3
-pkgrel=0
+pkgver=4.2.1
+pkgrel=2
 pkgdesc="GNU make utility to maintain groups of programs"
 url="https://www.gnu.org/software/make"
 arch="all"
 license="GPL-3.0-or-later"
+depends=""
+makedepends=""
 subpackages="$pkgname-doc"
-source="http://ftp.gnu.org/gnu/make/make-$pkgver.tar.gz"
+source="http://ftp.gnu.org/gnu/make/make-$pkgver.tar.bz2
+	fix-atexit-exit.patch
+	fix-glob-dtype.patch
+	"
 builddir=$srcdir/make-$pkgver
 
+prepare() {
+	cd "$builddir"
+	update_config_sub
+	default_prepare
+}
+
 build() {
+	cd "$builddir"
 	./configure \
 		--build=$CBUILD \
 		--host=$CHOST \
@@ -26,10 +38,13 @@ build() {
 }
 
 check() {
-	[ "$CBUILD" != "$CHOST" ] || (ulimit -n 64 && PERL5LIB=. make check)
+	cd "$builddir"
+	return 0
+	[ "$CBUILD" != "$CHOST" ] || (ulimit -n 64 && PERL5LIB=. make check) || return 1
 }
 
 package() {
+	cd "$builddir"
 	if [ ! -f /usr/bin/make ]; then
 		./make DESTDIR="$pkgdir" install
 	else
@@ -44,4 +59,7 @@ aalt() {
 
 	DESTDIR="$subpkgdir" aalt-bin -R -g gnu -p make -f /usr/bin/gmake
 }
-b2sums="5a82ce1f30eb034366ac3b87d2ec6698aae17d7b1a611941cf42136b2453b34236ab55382eab0a593c43cee8b036ba4a054f966c41ba766fdbd2862942be5dff  make-4.3.tar.gz"
+
+b2sums="fa6d43f5fd46182182a296c58dcd138a1a4568104eda760bbb3c241c023dee216789cf3128e5ac2b416cec76e1ba82d5b5e7852da12e86138a7d0865c85a42b4  make-4.2.1.tar.bz2
+ae2f9ff78f7f0d675dedaf546e6ef5d6e8a13013684422fc712c34b6e9fd4258673ec9489e55a59f3db1cf38d1f580b38a11ee1cec51481f1cf804b966e441f9  fix-atexit-exit.patch
+657420ab9c48b559836865e9b1471a6685f549d55166751e0804a4f088c0bb5e8b3dcfd925dbefe3f3e8014984305e6c4dc5378ad443d9b8f1bbfc62d08ef66f  fix-glob-dtype.patch"

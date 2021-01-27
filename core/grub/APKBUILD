@@ -43,6 +43,7 @@ _build_flavor() {
 	msg "Building grub for platform $flavor"
 	mkdir -p "$srcdir"/build-$flavor
 	cd "$srcdir"/build-$flavor
+	export BUILD_CC=$CC
 	$builddir/configure \
 		--build=$CBUILD \
 		--host=$CHOST \

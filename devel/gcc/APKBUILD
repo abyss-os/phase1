@@ -1,6 +1,6 @@
 pkgname=gcc
 pkgver=10.2.0
-pkgrel=2
+pkgrel=3
 pkgdesc="The GNU Compiler Collection"
 url="http://gcc.gnu.org"
 arch="all"
@@ -10,10 +10,10 @@ _gmp=6.1.2
 _mpfr=4.0.2
 _isl=0.22
 _mpc=1.1.0
-makedepends="bison flex texinfo gawk zip zlib-dev linux-dev binutils libssp_nonshared"
+makedepends="bison flex texinfo gawk zip zlib-dev linux-dev binutils $pkgname-bootstrap"
 subpackages="$pkgname-doc libatomic libatomic-dev:libatomicdev libgcc libgomp libstdc++:libcxx"
 
-provides="$pkgname-bootstrap"
+provides="$pkgname-bootstrap=$pkgver-r$pkgrel"
 
 source="https://gcc.gnu.org/pub/gcc/releases/gcc-${_pkgbase:-$pkgver}/gcc-${_pkgbase:-$pkgver}.tar.xz
 	002_all_default-relro.patch
@@ -112,7 +112,7 @@ prepare() {
 
 	_languages=c,c++
 
-#	export AS=gnu-as CC=gcc CXX=g++ LD=gnu-ld
+	export AS=gnu-as CC=gnu-gcc CXX=gnu-g++ LD=gnu-ld
 
 	msg "Configuring the following:"
 	echo ""

@@ -1,5 +1,5 @@
 pkgname=rsync
-pkgver=3.1.3
+pkgver=3.2.3
 pkgrel=0
 pkgdesc="A file transfer program to keep remote files in sync"
 url="https://rsync.samba.org/"
@@ -59,7 +59,7 @@ rrsync() {
 	install -D -m 755 ./support/rrsync "$subpkgdir"/usr/bin/rrsync
 }
 
-b2sums="616a1f3239327a28b881310f5f249c90b8bcdb05091279cd62f9cb4e35a8428c7cdd9b89e711ba124601a738f0deb9bfbebafba7fd88b72866476138a9f8c75a  rsync-3.1.3.tar.gz
+b2sums="085adb55d0d7e3d063fa198912fd09df67b63800a65baff5315ccb7dfc0e9d703eef30a7f2e72e3b271162c280abd9809b3f736704752c1663eed65ad8e0ac25  rsync-3.2.3.tar.gz
 acf9fc10e87736a026aceec8a8d3405c9ca16be64310c26dde586e0f4f746e724a6c4efa55cb08a274f902ca97e440bf384b62ac086cda0b27e9ecba887ac938  rsyncd.initd
 2a8a49ae5ff8ab6c3f37e4d8c16ee8197e781087770c4f21e8f9945203aab9451406064a5f44b57efe36c0db28c026596b64346c1296efe772df820e97fd33bd  rsyncd.confd
 813ff21aa1d444c311a52fa07de75efb2d2d4efcdfc1a44e00b67a8913c5b41cfcd063909f485caf21d237e8e99b818b60a7dcb684581a1939790430e77168db  rsyncd.conf

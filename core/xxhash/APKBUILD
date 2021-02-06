@@ -1,0 +1,27 @@
+pkgname=xxhash
+_pkgname=xxHash
+pkgver=0.8.0
+pkgrel=0
+pkgdesc="Extremely fast non-cryptographic hash algorithm"
+url="https://cyan4973.github.io/xxHash/"
+arch="all"
+license="BSD-2-Clause GPL-2.0-or-later"
+subpackages="$pkgname-dev $pkgname-doc"
+source="$_pkgname-$pkgver.tar.gz::https://github.com/Cyan4973/$_pkgname/archive/v$pkgver.tar.gz"
+builddir="$srcdir/"$_pkgname-$pkgver
+
+build() {
+	export CFLAGS="$CFLAGS -DXXH_FORCE_MEMORY_ACCESS=1"
+	sed -i 's|--leak-check=yes|-v --leak-check=full --show-leak-kinds=all|' Makefile
+	make
+}
+
+check() {
+	make check
+}
+
+package() {
+	make DESTDIR="$pkgdir" PREFIX=/usr install
+}
+
+b2sums="3e4e715d20ad09da2fe706a69e89a305d9f4d19588a28361f519d424c002345ba76b48d5adc0b600e34e595fed20a1ce8b8c5f22457cb05c4233810e9af9b823  xxHash-0.8.0.tar.gz"

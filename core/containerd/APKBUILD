@@ -1,9 +1,7 @@
 pkgname=containerd
-# NOTE: containerd's Makefile tries to get REVISION from git, but we're building from a tarball.
-_commit=5d470fa23bf969e16b25212703b7a9902dd6cda7
-pkgver=1.4.0
-_pkgver=1.4.0-beta.2
-pkgrel=2
+pkgver=1.4.3
+_commit=269548fa27e0089a8b8278fc4fc781d7f65a939b
+pkgrel=0
 pkgdesc="An open and reliable container runtime"
 url="https://containerd.io"
 arch="all"
@@ -11,17 +9,17 @@ license="Apache-2.0"
 depends="runc"
 makedepends="btrfs-progs-dev go go-md2man libseccomp-dev"
 #subpackages="$pkgname-doc"
-source="containerd-$pkgver.tar.gz::https://github.com/containerd/containerd/archive/v$_pkgver.tar.gz"
-builddir="$srcdir/$pkgname-$_pkgver"
+source="containerd-$pkgver.tar.gz::https://github.com/containerd/containerd/archive/v$pkgver.tar.gz"
+builddir="$srcdir/$pkgname-$pkgver"
 options="!strip"
 
 build() {
 	export GOPATH="$srcdir"
 	cd "$srcdir"
 	mkdir -p $(dirname "$srcdir/src/github.com/containerd/containerd")
-	ln -s "$PWD/$pkgname-$_pkgver" "$srcdir/src/github.com/containerd/containerd"
+	ln -sf "$PWD/$pkgname-$pkgver" "$srcdir/src/github.com/containerd/containerd"
 	cd "$srcdir/src/github.com/containerd/containerd"
-	make VERSION="v$_pkgver" REVISION="$_commit"
+	make VERSION="v$pkgver" REVISION="$_commit"
 	# new generated manpages
 	#make genman
 }
@@ -35,4 +33,4 @@ package() {
 	install -Dsm755 "$builddir"/bin/* "$pkgdir"/usr/bin/
 }
 
-b2sums="52a61544916e412e0f706a6232a44bff387e337997155a1a3a94b3b6c2434dc159fd4c813e2e2ad7c34ca38bc4a115964aa9390eb6d94cc8157eafa1481d5be6  containerd-1.4.0.tar.gz"
+b2sums="181ba9139ff9f245d71459baed21a6f2cde2d64f10bb42ae9361167c2686ccf25a90ee213df8f6d430a3c70390d0cd3e6620e42c6c7ec2dfe51289ca2d4add3c  containerd-1.4.3.tar.gz"

@@ -1,5 +1,5 @@
 pkgname=nettle
-pkgver=3.6
+pkgver=3.7
 pkgrel=0
 pkgdesc="A low-level cryptographic library"
 url="https://www.lysator.liu.se/~nisse/nettle/"
@@ -40,4 +40,4 @@ package() {
 	make DESTDIR="$pkgdir" install
 }
 
-b2sums="45e08832e9c337f10d958956545c77f521b747b8abca56ce40c755adf352bdc2a79584b1e1c0e50f5ede0ac54794aabd6883601c53593b965aada744502789db  nettle-3.6.tar.gz"
+b2sums="1e8a77db9b7e62dee9a01e3c3b476e206f36cc7235153b0a1a762276650c61d7c4c3be73b2ecae9313313e416e3c7a2bd999a3505c41b26e806f9b3eb486550f  nettle-3.7.tar.gz"

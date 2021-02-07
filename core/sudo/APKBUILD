@@ -1,5 +1,5 @@
 pkgname=sudo
-pkgver=1.9.1
+pkgver=1.9.5p2
 if [ "${pkgver%_*}" != "$pkgver" ]; then
 	_realver=${pkgver%_*}${pkgver#*_}
 else
@@ -17,13 +17,8 @@ source="https://www.sudo.ws/dist/sudo-${_realver}.tar.gz
 	fix-tests.patch"
 options="suid"
 
-# secfixes:
-#   1.8.20_p2-r0:
-#   - CVE-2017-1000368
-
 builddir="$srcdir"/$pkgname-$_realver
 build() {
-	cd "$builddir"
 	./configure \
 		--build=$CBUILD \
 		--host=$CHOST \
@@ -42,13 +37,10 @@ build() {
 }
 
 check() {
-	cd "$builddir"
-	return 0
 	make check
 }
 
 package() {
-	cd "$builddir"
 	# the sudo's mkinstalldir script miscreates the leading
 	# path components with bad permissions. fix this.
 	install -d -m0755 "$pkgdir"/var "$pkgdir"/var/db
@@ -56,5 +48,5 @@ package() {
 	rm -rf "$pkgdir"/var/run
 }
 
-b2sums="835eaae5b61627da65f40f04646b261093c56f77bdfb1b64f746e569a4bfafcfbb31d88ab301bf8544a8714f43d3416a792ee8b0fdcb75d81dbc6fcf29551f0b  sudo-1.9.1.tar.gz
+b2sums="41913887463e4f775564af8d614fb5ed762200aa777dc789ec333842d4f432323474fc952a531fe929b33607cdfbcd18d7fe7470a15d67139deaf855841ed11f  sudo-1.9.5p2.tar.gz
 b9e8f03cc64e1b53ec1ebb168ab8010b911fd9d8d3cb49fc5a4fabca714b4456f3443f2d115a2f8846b965092a8c87250d042457b3fedd87d0a052bb218ab370  fix-tests.patch"

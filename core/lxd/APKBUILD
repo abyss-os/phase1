@@ -1,5 +1,5 @@
 pkgname=lxd
-pkgver=4.10
+pkgver=4.11
 pkgrel=0
 pkgdesc="a container hypervisor and a new user experience for LXC"
 url="https://linuxcontainers.org/lxd/"
@@ -104,7 +104,7 @@ scripts() {
 	install -Dm755 ../scripts/empty-lxd.sh "$subpkgdir"/usr/bin/empty-lxd.sh
 }
 
-b2sums="de6e13f6617cf7a8e11ae62640229d7b178d396142f57afd7b7dc65cd0d3f4b24ce647368e27dd9f5f8edeb746d511e01bf69b38be4e695a4bab8a0e819090b7  lxd-4.10.tar.gz
+b2sums="8bf63dd3e5728d74c3006e06997b59d3906c0d38927fad1f93608ce3eeddfe406c40dbfb306b8198855f28b0d4a01e983475056d18489c3a1d680392144a0e5f  lxd-4.11.tar.gz
 0c53ad54c956fa067e83ae53467cfcdb8ace2e14972b762dcf8715493d89a74da376f37386626b8b96b27df163e3d8ce13b96858191b6d0000d90a0ce08cc137  lxd.confd
 b638fca189b270567f8077890d7820e3d9e82b0a29e9c665a4f4b1a5454d1df627d7849ae2e7e83800d5b4f6e62791a65742522cfaf422f12b67f4b359f4e79f  lxd.initd
 870d6d9a35ab4ccfb641531b5d806ef76c41deb22ad53bbe6af3d90a93252fc7a81428cd8557c7a42915880d4ff14d76d7fff3dccb2a10b989df4b9c5c616b16  lxd-dont-go-get.patch

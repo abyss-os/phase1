@@ -162,7 +162,7 @@ prepare() {
 
 build() {
 	cd "$_builddir"
-	make -j1
+	make -j${JOBS}
 }
 
 package() {

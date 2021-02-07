@@ -1,29 +1,20 @@
 pkgname=dropbear
-pkgver=2019.78
-pkgrel=2
+pkgver=2020.81
+pkgrel=0
 pkgdesc="small SSH 2 client/server designed for small memory environments"
 url="http://matt.ucc.asn.au/dropbear/dropbear.html"
 arch="all"
 license="MIT"
 options="!check"
 makedepends="zlib-dev linux-dev"
-subpackages="$pkgname-doc
-	$pkgname-openrc
-	$pkgname-convert:_convert
-	$pkgname-dbclient:_dbclient
-	$pkgname-ssh:_ssh:noarch
-	$pkgname-scp:_scp"
+subpackages="$pkgname-doc $pkgname-openrc"
 source="https://matt.ucc.asn.au/dropbear/releases/${pkgname}-${pkgver}.tar.bz2
 	dropbear.initd
 	dropbear.confd
 	dropbear-0.53.1-static_build_fix.patch
 	dropbear-options_sftp-server_path.patch
 	"
-
-# secfixes:
-#   2018.76-r2:
-#     - CVE-2018-15599
-
+replaces="$pkgname-convert $pkgname-dbclient $pkgname-ssh $pkgname-scp"
 _progs="dropbear dropbearkey dbclient dropbearconvert scp"
 
 build() {
@@ -52,35 +43,7 @@ package() {
 		"$pkgdir"/etc/conf.d/dropbear
 }
 
-_convert() {
-	pkgdesc="$pkgname dropbearconvert command"
-	depends=""
-	mkdir -p "$subpkgdir"/usr/bin
-	mv "$pkgdir"/usr/bin/dropbearconvert "$subpkgdir"/usr/bin/
-}
-
-_dbclient() {
-	pkgdesc="$pkgname dbclient command"
-	depends=""
-	mkdir -p "$subpkgdir"/usr/bin
-	mv "$pkgdir"/usr/bin/dbclient "$subpkgdir"/usr/bin/
-}
-
-_scp() {
-	pkgdesc="$pkgname scp support"
-	depends="!openssh-client"
-	mkdir -p "$subpkgdir"/usr/bin
-	mv "$pkgdir"/usr/bin/scp "$subpkgdir"/usr/bin/
-}
-
-_ssh() {
-	pkgdesc="$pkgname ssh command (compatibility symlink for dbclient)"
-	depends="dropbear-dbclient !openssh-client"
-	mkdir -p "$subpkgdir"/usr/bin
-	ln -s /usr/bin/dbclient "$subpkgdir"/usr/bin/ssh
-}
-
-b2sums="212b173cfea8655b43a8d93422dd4d3e0d669a67681cb17d6494b6083e6e4c58d21d52850c0cdf414617ee3dcaa071e376d0b5b156b6856cee2e4fe111550f7d  dropbear-2019.78.tar.bz2
+b2sums="eb80ff88d75ae97365570f8793aee855cc615f6a46c49c4efa026d14ba8507c41b87093ca5b86dd1fcd3602f5e24b7b9c4f83c7cf4f6dc7945ff628b09c98794  dropbear-2020.81.tar.bz2
 a9f8f9884f09b6de5d214c9526222b869dcfeeadc19ef35cd3b216f5fc4279ffff973552e7cdbe3ac18835a13dd8c32fa4b60cb4ff41b15280f7bb84ebad403c  dropbear.initd
 b89e59ae84f23f00162d78cb900e4fef05fe01123a6ee7533ed3d39625f43580012591b2cf8dcc9ea5f093a64d3ed81fa590c44389bacb369b9123929ca2bb69  dropbear.confd
 c5bf6a6cb93a5d9684783bb8c547dea9262968b09317dd1dd9a78d447b920cacbf26fef11d08a260ba5effc46df236620f301fd71ef1f07125f4ce2c28b90ffe  dropbear-0.53.1-static_build_fix.patch

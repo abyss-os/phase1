@@ -1,13 +1,13 @@
 pkgname=zsh
-pkgver=5.7.1
-pkgrel=1
+pkgver=5.8
+pkgrel=0
 pkgdesc="Very advanced and programmable command interpreter (shell)"
 url="https://www.zsh.org/"
 arch="all"
 license="custom"
 makedepends="mandoc autoconf ncurses-dev diffutils"
 install="zsh.post-install zsh.post-upgrade zsh.pre-deinstall"
-source="${distfilesm}/$pkgname-$pkgver.tar.xz
+source="https://www.zsh.org/pub/$pkgname-$pkgver.tar.xz
 	zprofile"
 subpackages="$pkgname-doc"
 builddir="$srcdir/$pkgname-$pkgver"
@@ -71,5 +71,5 @@ package() {
 	install -Dm644 LICENCE "$pkgdir"/usr/share/licenses/$pkgname/LICENCE
 }
 
-b2sums="4f1aa2d5aea0341ba7839cf05687020889b5ca6879654a376ce838986211af4bddb7ab521a8a35cc06701f730a75a9778c633726b447f31845f5c140ec1e8d80  zsh-5.7.1.tar.xz
+b2sums="b1186dd27aede3318763d7c42253e919e60d00a018d085b2de7e8d985c872e9756a3ce112f623a088ec0878abd7a38d04dfa5ec552ef0f0a72e623191a7ba5e3  zsh-5.8.tar.xz
 f0c4c9e20efaa4f8f1c781ef92f1cb9192dc4382a4fce7e7d959af53b11e1c6706136df19ad676a5af21fdd858e0d697bdb01807757f99d78d6db44e5662542f  zprofile"

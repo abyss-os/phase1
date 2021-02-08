@@ -1,16 +1,16 @@
 pkgname=cmake
-pkgver=3.19.2
+pkgver=3.19.4
 pkgrel=0
 pkgdesc="Cross-platform, open-source make system"
 url="https://www.cmake.org"
 arch="all"
 license="BSD-3-Clause"
 makedepends="bzip2-dev curl-dev expat-dev libarchive-dev linux-dev
-	libuv-dev ncurses-dev rhash-dev xz-dev zlib-dev"
+	libuv-dev ncurses-dev rhash-dev xz-dev zlib-dev cmake-bootstrap zstd-dev nghttp2-dev samurai"
 options="!checkroot !check" # disable for now
 checkdepends="file musl-utils"
-subpackages="$pkgname-doc"
-provides="${pkgname}-bootstrap"
+subpackages="$pkgname-bash-completion"
+provides="${pkgname}-bootstrap=${pkgver}-${pkgrel}"
 
 case $pkgver in
 *.*.*.*) _v=v${pkgver%.*.*};;
@@ -19,28 +19,25 @@ esac
 
 source="https://www.cmake.org/files/$_v/cmake-${pkgver}.tar.gz"
 
-_parallel_opt() {
-	local i n
-	for i in $MAKEOPTS; do
-		case "$i" in
-			-j*) n=${i#-j};;
-		esac;
-	done
-	[ -n "$n" ] && echo "--parallel $n"
-}
-
 build() {
-	cd "$builddir"
 	mkdir build && cd build
-	../bootstrap \
-		--prefix=/usr \
-		--mandir=/share/man \
-		--datadir=/share/$pkgname \
-		--docdir=/share/doc/$pkgname \
-		--system-libs \
-		--no-system-jsoncpp \
-		$(_parallel_opt)
-	make
+	cmake	-G Ninja \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_USE_SYSTEM_BZIP2=ON \
+		-DCMAKE_USE_SYSTEM_CURL=ON \
+		-DCMAKE_USE_SYSTEM_EXPAT=ON \
+		-DCMAKE_USE_SYSTEM_FORM=OFF \
+		-DCMAKE_USE_SYSTEM_JSONCPP=OFF \
+		-DCMAKE_USE_SYSTEM_KWIML=OFF \
+		-DCMAKE_USE_SYSTEM_LIBARCHIVE=ON \
+		-DCMAKE_USE_SYSTEM_LIBLZMA=ON \
+		-DCMAKE_USE_SYSTEM_LIBRHASH=ON \
+		-DCMAKE_USE_SYSTEM_LIBUV=ON \
+		-DCMAKE_USE_SYSTEM_NGHTTP2=ON \
+		-DCMAKE_USE_SYSTEM_ZLIB=ON \
+		-DCMAKE_USE_SYSTEM_ZSTD=ON \
+	..
+	ninja -j${JOBS}
 }
 
 check() {
@@ -59,7 +56,8 @@ check() {
 
 package() {
 	cd $startdir/src/$pkgname-$pkgver/build
-	make DESTDIR="$pkgdir" install
+	DESTDIR="$pkgdir" ninja install
+	rm -rf ${pkgdir}/usr/doc
 }
 
-b2sums="f45727fd6b6e0e324f618577abbc7fb1830f05f01a9afea4f8713f5f62ede3a612a020ef97385cdd6ede4b575a3b6f63deb57123a222b71e2906a42cba3b3d7f  cmake-3.19.2.tar.gz"
+b2sums="b5ac44fa426a47031e37fca990130d9289909a5f21eed2ebb0987da9202db16f654a1f3eeaca2465693b2fca09de05b9bb452dd71df9a65ffd27c02da577a1c5  cmake-3.19.4.tar.gz"

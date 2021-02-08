@@ -1,6 +1,6 @@
 pkgname=cmake
 pkgver=3.19.4
-pkgrel=0
+pkgrel=1
 pkgdesc="Cross-platform, open-source make system"
 url="https://www.cmake.org"
 arch="all"
@@ -10,7 +10,7 @@ makedepends="bzip2-dev curl-dev expat-dev libarchive-dev linux-dev
 options="!checkroot !check" # disable for now
 checkdepends="file musl-utils"
 subpackages="$pkgname-bash-completion"
-provides="${pkgname}-bootstrap=${pkgver}-${pkgrel}"
+provides="${pkgname}-bootstrap=${pkgver}-r${pkgrel}"
 
 case $pkgver in
 *.*.*.*) _v=v${pkgver%.*.*};;

@@ -1,5 +1,5 @@
 pkgname=ninja
-pkgver=1.10.0
+pkgver=1.10.2
 pkgrel=0
 pkgdesc="Small build system with a focus on speed"
 url="https://ninja-build.org/"
@@ -39,4 +39,4 @@ package() {
 		"${pkgdir}$(_py3_sitelib)/ninja_syntax.py"
 }
 
-b2sums="0a3db145deaea8a990958ad2e812bc18ed014aaba94911a2905b082745a0d08f10ce1113badabaa362f3834540b7bd3858f07e2a5fce268c66d3d6c73e974e76  ninja-1.10.0.tar.gz"
+b2sums="b8160ca6d58cfa0edb93d16b7dfb9776d290c42e54b33b78cd925f167c80f8794e4cc30af984a526b8263c7904a734cf0770d3c27283d21d02f18d3e2eb70032  ninja-1.10.2.tar.gz"

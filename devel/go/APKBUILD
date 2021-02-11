@@ -1,6 +1,6 @@
 pkgname=go
 pkgrel=0
-pkgver=1.15.7
+pkgver=1.15.8
 pkgdesc="Go programming language compiler"
 url="https://golang.org/"
 arch="all"
@@ -64,7 +64,7 @@ package() {
 	cp -a doc/* "$ddoc"
 }
 
-b2sums="15b0827fb56b8e9208c65e8f7f11c7f67820efce1627b4123e937301bb437c597e87adfff9a2eee9aaf53ba0f22eb2f10746bafb7247b4250566f20181b7a2a0  go1.15.7.src.tar.gz
+b2sums="234208b16865f0ac1567e12d3f2dee379f64220a8a04e4b4057d065d3b12e1a110688f165ddc25accf96eab7d8bd2da3717cdd18b74f8d391da8b404bf40ae4f  go1.15.8.src.tar.gz
 58bf92fc78b8ac8cca86fd2152b80b4ef50d38fd63f01fc19271f883c393b076e9e8b80a387d5104e376067216b20da5860141c5943f9b1bfffd7e3ec1408468  dont_use_gold_arm64.patch
 fda7a5ca2f69cf4f9810389109fb8cd2e29240f3db582cf1a626fcfdb3970fb34c0015f7e1185235f8819fe5679bf77da3fd3b28c465370ca2149ecbba0fb260  mips-fix-linker.patch
 112db77a50279c4671d6cd82fc52d48b8cff50269d0523535b43d5210636baf7fdca24bfcc3d8f63971ecf94414ffb0d9419029b5c8d67e7457fda9c1f5055fe  fix-setrlimit-hang.patch"

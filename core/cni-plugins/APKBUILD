@@ -1,5 +1,5 @@
 pkgname=cni-plugins
-pkgver=0.8.6
+pkgver=0.9.1
 pkgrel=0
 pkgdesc="Some standard networking plugins, maintained by the CNI team"
 options="!check"
@@ -22,4 +22,4 @@ package() {
 	install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
 
-b2sums="89276e0f7fdbc782b30ff675abcb0f92f210771bb772269210416e17d6da443fe732774d9af8ae66f69847c8b48ee4dc6485f51e2156814cfd7e3ca8b455428f  cni-plugins-0.8.6.tar.gz"
+b2sums="878f476e62f12020b39d33a79723fe246b34d80705d3a336573401743392adca9a57b196d6d191b4a6f281110f47ecbb1525aacd91cd488bea61c7aaed12a6ef  cni-plugins-0.9.1.tar.gz"

@@ -6,7 +6,8 @@ url="https://www.packer.io/"
 arch="all"
 license="MPL-2.0"
 makedepends="go"
-source="$pkgname-$pkgver.tar.gz::https://github.com/hashicorp/packer/archive/v$pkgver.tar.gz"
+source="$pkgname-$pkgver.tar.gz::https://github.com/hashicorp/packer/archive/v$pkgver.tar.gz
+	riscv64.patch"
 builddir="$srcdir/src/github.com/hashicorp/$pkgname"
 
 prepare() {
@@ -34,4 +35,5 @@ cleanup_srcdir() {
 	default_cleanup_srcdir
 }
 
-b2sums="149499ae95c5ce045ad68d4e1407d197164402ff5bf26065ccc5803c025a7910b3f684a46669cd5fea6372b3836e95bcc175067cf212a36ae3cd44443477b7de  packer-1.7.0.tar.gz"
+b2sums="149499ae95c5ce045ad68d4e1407d197164402ff5bf26065ccc5803c025a7910b3f684a46669cd5fea6372b3836e95bcc175067cf212a36ae3cd44443477b7de  packer-1.7.0.tar.gz
+076f16bca99d08a303b60ee4b136b18d1eb448e4216786fb357981a6ed38eb3587229881cd4a85e2efe3328d6b512f8932834d677edc4615493f8f94667d884a  riscv64.patch"

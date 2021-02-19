@@ -1,0 +1,37 @@
+pkgname=packer
+pkgver=1.7.0
+pkgrel=0
+pkgdesc="Build Automated Machine Images"
+url="https://www.packer.io/"
+arch="all"
+license="MPL-2.0"
+makedepends="go"
+source="$pkgname-$pkgver.tar.gz::https://github.com/hashicorp/packer/archive/v$pkgver.tar.gz"
+builddir="$srcdir/src/github.com/hashicorp/$pkgname"
+
+prepare() {
+	mkdir -p ${builddir%/*}
+	mv $srcdir/$pkgname-$pkgver "$builddir"/
+	default_prepare
+}
+
+build() {
+	GO111MODULE=off GOPATH="$srcdir" go build -v -o bin/$pkgname \
+		-ldflags "-X main.GitCommit=v$pkgver -X github.com/hashicorp/packer/version.Prerelease= -s -w"
+}
+
+check() {
+	GOPATH="$srcdir" go list -mod=vendor . | xargs -t -n4 go test -mod=vendor -timeout=2m -parallel=4
+	bin/$pkgname -v
+}
+
+package() {
+	install -Dm755 "$builddir"/bin/$pkgname "$pkgdir"/usr/bin/$pkgname
+}
+
+cleanup_srcdir() {
+	go clean -modcache
+	default_cleanup_srcdir
+}
+
+b2sums="149499ae95c5ce045ad68d4e1407d197164402ff5bf26065ccc5803c025a7910b3f684a46669cd5fea6372b3836e95bcc175067cf212a36ae3cd44443477b7de  packer-1.7.0.tar.gz"

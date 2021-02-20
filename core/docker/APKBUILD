@@ -2,12 +2,13 @@ pkgname=docker
 pkgver=20.10.3
 _cli_commit=48d30b5b32e99c932b4ea3edca74353feddd83ff	# https://github.com/docker/cli/commits/v$pkgver
 _moby_commit=46229ca1d815cfd4b50eb377ac75ad8300e13a85	# https://github.com/moby/moby/commits/v$pkgver
-pkgrel=0
+pkgrel=1
 pkgdesc="Pack, ship and run any application as a lightweight container"
 url="https://www.docker.io/"
 arch="all"
 license="Apache-2.0"
 makedepends="go go-md2man btrfs-progs-dev bash linux-dev coreutils lvm2-dev libtool libseccomp-dev"
+depends="containerd iptables"
 install="$pkgname.pre-install"
 
 # from https://github.com/moby/moby:	grep libnetwork vendor.conf

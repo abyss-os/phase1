@@ -35,6 +35,7 @@ build() {
 	export DOCKER_GITCOMMIT=$_moby_commit	# for moby
 	export DOCKER_BUILDTAGS=seccomp
 	export DISABLE_WARN_OUTSIDE_CONTAINER=1
+	export GO111MODULE=auto
 
 	# libnetwork (docker-proxy)
 	msg "building docker-proxy"

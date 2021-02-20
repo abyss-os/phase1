@@ -1,6 +1,6 @@
 pkgname=containerd
-pkgver=1.4.3
-_commit=269548fa27e0089a8b8278fc4fc781d7f65a939b
+pkgver=1.5.0.b1
+_commit=cfa842c278694860a7e32917066f4a24978f80d0
 pkgrel=0
 pkgdesc="An open and reliable container runtime"
 url="https://containerd.io"
@@ -9,15 +9,15 @@ license="Apache-2.0"
 depends="runc"
 makedepends="btrfs-progs-dev go go-md2man libseccomp-dev"
 #subpackages="$pkgname-doc"
-source="containerd-$pkgver.tar.gz::https://github.com/containerd/containerd/archive/v$pkgver.tar.gz"
-builddir="$srcdir/$pkgname-$pkgver"
+source="containerd-$pkgver.tar.gz::https://github.com/containerd/containerd/archive/${_commit}.tar.gz"
+builddir="$srcdir/$pkgname-${_commit}"
 options="!strip"
 
 build() {
 	export GOPATH="$srcdir"
 	cd "$srcdir"
 	mkdir -p $(dirname "$srcdir/src/github.com/containerd/containerd")
-	ln -sf "$PWD/$pkgname-$pkgver" "$srcdir/src/github.com/containerd/containerd"
+	ln -sf "$PWD/$pkgname-${_commit}" "$srcdir/src/github.com/containerd/containerd"
 	cd "$srcdir/src/github.com/containerd/containerd"
 	make VERSION="v$pkgver" REVISION="$_commit"
 	# new generated manpages
@@ -33,4 +33,4 @@ package() {
 	install -Dsm755 "$builddir"/bin/* "$pkgdir"/usr/bin/
 }
 
-b2sums="181ba9139ff9f245d71459baed21a6f2cde2d64f10bb42ae9361167c2686ccf25a90ee213df8f6d430a3c70390d0cd3e6620e42c6c7ec2dfe51289ca2d4add3c  containerd-1.4.3.tar.gz"
+b2sums="8cf4590e6f838e503a8cd176fde231a8130d799e4e2612fee454f61bbcc4d331638c6a8514704b94ae9a2acdb7d6a042e89f6fa78cf3e8411528d9340b1d4289  containerd-1.5.0.b1.tar.gz"

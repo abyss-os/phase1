@@ -1,10 +1,10 @@
 pkgname=minio-client
 _pkgname=mc
-_pkgver='RELEASE.2020-05-16T01-44-37Z'
+_pkgver='RELEASE.2021-02-19T05-34-40Z'
 pkgver=${_pkgver#*.}
 pkgver=${pkgver%T*}
 pkgver=0.${pkgver//-}
-pkgrel=1
+pkgrel=0
 pkgdesc="The MinIO Client"
 url="https://minio.io/"
 arch="all"
@@ -38,4 +38,4 @@ cleanup_srcdir() {
 	go clean -modcache
 	default_cleanup_srcdir
 }
-b2sums="1784f584bcc0a1d9679af75f92184e8286c58f0462db299ef10f1660b9b977dd4b3f52459fb2f599959a72165da2becbaa84da9d3cb902100fa624f305c240f3  mc-RELEASE.2020-05-16T01-44-37Z.tar.gz"
+b2sums="b5634355c1e4e5422ef4ea8493304bf3771c91e524948552012bb4ca5f76cbfa1ad95ebd0ef193a43f686bbe8a0595e4f1a3559ab403146ffebb206d4dc07071  mc-RELEASE.2021-02-19T05-34-40Z.tar.gz"

@@ -1,5 +1,5 @@
 pkgname=libgpg-error
-pkgver=1.38
+pkgver=1.41
 pkgrel=0
 pkgdesc="Support library for libgcrypt"
 url="http://www.gnupg.org"
@@ -44,4 +44,4 @@ lisp() {
 	mv "$pkgdir"/usr/share "$subpkgdir"/usr/share/
 }
 
-b2sums="9532402466748503805366b94c82c9adfe5b448f885c26b33ebf7ba9957161ca046b4057f5ca862224accb9f2af731652a55d20e7a4ab69107190a58c8e11ad6  libgpg-error-1.38.tar.bz2"
+b2sums="9dc95bc09f55915d904e0f956ecf9281615028b8b8d876dbc786b752068fefea56adfb5dd5db65bad656ab664d567e56541e44a584c7f8672c30537ed05c4db0  libgpg-error-1.41.tar.bz2"

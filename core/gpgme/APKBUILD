@@ -9,6 +9,7 @@ depends="gnupg"
 makedepends="python3-dev swig libgpg-error-dev libassuan-dev"
 subpackages="$pkgname-dev $pkgname-doc gpgmepp py-gpgme:py"
 source="https://www.gnupg.org/ftp/gcrypt/gpgme/gpgme-$pkgver.tar.bz2"
+options="!check"
 
 build() {
 	./configure \

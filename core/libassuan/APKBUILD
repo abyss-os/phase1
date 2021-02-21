@@ -1,6 +1,6 @@
 pkgname=libassuan
-pkgver=2.5.3
-pkgrel=2
+pkgver=2.5.4
+pkgrel=0
 pkgdesc="A IPC library used by some GnuPG related software"
 url="https://www.gnupg.org/software/libassuan/index.html"
 arch="all"
@@ -29,4 +29,4 @@ package() {
 	make DESTDIR="$pkgdir" install
 }
 
-b2sums="ae3a5a9a03e85d62cf87271cd4a0718a2b89a4f90ea814837913e4b2bb6e5af9746e766d99685cc0cc3a801efaee597e491a2bc03d42ac26059580ea4680fd7a  libassuan-2.5.3.tar.bz2"
+b2sums="2eec42c47840741a4726fc35c3ed04300e5fbcd37f808b121534aeaa04d0d0f609a30ad48cfbe33a81ee4b2ebbb822b9a48a5c602268f1b802bf5d7d19d72e9c  libassuan-2.5.4.tar.bz2"

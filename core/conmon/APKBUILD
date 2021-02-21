@@ -5,7 +5,7 @@ pkgdesc="An OCI container runtime monitor"
 url="https://github.com/containers/conmon"
 arch="all"
 license="Apache-2.0"
-makedepends="glib-dev bash"
+makedepends="glib-dev bash go"
 source="$pkgname-$pkgver.tar.gz::https://github.com/containers/conmon/archive/v$pkgver.tar.gz"
 subpackages="${pkgname}-doc"
 

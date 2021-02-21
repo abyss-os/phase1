@@ -1,0 +1,21 @@
+pkgname=buildah
+pkgver=1.19.6
+pkgrel=0
+pkgdesc="tool that facilitates building OCI container images"
+url="https://github.com/containers/buildah"
+arch="all"
+license="Apache-2.0"
+makedepends="go go-md2man lvm2-dev gpgme-dev libseccomp-dev btrfs-progs-dev bash"
+subpackages="$pkgname-doc"
+options="!check"
+source="$pkgname-$pkgver.tar.gz::https://github.com/containers/buildah/archive/v$pkgver.tar.gz"
+
+build() {
+	GIT_COMMIT="$pkgver" TAGS="" make
+}
+
+package() {
+	GIT_COMMIT="$pkgver" make install PREFIX=/usr DESTDIR="$pkgdir"
+}
+
+b2sums="c5ad1405d907f6d5973f55c15b86e4341dc4c7c0db32854b5b54655fe1af1606b1206f3c7a3e86f83962c2ab1355c9e2b770ada97abfd9b9f8f231bd4b77e981  buildah-1.19.6.tar.gz"

@@ -1,6 +1,6 @@
 pkgname=skopeo
-pkgver=1.1.1
-pkgrel=2
+pkgver=1.2.2
+pkgrel=0
 pkgdesc="Work with remote images registries - retrieving information, images, signing content"
 url="https://github.com/containers/skopeo"
 arch="all"
@@ -16,8 +16,7 @@ makedepends="
 	ostree-dev
 	"
 subpackages="$pkgname-bash-completion"
-source="skopeo-$pkgver.tar.gz::https://github.com/containers/skopeo/archive/v$pkgver.tar.gz
-		storage_mips.patch"
+source="skopeo-$pkgver.tar.gz::https://github.com/containers/skopeo/archive/v$pkgver.tar.gz"
 builddir="$srcdir/src/github.com/containers/$pkgname"
 
 prepare() {
@@ -51,5 +50,4 @@ cleanup_srcdir() {
 	default_cleanup_srcdir
 }
 
-b2sums="3f72a812409a48d960fe36028355cf7128dabbb466bbb20aae9d8dda81a35e018e5a3cf4d430beaf8834f5355d6293a01b7702e88713557afb58216bffd9f3e5  skopeo-1.1.1.tar.gz
-0af48f3e61a123fff6e662968869487681a061fa50df831ef5b218b5f0732f1a3adc1213693d270232d6b7a74d601c05cdb313e26eb8c27aa09d010cf7817edc  storage_mips.patch"
+b2sums="3dd3a9f7c061ec408b93b51531f063a2ea9cd489cf746d96b9e7dbcb5c3a2723955cc018c80b7de68098e88644ab0d075a5416adce912665bde203c4830f09e1  skopeo-1.2.2.tar.gz"

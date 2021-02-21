@@ -1,0 +1,28 @@
+diff --git a/meson.build b/meson.build
+index 8a6dfae..ee1d551 100644
+--- a/meson.build
++++ b/meson.build
+@@ -1808,12 +1808,17 @@ atomicdefine = '''
+ 
+ # We know that we can always use real ("lock free") atomic operations with MSVC
+ if cc.get_id() == 'msvc' or cc.get_id() == 'clang-cl' or cc.links(atomictest, name : 'atomic ops')
+-  have_atomic_lock_free = true
+-  if cc.get_id() == 'gcc' and not cc.compiles(atomicdefine, name : 'atomic ops define')
+-    # Old gcc release may provide
+-    # __sync_bool_compare_and_swap but doesn't define
+-    # __GCC_HAVE_SYNC_COMPARE_AND_SWAP_4
+-    glib_conf.set('__GCC_HAVE_SYNC_COMPARE_AND_SWAP_4', true)
++  # unconditionally set false here for riscv64, since they don't work at present
++  if host_machine.cpu_family() == 'riscv64'
++    have_atomic_lock_free = false
++  else
++    have_atomic_lock_free = true
++    if cc.get_id() == 'gcc' and not cc.compiles(atomicdefine, name : 'atomic ops define')
++      # Old gcc release may provide
++      # __sync_bool_compare_and_swap but doesn't define
++      # __GCC_HAVE_SYNC_COMPARE_AND_SWAP_4
++      glib_conf.set('__GCC_HAVE_SYNC_COMPARE_AND_SWAP_4', true)
++    endif
+   endif
+ else
+   have_atomic_lock_free = false

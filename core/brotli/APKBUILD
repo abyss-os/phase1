@@ -1,5 +1,5 @@
 pkgname=brotli
-pkgver=1.0.7
+pkgver=1.0.9
 pkgrel=0
 pkgdesc="Generic lossless compressor"
 url="https://github.com/google/brotli"
@@ -38,5 +38,5 @@ py3() {
 	python3 setup.py install --prefix=/usr --root="$subpkgdir"
 }
 
-b2sums="b9fc554cd23c8387b648638b6f9bb2d29fa87035856d03cf284662f9281984f3bf8e40109e61155ece18673f4391bc0fff704f8ab800a2041d3ce1824478d2ae  brotli-1.0.7.tar.gz
+b2sums="8b9939d5224396ef33b43e019250ba4bc8949903583615e8dc02c85340fc0a1e2d1632161e00b0ee7355d77f05529ac772f482e05d2089afd71a0bf71e803904  brotli-1.0.9.tar.gz
 ed294b53f2f28754f05a5aecc63dd7c06294c6da7f5d4d0dac32e93ac53c325b434ca038c5b757c711429576ef389f5081d5869a63e1406e14f5a49134fb28fd  optimize-mips-s390x.patch"

@@ -1,6 +1,6 @@
 pkgname=lxd
 pkgver=4.11
-pkgrel=0
+pkgrel=1
 pkgdesc="a container hypervisor and a new user experience for LXC"
 url="https://linuxcontainers.org/lxd/"
 arch="all"
@@ -59,7 +59,7 @@ source="https://linuxcontainers.org/downloads/$pkgname/$pkgname-$pkgver.tar.gz
 _project="github.com/lxc/lxd"
 
 build() {
-	export GOPATH="$builddir/_dist" CGO_CFLAGS="-Wno-error -Wignored-attributes"
+	export GOPATH="$builddir/_dist" CGO_CFLAGS="-Wno-error -Wignored-attributes" GO111MODULE=auto
 
 	cd "$builddir"
 	go install -v -x -tags libsqlite3 $_project/lxd

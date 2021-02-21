@@ -1,6 +1,6 @@
 pkgname=libgcrypt
-pkgver=1.8.5
-pkgrel=3
+pkgver=1.9.2
+pkgrel=0
 pkgdesc="general purpose crypto library based on the code used in GnuPG"
 url="http://www.gnupg.org"
 arch="all"
@@ -53,4 +53,4 @@ package() {
 	rm -f ${pkgdir}/usr/share/info/dir
 }
 
-b2sums="93276b4536f71c07bb103e10607592e02add413f633d96cc95513daa6e6b0e098fe803bb6a0e405a241fddc5ce0cfad61658d57c27bd724eecd32fd862af4c99  libgcrypt-1.8.5.tar.bz2"
+b2sums="e0ceb02b0c26a7246c4146640a9dcea01429a365bd484532b9d85fdb0c8f4ac1308862e70899a1593f4665e4b2d16ceaa10029702f67720897975258a25d8ab0  libgcrypt-1.9.2.tar.bz2"

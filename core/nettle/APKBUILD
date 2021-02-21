@@ -1,12 +1,11 @@
 pkgname=nettle
-pkgver=3.7
+pkgver=3.7.1
 pkgrel=0
 pkgdesc="A low-level cryptographic library"
 url="https://www.lysator.liu.se/~nisse/nettle/"
 arch="all"
 license="LGPL-2.0-or-later"
-depends_dev="gmp-dev"
-makedepends="$depends_dev m4"
+makedepends="gmp-dev m4"
 subpackages="$pkgname-dev"
 source="https://ftp.gnu.org/gnu/$pkgname/$pkgname-$pkgver.tar.gz"
 builddir="$srcdir/$pkgname-$pkgver"
@@ -40,4 +39,4 @@ package() {
 	make DESTDIR="$pkgdir" install
 }
 
-b2sums="1e8a77db9b7e62dee9a01e3c3b476e206f36cc7235153b0a1a762276650c61d7c4c3be73b2ecae9313313e416e3c7a2bd999a3505c41b26e806f9b3eb486550f  nettle-3.7.tar.gz"
+b2sums="2dbc0204623ca9d42d4e4fec0d96e3d1aa164ac63f046198c2827a9eb8946392cbf5dd48a2a77cb98d52591eb83b48092686e3f5eb5dc2ee5f5e92cfaa335f26  nettle-3.7.1.tar.gz"

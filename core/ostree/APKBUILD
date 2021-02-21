@@ -1,5 +1,5 @@
 pkgname=ostree
-pkgver=2020.4
+pkgver=2020.8
 pkgrel=0
 pkgdesc="Operating system and container binary deployment and upgrades"
 url="https://github.com/ostreedev/ostree"
@@ -50,5 +50,5 @@ bashcomp() {
 	amove usr/share/bash-completion
 }
 
-b2sums="a64ae5b58eff5cd0e7fe5c4d2ab499404212ecb80c5df27edc06489303d38a3ecd0a2fbe34c7a55eda0813ea176d2901a1ff5b844a4dbe4290a2bdead18f3d4e  libostree-2020.4.tar.xz
+b2sums="e856f9642db9fd16e96d6bdc9b3f3be93989458d72258c4586e5a49e67c197d0b7b20cefd0b5a28d77dee986db42ae5584d2894005ede654b8320402aa3af367  libostree-2020.8.tar.xz
 e339348d2802ad804033b2bf6625ac5243e619c474bcdb43d7556f31677a2ba3ddebc57f29da2c3f771c9e44e3c9ae191bd93c7016c104e294bfc864c89be607  musl-fixes.patch"

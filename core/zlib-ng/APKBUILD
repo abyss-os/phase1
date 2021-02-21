@@ -1,0 +1,37 @@
+pkgname=zlib-ng
+pkgver=2.0.0.r2
+_pkgver=2.0.0-RC2
+pkgrel=0
+pkgdesc="A compression/decompression Library"
+arch="all"
+license="zlib"
+url="https://github.com/zlib-ng/zlib-ng"
+subpackages="$pkgname-dev $pkgname-doc"
+source="$pkgname-$pkgver.tar.gz::https://github.com/zlib-ng/zlib-ng/archive/v${_pkgver}.tar.gz"
+replaces="zlib"
+provides="zlib so:libz.so.1"
+
+builddir="$srcdir/$pkgname-${_pkgver}"
+
+build() {
+	./configure \
+		--prefix=/usr \
+		--libdir=/usr/lib \
+		--shared \
+		--zlib-compat
+	make
+}
+
+check() {
+	cd "$builddir"
+	make check
+}
+
+package() {
+	cd "$builddir"
+	make install \
+		pkgconfigdir="/usr/lib/pkgconfig" \
+		DESTDIR="$pkgdir"
+}
+
+b2sums="f831d7179b8ba184462a181f27bc54b97454f8b17a8474c578bc467fc7513c957f83080694e89beb63458a66d4a2736f1ce7b2f43c432d96a73686da91795061  zlib-ng-2.0.0.r2.tar.gz"

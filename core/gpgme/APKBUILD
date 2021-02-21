@@ -1,5 +1,5 @@
 pkgname=gpgme
-pkgver=1.13.1
+pkgver=1.15.1
 pkgrel=0
 pkgdesc="gnupg made easy"
 url="https://www.gnupg.org/related_software/gpgme/"
@@ -45,4 +45,4 @@ py() {
 	mv "$pkgdir"/usr/lib/python3* "$subpkgdir"/usr/lib/
 }
 
-b2sums="17fff261ab76b72e096aa42cc847443bfd3bbf0eb6d04af1d38561ddce1d11cfe9a98b6ced268b28f33e2cb7d900a9e6b3dfc56f1c784a021dbefbf493522e70  gpgme-1.13.1.tar.bz2"
+b2sums="d3a6ccaa35360ed3fc79364dfcc3f2fdcb70e5e41ac72ef011373a39d5def9be9ce1be45843ab65a87630d3fc570d29db5f40b9a273aa8e281464c9d1d3477de  gpgme-1.15.1.tar.bz2"

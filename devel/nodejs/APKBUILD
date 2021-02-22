@@ -1,9 +1,9 @@
 pkgname=nodejs
-pkgver=14.15.1
-pkgrel=2
+pkgver=15.9.0
+pkgrel=0
 pkgdesc="JavaScript runtime built on V8 engine"
 url="https://nodejs.org/"
-arch="all"
+arch="all !riscv64"
 license="MIT"
 depends="ca-certificates"
 makedepends="linux-dev python3 libuv-dev c-ares-dev nghttp2-dev openssl-dev icu-dev brotli-dev ninja libatomic-dev"
@@ -47,5 +47,5 @@ package() {
 	make DESTDIR="$pkgdir" BUILDTYPE=Release install
 }
 
-b2sums="7b80aaabaefa21c6c3dee37c013babced18e405df9fdffd6cceaa1c0dbd7b539a584f5a6c39698af424e9568b4247265011e5a227c24c59bf117cda4b6e308b3  node-v14.8.0.tar.gz
+b2sums="24dc07fa7da9c140cb786823c111b841bd234354d1c4950e1d879954f86ee77aa5b7b19efd363ec65b44bf9aec60d853a2287a76241a03f484546a825e50da85  node-v15.9.0.tar.gz
 f6601a8b2d15fd5b61f74898360cc9fde290f5e85316e2262f309284404b076a7b99f3ee4c8d46a2ac052b1e4c00746a635ca87c108ee9e1477b3f416f74c41f  ppc64-no-minimal-toc.patch"

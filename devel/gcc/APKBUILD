@@ -1,6 +1,6 @@
 pkgname=gcc
 pkgver=10.2.0
-pkgrel=5
+pkgrel=6
 pkgdesc="The GNU Compiler Collection"
 url="http://gcc.gnu.org"
 arch="all"
@@ -39,6 +39,10 @@ source="https://gcc.gnu.org/pub/gcc/releases/gcc-${_pkgbase:-$pkgver}/gcc-${_pkg
 	0037-gcc-go-link-to-libucontext.patch
 	0038-gcc-go-Disable-printing-of-unaccessible-ppc64-struct.patch
 
+        0016-dlang-update-zlib-binding.patch
+        0017-dlang-fix-fcntl-on-mips-add-libucontext-dep.patch
+
+
 	205-nopie.patch
 	0002-posix_memalign.patch
 	0008-s390x-muslldso.patch
@@ -52,9 +56,6 @@ source="https://gcc.gnu.org/pub/gcc/releases/gcc-${_pkgbase:-$pkgver}/gcc-${_pkg
 	libgnarl-musl.patch
 
 	320-libffi-gnulinux.patch
-
-	404-dlang-zlib.patch
-	405-dlang-mips.patch
 
 	gcc-pure64-mips.patch
 
@@ -154,7 +155,7 @@ prepare() {
 		--enable-__cxa_atexit \
 		--enable-default-pie \
 		--enable-cloog-backend \
-		--enable-languages=c,c++,go \
+		--enable-languages=c,c++,go,d \
 		--enable-checking=release \
 		--with-system-zlib \
 		--enable-shared \
@@ -180,6 +181,8 @@ package() {
 
 	ln -s /usr/bin/gnu-gcc ${pkgdir}/usr/bin/gcc
 	ln -s /usr/bin/gnu-c++ ${pkgdir}/usr/bin/g++
+	ln -s /usr/bin/gnu-gdc ${pkgdir}/usr/bin/gdc
+	ln -s /usr/bin/gnu-gccgo ${pkgdir}/usr/bin/gccgo
 
 	find "$pkgdir" -name libgtkpeer.a \
 		-o -name libgjsmalsa.a \
@@ -252,35 +255,6 @@ libgomp() {
 	mv "$pkgdir"/usr/${_target:+$CTARGET/}lib/libgomp.so.* "$subpkgdir"/usr/lib/
 }
 
-libgphobos() {
-	pkgdesc="D programming language standard library for GCC"
-	depends=
-
-	mkdir -p "$subpkgdir"/usr/lib
-	mv "$pkgdir"/usr/lib/libgdruntime.so.* "$subpkgdir"/usr/lib/
-	mv "$pkgdir"/usr/lib/libgphobos.so.*  "$subpkgdir"/usr/lib/
-}
-
-gdc() {
-	pkgdesc="GCC-based D language compiler"
-	depends="gcc=$_gccrel libgphobos=$_gccrel musl-dev"
-	depends="$depends libucontext-dev"
-
-	mkdir -p "$subpkgdir"/$_gcclibdir/include/d/ \
-		"$subpkgdir"/usr/lib \
-		"$subpkgdir"/usr/bin
-	# Copy: The installed '.d' files, the static lib, the binary itself
-	# The shared libs are part of 'libgphobos' so one can run program
-	# without installing the compiler
-	mv "$pkgdir"/$_gcclibdir/include/d/* "$subpkgdir"/$_gcclibdir/include/d/
-	mv "$pkgdir"/usr/lib/libgdruntime.a "$subpkgdir"/usr/lib/
-	mv "$pkgdir"/usr/lib/libgphobos.a "$subpkgdir"/usr/lib/
-	mv "$pkgdir"/usr/bin/gnu-gdc "$subpkgdir"/usr/bin/
-
-	ln -s /usr/bin/gnu-gdc ${pkgdir}/usr/bin/gdc
-}
-
-
 b2sums="1d79397330354e61439283cac96a109bf78ffc726265442e6d3ec131f107589ab7349d6612836edd8c8512f7bcc1d901a65a0d5d925d28a5bf3ef5cc3f9787ee  gcc-10.2.0.tar.xz
 2a0a7b8a36a74e2d093ec34e93640b486a656d1e8b5d5408751799fab3359283d9e934f3a00deeb8e02e97f1d5cd7a47a30f2bcedf2a8da9b64b2c5717018126  002_all_default-relro.patch
 f375f417bfdaa96aeafe327bf35bf26bf1d350ecc4b5db2ad735bb4e9b636d6f9d06c6a9c1359ccd1c1f6113db8ae3ab2f06ea9f0c72f292d8d5cfbb18c9d4da  003_all_default-fortify-source.patch
@@ -303,6 +277,8 @@ b296f2c3819947ba585ed102420f6492296c5d96318b143427a24d69c2fd7bf34369e572d7a9fc02
 a6f1ae365939a44b64fa771711aff581d1fe013bfc13660a0b31fb6e528645210d94aad09ec4475bdfe66e13db4c9b5283f28a51b1b3e7f713ef14a0a1012df8  0036-gcc-go-undef-SETCONTEXT_CLOBBERS_TLS-in-proc.c.patch
 7a8f0929192fee885a2ab7542f47ee4484465f65d008dac18a756bdf98f04ee4785ab6ae72dc84c3a64e82593bda58eee8da02ac5cb0d4b060bdcd210f55c584  0037-gcc-go-link-to-libucontext.patch
 920f785ba792118030316c734854d40ee98905094b5164e4f016cd5876bd70e81036949849468579ec378601c9159a8ecc7c8f268002ebc8a5b55d7b627864c9  0038-gcc-go-Disable-printing-of-unaccessible-ppc64-struct.patch
+ce189eb27c5fd5de9c6339a68256da1cefb9370905f2de22802a9c4196cc8845b45cabd6c830983d28f8e06a836ef0f6fb3998f8392d139b83c20d42875f76aa  0016-dlang-update-zlib-binding.patch
+2352c56df04dd98accbaa896e065a02f69b318493d5351b49238f5732b040b851ca2b47387ce01bc02bf8fdc58bef7a508832ab6320d037838fd0eea3cb8b644  0017-dlang-fix-fcntl-on-mips-add-libucontext-dep.patch
 d5c73a0466635f26e26c6e2572199cb7d818441fb6bb874ed141bbfcec6784559e4e8cb0240b0decf04ef18a32e252fbd14589351d489178fc7215277a90c6a2  205-nopie.patch
 c28b7d17b7bcd0ef74ddecc9b2e0d20de28a0077e068aca7efb75eaba645e05e8b322a247f3c53c6604400af8e78135f7c18400deb18e80b7cf7325eeceaf13f  0002-posix_memalign.patch
 98859068abf09f772556e7760a09854e8cd27f183d54f8343d89557803cd1db4590ec945f95fe6a970c6f0d4c029dc462b597689614405147a5ee8a44628bbfd  0008-s390x-muslldso.patch
@@ -313,8 +289,6 @@ abc92215e54acac596ae835914edd64c25bb1df967b22678b10700a999080afaea711135eb73a33f
 46f8cb8e5815a84a42d4aa4446a098fb6df4b3e5ef2458a323fd48d17963c30627e41fdb28e787b6d61a58e059b6f7f5a179382e4dcbbbd52d84fee6dcc2407b  fix-cxxflags-passing.patch
 a7458adba9d1a8a3537d0a0e3335ac7ee65081a364f95be1f144d2a2aaba3317412ae05a484c1412da57c55affd67c951f38df1cf8577b9d7121f076ad5a6030  libgnarl-musl.patch
 31788bf24ffa306914306c9f1cce0b4a0e6b65824c3129208bdccde5846d9eb47de5ef2a6efb7a11108c8b5fa48a2fa9bb53c1967cbe9a8a3f1002b60f3081b0  320-libffi-gnulinux.patch
-a5ea52118eb0caa0c5388132bd5d53ff69f61cec421d7def57e1d7a6a03cd98fc44b3e507078d01522da45d95c3846c80a934db415e139b25b38113e855d6cc1  404-dlang-zlib.patch
-7d0b2c5eece0b9a7ec31eb781db4da7c6e1dfea2a6907394d65d9b57075d1ec4056ea520ba2189f6549ddfedfc38341d9b239b19629e9fcae7fe5b4265fd0edf  405-dlang-mips.patch
 c2e8e33eb88bba6453f0645092cc2a6b3adfb07788d7f71a3f97e4f09f95934b6dfac929b72f34c7e515d8d07b1f6db2a2bee2bb1158c85e9c41e4246bdafd41  gcc-pure64-mips.patch
 afd9fefe687b7cd3c3a483e183f366348e34f58f5d713e2f6b38da16e2e382248b446d9da01ea89fe7202b795b08929b7c42c89c2c1e9a57482faf01ee697beb  mpc-1.1.0.tar.gz
 2a864e80799471037a71c10d871f9782c37fe3a0a1734872e90f14a874ecd6551099d67b2ebd07f82a43b0522249a6b46e79952db11a278f87ca8013198f7604  gmp-6.1.2.tar.xz

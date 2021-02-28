@@ -1,8 +1,7 @@
 diff --git a/llvm/lib/CodeGen/TargetLoweringObjectFileImpl.cpp b/llvm/lib/CodeGen/TargetLoweringObjectFileImpl.cpp
-index fe64b38..b0e1601 100644
 --- a/llvm/lib/CodeGen/TargetLoweringObjectFileImpl.cpp
 +++ b/llvm/lib/CodeGen/TargetLoweringObjectFileImpl.cpp
-@@ -224,7 +224,7 @@ void TargetLoweringObjectFileELF::Initialize(MCContext &Ctx,
+@@ -208,7 +208,7 @@
      // FreeBSD must be explicit about the data size and using pcrel since it's
      // assembler/linker won't do the automatic conversion that the Linux tools
      // do.
@@ -12,10 +11,9 @@ index fe64b38..b0e1601 100644
        LSDAEncoding = dwarf::DW_EH_PE_pcrel | dwarf::DW_EH_PE_sdata4;
      }
 diff --git a/llvm/lib/MC/MCObjectFileInfo.cpp b/llvm/lib/MC/MCObjectFileInfo.cpp
-index 398de87..ff11559 100644
 --- a/llvm/lib/MC/MCObjectFileInfo.cpp
 +++ b/llvm/lib/MC/MCObjectFileInfo.cpp
-@@ -306,14 +306,11 @@ void MCObjectFileInfo::initELFMCObjectFileInfo(const Triple &T, bool Large) {
+@@ -306,14 +306,11 @@
    case Triple::mipsel:
    case Triple::mips64:
    case Triple::mips64el:
@@ -36,10 +34,9 @@ index 398de87..ff11559 100644
    case Triple::ppc64:
    case Triple::ppc64le:
 diff --git a/llvm/lib/Object/RelocationResolver.cpp b/llvm/lib/Object/RelocationResolver.cpp
-index 204577a..fcd5549 100644
 --- a/llvm/lib/Object/RelocationResolver.cpp
 +++ b/llvm/lib/Object/RelocationResolver.cpp
-@@ -358,6 +358,7 @@ static uint64_t resolveLanai(uint64_t Type, uint64_t Offset, uint64_t S,
+@@ -291,6 +291,7 @@
  static bool supportsMips32(uint64_t Type) {
    switch (Type) {
    case ELF::R_MIPS_32:
@@ -47,12 +44,12 @@ index 204577a..fcd5549 100644
    case ELF::R_MIPS_TLS_DTPREL32:
      return true;
    default:
-@@ -370,6 +371,8 @@ static uint64_t resolveMips32(uint64_t Type, uint64_t Offset, uint64_t S,
-   // FIXME: Take in account implicit addends to get correct results.
-   if (Type == ELF::R_MIPS_32)
-     return (S + LocData) & 0xFFFFFFFF;
+@@ -303,6 +304,8 @@
+   uint32_t Rel = R.getType();
+   if (Rel == ELF::R_MIPS_32)
+     return (S + A) & 0xFFFFFFFF;
 +  if (Rel == ELF::R_MIPS_PC32)
 +    return (S + getELFAddend(R) - R.getOffset()) & 0xFFFFFFFF;
-   if (Type == ELF::R_MIPS_TLS_DTPREL32)
-     return (S + LocData) & 0xFFFFFFFF;
+   if (Rel == ELF::R_MIPS_TLS_DTPREL32)
+     return (S + A) & 0xFFFFFFFF;
    llvm_unreachable("Invalid relocation type");

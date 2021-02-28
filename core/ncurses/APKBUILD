@@ -1,5 +1,5 @@
 pkgname=ncurses
-pkgver=6.2_p20210116
+pkgver=6.2_p20210220
 _ver=${pkgver/_p/-}
 pkgrel=0
 pkgdesc="Console display library"
@@ -70,4 +70,4 @@ dev() {
 	ln -s libncurses.so "$subpkgdir"/usr/lib/libcurses.so
 }
 
-b2sums="523ab808dc9147d564be50d20f684f162b78717428e2e6f29cb734682b5ae51c452d4a4d7f4c9d72df3ed963845c7a86b86be4f9f7c8f602b4669a5ee084c65d  ncurses-6.2-20210116.tgz"
+b2sums="e4e3fd33a4fb86a31f43fb5f6f93260c54e6be966bc21d4cfebe6ecd2394056e83fde897ceb7b220a724f6e9b508d4c1217a1b0e79d59ff2784c93ddb3bc64c8  ncurses-6.2-20210220.tgz"

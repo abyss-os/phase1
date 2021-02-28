@@ -1,5 +1,5 @@
 pkgname=rhash
-pkgver=1.4.0
+pkgver=1.4.1
 pkgrel=0
 pkgdesc="Utility for calculation and verification of hash sums and magnet links"
 url="http://rhash.anz.ru"
@@ -7,7 +7,7 @@ arch="all"
 license="custom"
 makedepends="openssl-dev"
 subpackages="$pkgname-doc $pkgname-dev"
-source="$pkgname-$pkgvar.tgz::https://github.com/rhash/RHash/archive/v$pkgver.tar.gz
+source="$pkgname-$pkgver.tgz::https://github.com/rhash/RHash/archive/v$pkgver.tar.gz
 	byteorder.patch"
 builddir="$srcdir/RHash-$pkgver"
 
@@ -32,5 +32,5 @@ package() {
 		install-lib-headers install-lib-shared install-lib-so-link
 }
 
-b2sums="2af437cd3a049bb9473825026f8a6476c81b4400a47638c62ee3ecb3d3984f7f9fe97def91488094a2919e5baad967d3f49ec7d95363896e270251ad085bacac  rhash-.tgz
+b2sums="2027bccc677e8a1766f0624e67f475713653ddb4be457f9c8434c45019bc730934ca860e69f8b8e1fec349e724b1a366df0f5fb98501c825b44f9b8105068ff7  rhash-1.4.1.tgz
 d3962ed44bb1fad9fec025cc2dfe2b12b18433d2a41a459cc24726a91f518d82b6dd5f0ccf916af05bb8136d603141a56f9ca8ff4803797f3bcde81ec9af2938  byteorder.patch"

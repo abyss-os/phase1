@@ -1,5 +1,5 @@
 pkgname=libedit
-pkgver=20191231.3.1
+pkgver=20210216.3.1
 _ver=${pkgver/./-}
 pkgrel=2
 pkgdesc="BSD line editing library"
@@ -36,4 +36,4 @@ package() {
 	rm "$pkgdir"/usr/share/man/man3/history.3*
 }
 
-b2sums="e209a8f7cda164d8e4d6f3c23b35af91a466c0acbdabcdca113b7dfcd969a0a3386143eb56d486440da3aab37378850c5eb04415446c604cc4bb36de3743fd43  libedit-20191231-3.1.tar.gz"
+b2sums="4b29f08ddccd77148c7ae810c3c4e378f6eab4b6d2c530f21aa9c0da1bc156d646bac6404408510639c34298ef3583fd7f2bde5051c0dac8b3a125e2659d8412  libedit-20210216-3.1.tar.gz"

@@ -1,6 +1,6 @@
 pkgname=gcc
 pkgver=10.2.0
-pkgrel=3
+pkgrel=4
 pkgdesc="The GNU Compiler Collection"
 url="http://gcc.gnu.org"
 arch="all"
@@ -10,7 +10,7 @@ _gmp=6.1.2
 _mpfr=4.0.2
 _isl=0.22
 _mpc=1.1.0
-makedepends="bison flex texinfo gawk zip zlib-dev linux-dev binutils $pkgname-bootstrap"
+makedepends="bison flex texinfo gawk zip zlib-dev linux-dev binutils $pkgname-bootstrap libucontext-dev"
 subpackages="$pkgname-doc libatomic libatomic-dev:libatomicdev libgcc libgomp libstdc++:libcxx"
 
 provides="$pkgname-bootstrap=$pkgver-r$pkgrel"
@@ -26,6 +26,18 @@ source="https://gcc.gnu.org/pub/gcc/releases/gcc-${_pkgbase:-$pkgver}/gcc-${_pkg
 	050_all_libiberty-asprintf.patch
 	051_all_libiberty-pic.patch
 	053_all_libitm-no-fortify-source.patch
+
+	0028-gcc-go-Use-_off_t-type-instead-of-_loff_t.patch
+	0029-gcc-go-Don-t-include-sys-user.h.patch
+	0030-gcc-go-Fix-ucontext_t-on-PPC64.patch
+	0031-gcc-go-Fix-handling-of-signal-34-on-musl.patch
+	0032-gcc-go-Use-int64-type-as-offset-argument-for-mmap.patch
+	0033-gcc-go-Fix-st_-a-m-c-tim-fields-in-generated-sysinfo.patch
+	0034-gcc-go-signal-34-is-special-on-musl-libc.patch
+	0035-gcc-go-Prefer-_off_t-over-_off64_t.patch
+	0036-gcc-go-undef-SETCONTEXT_CLOBBERS_TLS-in-proc.c.patch
+	0037-gcc-go-link-to-libucontext.patch
+	0038-gcc-go-Disable-printing-of-unaccessible-ppc64-struct.patch
 
 	205-nopie.patch
 	0002-posix_memalign.patch
@@ -110,8 +122,6 @@ prepare() {
 	*)	_hash_style_configure="--with-linker-hash-style=gnu" ;;
 	esac
 
-	_languages=c,c++
-
 	export AS=gnu-as CC=gnu-gcc CXX=gnu-g++ LD=gnu-ld
 
 	msg "Configuring the following:"
@@ -120,7 +130,6 @@ prepare() {
 	echo "  CHOST=$CHOST"
 	echo "  CTARGET=$CTARGET"
 	echo "  CTARGET_ARCH=$CTARGET_ARCH"
-	echo "  languages=$_languages"
 	echo "  arch_configure=$_arch_configure"
 	echo "  CC $CC CXX $CXX AS $AS LD $LD"
 	echo ""
@@ -133,9 +142,9 @@ prepare() {
 		--program-prefix=gnu- \
 		--mandir=/usr/share/man \
 		--infodir=/usr/share/info \
-        --build=${CBUILD} \
-        --host=${CHOST} \
-        --target=${CTARGET} \
+		--build=${CBUILD} \
+		--host=${CHOST} \
+		--target=${CTARGET} \
 		--with-pkgversion="Abyss OS" \
 		--disable-fixed-point \
 		--disable-libstdcxx-pch \
@@ -145,7 +154,7 @@ prepare() {
 		--enable-__cxa_atexit \
 		--enable-default-pie \
 		--enable-cloog-backend \
-		--enable-languages=$_languages \
+		--enable-languages=c,c++,go \
 		--enable-checking=release \
 		--with-system-zlib \
 		--enable-shared \
@@ -271,6 +280,7 @@ gdc() {
 	ln -s /usr/bin/gnu-gdc ${pkgdir}/usr/bin/gdc
 }
 
+
 b2sums="1d79397330354e61439283cac96a109bf78ffc726265442e6d3ec131f107589ab7349d6612836edd8c8512f7bcc1d901a65a0d5d925d28a5bf3ef5cc3f9787ee  gcc-10.2.0.tar.xz
 2a0a7b8a36a74e2d093ec34e93640b486a656d1e8b5d5408751799fab3359283d9e934f3a00deeb8e02e97f1d5cd7a47a30f2bcedf2a8da9b64b2c5717018126  002_all_default-relro.patch
 f375f417bfdaa96aeafe327bf35bf26bf1d350ecc4b5db2ad735bb4e9b636d6f9d06c6a9c1359ccd1c1f6113db8ae3ab2f06ea9f0c72f292d8d5cfbb18c9d4da  003_all_default-fortify-source.patch
@@ -282,6 +292,17 @@ f02d654db021e4a647ac2526ec7d487f5c73ba687066b188601e99f46f6053d7a3515da3fb8d6fc7
 71763a85ba2ccec603e44e895cef4fff1a12f53941b37a9e64b108e66f24de3995c9eba5071053de207a77ac71efa528d8bdf714e3f1a84abbb423994b673552  050_all_libiberty-asprintf.patch
 284f01e91907506e65d5267d158341e3f439a57086d9f6b2ff59e94047afd2fd7818469a526d13802f45ddeef65d908ca31723a8dbe0bb268be7d200e56c88e9  051_all_libiberty-pic.patch
 8f8f35d28a4f511f23b7ae3276d6519255f2e8651ba35563c465133e053e7001d7568821cb235491eb2c1a2bd5771a9cea5325e880b35363127f05efd5feaf7b  053_all_libitm-no-fortify-source.patch
+fd8274aab9c39d86e44ad226d9dd31873769af0aa33679a18debd210e91b99efc0cbf9eb4333fcf3930fb16b9fe32a8602056c7157d1aaaf77d94e30ab79d088  0028-gcc-go-Use-_off_t-type-instead-of-_loff_t.patch
+aad5807e3605ce7efc9d9c8a663f113a070337ded079817c8c5c07e45e3f5df26d2ed349e740fc8f6ac685d28cac4e79f3ff9efa7103f3fc2f5a846d75b505af  0029-gcc-go-Don-t-include-sys-user.h.patch
+18cd82b9c81a59731485cf580a5dbe8a6d34ec71d34738eca8b6d0d437ba1d782409121cf1435b13b6d701306c071fae609b9df0cdf75cb0bd71e85322ae8b92  0030-gcc-go-Fix-ucontext_t-on-PPC64.patch
+6295dcb80602aeae6cc35eabc4c8f245d0a578fe0dc8d2e05b920f7b131cb66d7aaf0c5d2738df5059c1e1606bbff24217a8c1bf9b73f97fcdadb5b4c49c6a71  0031-gcc-go-Fix-handling-of-signal-34-on-musl.patch
+b296f2c3819947ba585ed102420f6492296c5d96318b143427a24d69c2fd7bf34369e572d7a9fc02711befbd0414824315c4fae845d9dc79b25702f34ea6bf5a  0032-gcc-go-Use-int64-type-as-offset-argument-for-mmap.patch
+9f9c33556223c0577d007f46c67cd1ac2c3259f41cb4b3c8a404a966e6f1f8016f6f08415d9355e675173ea8be045cc143763a55a6a8b140a17ff209f1cbd58f  0033-gcc-go-Fix-st_-a-m-c-tim-fields-in-generated-sysinfo.patch
+45c1966f32aa2f0dac37afae72a5996bd936b36999359f8a0f046d4f52a5e222c21975e4cad734e3288a6804e0f059d7ec42db9b607b1453f6ebdf12b48d6961  0034-gcc-go-signal-34-is-special-on-musl-libc.patch
+533bb119a1db8a8356fc1c072be096bde1b739165639316bece111838a6a43e10169ab3c254056e50215f1a500a471fe3864e22261ef7517bc40c9b8c6c10c5e  0035-gcc-go-Prefer-_off_t-over-_off64_t.patch
+a6f1ae365939a44b64fa771711aff581d1fe013bfc13660a0b31fb6e528645210d94aad09ec4475bdfe66e13db4c9b5283f28a51b1b3e7f713ef14a0a1012df8  0036-gcc-go-undef-SETCONTEXT_CLOBBERS_TLS-in-proc.c.patch
+7a8f0929192fee885a2ab7542f47ee4484465f65d008dac18a756bdf98f04ee4785ab6ae72dc84c3a64e82593bda58eee8da02ac5cb0d4b060bdcd210f55c584  0037-gcc-go-link-to-libucontext.patch
+920f785ba792118030316c734854d40ee98905094b5164e4f016cd5876bd70e81036949849468579ec378601c9159a8ecc7c8f268002ebc8a5b55d7b627864c9  0038-gcc-go-Disable-printing-of-unaccessible-ppc64-struct.patch
 d5c73a0466635f26e26c6e2572199cb7d818441fb6bb874ed141bbfcec6784559e4e8cb0240b0decf04ef18a32e252fbd14589351d489178fc7215277a90c6a2  205-nopie.patch
 c28b7d17b7bcd0ef74ddecc9b2e0d20de28a0077e068aca7efb75eaba645e05e8b322a247f3c53c6604400af8e78135f7c18400deb18e80b7cf7325eeceaf13f  0002-posix_memalign.patch
 98859068abf09f772556e7760a09854e8cd27f183d54f8343d89557803cd1db4590ec945f95fe6a970c6f0d4c029dc462b597689614405147a5ee8a44628bbfd  0008-s390x-muslldso.patch

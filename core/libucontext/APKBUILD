@@ -10,7 +10,7 @@ source="https://distfiles.dereferenced.org/libucontext/libucontext-$pkgver.tar.x
 options="!check" # segfault on mips, but seems to work fine
 
 case $CARCH in
-        ppc64le) makedepends="gcc" LDFLAGS="-fuse-ld=gold" CC=gnu-gcc;;
+        ppc64le) makedepends="gcc binutils" LDFLAGS="-fuse-ld=gold" CC=gnu-gcc;;
 esac
 
 build() {

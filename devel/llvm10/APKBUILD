@@ -1,18 +1,18 @@
 # in reality, we only package select libraries from older LLVM versions in order to make upgrades between major releases easier
 pkgname=llvm10
 pkgver=10.0.1
-pkgrel=0
+pkgrel=1
 pkgdesc="$pkgname $pkgver (libs only)"
 arch="all"
 url=https://llvm.org
 license=.
 
 case $CARCH in
-        aarch64) _targets="AArch64" _linker="lld" lld="ON";;
-        x86_64) _targets="X86" _linker="lld" lld="ON";;
+        aarch64) _targets="X86;AArch64;Mips;RISCV;PowerPC" _linker="lld" lld="ON";;
+        x86_64) _targets="X86;AArch64;Mips;RISCV;PowerPC" _linker="lld" lld="ON";;
         mips64*) _targets="Mips" _linker="lld" lld="ON";;
         riscv64) _targets="RISCV" _linker="lld" lld="ON";;
-        ppc64*) _targets="PowerPC" _linker="lld" lld="ON";;
+        ppc64*) _targets=";AArch64;Mips;RISCV;PowerPC" _linker="lld" lld="ON";;
         *) echo "Unknown arch" ; return 1 ;;
 esac
 

@@ -3,7 +3,7 @@ pkgver=5.1.4
 _patchlevel=${pkgver##*.}
 _myver=${pkgver%.*}
 _patchbase=${_myver/./}
-pkgrel=2
+pkgrel=0
 pkgdesc="The GNU Bourne Again shell"
 url="https://www.gnu.org/software/bash/bash.html"
 arch="all"
@@ -15,7 +15,6 @@ options="!checkroot"
 provides="/bin/sh"
 source="https://ftp.gnu.org/gnu/bash/bash-${_myver}.tar.gz
 	bash-noinfo.patch
-	fix-jobs.patch
 	"
 
 # generate url's to patches. note: no forks allowed!

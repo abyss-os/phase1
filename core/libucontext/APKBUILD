@@ -1,6 +1,6 @@
 pkgname=libucontext
-pkgver=0.11
-pkgrel=1
+pkgver=1.0
+pkgrel=0
 pkgdesc="ucontext function implementations"
 url="https://github.com/kaniini/libucontext"
 arch="all"
@@ -9,23 +9,17 @@ subpackages="$pkgname-dev"
 source="https://distfiles.dereferenced.org/libucontext/libucontext-$pkgver.tar.xz"
 options="!check" # segfault on mips, but seems to work fine
 
-case "$CTARGET_ARCH" in
-	arm*)		LIBUCONTEXT_ARCH="arm" ;;
-	ppc64*)		LIBUCONTEXT_ARCH="ppc64" ;;
-	*)		LIBUCONTEXT_ARCH="$CTARGET_ARCH" ;;
-esac
-
 build() {
-	make ARCH="$LIBUCONTEXT_ARCH"
+	make
 }
 
 check() {
-	make ARCH="$LIBUCONTEXT_ARCH" check
+	make check
 }
 
 package() {
-	make ARCH="$LIBUCONTEXT_ARCH" DESTDIR="$pkgdir" install
-	mkdir -p $pkgdir/usr && mv $pkgdir/lib $pkgdir/usr/
+	make DESTDIR="$pkgdir" install
+	mkdir -p $pkgdir/usr/lib && mv -v $pkgdir/lib/* $pkgdir/usr/lib/ && rm -rf $pkgdir/lib
 }
 
-b2sums="300ec96902653e2af7b12f3110231232442f466bcf7c9986905df2e2d42a3b59214e6ec74fd9c0ea59fc3b6ca9cea20075c9f855ee40b6f0e557e4e5f47f7a32  libucontext-0.11.tar.xz"
+b2sums="6f10fbe25e9a132d290976d3b4abd09269b22f87a15c75b876165290fddc70b642ff0904ddbfa6003ec0bc4c11c5803a7df322d911c5b41e215428367f639c0f  libucontext-1.0.tar.xz"

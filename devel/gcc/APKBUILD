@@ -1,6 +1,6 @@
 pkgname=gcc
 pkgver=10.2.0
-pkgrel=6
+pkgrel=7
 pkgdesc="The GNU Compiler Collection"
 url="http://gcc.gnu.org"
 arch="all"
@@ -12,8 +12,11 @@ _isl=0.22
 _mpc=1.1.0
 makedepends="bison flex texinfo gawk zip zlib-dev linux-dev binutils $pkgname-bootstrap libucontext-dev"
 subpackages="$pkgname-doc libatomic libatomic-dev:libatomicdev libgcc libgomp libstdc++:libcxx"
-
 provides="$pkgname-bootstrap=$pkgver-r$pkgrel"
+
+if [ "$CARCH" != "ppc64le" ]; then
+	subpackages="$subpackages gdc libgphobos"
+fi
 
 source="https://gcc.gnu.org/pub/gcc/releases/gcc-${_pkgbase:-$pkgver}/gcc-${_pkgbase:-$pkgver}.tar.xz
 	002_all_default-relro.patch
@@ -125,12 +128,19 @@ prepare() {
 
 	export AS=gnu-as CC=gnu-gcc CXX=gnu-g++ LD=gnu-ld
 
+	_languages=c,c++,go
+
+	if [ "$CARCH" != "ppc64le" ]; then
+		_languages="${_languages},d"
+	fi
+
 	msg "Configuring the following:"
 	echo ""
 	echo "  CBUILD=$CBUILD"
 	echo "  CHOST=$CHOST"
 	echo "  CTARGET=$CTARGET"
 	echo "  CTARGET_ARCH=$CTARGET_ARCH"
+	echo "  Languages: $_languages"
 	echo "  arch_configure=$_arch_configure"
 	echo "  CC $CC CXX $CXX AS $AS LD $LD"
 	echo ""
@@ -155,7 +165,7 @@ prepare() {
 		--enable-__cxa_atexit \
 		--enable-default-pie \
 		--enable-cloog-backend \
-		--enable-languages=c,c++,go,d \
+		--enable-languages=$_languages \
 		--enable-checking=release \
 		--with-system-zlib \
 		--enable-shared \
@@ -255,6 +265,35 @@ libgomp() {
 	mv "$pkgdir"/usr/${_target:+$CTARGET/}lib/libgomp.so.* "$subpkgdir"/usr/lib/
 }
 
+libgphobos() {
+	pkgdesc="D programming language standard library for GCC"
+	depends=
+
+	mkdir -p "$subpkgdir"/usr/lib
+	mv "$pkgdir"/usr/lib/libgdruntime.so.* "$subpkgdir"/usr/lib/
+	mv "$pkgdir"/usr/lib/libgphobos.so.*  "$subpkgdir"/usr/lib/
+}
+
+gdc() {
+	pkgdesc="GCC-based D language compiler"
+	depends="gcc=$_gccrel libgphobos=$_gccrel musl-dev"
+	depends="$depends libucontext-dev"
+
+	mkdir -p "$subpkgdir/$_gcclibexec" \
+		"$subpkgdir"/$_gcclibdir/include/d/ \
+		"$subpkgdir"/usr/lib \
+		"$subpkgdir"/usr/bin
+	# Copy: The installed '.d' files, the static lib, the binary itself
+	# The shared libs are part of 'libgphobos' so one can run program
+	# without installing the compiler
+	mv "$pkgdir/$_gcclibexec/d21" "$subpkgdir/$_gcclibexec/"
+	mv "$pkgdir"/$_gcclibdir/include/d/* "$subpkgdir"/$_gcclibdir/include/d/
+	mv "$pkgdir"/usr/lib/libgdruntime.a "$subpkgdir"/usr/lib/
+	mv "$pkgdir"/usr/lib/libgphobos.a "$subpkgdir"/usr/lib/
+	mv "$pkgdir"/usr/lib/libgphobos.spec "$subpkgdir"/usr/lib/
+	mv "$pkgdir"/usr/bin/$CTARGET-gdc "$subpkgdir"/usr/bin/
+	mv "$pkgdir"/usr/bin/gdc "$subpkgdir"/usr/bin/
+}
 b2sums="1d79397330354e61439283cac96a109bf78ffc726265442e6d3ec131f107589ab7349d6612836edd8c8512f7bcc1d901a65a0d5d925d28a5bf3ef5cc3f9787ee  gcc-10.2.0.tar.xz
 2a0a7b8a36a74e2d093ec34e93640b486a656d1e8b5d5408751799fab3359283d9e934f3a00deeb8e02e97f1d5cd7a47a30f2bcedf2a8da9b64b2c5717018126  002_all_default-relro.patch
 f375f417bfdaa96aeafe327bf35bf26bf1d350ecc4b5db2ad735bb4e9b636d6f9d06c6a9c1359ccd1c1f6113db8ae3ab2f06ea9f0c72f292d8d5cfbb18c9d4da  003_all_default-fortify-source.patch

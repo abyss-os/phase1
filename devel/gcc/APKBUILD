@@ -14,9 +14,11 @@ makedepends="bison flex texinfo gawk zip zlib-dev linux-dev binutils $pkgname-bo
 subpackages="$pkgname-doc libatomic libatomic-dev:libatomicdev libgcc libgomp libstdc++:libcxx"
 provides="$pkgname-bootstrap=$pkgver-r$pkgrel"
 
-if [ "$CARCH" != "ppc64le" ]; then
-	subpackages="$subpackages gdc libgphobos"
-fi
+case $CARCH in
+	riscv64) continue;;
+	ppc64le) continue;;
+	*) subpackages="$subpackages gdc libgphobos";;
+esac
 
 source="https://gcc.gnu.org/pub/gcc/releases/gcc-${_pkgbase:-$pkgver}/gcc-${_pkgbase:-$pkgver}.tar.xz
 	002_all_default-relro.patch
@@ -130,9 +132,11 @@ prepare() {
 
 	_languages=c,c++,go
 
-	if [ "$CARCH" != "ppc64le" ]; then
-		_languages="${_languages},d"
-	fi
+	case $CARCH in
+		riscv64) continue;;
+		ppc64le) continue;;
+		*) _languages="${_languages},d";;
+	esac
 
 	msg "Configuring the following:"
 	echo ""
@@ -283,16 +287,13 @@ gdc() {
 		"$subpkgdir"/$_gcclibdir/include/d/ \
 		"$subpkgdir"/usr/lib \
 		"$subpkgdir"/usr/bin
-	# Copy: The installed '.d' files, the static lib, the binary itself
-	# The shared libs are part of 'libgphobos' so one can run program
-	# without installing the compiler
+
 	mv "$pkgdir/$_gcclibexec/d21" "$subpkgdir/$_gcclibexec/"
 	mv "$pkgdir"/$_gcclibdir/include/d/* "$subpkgdir"/$_gcclibdir/include/d/
 	mv "$pkgdir"/usr/lib/libgdruntime.a "$subpkgdir"/usr/lib/
 	mv "$pkgdir"/usr/lib/libgphobos.a "$subpkgdir"/usr/lib/
 	mv "$pkgdir"/usr/lib/libgphobos.spec "$subpkgdir"/usr/lib/
-	mv "$pkgdir"/usr/bin/$CTARGET-gdc "$subpkgdir"/usr/bin/
-	mv "$pkgdir"/usr/bin/gdc "$subpkgdir"/usr/bin/
+	mv "$pkgdir"/usr/bin/gnu-gdc "$subpkgdir"/usr/bin/
 }
 b2sums="1d79397330354e61439283cac96a109bf78ffc726265442e6d3ec131f107589ab7349d6612836edd8c8512f7bcc1d901a65a0d5d925d28a5bf3ef5cc3f9787ee  gcc-10.2.0.tar.xz
 2a0a7b8a36a74e2d093ec34e93640b486a656d1e8b5d5408751799fab3359283d9e934f3a00deeb8e02e97f1d5cd7a47a30f2bcedf2a8da9b64b2c5717018126  002_all_default-relro.patch

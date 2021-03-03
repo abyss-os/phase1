@@ -1,17 +1,17 @@
 pkgname=llvm
 pkgver=11.1.0
-pkgrel=0
+pkgrel=1
 pkgdesc="$pkgname"
 arch="all"
 url=https://llvm.org
 license=.
 
 case $CARCH in
-        aarch64) _targets="X86;AArch64;Mips;RISCV;PowerPC" _linker="lld" lld="ON";;
-        x86_64) _targets="X86;AArch64;Mips;RISCV;PowerPC" _linker="lld" lld="ON";;
+        x86_64) _targets="all" _linker="lld" lld="ON";;
+        aarch64) _targets="all" _linker="lld" lld="ON";;
+        ppc64*) _targets="all" _linker="lld" lld="ON";;
         mips64*) _targets="Mips" _linker="lld" lld="ON";;
         riscv64) _targets="RISCV" _linker="lld" lld="ON";;
-        ppc64*) _targets=";AArch64;Mips;RISCV;PowerPC" _linker="lld" lld="ON";;
         *) echo "Unknown arch" ; return 1 ;;
 esac
 

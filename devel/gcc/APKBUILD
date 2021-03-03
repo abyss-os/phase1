@@ -15,8 +15,8 @@ subpackages="$pkgname-doc libatomic libatomic-dev:libatomicdev libgcc libgomp li
 provides="$pkgname-bootstrap=$pkgver-r$pkgrel"
 
 case $CARCH in
-	riscv64) continue;;
-	ppc64le) continue;;
+	riscv64) ;;
+	ppc64le) ;;
 	*) subpackages="$subpackages gdc libgphobos";;
 esac
 

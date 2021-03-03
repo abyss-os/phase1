@@ -1,6 +1,6 @@
 pkgname=gcc
 pkgver=10.2.0
-pkgrel=7
+pkgrel=8
 pkgdesc="The GNU Compiler Collection"
 url="http://gcc.gnu.org"
 arch="all"
@@ -15,9 +15,7 @@ subpackages="$pkgname-doc libatomic libatomic-dev:libatomicdev libgcc libgomp li
 provides="$pkgname-bootstrap=$pkgver-r$pkgrel"
 
 case $CARCH in
-	riscv64) ;;
-	ppc64le) ;;
-	*) subpackages="$subpackages gdc libgphobos";;
+	x86_64|aarch64) subpackages="$subpackages gdc libgphobos";;
 esac
 
 source="https://gcc.gnu.org/pub/gcc/releases/gcc-${_pkgbase:-$pkgver}/gcc-${_pkgbase:-$pkgver}.tar.xz
@@ -133,9 +131,7 @@ prepare() {
 	_languages=c,c++,go
 
 	case $CARCH in
-		riscv64) continue;;
-		ppc64le) continue;;
-		*) _languages="${_languages},d";;
+		x86_64|aarch64) _languages="${_languages},d";;
 	esac
 
 	msg "Configuring the following:"

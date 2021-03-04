@@ -1,13 +1,12 @@
 pkgname=zig
-pkgver=0.7.0
-pkgrel=1
+pkgver=0.7.1
+pkgrel=0
 pkgdesc="Zig!"
 url="https://github.com/ziglang/zig"
-arch="all"
+arch="x86_64 aarch64 ppc64le"
 license="MIT"
-makedepends="ninja cmake"
-source="$pkgname-$pkgver.tar.gz::https://github.com/ziglang/zig/archive/$pkgver.tar.gz
-		targets.patch"
+makedepends="samurai cmake"
+source="$pkgname-$pkgver.tar.gz::https://github.com/ziglang/zig/archive/$pkgver.tar.gz"
 
 builddir=$srcdir/$pkgname-$pkgver
 _builddir=$srcdir/build
@@ -28,5 +27,4 @@ package() {
 	DESTDIR=$pkgdir ninja install
 }
 
-b2sums="fab2d4482f8383f18a37a6a6ac8c683252babcad0650c31e01d7af6c4034ad1baef9655ac816213a463064018e2d6f6dbcb8c3e0c65a74750b19d643465c67c3  zig-0.7.0.tar.gz
-20d7cb128e47d2ebf1be995eca6099275a39d5d1edcce1700a637c99ac637b14de2a12db780a726e634c68d975ab05bb012e9576b31680c206d0cdfbc446e44a  targets.patch"
+b2sums="401bb079f2d0e2ad26837940e3b79c14237a492bd0b4df616f91b8b454ebd4ac3de36b2c988369c9eaaf7c2df4f95d4b1bb97760629f813ac8c7220e9542e12b  zig-0.7.1.tar.gz"

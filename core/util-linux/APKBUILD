@@ -1,12 +1,12 @@
 pkgname=util-linux
-pkgver=2.36.1
+pkgver=2.36.2
 
 case $pkgver in
 	*.*.*) _v=${pkgver%.*};;
 	*.*) _v=$pkgver;;
 esac
 
-pkgrel=3
+pkgrel=0
 pkgdesc="Random collection of Linux utilities"
 url="https://git.kernel.org/cgit/utils/util-linux/util-linux.git"
 arch="all"
@@ -151,5 +151,5 @@ _findmnt() {
 	mv "$pkgdir"/usr/bin/findmnt "$subpkgdir"/usr/bin
 }
 
-b2sums="52d867aa0b722a84828c37958d80b0bdcc1ceaae4e46fa6550ad0f2f152c52e4aaf2c8bc5fdf4f27b522037a870ff2554382abac0eaa50a6791d8b8016e3d74c  util-linux-2.36.1.tar.xz
+b2sums="17e49515f8d0430f3ed26b80bf1d6e811d847141020d0dae1340dc92887549b7b711f3db6e3913120871fc912435def73586a7aef09d8d9cc6ff7ca331b2770f  util-linux-2.36.2.tar.xz
 db5861e6f809b1537a065e5af769bf539c9f96889cf39b703f5b1575a982d9f13fc37e46c8282c2d90f69bc4998bd1bc013db4336871a382ad2f0d5a045df231  ttydefaults.h"

@@ -1,0 +1,35 @@
+pkgname="libb2"
+pkgver="0.98.1"
+pkgrel=0
+pkgdesc="Blake2 C Library"
+url="https://github.com/BLAKE2/libb2"
+arch="all"
+license="CC0"
+depends=""
+depends_dev=""
+makedepends="$depends_dev"
+install=""
+subpackages="$pkgname-dev"
+source="https://github.com/BLAKE2/libb2/releases/download/v$pkgver/libb2-$pkgver.tar.gz"
+builddir="$srcdir/libb2-$pkgver"
+
+build() {
+	./configure \
+		--build=$CBUILD \
+		--host=$CHOST \
+		--prefix=/usr \
+		--sysconfdir=/etc \
+		--mandir=/usr/share/man \
+		--localstatedir=/var
+	make
+}
+
+check() {
+	make check
+}
+
+package() {
+	make DESTDIR="$pkgdir" install
+}
+
+b2sums="078bc42a2d53b5803fdb1f40ea45c879872f7fb8e499b8305acc9dbf020456baaec2745120ba3c47aef7b18622c99fc78d10974e00da7849c4245e2761b4f079  libb2-0.98.1.tar.gz"

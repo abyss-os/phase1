@@ -1,6 +1,6 @@
 pkgname=libcap
 pkgver=2.46
-pkgrel=0
+pkgrel=1
 pkgdesc="POSIX 1003.1e capabilities"
 options="checkroot"
 arch="all"

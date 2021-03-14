@@ -1,18 +1,18 @@
 # in reality, we only package select libraries from the previous major LLVM version in order to make upgrades easier
 pkgname=llvm-compat
 pkgver=11.1.0
-pkgrel=0
+pkgrel=1
 pkgdesc="$pkgname $pkgver (libs only)"
 arch="all"
 url=https://llvm.org
 license=.
 
 case $CARCH in
-        aarch64) _targets="X86;AArch64;Mips;RISCV;PowerPC" _linker="lld" lld="ON";;
-        x86_64) _targets="X86;AArch64;Mips;RISCV;PowerPC" _linker="lld" lld="ON";;
+        x86_64) _targets="all" _linker="lld" lld="ON";;
+        aarch64) _targets="all" _linker="lld" lld="ON";;
+        ppc64*) _targets="all" _linker="lld" lld="ON";;
         mips64*) _targets="Mips" _linker="lld" lld="ON";;
         riscv64) _targets="RISCV" _linker="lld" lld="ON";;
-        ppc64*) _targets=";AArch64;Mips;RISCV;PowerPC" _linker="lld" lld="ON";;
         *) echo "Unknown arch" ; return 1 ;;
 esac
 
@@ -123,7 +123,7 @@ build() {
 
 package() {
 	cd $_builddir
-	install -D $_builddir/lib/libLLVM-${pkgver%%.*}.so ${pkgdir}/usr/lib
+	install -D $_builddir/lib/libLLVM-${pkgver%%.*}.so ${pkgdir}/usr/lib/libLLVM-${pkgver%%.*}.so
 }
 
 b2sums="ca842ff4afff8f44c82b5e7383962a9c45ca1c93b64fa4c6ebcd70a1d3849dbad2b8e4e24fba02d144c6266d7fab3607ebc6999b28c229cb35256cf40f26a985  llvmorg-11.1.0.tar.gz

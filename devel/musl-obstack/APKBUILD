@@ -1,0 +1,21 @@
+pkgname=musl-obstack
+pkgver=1.2.2
+pkgrel=0
+pkgdesc="A standalone library to implement GNU libc's obstack"
+url="https://github.com/void-linux/musl-obstack"
+arch="all"
+license="GPL"
+source="$pkgname-$pkgver.tar.gz::https://github.com/void-linux/musl-obstack/archive/v$pkgver.tar.gz"
+subpackages="$pkgname-dev"
+
+build() {
+	autoreconf -fiv
+	./configure --prefix=/usr
+	make
+}
+
+package() {
+	make DESTDIR="$pkgdir" install
+}
+
+b2sums="140924405d6b778de45f9cddd6802ea39fbf8861dcb906b25a00a35bf66e61a1a5cf1b710e57709541585546303c5c5725c95ea5c5dbf5729aaefb158ecc9f72  musl-obstack-1.2.2.tar.gz"

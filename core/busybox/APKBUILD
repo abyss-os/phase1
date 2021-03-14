@@ -1,6 +1,6 @@
 pkgname=busybox
 pkgver=1.32.1
-pkgrel=0
+pkgrel=1
 pkgdesc="Size optimized toolbox of many common UNIX utilities"
 url="https://busybox.net/"
 arch="all"

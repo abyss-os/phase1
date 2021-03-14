@@ -1,6 +1,6 @@
 pkgname=zerotier-one
 pkgver=1.6.2
-pkgrel=0
+pkgrel=1
 pkgdesc="ZeroTier One allows systems to join and participate in ZeroTier virtual networks."
 url="https://www.zerotier.com/"
 arch="all"

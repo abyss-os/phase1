@@ -1,6 +1,6 @@
 pkgname=lzip
 pkgver=1.22
-pkgrel=0
+pkgrel=1
 pkgdesc="Lzip is a lossless data compressor"
 url="http://www.nongnu.org/lzip/lzip.html"
 arch="all"

@@ -1,6 +1,6 @@
 pkgname=samurai
 pkgver=1.2
-pkgrel=0
+pkgrel=1
 pkgdesc="
 ninja-compatible build tool written in C"
 url="https://github.com/michaelforney/samurai"

@@ -1,0 +1,23 @@
+pkgname=toybox
+pkgver=0.8.4
+pkgrel=0
+pkgdesc="Size optimized toolbox of many common UNIX utilities"
+url="https://landley.net/toybox"
+arch="all"
+license="0BSD"
+makedepends="linux-dev"
+provides="/bin/sh"
+source="$pkgname-$pkgver.tar.gz::https://github.com/landley/toybox/archive/$pkgver.tar.gz
+	toybox.config"
+
+build() {
+	cp -v $srcdir/toybox.config $builddir/.config
+	make
+}
+
+package() {
+	install -D -m755 $builddir/toybox "$pkgdir"/usr/bin/toybox
+}
+
+b2sums="b3d0c0d2a7d673c3c5b3610d191d47608290e81e2fd035c705b1f002e64d0d9d98f79bb1d38f85149c6921f0f5cdef1e612f781a15a1c56acca2c0aa9eae2bb6  toybox-0.8.4.tar.gz
+88e9d333fd73c3e0fba43680cbc0a54933c50b300a9a5e6c0ee90c9276e48b7bc21bc2898fef0b27b4de7a9ed1912b826c6ea104e8be34511bfdcc88e6c051aa  toybox.config"

@@ -1,6 +1,6 @@
 pkgname=pkgconf
 pkgver=1.7.3
-pkgrel=1
+pkgrel=2
 pkgdesc="development framework configuration tools"
 url="https://git.dereferenced.org/pkgconf/pkgconf"
 arch="all"

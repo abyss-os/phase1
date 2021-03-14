@@ -1,0 +1,35 @@
+pkgname=libmd
+pkgver=1.0.3
+pkgrel=0
+pkgdesc="libmd (libbsd)"
+url="https://libbsd.freedesktop.org/"
+arch="all"
+license="BSD"
+makedepends="autoconf automake libtool linux-dev"
+subpackages="$pkgname-dev $pkgname-doc"
+source="https://libbsd.freedesktop.org/releases/$pkgname-$pkgver.tar.xz"
+
+build() {
+	cd "$builddir"
+	./configure \
+		--build=$CBUILD \
+		--host=$CHOST \
+		--prefix=/usr \
+		--sbindir=/usr/bin \
+		--sysconfdir=/etc \
+		--mandir=/usr/share/man \
+		--infodir=/usr/share/info \
+		--localstatedir=/var
+	make
+}
+
+check() {
+	cd "$builddir"
+	make check
+}
+
+package() {
+	make DESTDIR="$pkgdir" -C "$builddir" install
+}
+
+b2sums="35b732800a4b0a7b8d0a88eeff5e7e80fe55ab5ed05b7a7a1ffe866e156cc6dc6daca95f865a56297857b10b1bdfc9815b5bf0b198e8284f217498265c08fcc9  libmd-1.0.3.tar.xz"

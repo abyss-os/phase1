@@ -1,25 +1,17 @@
 pkgname=libbsd
-pkgver=0.10.0
-pkgrel=2
+pkgver=0.11.3
+pkgrel=0
 pkgdesc="commonly-used BSD functions not implemented by all libcs"
 url="https://libbsd.freedesktop.org/"
 arch="all"
 license="BSD"
-makedepends="autoconf automake libtool linux-dev"
+makedepends="autoconf automake libtool linux-dev libmd-dev"
 subpackages="$pkgname-dev $pkgname-doc"
 source="https://libbsd.freedesktop.org/releases/$pkgname-$pkgver.tar.xz
 	disable-fpurge-test.patch"
-builddir="$srcdir/$pkgname-$pkgver"
-
-prepare() {
-	default_prepare
-
-	cd "$builddir"
-	autoreconf -fiv
-}
 
 build() {
-	cd "$builddir"
+	autoreconf -ifv
 	./configure \
 		--build=$CBUILD \
 		--host=$CHOST \
@@ -33,7 +25,6 @@ build() {
 }
 
 check() {
-	cd "$builddir"
 	make check
 }
 
@@ -41,5 +32,5 @@ package() {
 	make DESTDIR="$pkgdir" -C "$builddir" install
 }
 
-b2sums="66005a511dae7fb799322c813b8ea058ab460e3b9044756d6efad5de741d8f70270496f09803bbce8cd0000ff37e998f18e092037c850826c3c8e3f47ddfdb28  libbsd-0.10.0.tar.xz
+b2sums="1af04b8fcbc0bfa59fba549639d61a33ac934fe7ee42b506d1b0452e0b836b0bfdd3d8739de90465be46fe6a9d326a2d11bcf72280aa19ccba81db5da6d63d89  libbsd-0.11.3.tar.xz
 b877d5b1b9ac211508c6c044eb6502e6fda4c6a8c93f7a4a70b16665deb7170cacedf78747cc56fe2df5bb90e12a1610578e01932850054e0f6dbdd7e6231cb5  disable-fpurge-test.patch"

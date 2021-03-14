@@ -1,20 +1,10 @@
 pkgname=llvm
 pkgver=12.0.0_rc3
-pkgrel=1
+pkgrel=2
 pkgdesc="$pkgname"
 arch="all"
 url=https://llvm.org
 license=.
-
-case $CARCH in
-        x86_64) _targets="all";;
-        aarch64) _targets="all";;
-        ppc64*) _targets="all";;
-        mips64*) _targets="Mips";;
-        riscv64) _targets="RISCV";;
-        *) echo "Unknown arch" ; return 1 ;;
-esac
-
 source="https://github.com/llvm/llvm-project/archive/llvmorg-${pkgver/_/-}.tar.gz
 		mips_softfloat.patch
 		mips_ppc_crt.patch
@@ -25,17 +15,19 @@ source="https://github.com/llvm/llvm-project/archive/llvmorg-${pkgver/_/-}.tar.g
 		mips-ldso.patch"
 
 # FIXME		mips-reloc.patch
-
+_targets="all"
 subpackages="lld llvm-binutils:binutils $pkgname-dev"
 
 builddir=$srcdir/llvm-project-llvmorg-${pkgver/_/-}
 _builddir="$srcdir/build"
-_projects="libunwind;libcxxabi;libcxx;compiler-rt;llvm;lld;clang"
 
-depends="libcxx elfutils libffi libedit ncurses zlib"
-makedepends="cmake clang lld ncurses-dev libedit-dev samurai elfutils elfutils-dev libffi-dev perl python3-dev zlib-dev linux-dev"
+makedepends="cmake ncurses-dev libedit-dev samurai libffi-dev perl python3-dev"
+provides="clang compiler-rt $pkgname-bootstrap=$pkgver-r$pkgrel"
 
-provides="clang compiler-rt llvm-bootstrap"
+case $CARCH in
+        mips64*) _targets="Mips";;
+        riscv64) _targets="RISCV";;
+esac
 
 prepare() {
 	default_prepare
@@ -54,10 +46,11 @@ prepare() {
 			-DCMAKE_BUILD_TYPE=Release \
 			-DLLVM_VERSION_SUFFIX="" \
 			-DLLVM_APPEND_VC_REV=OFF \
-			-DLLVM_ENABLE_PROJECTS="$_projects" \
+			-DLLVM_ENABLE_PROJECTS="libunwind;libcxxabi;libcxx;compiler-rt;llvm;lld;clang" \
 			-DLLVM_ENABLE_LLD=ON \
 			-DLLVM_TARGETS_TO_BUILD="$_targets" \
 			-DLLVM_INSTALL_BINUTILS_SYMLINKS=OFF \
+			-DLLVM_INSTALL_CCTOOLS_SYMLINKS=OFF \
 			-DLLVM_INCLUDE_EXAMPLES=OFF \
 			-DLLVM_ENABLE_PIC=ON \
 			-DLLVM_ENABLE_LTO=OFF \
@@ -69,6 +62,7 @@ prepare() {
 			-DLLVM_ENABLE_ZLIB=ON \
 			-DLLVM_BUILD_LLVM_DYLIB=ON \
 			-DLLVM_LINK_LLVM_DYLIB=ON \
+			-DLLVM_ENABLE_FFI=ON \
 			-DLLVM_OPTIMIZED_TABLEGEN=ON \
 			-DLLVM_INCLUDE_BENCHMARKS=OFF \
 			-DLLVM_INCLUDE_DOCS=OFF \
@@ -107,7 +101,7 @@ prepare() {
 			-DCLANG_VENDOR="Abyss OS" \
 			-DCLANG_ENABLE_STATIC_ANALYZER=OFF \
 			-DCLANG_ENABLE_ARCMT=OFF \
-			-DCLANG_LINK_CLANG_DYLIB=OFF \
+			-DCLANG_LINK_CLANG_DYLIB=ON \
 			-DCOMPILER_RT_USE_BUILTINS_LIBRARY=ON \
 			-DCOMPILER_RT_DEFAULT_TARGET_ONLY=OFF \
 			-DCOMPILER_RT_INCLUDE_TESTS=OFF \
@@ -118,6 +112,7 @@ prepare() {
 			-DCOMPILER_RT_INCLUDE_TESTS=OFF \
 			-DCOMPILER_RT_BUILD_LIBFUZZER=OFF \
 			-DENABLE_EXPERIMENTAL_NEW_PASS_MANAGER=TRUE \
+			-DLLVM_USE_NEWPM=ON \
 			$builddir/llvm
 }
 
@@ -131,11 +126,6 @@ package() {
 	cd $_builddir
 	DESTDIR="$pkgdir" ninja install
 	rm -rv ${pkgdir}/usr/include/c++
-}
-dev() {
-	provides="clang-dev"
-	replaces="clang-dev"
-	default_dev
 }
 
 binutils() {

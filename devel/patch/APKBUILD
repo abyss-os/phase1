@@ -1,6 +1,6 @@
 pkgname=patch
 pkgver=2.7.6
-pkgrel=1
+pkgrel=2
 pkgdesc="Utility to apply diffs to files"
 url="https://www.gnu.org/software/patch/patch.html"
 arch="all"

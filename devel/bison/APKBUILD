@@ -1,6 +1,6 @@
 pkgname=bison
 pkgver=3.3.2
-pkgrel=1
+pkgrel=2
 pkgdesc="The GNU general-purpose parser generator"
 arch="all"
 license="GPL-3.0-or-later"

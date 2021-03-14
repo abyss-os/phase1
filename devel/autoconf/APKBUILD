@@ -1,6 +1,6 @@
 pkgname=autoconf
 pkgver=2.69
-pkgrel=1
+pkgrel=2
 pkgdesc="A GNU tool for automatically configuring source code"
 arch="noarch"
 license="GPL-2.0-or-later"

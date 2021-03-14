@@ -1,0 +1,22 @@
+pkgname=musl-fts
+pkgver=1.2.7
+pkgrel=0
+pkgdesc="Implementation of fts(3) for musl libc"
+url="https://github.com/void-linux/musl-fts"
+arch="all"
+license="BSD"
+#makedepends="autoconf automake libtool"
+source="$pkgname-$pkgver.tar.gz::https://github.com/void-linux/musl-fts/archive/v$pkgver.tar.gz"
+subpackages="$pkgname-dev"
+
+build() {
+	autoreconf -fiv
+	./configure --prefix=/usr
+	make
+}
+
+package() {
+	make DESTDIR="$pkgdir" install
+}
+
+b2sums="045cfc32dffd18b58093dfe578a029ca15083eec98812ea2849acf37fd2c8e7272840b15b4966201421624d96ba69208a36b58d5420cef2563c107cfae98ea93  musl-fts-1.2.7.tar.gz"

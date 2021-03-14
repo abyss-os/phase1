@@ -1,0 +1,12 @@
+diff --git a/Makefile.ckati b/Makefile.ckati
+index 6d45095..4e1524d 100644
+--- a/Makefile.ckati
++++ b/Makefile.ckati
+@@ -72,7 +72,6 @@ KATI_CXX_TEST_EXES := $(patsubst $(KATI_INTERMEDIATES_PATH)/%.o,$(KATI_BIN_PATH)
+ 
+ KATI_CXXFLAGS := -g -W -Wall -MMD -MP
+ KATI_CXXFLAGS += -O -DNOLOG
+-KATI_CXXFLAGS += -march=native
+ #KATI_CXXFLAGS += -pg
+ 
+ ifeq ($(shell uname),Linux)

@@ -1,0 +1,24 @@
+pkgname=kati
+pkgver=20210223.2357
+_commit=b08876f115518c3fdcb64ccc17a0e7036f58aa8e
+pkgrel=0
+pkgdesc="An experimental GNU make clone"
+url="https://github.com/google/kati"
+arch="all"
+license="Apache-2.0"
+makedepends="go"
+source="$pkgname-$pkgver.tar.gz::https://github.com/google/kati/archive/$_commit.tar.gz
+	remove_stupid_cxxflags.patch"
+options="!check !strip"
+builddir="$srcdir/$pkgname-$_commit"
+
+build() {
+	make ckati
+}
+
+package() {
+	install -Dsm755 ckati "$pkgdir"/usr/bin/ckati
+}
+
+b2sums="18b3915deb2ad615ca747edfe7e3e79b42f85be8d7fc43c9da02b0ca9f38e9c30fd4c35ae8dd791019639d8000f88388e86e5785392221f1943d968aa5897f0d  kati-20210223.2357.tar.gz
+fe5cda70b475530efd1b1c715ad2c55b5f00f24573cf0bf3990ca5367db06cc6fc00df1c6202cf3f628b295189a19e10d947c90b1d201d46ca8fbe7d0b6faf22  remove_stupid_cxxflags.patch"

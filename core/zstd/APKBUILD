@@ -1,6 +1,6 @@
 pkgname=zstd
 pkgver=1.4.8
-pkgrel=0
+pkgrel=1
 pkgdesc="Zstandard - Fast real-time compression algorithm"
 url="https://www.zstd.net"
 arch="all"

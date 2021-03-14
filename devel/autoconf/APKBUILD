@@ -1,6 +1,6 @@
 pkgname=autoconf
-pkgver=2.69
-pkgrel=2
+pkgver=2.71
+pkgrel=0
 pkgdesc="A GNU tool for automatically configuring source code"
 arch="noarch"
 license="GPL-2.0-or-later"
@@ -8,17 +8,9 @@ url="https://www.gnu.org/software/autoconf"
 depends="m4 perl"
 subpackages="$pkgname-doc"
 options="!check"
-source="ftp://ftp.gnu.org/pub/gnu/$pkgname/$pkgname-$pkgver.tar.gz
-	autoconf-2.69-fix-perl-regex.patch
-        autoconf-2.69-backport-runstatedir.patch
-	"
+source="ftp://ftp.gnu.org/pub/gnu/$pkgname/$pkgname-$pkgver.tar.gz"
 
 builddir="$srcdir"/$pkgname-$pkgver
-
-prepare() {
-	update_config_sub
-	default_prepare
-}
 
 build() {
 	cd "$builddir"
@@ -44,6 +36,4 @@ package() {
 	rm -f "$pkgdir"/usr/share/info/standards.info
 }
 
-b2sums="7e8a513bbfcabadad1577919c048cc05ca0a084788850b42570f88afc2fa9c25fb32277412f135b81ba1c0d8079465a6b581d2d78662c991d2183b739fac407c  autoconf-2.69.tar.gz
-9c64c4d152b503122ee3ff0bb270bb82d3a7fa9968f72786d04f31f9d23775c7213afd6d1ef17be42669bfcc662d8a372d90fd52d68607c65f9bd80fb1a392ec  autoconf-2.69-fix-perl-regex.patch
-16fc5f02c0f2db06bc56beca5de5b3fd9abdc1fcd58be55baa148915480e6fad429ab67d54198f3559cb926adf8840358ce16b77dae218db9b50a0ef2b9fd065  autoconf-2.69-backport-runstatedir.patch"
+b2sums="1884479b3ff08c7e1a67cd75b208457bf904ec77f0d765d1eb372fa2e6f590db6048125288f1ef46823d2ed664316a22ecee4afbdf08561462533e53d68dc6b5  autoconf-2.71.tar.gz"

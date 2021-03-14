@@ -1,6 +1,6 @@
 pkgname=linux-pam
 pkgver=1.5.1
-pkgrel=0
+pkgrel=1
 pkgdesc="pluggable authentication modules for linux"
 url="http://www.kernel.org/pub/linux/libs/pam"
 arch="all"

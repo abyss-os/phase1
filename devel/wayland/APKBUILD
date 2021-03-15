@@ -1,6 +1,6 @@
 pkgname="wayland"
-pkgver="1.18.0"
-pkgrel=4
+pkgver="1.19.0"
+pkgrel=0
 pkgdesc="Core Wayland window system code and protocol."
 url="https://wayland.freedesktop.org/"
 arch="all"
@@ -9,6 +9,7 @@ makedepends="expat-dev libffi-dev libxml2-dev"
 subpackages="$pkgname-dev"
 source="https://gitlab.freedesktop.org/wayland/wayland/-/archive/$pkgver/wayland-$pkgver.tar.gz"
 builddir="$srcdir/wayland-$pkgver"
+options="!check"
 
 build() {
 	# no docs, don't want to package doxygen and dot
@@ -17,14 +18,9 @@ build() {
 	make -j${JOBS}
 }
 
-check() {
-	# Replace with proper check command(s)
-	:
-}
-
 package() {
 	cd output
 	make DESTDIR="$pkgdir" install
 }
 
-b2sums="a98da5e93aa4f3a1a11c73db5ba2381ddecb8fe905489dc8b4f5aece9d4b0be1632bbb637070209cdecd98b1cba0d07b583220892018e0ccdf807153ae297d61  wayland-1.18.0.tar.gz"
+b2sums="e57f9c1cb1c3cfdac395ab1597347cc34fa133e5ed8cff9d4ca83161dac5a7497a9e4d452cd9be7f38e585637ae405a089ca801c9587edfad72181f659f13fc9  wayland-1.19.0.tar.gz"

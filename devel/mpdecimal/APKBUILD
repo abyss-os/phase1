@@ -1,0 +1,21 @@
+pkgname="mpdecimal"
+pkgver="2.5.1"
+pkgrel=0
+pkgdesc="complete implementation of the General Decimal Arithmetic Specification"
+url="https://www.bytereef.org/mpdecimal/index.html"
+arch="all"
+license="BSD-2-Clause"
+subpackages="$pkgname-dev $pkgname-doc"
+source="https://www.bytereef.org/software/mpdecimal/releases/mpdecimal-$pkgver.tar.gz"
+options="!check"
+
+build() {
+	LD=$CC ./configure --prefix=/usr
+	ckati
+}
+
+package() {
+	ckati install DESTDIR="$pkgdir"
+}
+
+b2sums="8d3a16cf6b20d0793d7fecc339c476713e3026ad5f2c1d6069972b5ffbdb7325a3ef2e91a7a660c285e3c44601d682eef1d955962fbc7ed697662d4b02bfeb6a  mpdecimal-2.5.1.tar.gz"

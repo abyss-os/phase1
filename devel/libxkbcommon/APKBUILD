@@ -1,17 +1,15 @@
 pkgname="libxkbcommon"
-pkgver="0.10.0"
-pkgrel=1
+pkgver="1.1.0"
+pkgrel=0
 pkgdesc="Keymap handling library for toolkits and window systems."
 url="https://xkbcommon.org/"
 arch="all"
 license="MIT"
-depends=""
-depends_dev=""
-makedepends="meson libxcb-dev"
-install=""
+makedepends="meson libxcb-dev libxml2-dev"
 subpackages="$pkgname-dev"
 source="libxkbcommon-$pkgver.tar.gz::https://github.com/xkbcommon/libxkbcommon/archive/xkbcommon-$pkgver.tar.gz"
 builddir="$srcdir/libxkbcommon-xkbcommon-$pkgver"
+options="!check"
 
 build() {
 	# disabled docs: I don't want to package doxygen right now
@@ -28,13 +26,9 @@ build() {
 	ninja -C output
 }
 
-check() {
-	# Replace with proper check command(s)
-	:
-}
-
 package() {
 	DESTDIR="$pkgdir" ninja -C output install
+	rm -r $pkgdir/usr/share/man
 }
 
-b2sums="f4b4a291be3ec89e854b5aff70b645931d94e6ecc6064ee8d4eb7402c38da70ab9483d41743e4300bff66183c11eb26aedba4d0851ed94698c83a1fec970711a  libxkbcommon-0.10.0.tar.gz"
+b2sums="5cd5b07d0e27c805a4f93922652c7dba70de2791a8778d74259e0c3602ebf78a0c44d8cd2e2c81853225a95c417b89c29ae4c6dc2d68015d7ba88f21db3e73e3  libxkbcommon-1.1.0.tar.gz"

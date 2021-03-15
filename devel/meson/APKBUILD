@@ -1,6 +1,6 @@
 pkgname=meson
-pkgver=0.56.2
-pkgrel=2
+pkgver=0.57.1
+pkgrel=0
 pkgdesc="Fast and user friendly build system"
 url="https://mesonbuild.com"
 arch="noarch"

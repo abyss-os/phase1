@@ -1,6 +1,6 @@
 pkgname=gettext-tiny
 pkgver=0.3.2
-pkgrel=1
+pkgrel=2
 pkgdesc="gettext-tiny"
 url="https://github.com/sabotage-linux/gettext-tiny"
 arch="all"
@@ -19,6 +19,7 @@ build() {
 
 package() {
 	make CC=$CC CXX=$CXX CFLAGS="$CFLAGS" CXXFLAGS="$CXXFLAGS" LIBINTL=MUSL DESTDIR=$pkgdir prefix=/usr install
+	ln -sv libintl.so.1 $pkgdir/usr/lib/libintl.so
 }
 
 b2sums="ee28fc224cc6fc492e92e5010a8eb4c4da0254a67290f07f6c48484bceb33dcd95ba1e2a1bd620137d5b9706dc2401f993783b16a804f8545682f8265084d063  gettext-tiny-0.3.2.tar.xz

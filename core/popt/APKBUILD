@@ -1,6 +1,6 @@
 pkgname=popt
 pkgver=1.18
-pkgrel=0
+pkgrel=1
 pkgdesc="A commandline option parser"
 url="."
 arch="all"
@@ -16,9 +16,8 @@ build() {
 		--build=$CBUILD \
 		--host=$CHOST \
 		--prefix=/usr \
-		--libdir=/usr/lib \
-		--disable-static
-	make
+		--libdir=/usr/lib
+		make
 }
 
 check() {

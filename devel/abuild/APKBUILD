@@ -1,17 +1,16 @@
 pkgname=abuild
 pkgver=4.0.66
-pkgrel=1
+pkgrel=2
 pkgdesc="Script to build Abyss OS packages"
 url="https://github.com/abyss-os/abuild"
 arch="all"
 license="GPL-2.0"
-depends="sudo pax-utils openssl apk-tools bsdtar
+depends="sudo pax-utils openssl apk-tools bsdtar cmake
 	 attr pkgconf patch bzip2 xz zlib lzip diffutils flex
-	 bison unzip gmake file musl-utils pigz gzip
+	 bison unzip gmake file musl-utils pigz gzip zstd-dev
 	 libcxx-dev llvm-dev libtool curl pkgconf zlib-dev
 	 openssl-dev musl-dev automake autoconf signify gtar"
 subpackages="abuild-rootbld:_rootbld:noarch $pkgname-doc"
-# tests in abuild aren't released yet
 options="suid !check"
 source="$pkgname-v$pkgver.tar.gz::https://github.com/abyss-os/abuild/archive/v$pkgver.tar.gz"
 

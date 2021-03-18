@@ -1,38 +1,28 @@
 pkgname=ccache
-pkgver=3.7.9
+pkgver=4.2
 pkgrel=0
 pkgdesc="A fast C/C++ compiler cache"
 url="https://ccache.dev/"
 arch="all"
 license="GPL-3.0-or-later"
-makedepends="zlib-dev"
-checkdepends="bash perl elfutils elfutils-dev"
-subpackages="$pkgname-doc"
 source="https://github.com/ccache/ccache/releases/download/v$pkgver/ccache-$pkgver.tar.xz"
 options="!check"
 
 build() {
-	cd "$builddir"
-	./configure \
-		--build=$CBUILD \
-		--host=$CHOST \
-		--prefix=/usr \
-		--sbindir=/usr/bin \
-		--sysconfdir=/etc \
-		--mandir=/usr/share/man \
-		--localstatedir=/var
-	make
+	cmake -B build \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_SBINDIR=bin \
+		-DCMAKE_INSTALL_SYSCONFDIR=/etc
+	cmake --build build
 }
 
 check() {
-	cd "$builddir"
-	make test
+	make -C build test
 }
 
 package() {
-	cd "$builddir"
-	install -Dm 755 ccache "$pkgdir"/usr/bin/ccache
-	install -Dm 644 doc/ccache.1 "$pkgdir"/usr/share/man/man1/ccache.1
+	install -Dm 755 build/ccache "$pkgdir"/usr/bin/ccache
 
 	local link=
 	mkdir -p "$pkgdir"/usr/lib/ccache/bin
@@ -42,4 +32,4 @@ package() {
 	done
 }
 
-b2sums="791491c3f9da58f06bb0a58e411d9a7b3e39e460102793ef736820913d43d488ce7daffba572c21f507ea78d8da04edc3aaa47eb1a0fbec8cb35461a60b770e9  ccache-3.7.9.tar.xz"
+b2sums="932db2e4f6ef9d98359fe44f931d083acb9fd32661d9baec5a2d0cfffc9301a999b04e4628d31513ec809bf43e3e94d71f9b92a1c83bcebbaf5e35e219596704  ccache-4.2.tar.xz"

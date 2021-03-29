@@ -1,5 +1,5 @@
 pkgname=rust
-pkgver=1.50.0
+pkgver=1.51.0
 pkgrel=0
 pkgdesc="The Rust Programming Language"
 url="https://www.rust-lang.org"
@@ -179,7 +179,7 @@ _mv() {
 	mv "$@"
 }
 
-b2sums="76d4fd31643d996931b9b387a258bb47799910f448d099f43590e5c3f87be8ddff4752b4a2323e7ac7bf9c3210cddbc2190482ad5f0ece5a1ad28a941dedcc80  rustc-1.50.0-src.tar.gz
+b2sums="062ae11bedac9aa0d242546c829e4e6704fb99a9fdf72d1a1890893e180f970443870ab945946d2a804a3677dfcc6a110af2fecba76a8025bcdffd0740f58ee8  rustc-1.51.0-src.tar.gz
 5efa52ab75426ddad6c84e97713a6e792721083218638fe88b4fba4803f1902be973662cc0d3fb859a898ecceaa9bd78ee323a8446f569cd4e156ba9fc29ae60  alpine-move-py-scripts-to-share.patch
 4de9b6c3afcbc649eb3b9147d52e78cc87f32f794cb10ec22ff272f7d3edd8b9acd11a64c47dff85de090215b3493c97f39cdc7524d81f8e45df4ced22fa3879  install-template-shebang.patch
 16c6b43a4cbe7e678fdd9c7cfbd90e79ee2e847bb9086e77536b1a50ddba65799775a34cb229c8568d9689f8e7c36ab0c3beed04f27f74ae5a9c232ac1237dd7  libunwind.patch

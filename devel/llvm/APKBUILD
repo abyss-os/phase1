@@ -1,6 +1,6 @@
 pkgname=llvm
-pkgver=12.0.0_rc3
-pkgrel=3
+pkgver=12.0.0_rc4
+pkgrel=0
 pkgdesc="$pkgname"
 arch="all"
 url=https://llvm.org
@@ -180,7 +180,7 @@ lld_aalt() {
     DESTDIR=$subpkgdir aalt-bin -R -g llvm -p ld -f /usr/bin/lld
 }
 
-b2sums="ed09aa361b264387711ba1ee2e4b01c0c78ad97391df95e2542d4edc31f657cc33c8a2a45de63eb421908d5dadd9392a736610fbb04b3ecbd336d6514a649da8  llvmorg-12.0.0-rc3.tar.gz
+b2sums="860a0551a42e2c6a28f213c151076c5ae64a9d85f7bfb2e2df4737acd5fe968f29d368a689d9a857e01038587e872722d216f044b3f665857d7ed71122fe334e  llvmorg-12.0.0-rc4.tar.gz
 8e23d19518bc2bba4009c30ba6d8c981e94b6e293a95a29ebbb9be7c9a7a40b21900a7e526529149847a42bd98899306a1af9b99c819e290d4a67e34f4ea32c3  mips_softfloat.patch
 4bcd1888e1376874bfc31239e35088aeda82f09c5c9a7730ff393f49596b742c5b9245a157f377ecfac417af7c4bebbc7770658a5fffc333a3dd1aabaf24bbcb  mips_ppc_crt.patch
 ada8faf1f1bbdfc52b0493ba563b91de954e6613b8be0af7deeabdf0b621a69a45e5acc753ecb487f461360bb2ec99b4f510a8872bff3afe90e9e7b91de12997  lld-znow.patch

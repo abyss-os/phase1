@@ -1,6 +1,6 @@
 pkgname=nasm
-pkgver=2.14.02
-pkgrel=1
+pkgver=2.15.05
+pkgrel=0
 pkgdesc="80x86 assembler designed for portability and modularity"
 url="https://www.nasm.us"
 arch="all"
@@ -11,8 +11,6 @@ source="https://www.nasm.us/pub/nasm/releasebuilds/$pkgver/$pkgname-$pkgver.tar.
 
 build () {
 	cd "$builddir"
-	export CFLAGS=
-	export CXXFLAGS=
 	./configure \
 		--build=$CBUILD \
 		--host=$CHOST \
@@ -30,4 +28,4 @@ package() {
 	make DESTDIR="$pkgdir" install
 }
 
-b2sums="deb1f3c806ffbe48eefe4163271c68f02a782f75f21980331cb03e64de20da61c118621536c1c869c1629e558cab45ce98fed8443d29c1126fb4255cd6a36ce4  nasm-2.14.02.tar.xz"
+b2sums="a41434965c2125577b762d907a0a3c251c75d9f9beac230fba4099182c7f7beb08c6d2c05c2432b0dc8ba829f24077f44c3096faea9bd0a533250e6dbbfaef35  nasm-2.15.05.tar.xz"

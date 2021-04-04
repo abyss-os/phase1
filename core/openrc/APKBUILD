@@ -1,7 +1,7 @@
 pkgname=openrc
-pkgver=0.42.1
+pkgver=0.43
 _ver=${pkgver/_git*/}
-pkgrel=7
+pkgrel=0
 pkgdesc="OpenRC manages the services, startup and shutdown of a host"
 url="https://github.com/OpenRC/openrc"
 arch="all"
@@ -26,18 +26,15 @@ prepare() {
 }
 
 build() {
-	cd "$builddir"
-
 	export MKZSHCOMP=yes
 	export MKBASHCOMP=yes
-	make LIBEXECDIR=/usr/lib/rc
+	make LIBEXECDIR=/usr/lib/rc PKG_PREFIX=/usr PREFIX=/usr SYSCONFDIR=/etc
 }
 
 package() {
 	local i j
 
-	cd "$builddir"
-	make LIBEXECDIR=/usr/lib/rc DESTDIR="$pkgdir/" install
+	make LIBEXECDIR=/usr/lib/rc PKG_PREFIX=/usr PREFIX=/usr SYSCONFDIR=/etc DESTDIR="$pkgdir/" install
 
 	disable="boot/mtab"
 	# disable some things
@@ -56,11 +53,8 @@ package() {
 
 	install -Dm644 "$srcdir/$pkgname.logrotate" "$pkgdir/etc/logrotate.d/$pkgname"
 
-	mkdir -p $pkgdir/usr/bin $pkgdir/usr/lib
-	mv -v $pkgdir/sbin/* $pkgdir/usr/bin/
-	mv -v $pkgdir/bin/* $pkgdir/usr/bin/
-	mv -v $pkgdir/lib/* $pkgdir/usr/lib/
-	rm -rfv $pkgdir/sbin $pkgdir/bin $pkgdir/lib
+	mv -v $pkgdir/usr/sbin/* $pkgdir/usr/bin/
+	rm -rfv $pkgdir/usr/sbin
 
 	ln -sv /usr/bin/openrc-init $pkgdir/usr/bin/init
 }
@@ -87,7 +81,7 @@ zshcomp() {
 	rm -rf "$pkgdir"/usr/share/zsh
 }
 
-b2sums="381f52552c13afbbcf45456fe71078bacf9182adfd67c97394093986977f5e8262d8a3c64219501745575a5210f525afe9fccee72f7625485a9f575108baa369  openrc-0.42.1.tar.gz
+b2sums="d184fed50d154025086ea05f6cf81165884bbcb8fcdf7c099982a0ebff589145f9ac63959c5968a9642fabcbafa1551a885242c585d6d5b37079cbc69d46b6dc  openrc-0.43.tar.gz
 0587cd211767937fd6273e6b159271490443a94d80a54b5a20ef625a1959e77dbf38cd1756838337fb39a061c4ee19a39cccd2f5867fab9f04fb916a74029aaa  openrc.logrotate
 d7d962126241030f2b461f920d1ffaccf0803d5acf5879848c233c3d8f1e44c9efc6f4bd93101ec7dcc6e3d7bffa53ca8bd711c60d8dfa95b5743f7e75262524  0001-fsck-don-t-add-C0-to-busybox-fsck.patch
 e07e698893cefc14273a1775e999a2cd62bbd24d7fa0069a0d3576670874ac14729a8d5c0ae4afa41ab09e04192840bea46086caad322dce1d33dbeb426ce478  0003-sysctl-add-compatibility-for-busybox-sysctl.patch

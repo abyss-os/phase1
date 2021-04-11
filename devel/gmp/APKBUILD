@@ -1,6 +1,6 @@
 pkgname=gmp
-pkgver=6.1.2
-pkgrel=3
+pkgver=6.2.1
+pkgrel=0
 pkgdesc="A free library for arbitrary precision arithmetic"
 url="https://gmplib.org/"
 arch="all"
@@ -8,9 +8,7 @@ license="LGPL-3.0"
 makedepends="m4 texinfo libtool"
 depends=
 subpackages="$pkgname-doc $pkgname-dev libgmpxx"
-source="https://gmplib.org/download/gmp/gmp-$pkgver.tar.xz
-	"
-replaces="gmp5"
+source="https://gmplib.org/download/gmp/gmp-$pkgver.tar.xz"
 
 prepare() {
 	cd "$builddir"
@@ -56,4 +54,4 @@ doc() {
 	replaces="gmp5-doc"
 }
 
-b2sums="2a864e80799471037a71c10d871f9782c37fe3a0a1734872e90f14a874ecd6551099d67b2ebd07f82a43b0522249a6b46e79952db11a278f87ca8013198f7604  gmp-6.1.2.tar.xz"
+b2sums="c0d85f175392a50cfa01bc6b0a312b235946ad8b4f6f84f6dabd33d7a6f2cc75c9b0e1e33057be07750bfa0145b7c4cf3b6188a5be6ca9d7271ec2276c84ebcb  gmp-6.2.1.tar.xz"

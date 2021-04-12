@@ -1,12 +1,11 @@
 pkgname=lxd
-pkgver=4.12
+pkgver=4.13
 pkgrel=0
 pkgdesc="a container hypervisor and a new user experience for LXC"
 url="https://linuxcontainers.org/lxd/"
 arch="all"
 license="Apache-2.0"
-depends="
-	acl
+depends="acl
 	netcat-openbsd
 	cgmanager
 	squashfs-tools
@@ -21,10 +20,8 @@ depends="
 	dqlite
 	raft
 	sqlite
-	libuv
-	"
-makedepends="
-	lxc-dev
+	libuv"
+makedepends="lxc-dev
 	acl-dev
 	tcl-dev
 	libuv-dev
@@ -40,13 +37,9 @@ makedepends="
 	dqlite-dev
 	raft-dev
 	sqlite-dev
-	libuv-dev
-	"
-subpackages="
-	$pkgname-scripts:scripts
-	$pkgname-bash-completion:bashcomp:noarch
-	$pkgname-openrc
-	"
+	libuv-dev"
+subpackages="$pkgname-bash-completion:bashcomp:noarch
+	$pkgname-openrc"
 install="$pkgname.pre-install"
 options="!check"
 source="https://linuxcontainers.org/downloads/$pkgname/$pkgname-$pkgver.tar.gz
@@ -54,14 +47,12 @@ source="https://linuxcontainers.org/downloads/$pkgname/$pkgname-$pkgver.tar.gz
 	$pkgname.initd
 	lxd-dont-go-get.patch
 	add-missing-includes.patch
-	seccomp_werror.patch
-	"
+	seccomp_werror.patch"
 _project="github.com/lxc/lxd"
 
 build() {
 	export GOPATH="$builddir/_dist" CGO_CFLAGS="-Wno-error -Wignored-attributes" GO111MODULE=auto
 
-	cd "$builddir"
 	go install -v -x -tags libsqlite3 $_project/lxd
 	for bin in lxc fuidshift lxc-to-lxd lxd-benchmark lxd-p2c lxd-agent; do
 		go install -v -x $_project/$bin
@@ -79,6 +70,11 @@ package() {
 		"$pkgdir"/etc/init.d/lxd
 	install -Dm644 "$srcdir"/lxd.confd \
 		"$pkgdir"/etc/conf.d/lxd
+
+	for tool in fuidshift lxc-to-lxd lxd-benchmark lxd-p2c lxd-agent; do
+		install -Dm755 bin/$tool "$subpkgdir"/usr/bin/$tool
+	done
+	
 }
 
 bashcomp() {
@@ -91,20 +87,7 @@ bashcomp() {
 	cp scripts/bash/lxd-client "$subpkgdir"/usr/share/bash-completion/completions/lxd-client
 }
 
-scripts() {
-	pkgdesc="LXD scripts"
-	depends="$pkgname py3-lxc"
-
-	export GOPATH="$builddir/_dist"
-	cd $GOPATH
-
-	for tool in fuidshift lxc-to-lxd lxd-benchmark lxd-p2c lxd-agent; do
-		install -Dm755 bin/$tool "$subpkgdir"/usr/bin/$tool
-	done
-	install -Dm755 ../scripts/empty-lxd.sh "$subpkgdir"/usr/bin/empty-lxd.sh
-}
-
-b2sums="17e3e51cd4167de0b8c1fff3580890775f74397c9a969960701c12281dfebb8c9100ef2e01a0d717fe763929b572e804c3d940dc8898822acba7b4a8d02ab20b  lxd-4.12.tar.gz
+b2sums="4ff4134b834f286ae0c5a8ed5e944c2a9dff6bd4a4929f0784f9893e8cb16ade69b4bba703a3aa05ae5f0779af8bba16f68f61d2398e1bb502db0c452dd13dec  lxd-4.13.tar.gz
 0c53ad54c956fa067e83ae53467cfcdb8ace2e14972b762dcf8715493d89a74da376f37386626b8b96b27df163e3d8ce13b96858191b6d0000d90a0ce08cc137  lxd.confd
 b638fca189b270567f8077890d7820e3d9e82b0a29e9c665a4f4b1a5454d1df627d7849ae2e7e83800d5b4f6e62791a65742522cfaf422f12b67f4b359f4e79f  lxd.initd
 870d6d9a35ab4ccfb641531b5d806ef76c41deb22ad53bbe6af3d90a93252fc7a81428cd8557c7a42915880d4ff14d76d7fff3dccb2a10b989df4b9c5c616b16  lxd-dont-go-get.patch

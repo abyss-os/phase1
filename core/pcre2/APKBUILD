@@ -1,5 +1,5 @@
 pkgname=pcre2
-pkgver=10.34
+pkgver=10.36
 pkgrel=0
 pkgdesc="Perl-compatible regular expression library"
 url="https://pcre.org/"
@@ -13,17 +13,14 @@ source="https://ftp.pcre.org/pub/pcre/$pkgname-$pkgver.tar.gz"
 builddir="$srcdir/$pkgname-$pkgver"
 
 case "$CARCH" in
-	s390x) _enable_jit="";;
 	riscv64) _enable_jit="";;
 	*) _enable_jit="--enable-jit";;
 esac
 
 build() {
-	cd "$builddir"
-
 	case "$CARCH" in
-	mips64*) export CPPFLAGS="$CPPFLAGS -DSLJIT_IS_FPU_AVAILABLE=0";;
-	mips*) export CPPFLAGS="$CPPFLAGS -DSLJIT_IS_FPU_AVAILABLE=0 -DSLJIT_MIPS_R1=1";;
+		mips64*) export CPPFLAGS="$CPPFLAGS -DSLJIT_IS_FPU_AVAILABLE=0";;
+		mips*) export CPPFLAGS="$CPPFLAGS -DSLJIT_IS_FPU_AVAILABLE=0 -DSLJIT_MIPS_R1=1";;
 	esac
 
 	# Note: Forced -O3 is recommended (needed?) for Julia.
@@ -46,8 +43,6 @@ build() {
 # Note: RunTest and pcre2_jit_test generates some binaries in .libs that needs
 # to disable MPROTECT on grsecurity kernel. That's why it's so complicated...
 check() {
-	cd "$builddir"
-
 	./RunTest
 
 	if [ -n "$_enable_jit" ]; then
@@ -56,8 +51,6 @@ check() {
 }
 
 package() {
-	cd "$builddir"
-
 	make DESTDIR="$pkgdir" install
 }
 
@@ -76,4 +69,4 @@ tools() {
 	mv "$pkgdir"/usr/bin "$subpkgdir"/usr/
 }
 
-b2sums="95817afd6ecc8eabc24439f317c26b461aebf2ae796f0daa9dc627d7ac66f658c7ababc21ce291946570f6a48322f7ef8c474bd74495f6b2e03d1facb23080ce  pcre2-10.34.tar.gz"
+b2sums="fed7caab1aeda3925c264f54fa4e77cb21ca15fbc5db38aeeac3db1667b43145d67d0f0aab125cae599c864bfbfe1c31f2a15ddb87ef7cce17c9818a9f0b2de6  pcre2-10.36.tar.gz"

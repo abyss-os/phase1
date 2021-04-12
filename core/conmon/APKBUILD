@@ -1,5 +1,5 @@
 pkgname=conmon
-pkgver=2.0.26
+pkgver=2.0.27
 pkgrel=0
 pkgdesc="An OCI container runtime monitor"
 url="https://github.com/containers/conmon"
@@ -23,4 +23,4 @@ package() {
 	make install PREFIX=/usr DESTDIR="$pkgdir"
 }
 
-b2sums="0646eaa7649e2be7cf00bcc53fb94d25da8e9c1582d86dcda12cdb1763e41fb583d1f31ad22e32d642326efef0aeeab2761009d366b7386c73cb8b2133b21f83  conmon-2.0.26.tar.gz"
+b2sums="f242b1be4f86b18ca94dade3d1f5522d1ae1951f4b7abf7e563e1a93472c2a673cd48a136fdff12b410ebaa46694b70ffbf173fc37a3bbefb03891452c22dfae  conmon-2.0.27.tar.gz"

@@ -1,7 +1,7 @@
 pkgname=python3
-pkgver=3.9.2
+pkgver=3.9.4
 _basever="${pkgver%.*}"
-pkgrel=2
+pkgrel=0
 pkgdesc="A high-level scripting language"
 url="https://www.python.org"
 arch="all"
@@ -66,7 +66,7 @@ package() {
 	ln -sv /usr/bin/pip3 $pkgdir/usr/bin/pip
 }
 
-b2sums="f29f741ced22a58fbd2b4e2b5d133dc4971fc597de4a3918cff3ac24ff99d35e3796501eb770b1e7c650377aade8850aa2058808e2f02283563218c6a597af18  Python-3.9.2.tar.xz
+b2sums="deb69a4e821163b3cb64b6fd5b3dbd7a8ad4bb0c33fb0342b5618db569ae3f763f154e60f2d859578ac531744c3d20a1371a60540136d5360a9e2a348fb5028f  Python-3.9.4.tar.xz
 e05b5e9fdc01baa063f7dc64ec47a14d9658233df32146a79944fdd20a70d4604539c24bf6fca977555f15fe322f3dbee7c8d7e1fc64ed0238981a4e9b88e5d6  musl-find_library.patch
 5183ff08383fa2ea44d7c10ef9256f3af64aa40a5a5b21a64c1090f829a66a5c998ca829f961fb47bf73cf8c5a482b49c72017659e14c1123945d91feced2896  mpdecimal-2.5.1.patch
 82d33650dc2f3c9f8cf0a7dbcba877f1154577a10d5756021a5067798114bc00ea3d45410b1ca96873862e759e66811d3a31a766f4c36265fb868659880c35a1  fix-xattrs-glibc.patch"

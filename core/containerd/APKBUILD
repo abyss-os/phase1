@@ -1,7 +1,7 @@
 pkgname=containerd
-pkgver=1.5.0.b1
-_commit=cfa842c278694860a7e32917066f4a24978f80d0
-pkgrel=1
+pkgver=1.5.0_rc0
+_commit=6636e36182504789fe05f7127956bac01f6e0784
+pkgrel=0
 pkgdesc="An open and reliable container runtime"
 url="https://containerd.io"
 arch="all"
@@ -34,5 +34,5 @@ package() {
 	install -Dsm755 "$builddir"/bin/* "$pkgdir"/usr/bin/
 }
 
-b2sums="8cf4590e6f838e503a8cd176fde231a8130d799e4e2612fee454f61bbcc4d331638c6a8514704b94ae9a2acdb7d6a042e89f6fa78cf3e8411528d9340b1d4289  containerd-1.5.0.b1.tar.gz
+b2sums="9083ea50135deeb897fd3fe7edf3be421da56370d1a5df2794f1c05ece0b880065abae83b3aa686e30c2d2316725f91a009b103789400ac3a8779465dbe97a05  containerd-1.5.0_rc0.tar.gz
 1bb397af07450deb9b51f88409408e27eb8544ca780d2f908cb1de592faefeb6f5cd555fc639cb0ac741b0572d9ae48ceca6a385d5d7799d227b5a79e9a4bd06  riscv64.patch"

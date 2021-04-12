@@ -42,7 +42,6 @@ build() {
 		--sbindir=/usr/bin \
 		--disable-multilib \
 		--enable-ld=default \
-		--enable-64-bit-bfd \
 		--enable-plugins \
 		--enable-relro \
 		--enable-deterministic-archives \
@@ -58,11 +57,7 @@ build() {
 }
 
 package() {
-	make install DESTDIR="$pkgdir"
-#	if [ -d "$pkgdir"/usr/lib64 ]; then
-#		mv "$pkgdir"/usr/lib64/* "$pkgdir"/usr/lib/
-#		rmdir "$pkgdir"/usr/lib64
-#	fi
+	make -j1 install DESTDIR="$pkgdir"
 }
 
 aalt() {

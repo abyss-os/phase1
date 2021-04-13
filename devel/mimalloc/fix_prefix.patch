@@ -1,0 +1,50 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 083abce..c212616 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -279,7 +279,7 @@ if(MI_BUILD_SHARED)
+   else()
+     install(TARGETS mimalloc EXPORT mimalloc DESTINATION ${mi_install_dir} LIBRARY)
+   endif()
+-  install(EXPORT mimalloc DESTINATION ${mi_install_dir}/cmake)
++  install(EXPORT mimalloc DESTINATION ${mi_install_dir}/lib/cmake)
+ endif()
+ 
+ # static library
+@@ -302,15 +302,15 @@ if (MI_BUILD_STATIC)
+     set_target_properties(mimalloc-static PROPERTIES OUTPUT_NAME ${mi_basename})
+   endif()
+ 
+-  install(TARGETS mimalloc-static EXPORT mimalloc DESTINATION ${mi_install_dir})
++  install(TARGETS mimalloc-static EXPORT mimalloc DESTINATION ${mi_install_dir}/lib)
+ endif()
+ 
+ # install include files
+-install(FILES include/mimalloc.h DESTINATION ${mi_install_dir}/include)
+-install(FILES include/mimalloc-override.h DESTINATION ${mi_install_dir}/include)
+-install(FILES include/mimalloc-new-delete.h DESTINATION ${mi_install_dir}/include)
+-install(FILES cmake/mimalloc-config.cmake DESTINATION ${mi_install_dir}/cmake)
+-install(FILES cmake/mimalloc-config-version.cmake DESTINATION ${mi_install_dir}/cmake)
++install(FILES include/mimalloc.h DESTINATION ${CMAKE_INSTALL_PREFIX}/include)
++install(FILES include/mimalloc-override.h DESTINATION ${CMAKE_INSTALL_PREFIX}/include)
++install(FILES include/mimalloc-new-delete.h DESTINATION ${CMAKE_INSTALL_PREFIX}/include)
++install(FILES cmake/mimalloc-config.cmake DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/cmake)
++install(FILES cmake/mimalloc-config-version.cmake DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/cmake)
+ 
+ if(NOT WIN32 AND MI_BUILD_SHARED AND NOT MI_INSTALL_TOPLEVEL)
+   # install a symlink in the /usr/local/lib to the versioned library
+@@ -332,12 +332,12 @@ if (MI_BUILD_OBJECT)
+   )
+ 
+   # the following seems to lead to cmake warnings/errors on some systems, disable for now :-(
+-  # install(TARGETS mimalloc-obj EXPORT mimalloc DESTINATION ${mi_install_dir})
++  # install(TARGETS mimalloc-obj EXPORT mimalloc DESTINATION ${mi_install_dir}/lib)
+ 
+   # the FILES expression can also be: $<TARGET_OBJECTS:mimalloc-obj>
+   # but that fails cmake versions less than 3.10 so we leave it as is for now
+   install(FILES ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/mimalloc-obj.dir/src/static.c${CMAKE_C_OUTPUT_EXTENSION}
+-          DESTINATION ${mi_install_dir}
++          DESTINATION ${mi_install_dir}/lib
+           RENAME ${mi_basename}${CMAKE_C_OUTPUT_EXTENSION} )
+ endif()
+ 

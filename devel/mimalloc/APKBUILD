@@ -1,0 +1,24 @@
+pkgname=mimalloc
+pkgver=2.0.1
+pkgrel=0
+pkgdesc="mimalloc is a compact general purpose allocator with excellent performance."
+url="https://github.com/microsoft/mimalloc"
+arch="all"
+license="MIT"
+subpackages="$pkgname-dev"
+source="$pkgname-$pkgver.tar.gz::https://github.com/microsoft/mimalloc/archive/refs/tags/v${pkgver}.tar.gz
+	fix_prefix.patch"
+
+build() {
+	mkdir -p build && cd build
+	cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DMI_INSTALL_TOPLEVEL=ON -DMI_USE_CXX=ON ..
+	make
+}
+
+package() {
+	cd build
+	make DESTDIR=$pkgdir install
+}
+
+b2sums="a3e1278b9cf6b5fd78121561b45f352af049da2e52df566e971331e64eb0c9673c07c3e750324a1d0428f10cd04be2e17be76c818d06f04b9dd9a548ac86af5b  mimalloc-2.0.1.tar.gz
+5d0b059a5d085f0091fbd11f6e6bbe4ec54250852dc7d6206c00c3aed4aac370d935a9ca71581a0975f74fdca18e4617b7f1e8eac0c33926d61cbe2ab1a1175b  fix_prefix.patch"

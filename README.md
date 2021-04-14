@@ -9,3 +9,8 @@ To contribute:
   By doing this you acknowledge that your current and future contributions will be licensed the same as the repository.
 2. Create a commit (one per package). The commit message should be `<path>: action`.
   For example, `core/zsh: upgrade to <version>`.
+
+Dependencies:
+ * *core* should be installable on its own
+ * *core* can depend on *devel* to build itself
+ * nothing may depend on *extra*

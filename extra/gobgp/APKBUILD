@@ -1,0 +1,22 @@
+pkgname=gobgp
+pkgver=2.26.0
+pkgrel=0
+pkgdesc="go bgp crap"
+url="https://github.com/osrg/gobgp"
+arch="all"
+license="Apache"
+makedepends="go"
+source="$pkgname-$pkgver.tar.gz::https://github.com/osrg/gobgp/archive/refs/tags/v${pkgver}.tar.gz"
+
+build() {
+	go build -o bin/gobgp ./cmd/gobgp
+	go build -o bin/gobgpd ./cmd/gobgpd
+}
+
+
+package() {
+	install -m750 -D bin/gobgp $pkgdir/usr/bin/gobgp
+	install -m750 -D bin/gobgpd $pkgdir/usr/bin/gobgpd
+}
+
+b2sums="16bfbf4eeeb2d9b38720a8c38c05ec69542a15162fab5633900c987481a20b5bd4603e535f248ea3314efe46e8a235c2a8263587e34b1476f36a1b3b6e82c68a  gobgp-2.26.0.tar.gz"

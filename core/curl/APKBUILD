@@ -1,5 +1,5 @@
 pkgname=curl
-pkgver=7.76.0
+pkgver=7.76.1
 pkgrel=0
 pkgdesc="URL retrival utility and library"
 url="https://curl.haxx.se/"
@@ -40,4 +40,4 @@ package() {
 	make install DESTDIR="$pkgdir"
 }
 
-b2sums="7c02bbd3c86a5de38990f7ef63e92804fc02977bf34eb4372e7ac95aa091689094193bcf58e30d76114341f930777787cbfbbf83f02c5037f7ac7599296a6735  curl-7.76.0.tar.xz"
+b2sums="56452871fbd998f0c9a5af86b3853ed1dfc956c39380e5da472b4f382db45926ac3aa9e395ae7d2812aac0f0f29bee28343218810a169beb592c5224e0a4f018  curl-7.76.1.tar.xz"

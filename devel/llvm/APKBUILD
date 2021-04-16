@@ -1,6 +1,6 @@
 pkgname=llvm
 pkgver=12.0.0
-pkgrel=0
+pkgrel=1
 pkgdesc="$pkgname"
 arch="all"
 url=https://llvm.org
@@ -13,13 +13,15 @@ source="https://github.com/llvm/llvm-project/archive/llvmorg-${pkgver/_/-}.tar.g
 		tmp-kernel.patch
 		mips_fix_syscall_warning.patch
 		mips-ldso.patch"
-subpackages="lld llvm-binutils:binutils $pkgname-dev"
+
+subpackages="$pkgname-dev"
 
 builddir=$srcdir/llvm-project-llvmorg-${pkgver/_/-}
 _builddir="$srcdir/build"
 
-makedepends="cmake ncurses-dev libedit-dev samurai libffi-dev python3-dev"
+makedepends="cmake ncurses-dev libedit-dev samurai libffi-dev python3-dev libexecinfo-dev libxml2-dev lua5.4-dev xz-dev swig"
 provides="clang $pkgname-bootstrap=$pkgver-r$pkgrel"
+replaces="lld llvm-binutils"
 
 _targets="all"
 case $CARCH in
@@ -44,19 +46,19 @@ prepare() {
 			-DCMAKE_BUILD_TYPE=Release \
 			-DLLVM_VERSION_SUFFIX="" \
 			-DLLVM_APPEND_VC_REV=OFF \
-			-DLLVM_ENABLE_PROJECTS="libunwind;libcxxabi;libcxx;compiler-rt;llvm;lld;clang" \
+			-DLLVM_ENABLE_PROJECTS="libunwind;libcxxabi;libcxx;compiler-rt;llvm;lld;clang;clang-tools-extra;lldb" \
 			-DLLVM_ENABLE_LLD=ON \
 			-DLLVM_TARGETS_TO_BUILD="$_targets" \
 			-DLLVM_INSTALL_BINUTILS_SYMLINKS=OFF \
 			-DLLVM_INSTALL_CCTOOLS_SYMLINKS=OFF \
 			-DLLVM_INCLUDE_EXAMPLES=OFF \
 			-DLLVM_ENABLE_PIC=ON \
-			-DLLVM_ENABLE_LTO=OFF \
+			-DLLVM_ENABLE_LTO=Thin \
 			-DLLVM_INCLUDE_GO_TESTS=OFF \
 			-DLLVM_INCLUDE_TESTS=OFF \
 			-DLLVM_HOST_TRIPLE=$CTARGET \
 			-DLLVM_DEFAULT_TARGET_TRIPLE=$CTARGET \
-			-DLLVM_ENABLE_LIBXML2=OFF \
+			-DLLVM_ENABLE_LIBXML2=ON \
 			-DLLVM_ENABLE_ZLIB=ON \
 			-DLLVM_BUILD_LLVM_DYLIB=ON \
 			-DLLVM_LINK_LLVM_DYLIB=ON \
@@ -64,11 +66,11 @@ prepare() {
 			-DLLVM_OPTIMIZED_TABLEGEN=ON \
 			-DLLVM_INCLUDE_BENCHMARKS=OFF \
 			-DLLVM_INCLUDE_DOCS=OFF \
-			-DLLVM_TOOL_LLVM_ITANIUM_DEMANGLE_FUZZER_BUILD=OFF \
-			-DLLVM_TOOL_LLVM_MC_ASSEMBLE_FUZZER_BUILD=OFF \
-			-DLLVM_TOOL_LLVM_MC_DISASSEMBLE_FUZZER_BUILD=OFF \
-			-DLLVM_TOOL_LLVM_OPT_FUZZER_BUILD=OFF \
-			-DLLVM_TOOL_LLVM_MICROSOFT_DEMANGLE_FUZZER_BUILD=OFF \
+			-DLLVM_TOOL_LLVM_ITANIUM_DEMANGLE_FUZZER_BUILD=ON \
+			-DLLVM_TOOL_LLVM_MC_ASSEMBLE_FUZZER_BUILD=ON \
+			-DLLVM_TOOL_LLVM_MC_DISASSEMBLE_FUZZER_BUILD=ON \
+			-DLLVM_TOOL_LLVM_OPT_FUZZER_BUILD=ON \
+			-DLLVM_TOOL_LLVM_MICROSOFT_DEMANGLE_FUZZER_BUILD=ON \
 			-DLLVM_TOOL_LLVM_GO_BUILD=OFF \
 			-DLLVM_INSTALL_UTILS=ON \
 			-DLLVM_ENABLE_LIBCXX=ON \
@@ -103,10 +105,10 @@ prepare() {
 			-DCOMPILER_RT_USE_BUILTINS_LIBRARY=ON \
 			-DCOMPILER_RT_DEFAULT_TARGET_ONLY=OFF \
 			-DCOMPILER_RT_INCLUDE_TESTS=OFF \
-			-DCOMPILER_RT_BUILD_SANITIZERS=OFF \
-			-DCOMPILER_RT_SANITIZERS_TO_BUILD="" \
-			-DCOMPILER_RT_BUILD_XRAY=OFF \
-			-DCOMPILER_RT_BUILD_MEMPROF=OFF \
+			-DCOMPILER_RT_BUILD_SANITIZERS=ON \
+			-DCOMPILER_RT_SANITIZERS_TO_BUILD="all" \
+			-DCOMPILER_RT_BUILD_XRAY=ON \
+			-DCOMPILER_RT_BUILD_MEMPROF=ON \
 			-DCOMPILER_RT_INCLUDE_TESTS=OFF \
 			-DCOMPILER_RT_BUILD_LIBFUZZER=OFF \
 			-DENABLE_EXPERIMENTAL_NEW_PASS_MANAGER=TRUE \
@@ -117,48 +119,12 @@ prepare() {
 build() {
 	cd $_builddir
 	ninja -j${JOBS} unwind cxxabi cxx
-	ninja -j${JOBS}
+	ninja -j${JOBS} all
 }
 
 package() {
 	cd $_builddir
 	DESTDIR="$pkgdir" ninja install
-	rm -rv ${pkgdir}/usr/include/c++
-}
-
-binutils() {
-	depends="llvm"
-	mkdir -p ${subpkgdir}/usr/bin
-	for t in addr2line ar as mt nm objcopy objdump ranlib readelf readobj size split strings strip dlltool lib; do
-		mv -v ${pkgdir}/usr/bin/llvm-${t} ${subpkgdir}/usr/bin/llvm-${t}
-	done
-}
-
-lld() {
-	pkgdesc="$pkgname $pkgver"
-	depends="llvm"
-	mkdir -p ${subpkgdir}/usr/bin ${subpkgdir}/usr/lib
-	for t in ld.lld lld ld64.lld lld-link wasm-ld; do
-		mv -v ${pkgdir}/usr/bin/${t} ${subpkgdir}/usr/bin/${t}
-	done
-	mv -v ${pkgdir}/usr/lib/libLTO* ${subpkgdir}/usr/lib/
-}
-
-lldb() {
-	pkgdesc="$pkgname $pkgver"
-	depends="llvm-dev python3 python3-dev"
-	mkdir -p ${subpkgdir}/usr/bin ${subpkgdir}/usr/lib/python3.7
-	mv -v ${pkgdir}/usr/lib/liblldb* ${subpkgdir}/usr/lib/
-	mv -v ${pkgdir}/usr/bin/lldb* ${subpkgdir}/usr/bin/
-	mv -v ${pkgdir}/usr/lib/python3.7/* ${subpkgdir}/usr/lib/python3.7
-	rm -rf ${pkgdir}/usr/lib/python3.7 ${subpkgdir}/usr/lib/python3.7/site-packages/six.py
-}
-
-llgo() {
-	pkgdesc="$pkgname $pkgver"
-	depends="llvm"
-	mkdir -p ${subpkgdir}/usr/bin
-	mv -v ${_builddir}/bin/llvm-go ${subpkgdir}/usr/bin/
 }
 
 binutils_aalt() {

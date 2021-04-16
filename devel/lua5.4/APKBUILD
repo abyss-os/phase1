@@ -1,6 +1,6 @@
 pkgname=lua5.4
 _pkgname=lua
-pkgver=5.4.2
+pkgver=5.4.3
 _luaver=${pkgname#lua}
 pkgrel=0
 pkgdesc="Powerful light-weight programming language"
@@ -84,7 +84,7 @@ dev() {
 	mv "$pkgdir"/usr/lib/$pkgname/liblua.so "$subpkgdir"/usr/lib/$pkgname/
 }
 
-b2sums="7e0e642684df635ed1c48db45989e86a2638024e30a170addf700b0c7d32276f1eaef80898539c671039c20cb0bed4861b12c58f4b8211653a17e89bad278d87  lua-5.4.2.tar.gz
+b2sums="e763a251bb3a830720d1d96e93856c5b5ec6bd87f3357fb538fe93910a7d6552924118075b23ca47b2c682010212d18c8fb2adcfc89f95fbbb4271c14c905300  lua-5.4.3.tar.gz
 685e2ca38ea315b249cd597da4f1d11ba80c2158cf1cb63bc537019810a2706913980908691517660b2c7a5d815c9d3564e75c23c56235f436e81bb64f7fe8aa  lua-5.4-make.patch
 6bb781e84c30f108ad8e0065ac7b0b03458fd7322c6621198cf06c7b83a78806a2c1ec1abef8c42dfc5408941f7e1cd80a01549e6aa4082a7ec99a2a167e3228  lua-5.4-module_paths.patch
 9888485997eb73dd177322004c17c22167203e5c977eb9f99487d6d3deded721cd6c1f9b678d00742001d2b789f0d2a1ca60bddfa451dd9d2da65faac4afe5ec  lua5.4.pc"

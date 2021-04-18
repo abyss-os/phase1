@@ -1,6 +1,6 @@
 pkgname=llvm
 pkgver=12.0.0
-pkgrel=1
+pkgrel=2
 pkgdesc="$pkgname"
 arch="all"
 url=https://llvm.org
@@ -23,16 +23,17 @@ makedepends="cmake ncurses-dev libedit-dev samurai libffi-dev python3-dev libexe
 provides="clang $pkgname-bootstrap=$pkgver-r$pkgrel"
 replaces="lld llvm-binutils"
 
+_projects="libunwind;libcxxabi;libcxx;compiler-rt;llvm;lld;clang;clang-tools-extra;lldb"
 _targets="all"
+_lto=Thin
 _arch_extra="-DCOMPILER_RT_BUILD_SANITIZERS=OFF -DCOMPILER_RT_BUILD_XRAY=OFF -DCOMPILER_RT_BUILD_MEMPROF=OFF -DLLVM_TOOL_LLVM_ITANIUM_DEMANGLE_FUZZER_BUILD=OFF
             -DLLVM_TOOL_LLVM_MC_ASSEMBLE_FUZZER_BUILD=OFF -DLLVM_TOOL_LLVM_MC_DISASSEMBLE_FUZZER_BUILD=OFF -DLLVM_TOOL_LLVM_OPT_FUZZER_BUILD=OFF
             -DLLVM_TOOL_LLVM_MICROSOFT_DEMANGLE_FUZZER_BUILD=OFF"
-_lto=Thin
 
 case $CARCH in
-        mips64*) _targets="Mips";;
-        riscv64) _targets="RISCV" _lto=OFF;;
-        x86_64) _arch_extra="-DCOMPILER_RT_BUILD_SANITIZERS=ON -DCOMPILER_RT_BUILD_XRAY=ON -DCOMPILER_RT_BUILD_MEMPROF=ON
+        mips64*) _targets="Mips" _lto=OFF _projects="libunwind;libcxxabi;libcxx;compiler-rt;llvm;lld;clang";;
+        riscv64) _targets="RISCV" _lto=OFF _projects="libunwind;libcxxabi;libcxx;compiler-rt;llvm;lld;clang;clang-tools-extra";;
+        x86_64|aarch64|ppc64le) _arch_extra="-DCOMPILER_RT_BUILD_SANITIZERS=ON -DCOMPILER_RT_BUILD_XRAY=ON -DCOMPILER_RT_BUILD_MEMPROF=ON
                 -DLLVM_TOOL_LLVM_ITANIUM_DEMANGLE_FUZZER_BUILD=ON -DLLVM_TOOL_LLVM_MC_ASSEMBLE_FUZZER_BUILD=ON
                 -DLLVM_TOOL_LLVM_MC_DISASSEMBLE_FUZZER_BUILD=ON -DLLVM_TOOL_LLVM_OPT_FUZZER_BUILD=ON
                 -DLLVM_TOOL_LLVM_MICROSOFT_DEMANGLE_FUZZER_BUILD=ON";;
@@ -55,7 +56,7 @@ prepare() {
 			-DCMAKE_BUILD_TYPE=Release \
 			-DLLVM_VERSION_SUFFIX="" \
 			-DLLVM_APPEND_VC_REV=OFF \
-			-DLLVM_ENABLE_PROJECTS="libunwind;libcxxabi;libcxx;compiler-rt;llvm;lld;clang;clang-tools-extra;lldb" \
+			-DLLVM_ENABLE_PROJECTS="$_projects" \
 			-DLLVM_ENABLE_LLD=ON \
 			-DLLVM_TARGETS_TO_BUILD="$_targets" \
 			-DLLVM_INSTALL_BINUTILS_SYMLINKS=OFF \
@@ -126,6 +127,7 @@ build() {
 package() {
 	cd $_builddir
 	DESTDIR="$pkgdir" ninja install
+    rm -rf $pkgdir/usr/include/c++
 }
 
 binutils_aalt() {

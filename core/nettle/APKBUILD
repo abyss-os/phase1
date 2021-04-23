@@ -1,5 +1,5 @@
 pkgname=nettle
-pkgver=3.7.1
+pkgver=3.7.2
 pkgrel=0
 pkgdesc="A low-level cryptographic library"
 url="https://www.lysator.liu.se/~nisse/nettle/"
@@ -44,4 +44,4 @@ dev() {
     depends="gmp-dev"
 }
 
-b2sums="2dbc0204623ca9d42d4e4fec0d96e3d1aa164ac63f046198c2827a9eb8946392cbf5dd48a2a77cb98d52591eb83b48092686e3f5eb5dc2ee5f5e92cfaa335f26  nettle-3.7.1.tar.gz"
+b2sums="0195f973afd76d33805de4621cd340a041144b24a20ccab03a58749dba82ea12b063f779aeeeb3f063be5e1bb74dec4c8c8f72b3dd01aff033e908a9f534ad01  nettle-3.7.2.tar.gz"

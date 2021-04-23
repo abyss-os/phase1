@@ -1,35 +1,31 @@
 pkgname=dnsmasq
 pkgver=2.85
-pkgrel=0
+pkgrel=1
 pkgdesc="A lightweight DNS, DHCP, RA, TFTP and PXE server"
 url="http://www.thekelleys.org.uk/dnsmasq/"
 arch="all"
 license="GPL-2.0"
 makedepends="linux-dev nettle-dev"
 install="$pkgname.pre-install $pkgname.pre-upgrade"
-subpackages="$pkgname-doc"
+subpackages="$pkgname-doc $pkgname-openrc"
 source="http://www.thekelleys.org.uk/dnsmasq/$pkgname-$pkgver.tar.gz
 	$pkgname.initd
 	$pkgname.confd
 	uncomment-conf-dir.patch
+    dnsmasq_dumb.patch
 	"
-builddir="$srcdir/$pkgname-$pkgver"
 
 build() {
-	cd "$builddir"
-
-	make CFLAGS="$CFLAGS" COPTS="-DHAVE_DNSSEC" all
+	make CFLAGS="$CFLAGS" COPTS="-DVERSION='\"$pkgver\"' -DHAVE_DNSSEC" all
 }
 
 check() {
-	cd "$builddir"
-	./src/dnsmasq --help >/dev/null
+	./src/dnsmasq --version | grep -q $pkgver || return 1
 }
 
 package() {
-	cd "$builddir"
 
-	make PREFIX=/usr DESTDIR="$pkgdir" install
+	make PREFIX=/usr DESTDIR="$pkgdir" COPTS="-DVERSION='\"$pkgver\"'" install
 
 	install -D -m755 "$srcdir"/$pkgname.initd "$pkgdir"/etc/init.d/$pkgname
 	install -D -m644 "$srcdir"/$pkgname.confd "$pkgdir"/etc/conf.d/$pkgname
@@ -46,4 +42,5 @@ package() {
 b2sums="0c941772971c166e8de9b87eed5061db36bffc4b52f87b7981d2b6d9d6ab6505401e3171d9798ba250c58990aae24085fb233526e6e77a666b8d79003914d761  dnsmasq-2.85.tar.gz
 a30d441999b78b3c53f1e5129d0a2e6e5835bc548ad53ec172e3b5c63afa7efb0e5f8c57b5104a93c45da5d151570c3a30e109c4061ea75d05afab2be1f90a39  dnsmasq.initd
 84d5cdb15236c9e1c83fa53d0e401df90e86c6687cc88f9ebba3e2a0987cad2ccf9bb82ac7b1fcd77a81fa6058a3cd3276fb8a8a76e13983628e92be95b39af1  dnsmasq.confd
-7366b5749210539a1b5d3dff4de22e2c90c7c3bca031c09a04a2fc348d0c29da57ab1e7d16e4173c8925fb6a7588cae6c894556cd2e0b3d3061f4780df31bb60  uncomment-conf-dir.patch"
+7366b5749210539a1b5d3dff4de22e2c90c7c3bca031c09a04a2fc348d0c29da57ab1e7d16e4173c8925fb6a7588cae6c894556cd2e0b3d3061f4780df31bb60  uncomment-conf-dir.patch
+cc76852f8387fe8ea84406fec69cbb59e128e2e5dd76d2ffe6b26db8711c43107bf8276ed7891ac40e48efb3d4d1cf055ab0329f38990adab6910e8fb7200e2e  dnsmasq_dumb.patch"

@@ -1,25 +1,15 @@
 pkgname=asciidoc
-pkgver=8.6.10
-_hash=544574e66ca89c898151c1c6d34b88a76e44343f
-pkgrel=3
+pkgver=9.1.0
+pkgrel=0
 pkgdesc="Text based documentation"
 url="http://asciidoc.org/"
 arch="noarch"
 license="GPL-2.0"
 depends="python3 libxml2 docbook-xsl"
-makedepends="autoconf"
-provides="asciidoc-py"
-subpackages="$pkgname-doc $pkgname-vim::noarch"
-source="$pkgname-$pkgver.tar.gz::https://github.com/asciidoc/asciidoc-py3/archive/$_hash.tar.gz"
-builddir="$srcdir/$pkgname-py3-$_hash"
-
-prepare() {
-	default_prepare
-	autoconf
-}
+subpackages="$pkgname-doc"
+source="$pkgname-$pkgver.tar.gz::https://github.com/asciidoc-py/asciidoc-py/releases/download/$pkgver/asciidoc-$pkgver.tar.gz"
 
 build() {
-	cd "$builddir"
 	./configure \
 		--build=$CBUILD \
 		--host=$CHOST \
@@ -31,15 +21,7 @@ build() {
 }
 
 package() {
-	cd "$builddir"
 	make DESTDIR="$pkgdir" install
 }
 
-vim() {
-	pkgdesc="Vim syntax for $pkgname"
-	depends=""
-	install -Dm644 "$builddir"/vim/syntax/$pkgname.vim \
-		"$subpkgdir"/usr/share/vim/vimfiles/syntax/$pkgname.vim
-}
-
-b2sums="fc317f05a0bf32cfd1da5a8712be43284c26e51650ebec1a351194be7ff5f221c3a5553ac05924f9e470f55ff3ad1c1065c119ab0a5dc048754234d1674d383e  asciidoc-8.6.10.tar.gz"
+b2sums="0a98f58f7604f84d704092313c38563634bad5d697d60d02760f3be1d2a78a97ee2488dda3a9918b02e0062710175c6513d600f3fbd850fe700bf3fa917a3980  asciidoc-9.1.0.tar.gz"

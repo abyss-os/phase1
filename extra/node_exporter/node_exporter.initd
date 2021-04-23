@@ -1,0 +1,10 @@
+#!/sbin/openrc-run
+description="node exporter"
+supervisor=supervise-daemon
+command=/usr/bin/node_exporter
+command_args="--web.listen-address=\"${NODE_EXPORTER_LISTEN}\" $NODE_EXPORTER_ARGS"
+pidfile="/run/${RC_SVCNAME}.pid"
+
+depend() {
+	need net
+}

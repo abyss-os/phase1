@@ -1,0 +1,26 @@
+pkgname=node_exporter
+pkgver=1.1.2
+pkgrel=0
+pkgdesc="Exporter for machine metrics"
+url="https://github.com/prometheus/node_exporter"
+arch="all"
+license="Apache"
+makedepends="go"
+subpackages="$pkgname-openrc"
+source="$pkgname-$pkgver.tar.gz::https://github.com/prometheus/node_exporter/archive/refs/tags/v${pkgver}.tar.gz
+        node_exporter.confd
+        node_exporter.initd"
+
+build() {
+    go build -v -o bin/node_exporter
+}
+
+package() {
+	install -m750 -D bin/node_exporter $pkgdir/usr/bin/node_exporter
+    install -m750 -D $srcdir/node_exporter.initd $pkgdir/etc/init.d/node_exporter
+    install -m750 -D $srcdir/node_exporter.confd $pkgdir/etc/conf.d/node_exporter
+}
+
+b2sums="daeedd913ae5bf6d2d21ae7a1d496b48850d5f3363f60dc4b1b715f000c412709452568ec33a5b4ade166512698a129866e28a145b66638b81c056f49963c3f4  node_exporter-1.1.2.tar.gz
+c5126159efb1d7f72a999837247e551c61823069ce6a3304bf848ef2fefec5972dfabe72ad25cfffcba14d7bad4446a3fa6b0d94633aae38082fbb2633d009a3  node_exporter.confd
+42dbe0bcf1761492b3d996c95b9116a555e6b475a33290143e0e534dcac5114f4bcebc5b6338f50c5cc819be4f2ac6f70e6e0485808b789f78b35bd19fb051ed  node_exporter.initd"

@@ -1,7 +1,7 @@
 # in reality, we only package select libraries from the previous major LLVM version in order to make upgrades easier
 pkgname=llvm-compat
 pkgver=11.1.0
-pkgrel=1
+pkgrel=2
 pkgdesc="$pkgname $pkgver (libs only)"
 arch="all"
 url=https://llvm.org

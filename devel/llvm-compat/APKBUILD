@@ -29,9 +29,8 @@ source="https://github.com/llvm/llvm-project/archive/llvmorg-${pkgver/_/-}.tar.g
 
 builddir=$srcdir/llvm-project-llvmorg-${pkgver/_/-}
 _builddir="$srcdir/build"
-_projects="libunwind;libcxxabi;libcxx;compiler-rt;llvm;lld;clang"
+_projects="llvm"
 
-depends="libcxx elfutils libffi libedit ncurses zlib"
 makedepends="cmake llvm-dev ncurses-dev libedit-dev samurai elfutils elfutils-dev libffi-dev perl python3-dev zlib-dev linux-dev"
 
 prepare() {

@@ -1,11 +1,11 @@
 pkgname=linux
-pkgver=5.10.10
+pkgver=5.11.17
 _pkgver=${pkgver/_/-}
-pkgrel=2
+pkgrel=0
 pkgdesc="Linux kernel"
 url="http://kernel.org"
 #depends="mkinitfs"
-makedepends="perl elfutils-dev bash flex bison gsed bc linux-dev openssl-dev findutils rsync ncurses-dev"
+makedepends="bash flex bison gsed bc linux-dev openssl-dev findutils rsync ncurses-dev"
 options="!strip"
 source="https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/linux-$pkgver.tar.xz
 	kernel-no-perl.patch
@@ -87,10 +87,10 @@ _menuconfig() {
 	cp -v .config "$startdir"/newconfig."$CARCH"
 }
 
-b2sums="180f0dd063eab9542fd799c54dd335c4f310bea739048800ab3222526cb1ea7cc4ef43d2a2c27ed0e37a776f5c77540c33795aa63297704d9e215735a1a98606  linux-5.10.10.tar.xz
+b2sums="76226bb9e071620929fbdb4bc5ca08be1dab748dc337505ce9a377df0cf0612f6e57d0003bde3d312506a354d02fbc9f4e4be12269daa576969d52fabca13403  linux-5.11.17.tar.xz
 7d2686a5cbb0384e6daa7e1315988597fa4316913048ad0c8a118acc138403393843501549f6b4be0903b27abddba2bc2155b60d19116f51d8f225d950b403eb  kernel-no-perl.patch
 5e7a2d34c0bbafc07bfbaf20cf55149a7ee46fc64cbae015618cf96d095a470361c972f1e838f00949a7aa05adb1a0713245db1f1e59d46776b32bdcdf07b685  config.aarch64
-2d17e30e256d6a0f3b2b1ad97bcb5c7aa69fb0dd8d5f1ce27c51ee535f24b14c6dafad645b62b7b8b86ef275d0889931402efd44061c5271752d4d7d57cb7800  config.x86_64
+581744fecc3dc524af4343e91aabf7db25aa582e96bf1abf90c51deb188da48a467d153b08d220f63d1413267af24d7e5e26dc2a97d30c46721a9a11cbd3fb46  config.x86_64
 d28e84afbc73cb9ae069b74ac12bf6c6f651d50665ae33d05e8ba6fd3ac7b3eed789858823b17cb3ea134cc1c76a501e722ebe1429cb45c627fe5e981c65fc42  config.riscv64
 f7ec2129f67b2f3656484e5933a4eea1e15b4f3bcdc477d045d7f152621709c8d5c44d575f0c1cbb80eda6af1b409b3a9688a415fa1b7f1ed47f8bf2ec01493b  config.mips64
 f7ec2129f67b2f3656484e5933a4eea1e15b4f3bcdc477d045d7f152621709c8d5c44d575f0c1cbb80eda6af1b409b3a9688a415fa1b7f1ed47f8bf2ec01493b  config.mips64el

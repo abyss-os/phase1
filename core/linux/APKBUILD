@@ -29,7 +29,7 @@ prepare() {
 	mkdir -p "$_builddir" && cd "$_builddir"
 	cp -v "$srcdir"/config."$CARCH" .config
 
-	#_make listnewconfig oldconfig
+	_make listnewconfig oldconfig
 }
 
 build() {

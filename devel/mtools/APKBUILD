@@ -1,0 +1,32 @@
+pkgname=mtools
+pkgver=4.0.27
+pkgrel=0
+pkgdesc="collection of utilities to access MS-DOS disks from Unix without mounting them"
+url="https://www.gnu.org/software/mtools/"
+arch="all"
+license="GPL-3.0-or-later"
+makedepends="texinfo linux-dev"
+source="https://ftp.gnu.org/gnu/mtools/mtools-$pkgver.tar.bz2"
+
+build() {
+	./configure \
+		--build=$CBUILD \
+		--host=$CHOST \
+		--prefix=/usr \
+		--mandir=/usr/share/man \
+		--infodir=/usr/share/info \
+		--sysconfdir=/etc/mtools \
+		--without-x
+	make
+}
+
+check() {
+	make check
+}
+
+package() {
+	make -j1 install DESTDIR="$pkgdir"
+    rm -rf $pkgdir/usr/share/man $pkgdir/usr/share/info
+}
+
+b2sums="3044fff1896427227e4585df81c208f7580302155cf119db426cfc7a24b3d5195b560b8810613f571eed77584d47bb5125007cdcb8551b303db62ce264853776  mtools-4.0.27.tar.bz2"

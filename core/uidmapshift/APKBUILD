@@ -1,6 +1,6 @@
 pkgname=uidmapshift
 pkgver=0.1.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Shift UIDs/GIDs of directory entries recursively by some offset"
 url="https://github.com/jirutka/uidmapshift"
 arch="noarch"

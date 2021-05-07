@@ -1,0 +1,20 @@
+pkgname=ipfs-sync
+pkgver=0.5.0
+pkgrel=0
+pkgdesc="ipfs-sync"
+url="https://github.com/TheDiscordian/ipfs-sync"
+arch="all"
+license="Apache"
+makedepends="go"
+source="$pkgname-$pkgver.tar.gz::https://github.com/TheDiscordian/ipfs-sync/archive/refs/tags/v${pkgver}.tar.gz"
+
+build() {
+	go build -v -buildmode=pie -o bin/ipfs-sync
+}
+
+
+package() {
+	install -m750 -D bin/ipfs-sync $pkgdir/usr/bin/ipfs-sync
+}
+
+b2sums="617f36d5beaa2ac5ae5804efb644ae6e8f8ed5c6d5570cb2a972c90c858ec8d1b32c0a559a85e078aba2f9ab70e4efc398ac1a9891956a27b288ba9df9ede1fe  ipfs-sync-0.5.0.tar.gz"

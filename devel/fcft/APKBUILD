@@ -1,5 +1,5 @@
 pkgname=fcft
-pkgver=2.3.1
+pkgver=2.4.0
 pkgrel=0
 pkgdesc="A small font loading and glyph rasterization library."
 url="https://codeberg.org/dnkl/fcft"
@@ -29,4 +29,4 @@ package() {
 	DESTDIR="$pkgdir" samu -C output install
 }
 
-b2sums="f9b0ec9dc697207b7db6b95b7c08d5f3b900dea2a11b3fe68e408e4d7510cdc8eb7589dd20bee7d4a9d084715346ace38bfc900aac65a55dc9fa1d6d50efc377  fcft-2.3.1.tar.gz"
+b2sums="1926d26b633cf768257340f093de734513678f3b5e62cb2fa89fd08496d06b36de89fe797a5328c35a5b467d3ea48214d5a3e76660d2effaea0f28fddbc7bd48  fcft-2.4.0.tar.gz"

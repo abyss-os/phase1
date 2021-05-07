@@ -1,15 +1,13 @@
 pkgname="tllist"
-pkgver="1.0.4"
+pkgver="1.0.5"
 pkgrel=0
 pkgdesc="Typed Linked List C header file only library."
 url="https://codeberg.org/dnkl/tllist"
 arch="noarch"
 license="MIT"
-depends=""
 makedepends="meson samurai"
-install=""
 subpackages="$pkgname-doc"
-source="$pkgname-$pkgver.tar.gz::https://codeberg.org/dnkl/tllist/archive/$pkgver.tar.gz"
+source="${distfilesm}/$pkgname-$pkgver.tar.gz"
 builddir="$srcdir/$pkgname"
 
 build() {
@@ -20,16 +18,11 @@ build() {
 		--localstatedir=/var \
 		--buildtype=release \
 		. output
-	samu -C output
-}
-
-check() {
-	# Replace with proper check command(s)
-	:
+	ninja -C output
 }
 
 package() {
-	DESTDIR="$pkgdir" samu -C output install
+	DESTDIR="$pkgdir" ninja -C output install
 }
 
-b2sums="592c74f1ce1eb645bc5623c0ebc942ecc5aca16b038631f772f92c5292a203693c67db7f2446bf34360b72cf87ff0a67367a253bf254aa1280500bfabcfaf510  tllist-1.0.4.tar.gz"
+b2sums="c0c6db1682d6ab408c43c434ffc8e58d2cc4076121e8c11e2612678af12faa93661dcb547371bbeca4f78c1b7c99843ae9cbff8ab4e2389ce1c395f0e65e66cd  tllist-1.0.5.tar.gz"

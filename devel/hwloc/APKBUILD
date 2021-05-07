@@ -8,6 +8,7 @@ license="BSD-3-Clause"
 makedepends="cairo-dev eudev-dev libxml2-dev ncurses-dev"
 subpackages="$pkgname-dev $pkgname-doc"
 source="https://www.open-mpi.org/software/hwloc/v${pkgver%.*}/downloads/hwloc-$pkgver.tar.bz2"
+options="!check"
 
 build() {
 	./configure \
@@ -16,10 +17,6 @@ build() {
 		--mandir=/usr/share/man \
 		--localstatedir=/var
 	make
-}
-
-check() {
-	make -C "$builddir" check
 }
 
 package() {

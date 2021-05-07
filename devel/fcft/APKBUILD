@@ -9,7 +9,7 @@ depends=""
 makedepends="meson samurai fontconfig-dev freetype-dev pixman-dev tllist scdoc scdoc-dev"
 install=""
 subpackages="$pkgname-dev $pkgname-doc"
-source="$pkgname-$pkgver.tar.gz::https://codeberg.org/dnkl/fcft/archive/$pkgver.tar.gz"
+source="${distfilesm}/$pkgname-$pkgver.tar.gz"
 builddir="$srcdir/$pkgname"
 options="!check"
 

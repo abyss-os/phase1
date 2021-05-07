@@ -1,14 +1,11 @@
 pkgname="pixman"
 pkgver="0.40.0"
-pkgrel=0
+pkgrel=1
 pkgdesc="A low-level software library for pixel manipulation."
 url="http://www.pixman.org/"
 arch="all !pcc64le"
 license="MIT"
-depends=""
-depends_dev=""
 makedepends="meson"
-install=""
 subpackages="$pkgname-dev"
 source="https://www.cairographics.org/releases/pixman-$pkgver.tar.gz"
 builddir="$srcdir/pixman-$pkgver"
@@ -23,11 +20,6 @@ build() {
 		-Ddefault_library=both \
 		. output
 	ninja -C output
-}
-
-check() {
-	# Replace with proper check command(s)
-	:
 }
 
 package() {

@@ -1,5 +1,5 @@
 pkgname=linux
-pkgver=5.12.1
+pkgver=5.12.2
 _pkgver=${pkgver/_/-}
 pkgrel=0
 pkgdesc="Linux kernel"
@@ -87,7 +87,7 @@ _menuconfig() {
 	cp -v .config "$startdir"/newconfig."$CARCH"
 }
 
-b2sums="71db3031f059b4411e542fb17acf15d9d2fcff10c35958f74b190f8a4cc352658f9101b34cd35a306d36f39a3c194cde1c3d5ad7a53a758bbe0a9671b8becdd3  linux-5.12.1.tar.xz
+b2sums="43d449d3099471c5d3baf6cae8f432fd5f9d39e24b4efc908b04cbfad1ed5c63e5197394c78100e47bd786c92b530dd475fd6098152144a36a8dd0c50a0b3f33  linux-5.12.2.tar.xz
 7d2686a5cbb0384e6daa7e1315988597fa4316913048ad0c8a118acc138403393843501549f6b4be0903b27abddba2bc2155b60d19116f51d8f225d950b403eb  kernel-no-perl.patch
 5e7a2d34c0bbafc07bfbaf20cf55149a7ee46fc64cbae015618cf96d095a470361c972f1e838f00949a7aa05adb1a0713245db1f1e59d46776b32bdcdf07b685  config.aarch64
 581744fecc3dc524af4343e91aabf7db25aa582e96bf1abf90c51deb188da48a467d153b08d220f63d1413267af24d7e5e26dc2a97d30c46721a9a11cbd3fb46  config.x86_64

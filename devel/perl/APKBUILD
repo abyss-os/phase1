@@ -1,5 +1,5 @@
 pkgname=perl
-pkgver=5.32.0
+pkgver=5.32.1
 pkgrel=0
 pkgdesc="Larry Wall's Practical Extraction and Report Language"
 url="http://www.perl.org/"
@@ -142,6 +142,6 @@ utils() {
 	done
 }
 
-b2sums="8e26dad3ff0ee07aea40acdf5480cbec0ca39862a81172dbc3eb5111ec099b870ddf3f06a7471f5955ebd39f41d031337284c9e0145b1ad2c769d2f684ae743a  perl-5.32.0.tar.gz
+b2sums="ba449a9d5d9042eedccdafc5af10eb634a38935560df1e0c0c4871ab95cd20d465a8c7d1a99f7c1fb8a59332476807610349ce249be123918327156b2ea40cbc  perl-5.32.1.tar.gz
 43850e1e9685a0f298f535d6299f58b45e81fae497ebdc51f743856b847c737583d99ccbe7d8b79c6b34041658bd31f709c3ed5a9253be5e59ac14844a77a203  musl-locale.patch
 705b13847fb4a10815a05883816af4083f9edb55ce462536976e32133b91f0698a4dbaf6bea044feb4950f723ee03734a400f09f945a4fc8ee8e90d641547c84  configure.patch"

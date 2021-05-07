@@ -1,6 +1,6 @@
 pkgname=go
 pkgrel=0
-pkgver=1.16.3
+pkgver=1.16.4
 pkgdesc="Go programming language compiler"
 url="https://golang.org/"
 arch="all"
@@ -62,5 +62,5 @@ package() {
 	cp -a doc/* "$ddoc"
 }
 
-b2sums="da6752d06b86a5349a1bc11e7e4c61543fa75cf72d971fb7559c059b3d5d7721d4cba16ad63eeb00398c6e0c8b1b1d42f07c665182b4b70da83fe648f813eee0  go1.16.3.src.tar.gz
+b2sums="4602a20ced74dba86938283a736d5235fe5dfb34ae742c44cdcd7ae2453d4654ea5757d0be76b6687d1d34c1b8c32681c41398d1a04ae72d491ee1d8b296d16d  go1.16.4.src.tar.gz
 58bf92fc78b8ac8cca86fd2152b80b4ef50d38fd63f01fc19271f883c393b076e9e8b80a387d5104e376067216b20da5860141c5943f9b1bfffd7e3ec1408468  dont_use_gold_arm64.patch"

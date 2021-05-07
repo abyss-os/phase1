@@ -1,0 +1,47 @@
+pkgname=cairo
+pkgver=1.16.0
+pkgrel=0
+pkgdesc="A vector graphics library"
+url="https://cairographics.org/"
+arch="all"
+options="!check"
+license="LGPL-2.0-or-later MPL-1.1"
+makedepends="expat-dev glib-dev libpng-dev zlib-dev fontconfig-dev freetype-dev pixman-dev"
+subpackages="$pkgname-dev $pkgname-doc"
+source="https://cairographics.org/releases/cairo-$pkgver.tar.xz
+	musl-stacksize.patch
+	CVE-2018-19876.patch
+	pdf-flush.patch
+	fix-mask-usage-in-image-compositor.patch
+	composite_color_glyphs.patch
+	cff-allow-empty-array-of-operands-for-certain-operat.patch
+	"
+builddir="$srcdir/$pkgname-$pkgver"
+
+build() {
+	./configure \
+		--prefix=/usr \
+		--sysconfdir=/etc \
+		--localstatedir=/var \
+		--enable-ft \
+		--enable-gobject \
+		--enable-pdf \
+		--enable-png \
+		--enable-ps \
+		--enable-svg \
+		--enable-tee \
+		--disable-xlib-xcb
+	make
+}
+
+package() {
+	make DESTDIR="$pkgdir" install
+}
+
+b2sums="aa37edf7fdf0c952484fd0adc9281724227db93958d6e4919216b30e9017fab670bc2340e3b975737080f1f67dec24025fe0e4680e275ab7703cfb9235eb1fe0  cairo-1.16.0.tar.xz
+88affbfbc95cb98b89026468cfedf3162dc1d01063c1f96eae385c547dfe49fcbf76460e82f2c4097f20b8d97117ded192f406f9c3c268cd4474a03c8a0a1d6d  musl-stacksize.patch
+269aad07694dd92b7587c609e6ac107652725aeacf8146cb357783bb7b37936456cb6af29e2e068a635b46588b68b10a2121939a87e3ef53ecf04fa13ca336b2  CVE-2018-19876.patch
+6d28169b45489423c153a97472d84542d9ae05884484745e6dab8417a18092bd05429a17e5e2225fb56f54103260f335cb0b22027acaeef2498bb1f15e5eb4a5  pdf-flush.patch
+80877c36a3d98c593478da5059e1f71470e4cbbd3ca5445a15255d636db235892ed82122397ca4c3d344a07860524a956185507bd537f13189df12eed9a7f570  fix-mask-usage-in-image-compositor.patch
+cf552de441f2c3b249d8dfc6362fcbd61728631e8fb9777ead6dd5158c6a94d9775bc918b4a559c85572307ffaa503c42a4e1fa9769bc35cd85203b2af625501  composite_color_glyphs.patch
+2b2b20006d24b903b1b2b14e0e11642219ab21161a2e39f92d7fcb117bd9c66ab9fd98bfd0fd2765e186de940516b5b8ff084ac12aa0adeab28ecaa76b7d71af  cff-allow-empty-array-of-operands-for-certain-operat.patch"

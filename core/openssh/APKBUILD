@@ -1,6 +1,6 @@
 pkgname=openssh
-pkgver=8.5_p1
-_myver=${pkgver%_*}${pkgver#*_}
+pkgver=8.6_p1
+_pkgver=${pkgver%_*}${pkgver#*_}
 pkgrel=0
 pkgdesc="Port of OpenBSD's free SSH release"
 url="https://www.openssh.com/portable.html"
@@ -10,21 +10,19 @@ options="!check suid" # FIXME: tests fails. disable for now
 makedepends="openssl-dev zlib-dev libedit-dev linux-dev linux-pam-dev"
 subpackages="$pkgname-doc $pkgname-openrc"
 
-source="https://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/$pkgname-$_myver.tar.gz
+source="https://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/$pkgname-$_pkgver.tar.gz
 	fix-utmp.patch
 	sftp-interactive.patch
 	sshd.initd
 	sshd.confd
 	"
 
-builddir="$srcdir"/$pkgname-$_myver
+builddir="$srcdir"/$pkgname-$_pkgver
 
 build() {
 	export LD="$CC"
 	export TEST_SSH_UTF8=no # utf8 test fails
 	CC=$CC CXX=$CXX ./configure \
-		--build=$CBUILD \
-		--host=$CHOST \
 		--prefix=/usr \
 		--sbindir=/usr/bin \
 		--sysconfdir=/etc/ssh \
@@ -61,7 +59,7 @@ package() {
 	sed -i 's/#UseDNS yes/UseDNS no/' "$pkgdir"/etc/ssh/sshd_config
 }
 
-b2sums="f4e4bd39e2dd275d4811e06ca994f2239ad27c804b003c74cc26f9dffae28f1b4006fc618580f0dc9c45f0b7361c24728c23688b45f41cb8a15cf6206c3f15c3  openssh-8.5p1.tar.gz
+b2sums="261a0f1a6235275894d487cce37537755c86835e3a34871462fe29bfe72b49cd9a6b6a547aea4bd554f0957e110c84458cc75a5f2560717fb04804d62228562a  openssh-8.6p1.tar.gz
 7a561f2ac629a31d7a6a679dffbc5991e0a46fb926e12c2b62dc0bedcea89cbaa15129b4e57018f9aa391d26516a234c7dd0e455b8b9e87d66509630bd3ecc89  fix-utmp.patch
 5bceac66a1396b688ee7f9215fb7cbb9c23f811bcb23760980683b4130ab1e251ce974c4e28036452c8f6b42fd8b6c24e0df3121598e6db777a169133d4a2d84  sftp-interactive.patch
 1710b87e98c05800a5b92bd40c808cf0c1534817203fa048579b006732c177b6e036f7b79ed1e5d6fc3cd3812220fa6f3cfc6d699bdad05ca53714825c511d02  sshd.initd

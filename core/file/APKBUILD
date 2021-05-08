@@ -1,12 +1,12 @@
 pkgname=file
-pkgver=5.38
+pkgver=5.40
 pkgrel=0
 pkgdesc="File type identification utility"
 url="https://www.darwinsys.com/file"
 arch="all"
 license="BSD-2-Clause"
-makedepends="autoconf libtool automake diffutils file"
-subpackages="$pkgname-dev $pkgname-doc libmagic"
+makedepends="autoconf libtool automake diffutils"
+subpackages="$pkgname-dev $pkgname-doc"
 source=$pkgname-$pkgver.tar.gz::https://github.com/file/file/archive/FILE${pkgver/./_}.tar.gz
 builddir="$srcdir/$pkgname-FILE${pkgver/./_}"
 
@@ -30,10 +30,4 @@ package() {
 	make DESTDIR="$pkgdir" install
 }
 
-libmagic() {
-	pkgdesc="File type identification library"
-	mkdir -p "$subpkgdir"/usr
-	mv "$pkgdir"/usr/lib "$pkgdir"/usr/share "$subpkgdir"/usr
-}
-
-b2sums="f33043c693569d632154886105d79638364c1e00744bcf2dc383448fc30b677ad0f04edb41f8d960498568968bab268d6290a61b5612e79121fbecc7d629f04b  file-5.38.tar.gz"
+b2sums="8b8af6034980a49c8ef2d388e7934f07c3306ca1ee13179c9bb8605615abaec85e87f57471777035721d59a2e1649a9530d82933ce095fef1c14b39990bddc66  file-5.40.tar.gz"

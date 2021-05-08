@@ -1,5 +1,5 @@
 pkgname=iproute2
-pkgver=5.10.0
+pkgver=5.12.0
 pkgrel=0
 pkgdesc="IP Routing Utilities"
 url="https://www.linuxfoundation.org/collaborate/workgroups/networking/iproute2"
@@ -10,7 +10,6 @@ install="$pkgname.post-install"
 makedepends="bison flex bash iptables-dev libmnl-dev"
 subpackages="$pkgname-doc $pkgname-bash-completion:bashcomp:noarch"
 source="https://kernel.org/pub/linux/utils/net/iproute2/iproute2-$pkgver.tar.xz
-	fix-install-errors.patch
 	musl-fixes.patch"
 builddir="$srcdir"/$pkgname-$pkgver
 
@@ -54,6 +53,5 @@ bashcomp() {
 	rmdir -p "$pkgdir"/usr/share 2>/dev/null || true
 }
 
-b2sums="8c17e65f03427f45b71dc17b289b272545549a6687257498676a23e4fdc4a590a7215bfdba3c7ac4b1ccde6c38ba8e3eb222eea2532374fa9680633aa198d347  iproute2-5.10.0.tar.xz
-5c5024be6f6be97411b1284fe4f3dc5b180f7cacf79b60fa4118b95d60958252ee37ab3dd61eaa83fb4785dfcaf082bcbf37a14714a7eb6ebbae368967c6e1e6  fix-install-errors.patch
+b2sums="8e3e1b7188d7ab5014d06d7edaae2cb0c1dc65862999a2ca9f31902256d7f3d166de8a1c76e4e137acce2b445d72ea6850bfec3640d1919cb82351d45dd3e47e  iproute2-5.12.0.tar.xz
 f6b7dbe86074993aa279adef50954c6ae8cdb58a658e785db23840ac89403877eac94963b37dce95b2076bbb009a13e73a2c41458b67d6b65d0b3e6232538933  musl-fixes.patch"

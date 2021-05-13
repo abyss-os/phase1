@@ -5,28 +5,18 @@ pkgdesc="Implements the SPICE protocol"
 url="http://www.spice-space.org/"
 arch="all"
 license="LGPL-2.0-or-later"
-makedepends="meson spice-protocol glib-dev pixman-dev openssl-dev libjpeg-turbo-dev zlib-dev lz4-dev py-parsing"
+makedepends="spice-protocol glib-dev pixman-dev openssl-dev libjpeg-turbo-dev zlib-dev lz4-dev py-parsing"
 subpackages="$pkgname-dev"
 source="https://www.spice-space.org/download/releases/spice-server/spice-$pkgver.tar.bz2"
 options="!check"
 
 build() {
-	meson \
-        -Dprefix=/usr \
-        -Dgstreamer=no \
-		-Dlz4=true \
-        -Dsasl=false \
-		-Dsmartcard=disabled \
-		. output
-	meson compile ${JOBS:+-j ${JOBS}} -C output
-}
-
-check() {
-	meson test --no-rebuild -v -C output
+	./configure --prefix=/usr --enable-static --enable-shared --disable-opus
+    make
 }
 
 package() {
-	DESTDIR="$pkgdir" meson install --no-rebuild -C output
+	make DESTDIR="$pkgdir" install
 }
 
 b2sums="98e8f55de81a86c6370e4a74c0fd90db78a9a8e8e3af536bccd6a2a75185194ac7b87521163090c4312e392d2ee10036c0283171c7796aea630e1307128a2d55  spice-0.15.0.tar.bz2"

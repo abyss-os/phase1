@@ -33,7 +33,10 @@ source="https://wiki.qemu-project.org/download/qemu-$pkgver.tar.xz
 	$pkgname-guest-agent.initd
 	80-kvm.rules"
 
-targets="$CARCH-softmmu"
+case "$CARCH" in
+    ppc64le) targets="ppc64-softmmu";;
+    *) targets="$CARCH-softmmu";;
+esac
 
 build() {
 	mkdir -p "$builddir"/build

@@ -1,0 +1,28 @@
+pkgname=py-pip
+_pkgname=pip
+pkgver=21.1.1
+pkgrel=0
+pkgdesc="Python library for creating PEG parsers"
+url="https://github.com/pyparsing/pyparsing"
+arch="noarch"
+license="MIT"
+makedepends="python3-dev py-setuptools"
+depends="python3"
+source="https://files.pythonhosted.org/packages/94/b0/e10bdc8809c81796c80aa3644a8e3dc16594fb1bd68f5996929f26cad980/pip-$pkgver.tar.gz"
+builddir="$srcdir/$_pkgname-$pkgver"
+
+options="!check"
+
+build() {
+	python3 setup.py build
+}
+
+check() {
+	python3 -m pytest -rfsxX
+}
+
+package() {
+	python3 setup.py install --prefix=/usr --root="$pkgdir"
+}
+
+b2sums="99250caede6e6e66779cd29a8c0cdae6fb7ff171a78a0eb41dafc7e9549c176a173291d6cf355c2ad78c8a523b106c217b330f31fb60a65bdd8c19e4070c07db  pip-21.1.1.tar.gz"

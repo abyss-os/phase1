@@ -1,47 +1,22 @@
 pkgname=lxc
-pkgver=4.0.8
+pkgver=4.0.9
 _pkgver=${pkgver/_rc/.rc}
 pkgrel=0
 pkgdesc="Userspace interface for the Linux kernel containment features"
 url="https://linuxcontainers.org/lxc/"
 arch="all"
 license="GPL-2.0-only"
-makedepends="
-	libcap-dev
-	libseccomp-dev
-	linux-pam-dev
-	linux-dev
-
-	automake
-	autoconf
-	libtool
-	"
-
+makedepends="libcap-dev libseccomp-dev linux-pam-dev linux-dev automake autoconf libtool"
 options="suid"
-subpackages="
-	$pkgname-dev
-	$pkgname-doc
-	$pkgname-openrc
-	$pkgname-lvm::noarch
-	$pkgname-bridge::noarch
-	$pkgname-bash-completion:bashcomp:noarch
-	$pkgname-pam
-	$pkgname-download:_download:noarch
-	$pkgname-templates-oci:templates_oci:noarch
-	$pkgname-templates::noarch
-	"
-
+subpackages="$pkgname-dev $pkgname-doc $pkgname-openrc $pkgname-bash-completion:bashcomp:noarch"
+replaces="$pkgname-lvm $pkgname-bridge $pkgname-pam $pkgname-download $pkgname-templates-oci $pkgname-templates"
 source="https://linuxcontainers.org/downloads/lxc/lxc-$_pkgver.tar.gz
-	lxc.initd
-	lxc.confd
-	"
-
+        lxc.initd
+        lxc.confd"
 _tmpldir="usr/share/lxc/templates"
 
 build() {
 	./configure \
-		--build=$CBUILD \
-		--host=$CHOST \
 		--prefix=/usr \
 		--sbindir=/usr/bin \
 		--sysconfdir=/etc \
@@ -72,78 +47,11 @@ package() {
 	mv -v ${pkgdir}/lib/* ${pkgdir}/usr/lib/
 }
 
-lvm() {
-	pkgdesc="LVM support for LXC"
-	depends="$pkgname=$pkgver-r$pkgrel lvm2 util-linux"
-	install_if="$pkgname=$pkgver-r$pkgrel lvm2"
-	mkdir "$subpkgdir"
-}
-
 py() {
 	pkgdesc="Python3 module for LXC"
 	depends="python3"
 	mkdir -p "$subpkgdir"/usr/lib
 	mv "$pkgdir"/usr/lib/python3.* "$subpkgdir"/usr/lib
-}
-
-_download() {
-	pkgdesc="LXC container image downloader template"
-	depends="$pkgname gtar"
-
-	mkdir -p "$subpkgdir"/$_tmpldir
-	mv "$pkgdir"/$_tmpldir/lxc-download "$subpkgdir"/$_tmpldir/
-}
-
-templates() {
-	pkgdesc="Templates for LXC (except alpine and download)"
-	depends="gtar"
-	mkdir -p "$subpkgdir"/$_tmpldir
-	mv "$pkgdir"/$_tmpldir/* "$subpkgdir"/$_tmpldir/
-}
-
-templates_oci() {
-	pkgdesc="OCI Template for LXC"
-	depends="bash jq"
-	mkdir -p "$subpkgdir"/usr/share/lxc/templates
-	mv "$pkgdir"/usr/share/lxc/templates/lxc-oci \
-		"$subpkgdir"/usr/share/lxc/templates/
-}
-
-pam() {
-	pkgdesc="PAM module for LXC"
-	mkdir -p "$subpkgdir"/usr/lib/security
-	mv "$pkgdir"/usr/lib/security/pam_cgfs.so "$subpkgdir"/usr/lib/security/
-}
-
-dev() {
-	default_dev
-	# fix abuild smartness
-	mv "$subpkgdir"/usr/bin/lxc-config "$pkgdir"/usr/bin/
-	mv "$subpkgdir"/usr/bin/lxc-update-config "$pkgdir"/usr/bin/
-}
-
-bridge() {
-	depends="dnsmasq"
-	pkgdesc="Bridge interface for LXC with dhcp"
-	mkdir -p "$subpkgdir"/etc/conf.d \
-		"$subpkgdir"/etc/init.d \
-		"$subpkgdir"/etc/lxc
-
-	ln -s dnsmasq "$subpkgdir"/etc/init.d/dnsmasq.lxcbr0
-	cat >>"$subpkgdir"/etc/conf.d/dnsmasq.lxcbr0 <<- EOF
-		rc_before="lxc"
-		BRIDGE_ADDR="10.0.3.1"
-		BRIDGE_NETMASK="255.255.255.0"
-		BRIDGE_NETWORK="10.0.3.0/24"
-		BRIDGE_DHCP_RANGE="10.0.3.2,10.0.3.254"
-		BRIDGE_DHCP_MAX="253"
-		BRIDGE_MAC="00:16:3e:00:00:00"
-		DNSMASQ_CONFFILE="/etc/lxc/dnsmasq.conf"
-	EOF
-	cat >>"$subpkgdir"/etc/lxc/dnsmasq.conf <<- EOF
-		#dhcp-host=somehost,10.0.3.3
-		#dhcp-host=otherhost,10.0.3.4
-	EOF
 }
 
 bashcomp() {
@@ -155,6 +63,6 @@ bashcomp() {
 	rmdir "$pkgdir"/etc/bash_completion.d
 }
 
-b2sums="51bbbf968bc07472214edbad89ed703f54347d5dd78860a2954609d87a1971326a5fcc2254890756d769dcf5e6005e19f6eff34fd923bb594cffcea0b8100ebd  lxc-4.0.8.tar.gz
+b2sums="3796d36b6f76ec595dc28207e66ec9f5a7c1a39f5c5ebc851638c519be35f59b4ec06a71b2866cd8fef0a6140f61fd4b70c900f5a8ffd42d7da7a30d3ff59975  lxc-4.0.9.tar.gz
 4e3382c79a203bb6d8dcf45ed77a583f0cb93f37ed04418aa060727ddd59b6038965c5a3b0355da4d10c2680e263121e808f5ae24cfbb6a08f640ee12e9729e9  lxc.initd
 279d1d9c71b273edf1ec40066e68a0c0ee7257d30f1728532a366aa0409013102dc9089680dcde5e8936710582759f9bffbb5026842f40b727ee67fcc4ef0784  lxc.confd"

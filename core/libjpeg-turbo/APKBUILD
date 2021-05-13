@@ -1,6 +1,6 @@
 pkgname=libjpeg-turbo
 pkgver=2.1.0
-pkgrel=0
+pkgrel=1
 pkgdesc="Accelerated baseline JPEG compression and decompression library"
 url="https://libjpeg-turbo.org/"
 arch="all"
@@ -8,7 +8,7 @@ license="BSD-3-Clause IJG Zlib"
 makedepends="cmake nasm"
 subpackages="$pkgname-dev $pkgname-doc"
 source="$pkgname-$pkgver.tar.gz::https://github.com/libjpeg-turbo/libjpeg-turbo/archive/refs/tags/$pkgver.tar.gz"
-
+options="!check"
 builddir="$srcdir"/libjpeg-turbo-$pkgver
 
 build() {

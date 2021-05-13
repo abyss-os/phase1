@@ -1,7 +1,7 @@
 pkgname=py-six
 _pkgname=six
-pkgver=1.13.0
-pkgrel=2
+pkgver=1.16.0
+pkgrel=0
 pkgdesc="Python 2 and 3 compatibility library"
 url="https://pypi.python.org/pypi/six"
 arch="noarch"
@@ -24,4 +24,4 @@ package() {
 	python3 setup.py install --prefix=/usr --root="$pkgdir"
 }
 
-b2sums="3763a9a2b0e48daaa3715c18c1f1c0a84b4d7d04116811a1baf7223aaeef3495b804b208d37510132b95f8a351846e3b56d7ebe51890466552d39a25a849c234  py-six-1.13.0.tar.gz"
+b2sums="e9366e8f4e4d01707b2b9610af419364db8408d87eea1fc79d92c5c67d11e1577e6067e70d15b436c695b62f39b35f1b304e9651e61568c424b9874f76dadebc  py-six-1.16.0.tar.gz"

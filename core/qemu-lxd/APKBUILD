@@ -1,0 +1,88 @@
+pkgname=qemu-lxd
+pkgver=5.2.0
+pkgrel=0
+pkgdesc="QEMU is a generic machine emulator and virtualizer"
+url="https://qemu.org/"
+arch="all !aarch64"
+license="GPL-2.0 LGPL-2"
+makedepends="meson bash bison curl-dev flex glib-dev openssl-dev libaio-dev libcap-dev libcap-ng-dev
+    libjpeg-turbo-dev libpng-dev libseccomp-dev libxml2-dev linux-dev lzo-dev ncurses-dev
+    perl python3 texinfo util-linux-dev zlib-dev zstd-dev pixman-dev spice-dev"
+builddir=$srcdir/qemu-$pkgver
+options="!strip !check"
+
+source="https://wiki.qemu-project.org/download/qemu-$pkgver.tar.xz
+	xattr_size_max.patch
+	MAP_SYNC-fix.patch
+	test-crypto-ivgen-skip-essiv.patch
+	guest-agent-shutdown.patch
+	mips-softfloat.patch
+	0001-virtio-host-input-use-safe-64-bit-time-accessors-for.patch
+	0002-virtio-user-input-use-safe-64-bit-time-accessors-for.patch"
+
+case "$CARCH" in
+    ppc64le) target="ppc64-softmmu";;
+    *) target="$CARCH-softmmu";;
+esac
+
+build() {
+	mkdir -p "$builddir"/build
+
+	cd "$builddir"/build
+	"$builddir"/configure \
+		--prefix=/usr \
+		--localstatedir=/var \
+		--sysconfdir=/etc \
+		--python=/usr/bin/python \
+		--disable-glusterfs \
+		--disable-debug-info \
+		--disable-bsd-user \
+		--disable-werror \
+		--disable-xen \
+		--enable-kvm \
+		--enable-seccomp \
+		--disable-modules \
+		--cc="$CC" \
+		--disable-linux-user \
+        --disable-user \
+		--enable-system \
+		--disable-docs \
+		--disable-sdl \
+		--disable-gtk \
+		--enable-spice \
+		--enable-tools \
+        --enable-curl \
+		--disable-guest-agent \
+		--disable-guest-agent-msi \
+		--disable-gnutls \
+		--disable-gcrypt \
+		--disable-nettle \
+		--disable-cap-ng \
+		--disable-brlapi \
+		--disable-mpath \
+		--disable-libnfs \
+		--disable-capstone \
+		--enable-pie \
+		--enable-vhost-net \
+		--enable-zstd \
+        --target-list=$target
+
+	make ARFLAGS="rc"
+}
+
+package() {
+    case "$CARCH" in
+        ppc64le) install -Dm755 $builddir/build/qemu-system-ppc64 $pkgdir/usr/libexec/lxd/qemu-system-ppc64;;
+        *) install -Dm755 $builddir/build/qemu-system-$CARCH $pkgdir/usr/libexec/lxd/qemu-system-$CARCH;;
+    esac
+    install -Dm755 $builddir/build/qemu-img $pkgdir/usr/libexec/lxd/qemu-img
+}
+
+b2sums="4413d5591cbabf80faba5b0b7347ee7749ff0a71af44bdf7f64b1995e17ecf1f3df539fa8e63959e0d50cd0502a41a2921e60cc6d078ed8ab5b09ab4b86d4ed7  qemu-5.2.0.tar.xz
+62dbff1e6cce6643ffca2be9404ecc4eed4230f9a36c19ab96ccee90b0f981e62bfa8672ea09d57bfe079d79cc8edb993b2a1cfd6c6c8e6ff5d99541eb02a508  xattr_size_max.patch
+5a4398318111d2b0192b6bfb1f153c965d03ef5bc345c9d5ad859897ccefa36e6077acb25d3654f66b52498df2ecd77dec146e728961190e728bd285de061f20  MAP_SYNC-fix.patch
+355d1d813c19e4863749dc3f99afd323fd904b0996e4a07b3c26cbeee452b2858ab531fe608c59709a98bd09f7c59a539306dce20c8dd0a0459a00d4068bf3ae  test-crypto-ivgen-skip-essiv.patch
+02d0ccb32b0249b8dcfa1800f9b593b956bfe8da93077e25f6242046a851c617a61c9ab65cbaa4f185ae87649ccf491e93093e56d97e1da4f8c92d2e8a7dbd09  guest-agent-shutdown.patch
+799585f5f0495a01c4aa40520d0a5408a9b75adc6466bf06ca5a3d5d80b09eaa5b4850f5390af5c0711ec31851a9633ccfc60ee256639b4c27511d0caaa72fe5  mips-softfloat.patch
+6343ca04eba65496a5323fa2eaf630171fa4df4d9584b794dc434133ed1febd8abc6841adaa0a5bd6660b34c99f3040359264a21dea2c338d72986d5ee0e3e81  0001-virtio-host-input-use-safe-64-bit-time-accessors-for.patch
+b0cfd635a0a1ef760d8bcaaa911b91a93fbec26847f99daa7bec1751693ec0a90e2a6d04882a08e6897f8d39e8870e1edd95f33eb2d30b9185a44b0e247c8c6b  0002-virtio-user-input-use-safe-64-bit-time-accessors-for.patch"

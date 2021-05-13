@@ -1,0 +1,21 @@
+pkgname=spice-protocol
+pkgver=0.14.3
+pkgrel=0
+pkgdesc="Spice protocol header files"
+url="http://www.spice-space.org/"
+arch="noarch"
+license="BSD-3-Clause LGPL-2.1-or-later"
+options="!check" # No test suite
+makedepends="meson"
+source="https://www.spice-space.org/download/releases/spice-protocol-$pkgver.tar.xz"
+
+build() {
+	meson build --prefix=/usr
+	meson compile ${JOBS:+-j ${JOBS}} -C build/
+}
+
+package() {
+	DESTDIR="$pkgdir" meson install --no-rebuild -C build
+}
+
+b2sums="32e69c56ea78e21cf2ff9474e34908eababc1dd9667cd8be24c973e9ff006e1a14f55dd23ab16c40d7bcb5bd7f00392edccdd3512218928787ad9162a6519f1c  spice-protocol-0.14.3.tar.xz"

@@ -1,61 +1,35 @@
 pkgname=libjpeg-turbo
-pkgver=2.0.2
-pkgrel=1
+pkgver=2.1.0
+pkgrel=0
 pkgdesc="Accelerated baseline JPEG compression and decompression library"
 url="https://libjpeg-turbo.org/"
 arch="all"
 license="BSD-3-Clause IJG Zlib"
-depends=""
 makedepends="cmake nasm"
-replaces="libjpeg"
-subpackages="$pkgname-doc $pkgname-dev $pkgname-utils"
-source="${distfilesm}/$pkgname-$pkgver.tar.gz"
+subpackages="$pkgname-dev $pkgname-doc"
+source="$pkgname-$pkgver.tar.gz::https://github.com/libjpeg-turbo/libjpeg-turbo/archive/refs/tags/$pkgver.tar.gz"
 
 builddir="$srcdir"/libjpeg-turbo-$pkgver
 
 build() {
-	cd "$builddir"
-	if [ "$CBUILD" != "$CHOST" ]; then
-		CMAKE_CROSSOPTS="-DCMAKE_SYSTEM_NAME=Linux -DCMAKE_HOST_SYSTEM_NAME=Linux"
-	fi
 	cmake \
 		-DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_INSTALL_LIBDIR=/usr/lib \
 		-DBUILD_SHARED_LIBS=True \
 		-DCMAKE_BUILD_TYPE=Release \
 		-DCMAKE_C_FLAGS="$CFLAGS" \
-		-DWITH_JPEG8=1 \
-		${CMAKE_CROSSOPTS}
+		-DWITH_JPEG8=1
+
 	make
 }
 
 check() {
-	cd "$builddir"
 	make test
 }
 
 package() {
-	cd "$builddir"
 	make -j1 DESTDIR="$pkgdir" install
 	install -d "$pkgdir"/usr/share/licenses/$pkgname
 	ln -s ../../doc/libjpeg-turbo/LICENSE.md "$pkgdir/usr/share/licenses/$pkgname"
 }
-
-utils() {
-	pkgdesc="Utilities for manipulating JPEG images"
-	replaces="jpeg"
-	mkdir -p "$subpkgdir"/usr
-	mv "$pkgdir"/usr/bin "$subpkgdir"/usr/
-}
-
-doc() {
-	default_doc
-	replaces="jpeg-doc"
-}
-
-dev() {
-	default_dev
-	replaces="jpeg-dev"
-}
-
-b2sums="3524c5577322c9fa6556ec263da35c85a6e7b7849dbdc51ec76606f975a46d1a8c40c32de5bb9add62a2dfc9c2ec131e5528591cf63d356bdf70496211e56a01  libjpeg-turbo-2.0.2.tar.gz"
+b2sums="609813424bf7cc87aaed716622ca1be58184dd9e7b5e2e483d081b122536f78a93c9f1d143bd3e7bb02c70afa827ebd3fd0405384a9338960bbd811a4a73e09f  libjpeg-turbo-2.1.0.tar.gz"

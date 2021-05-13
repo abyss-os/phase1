@@ -1,5 +1,5 @@
 pkgname=qemu
-pkgver=5.2.0
+pkgver=6.0.0
 pkgrel=0
 pkgdesc="QEMU is a generic machine emulator and virtualizer"
 url="https://qemu.org/"
@@ -7,7 +7,7 @@ arch="all !aarch64"
 license="GPL-2.0 LGPL-2"
 makedepends="meson bash bison curl-dev flex glib-dev openssl-dev libaio-dev libcap-dev libcap-ng-dev
     libjpeg-turbo-dev libpng-dev libseccomp-dev libxml2-dev linux-dev lzo-dev ncurses-dev
-    perl python3 texinfo util-linux-dev zlib-dev zstd-dev pixman-dev"
+    perl python3 texinfo util-linux-dev zlib-dev zstd-dev pixman-dev nghttp2-dev spice-dev"
 
 pkggroups="qemu"
 install="$pkgname.pre-install $pkgname.post-install $pkgname.pre-upgrade"
@@ -23,8 +23,6 @@ source="https://wiki.qemu-project.org/download/qemu-$pkgver.tar.xz
 	0001-linux-user-fix-build-with-musl-on-ppc64le.patch
 	MAP_SYNC-fix.patch
 	fix-sockios-header.patch
-	test-crypto-ivgen-skip-essiv.patch
-	guest-agent-shutdown.patch
 	mips-softfloat.patch
 	fix-sendmsg.patch
 	0001-virtio-host-input-use-safe-64-bit-time-accessors-for.patch
@@ -60,12 +58,11 @@ build() {
 		--cc="$CC" \
 		--disable-linux-user \
 		--enable-system \
-		--static \
 		--disable-docs \
 		--disable-sdl \
 		--disable-gtk \
-		--disable-spice \
-		--disable-tools \
+		--enable-spice \
+		--enable-tools \
 		--disable-guest-agent \
 		--disable-guest-agent-msi \
 		--disable-gnutls \
@@ -112,7 +109,7 @@ guest() {
 		"$subpkgdir"/etc/conf.d/$pkgname-guest-agent
 }
 
-b2sums="4413d5591cbabf80faba5b0b7347ee7749ff0a71af44bdf7f64b1995e17ecf1f3df539fa8e63959e0d50cd0502a41a2921e60cc6d078ed8ab5b09ab4b86d4ed7  qemu-5.2.0.tar.xz
+b2sums="7746329d3e13782b7c346ce4052cc517cfc65cd9b2d514d199e4d5b8570ca79566ec04b0c114db2e97c84e68eb551e0d4cdce1b14b91a88fe08d2a5f682c1418  qemu-6.0.0.tar.xz
 dada69e04571b5f90372d28eef65e63df551531819c3b150c8a29f9c5400aace5ebf5c5372b0ac95e3148484dd976c6184a9c42661073a601d86e31b74671c6f  0006-linux-user-signal.c-define-__SIGRTMIN-MAX-for-non-GN.patch
 dcf7343044bec8cd5801555b234c18710486d7da55214f1dba24e4b29ccabebb3cf6a9ed3e21576ffbc689bf79b8090cddebce3787891026b19a82cbc3719285  0001-linux-user-fix-build-with-musl-on-aarch64.patch
 e21b013f54a571572ab095396273486c1d7f031f1e10001a10dd5f7f6cb753e7b76468d01966debf6011d3473e62a3b6e1abe661b91baf962306668ef3bbb152  musl-F_SHLCK-and-F_EXLCK.patch
@@ -122,8 +119,6 @@ e3be45d1cfb224d4b22fe61978c15ea1ae4a71143a938e7583c94fed404bef727b1116fda2c30cc4
 782e1e8223a208466bb7e6d35701e4fb33543402f81c372dcbaeb60f805ad8fbbab67d875a7d34c2178221a1bc24752856bd8f5a3354eb0d74e13f5f77251f5d  0001-linux-user-fix-build-with-musl-on-ppc64le.patch
 5a4398318111d2b0192b6bfb1f153c965d03ef5bc345c9d5ad859897ccefa36e6077acb25d3654f66b52498df2ecd77dec146e728961190e728bd285de061f20  MAP_SYNC-fix.patch
 7c52407724f530f77f42da748c53d73a0114a05be30173a3295a1e3ec92abe36117a8fea6ae8ad0be3ecd2e9ef968df11b451fe4e72a9c88e31a0a2060902824  fix-sockios-header.patch
-355d1d813c19e4863749dc3f99afd323fd904b0996e4a07b3c26cbeee452b2858ab531fe608c59709a98bd09f7c59a539306dce20c8dd0a0459a00d4068bf3ae  test-crypto-ivgen-skip-essiv.patch
-02d0ccb32b0249b8dcfa1800f9b593b956bfe8da93077e25f6242046a851c617a61c9ab65cbaa4f185ae87649ccf491e93093e56d97e1da4f8c92d2e8a7dbd09  guest-agent-shutdown.patch
 799585f5f0495a01c4aa40520d0a5408a9b75adc6466bf06ca5a3d5d80b09eaa5b4850f5390af5c0711ec31851a9633ccfc60ee256639b4c27511d0caaa72fe5  mips-softfloat.patch
 f01620bd626e6b6ae4d4d225cd4cf91fc7f128b7d8ffbad135d545a027fd32b07ff82d1a6f1f52619071a238f770c8c35cdef238f8b3e2daf6bdbd4d8b22c7db  fix-sendmsg.patch
 6343ca04eba65496a5323fa2eaf630171fa4df4d9584b794dc434133ed1febd8abc6841adaa0a5bd6660b34c99f3040359264a21dea2c338d72986d5ee0e3e81  0001-virtio-host-input-use-safe-64-bit-time-accessors-for.patch

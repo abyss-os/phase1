@@ -1,0 +1,28 @@
+pkgname=py-setuptools
+_pkgname=setuptools
+pkgver=56.2.0
+pkgrel=0
+pkgdesc="Python library for creating PEG parsers"
+url="https://github.com/pyparsing/pyparsing"
+arch="noarch"
+license="MIT"
+makedepends="python3-dev"
+depends="python3"
+source="$pkgname-$pkgver.tar.gz::https://files.pythonhosted.org/packages/fc/0a/b486efab52f8ad03c3eca0c998dd3deafba0c39b29e0c49c68a7152c8b2d/setuptools-56.2.0.tar.gz"
+builddir="$srcdir/$_pkgname-$pkgver"
+
+options="!check"
+
+build() {
+	python3 setup.py build
+}
+
+check() {
+	python3 -m pytest -rfsxX
+}
+
+package() {
+	python3 setup.py install --prefix=/usr --root="$pkgdir"
+}
+
+b2sums="90c75ba006becc9f564eecd7d46a9ce70c9ad17eacf2e17b3551116b962e08af0084919fccc18ec29a54b98e8fe2419d129554a7b38fdd1104f472fb2e6f9995  py-setuptools-56.2.0.tar.gz"

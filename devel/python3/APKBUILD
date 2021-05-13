@@ -1,7 +1,7 @@
 pkgname=python3
 pkgver=3.9.5
 _basever="${pkgver%.*}"
-pkgrel=0
+pkgrel=1
 pkgdesc="A high-level scripting language"
 url="https://www.python.org"
 arch="all"
@@ -39,7 +39,7 @@ prepare() {
 		--with-computed-gotos \
 		--with-dbmliborder=gdbm:ndbm \
 		--with-system-expat \
-		--with-ensurepip=install \
+		--without-ensurepip \
 		--with-libm="" \
 		$_opts
 }
@@ -63,7 +63,6 @@ package() {
 		$pkgdir/usr/lib/python*/distutils/command/*.exe
 
 	ln -sv /usr/bin/python3 $pkgdir/usr/bin/python
-	ln -sv /usr/bin/pip3 $pkgdir/usr/bin/pip
 }
 
 b2sums="0072376ac69728436ee422da58c1680170cd60c76ac7d623d7a29c9001e6acace1a8d75a1805e65c9b11a30c55c9e67ed66712ec22b0b94ee6873995c935141d  Python-3.9.5.tar.xz

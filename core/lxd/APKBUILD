@@ -1,45 +1,13 @@
 pkgname=lxd
 pkgver=4.14
-pkgrel=0
+pkgrel=1
 pkgdesc="a container hypervisor and a new user experience for LXC"
 url="https://linuxcontainers.org/lxd/"
 arch="all"
 license="Apache-2.0"
-depends="acl
-	netcat-openbsd
-	cgmanager
-	squashfs-tools
-	rsync
-	shadow
-	lxc
-	iptables
-	dnsmasq
-	ca-certificates
-	gtar
-	iproute2
-	dqlite
-	raft
-	sqlite
-	libuv"
-makedepends="lxc-dev
-	acl-dev
-	tcl-dev
-	libuv-dev
-	libcap-dev
-	linux-dev
-	eudev-dev
-	rsync
-	go
-	intltool
-	libtool
-	autoconf
-	automake
-	dqlite-dev
-	raft-dev
-	sqlite-dev
-	libuv-dev"
-subpackages="$pkgname-bash-completion:bashcomp:noarch
-	$pkgname-openrc"
+depends="netcat-openbsd cgmanager squashfs-tools rsync shadow lxc iptables dnsmasq gtar iproute2"
+makedepends="lxc-dev go dqlite-dev raft-dev sqlite-dev libuv-dev libcap-dev eudev-dev acl-dev"
+subpackages="$pkgname-bash-completion:bashcomp:noarch $pkgname-openrc"
 install="$pkgname.pre-install"
 options="!check"
 source="https://linuxcontainers.org/downloads/$pkgname/$pkgname-$pkgver.tar.gz
@@ -48,14 +16,13 @@ source="https://linuxcontainers.org/downloads/$pkgname/$pkgname-$pkgver.tar.gz
 	lxd-dont-go-get.patch
 	add-missing-includes.patch
 	seccomp_werror.patch"
-_project="github.com/lxc/lxd"
 
 build() {
 	export GOPATH="$builddir/_dist" CGO_CFLAGS="-Wno-error -Wignored-attributes" GO111MODULE=auto
 
-	go install -v -x -tags libsqlite3 $_project/lxd
+	go install -v -x -tags libsqlite3 github.com/lxc/lxd/lxd
 	for bin in lxc fuidshift lxc-to-lxd lxd-benchmark lxd-p2c lxd-agent; do
-		go install -v -x $_project/$bin
+		go install -v -x github.com/lxc/lxd/$bin
 	done
 }
 
@@ -65,16 +32,16 @@ package() {
 	cd ${GOPATH}
 	install -Dm755 bin/$pkgname "$pkgdir"/usr/bin/$pkgname
 	install -Dm755 bin/lxc "$pkgdir"/usr/bin/lxc
-	
+
 	install -Dm755 "$srcdir"/lxd.initd \
 		"$pkgdir"/etc/init.d/lxd
 	install -Dm644 "$srcdir"/lxd.confd \
 		"$pkgdir"/etc/conf.d/lxd
 
 	for tool in fuidshift lxc-to-lxd lxd-benchmark lxd-p2c lxd-agent; do
-		install -Dm755 bin/$tool "$subpkgdir"/usr/bin/$tool
+		install -Dm755 bin/$tool "$pkgdir"/usr/bin/$tool
 	done
-	
+
 }
 
 bashcomp() {

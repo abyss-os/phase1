@@ -3,7 +3,7 @@ pkgver=5.2.0
 pkgrel=0
 pkgdesc="QEMU is a generic machine emulator and virtualizer"
 url="https://qemu.org/"
-arch="!aarch64"
+arch="all !aarch64"
 license="GPL-2.0 LGPL-2"
 makedepends="meson bash bison curl-dev flex glib-dev openssl-dev libaio-dev libcap-dev libcap-ng-dev
     libjpeg-turbo-dev libpng-dev libseccomp-dev libxml2-dev linux-dev lzo-dev ncurses-dev

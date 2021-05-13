@@ -8,6 +8,7 @@ license="LGPL-2.0-or-later"
 makedepends="meson spice-protocol glib-dev pixman-dev openssl-dev libjpeg-turbo-dev zlib-dev lz4-dev py-parsing"
 subpackages="$pkgname-dev"
 source="https://www.spice-space.org/download/releases/spice-server/spice-$pkgver.tar.bz2"
+options="!check"
 
 build() {
 	meson \

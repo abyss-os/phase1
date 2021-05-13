@@ -1,13 +1,12 @@
 pkgname=glib
-pkgver=2.67.4
-pkgrel=1
+pkgver=2.68.2
+pkgrel=0
 pkgdesc="Common C routines used by Gtk+ and other libs"
 url="https://developer.gnome.org/glib/"
 arch="all"
 license="LGPL-2.1-or-later"
 triggers="$pkgname.trigger=/usr/share/glib-2.0/schemas:/usr/lib/gio/modules"
-depends_dev="python3 bzip2-dev libxml2 libxslt
-	docbook-xml docbook-xsl"
+depends_dev="python3 bzip2-dev libxml2 libxsltdocbook-xml docbook-xsl"
 makedepends="$depends_dev pcre-dev meson zlib-dev libffi-dev util-linux-dev samurai"
 options="!check" # don't like to be run without first being installed
 source="https://download.gnome.org/sources/glib/${pkgver%.*}/glib-$pkgver.tar.xz
@@ -39,7 +38,7 @@ package() {
 	DESTDIR="$pkgdir" ninja -C output install
 }
 
-b2sums="bf77d881806ea565690ffc12ef57d422871adbe6ebd95d6e8c44332a9131c41ff6c572b86e3294f57566fad9cc01fd9c8a9facb16afea955da9958e28894994b  glib-2.67.4.tar.xz
+b2sums="d35489dcfe9d57d8bd6ecf4f893b7c8e93a5b8108765791071fc811598d1f41287e03d95f20591d50d51a78db34f11833cc7970b1bf29299385357a14977ba0b  glib-2.68.2.tar.xz
 219162ba6402541d043fb06896b6169a18110a3e441cbacc42158e873184c8e51c3af3ba088ea0748b422a550ad2e6d3b05a1909e68aad2932d190dd4316db1e  0001-gquark-fix-initialization-with-c-constructors.patch
 665254dfca8422583b8980505a5aa6ef7b11c36cbc5fd522520783da89412e8a2bd71719487e8aad2200599d4dcc6612af3d512f6bc3b7eea378d924c5310dd6  deprecated-no-warn.patch
 c365115bb406b90a84145807a9a527bb74e1f0bf410d2836d8bdaf11a27f9b12f091ffa160ccc3a35e7ee858416673cc42d18bd4dd4a918a086f0b1e0b2c7bc1  riscv64.patch"

@@ -11,3 +11,5 @@ depend() {
 	use lxcfs
 	after firewall
 }
+
+export PATH=/usr/libexec/lxd:$PATH

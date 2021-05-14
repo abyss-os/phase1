@@ -1,53 +1,37 @@
 pkgname=grub
 pkgver=2.04
-pkgrel=1
-pkgdesc="Bootloader with support for Linux, Multiboot and more"
+pkgrel=2
+pkgdesc="grub bootloader (efi)"
 url="https://www.gnu.org/software/grub/"
-arch="x86_64 aarch64 ppc64le"
+arch="x86_64 aarch64"
 license="GPL-3.0-or-later"
 #depends="mkinitfs"
 triggers="grub.trigger=/boot"
-makedepends="linux-dev xz-dev lvm2-dev python3 freetype-dev gettext-tiny"
+makedepends="linux-dev xz-dev lvm2-dev python3 freetype-dev gettext-tiny zfs-dev"
 install="$pkgname.post-upgrade"
-options="!check"  # Cannot test boot loader.
+options="!check"
 subpackages="$pkgname-dev $pkgname-doc"
 
-    #mips*)		flavors="qemu_mips";;
-
-flavors=""
 case "$CARCH" in
-	x86_64|aarch64)		flavors="efi";;
-	ppc64le)	flavors="ieee1275"; makedepends="$makedepends powerpc-utils" ;;
+	x86_64|aarch64) target="efi" target_conf="--disable-efiemu";;
+	ppc64le) target="ieee1275"; makedepends="$makedepends powerpc-utils" ;;
 esac
-for f in $flavors; do
-	subpackages="$subpackages $pkgname-$f"
-done
 
 source="https://ftp.gnu.org/gnu/grub/grub-$pkgver.tar.xz
 	fix-gcc-no-pie-specs.patch
 	abyss-mkconfig.patch
-	lang-C.UTF-8.patch
-	"
-builddir="$srcdir/grub-$pkgver"
+	lang-C.UTF-8.patch"
 
 prepare() {
 	default_prepare
 	PYTHON=python3 ./autogen.sh
 }
 
-_build_flavor() {
-	local flavor="$1"
-	shift
-	local _configure="$@"
-
-	msg "Building grub for platform $flavor"
-	mkdir -p "$srcdir"/build-$flavor
-	cd "$srcdir"/build-$flavor
+build() {
+	mkdir -p "$srcdir"/build
+	cd "$srcdir"/build
 	export BUILD_CC=$CC
 	$builddir/configure \
-		--build=$CBUILD \
-		--host=$CHOST \
-		--target=$CTARGET \
 		--prefix=/usr \
 		--sysconfdir=/etc \
 		--mandir=/usr/share/man \
@@ -55,36 +39,15 @@ _build_flavor() {
 		--disable-nls \
 		--disable-werror \
 		--sbindir=/usr/bin \
-		$_configure
+        --with-platform=$target \
+	    $target_conf
+
 	make -j${JOBS}
 }
 
-build() {
-	local f
-	for f in $flavors; do
-		case "$f" in
-		bios)		_build_flavor $f --with-platform=pc;;
-		efi)		_build_flavor $f --with-platform=efi --disable-efiemu;;
-		*)		_build_flavor $f --with-platform=$f;;
-
-		esac
-	done
-}
-
-_install_flavor() {
-	local flavor="$1"
-	cd "$srcdir"/build-$flavor
-	case $flavor in
-	*)	 	make DESTDIR="$pkgdir" install-strip;;
-	esac
-}
-
 package() {
-	# install BIOS & EFI version into the same directory
-	# and overwrite similar files.
-	for f in $flavors; do
-		_install_flavor $f
-	done
+    cd "$srcdir"/build
+    make DESTDIR="$pkgdir" install-strip
 
 	rm -f "$pkgdir"/usr/lib/charset.alias
 	# remove grub-install warning of missing directory
@@ -92,48 +55,12 @@ package() {
 
 	mkdir -p "$pkgdir"/etc/default/
 	cat >"$pkgdir"/etc/default/grub <<-EOF
-	GRUB_DISTRIBUTOR="Alpine"
+	GRUB_DISTRIBUTOR="Abyss OS"
 	GRUB_TIMEOUT=2
 	GRUB_DISABLE_SUBMENU=y
 	GRUB_DISABLE_RECOVERY=true
 	EOF
 }
-
-bios() {
-	pkgdesc="$pkgdesc (BIOS version)"
-	depends="$pkgname"
-	mkdir -p $subpkgdir/usr/lib/grub
-	mv $pkgdir/usr/lib/grub/*-pc $subpkgdir/usr/lib/grub/
-}
-
-efi() {
-	pkgdesc="$pkgdesc (EFI version)"
-	depends="$pkgname"
-	mkdir -p $subpkgdir/usr/lib/grub
-	mv $pkgdir/usr/lib/grub/*-efi $subpkgdir/usr/lib/grub/
-}
-
-qemu_mips() {
-	pkgdesc="$pkgdesc (QEMU MIPS version)"
-	depends="$pkgname"
-	mkdir -p $subpkgdir/usr/lib/grub
-	mv $pkgdir/usr/lib/grub/*-qemu_mips $subpkgdir/usr/lib/grub/
-}
-
-ieee1275() {
-	pkgdesc="$pkgdesc (IEEE1275 version)"
-	depends="$pkgname powerpc-utils"
-	mkdir -p $subpkgdir/usr/lib/grub
-	mv $pkgdir/usr/lib/grub/*-ieee1275 $subpkgdir/usr/lib/grub/
-}
-
-emu() {
-	pkgdesc="$pkgdesc (EMU version)"
-	depends="$pkgname"
-	mkdir -p $subpkgdir/usr/lib/grub
-	mv $pkgdir/usr/lib/grub/*-emu $subpkgdir/usr/lib/grub/
-}
-
 b2sums="413ffb9aaeae1ee3128032914ca426a1a5adb3737895dfe563fdde5a7e0386ac2dbc2f7ddfc4e0a67b3ad90494985d6886c20054b038701feb743e67e2eed9d0  grub-2.04.tar.xz
 7a3d53ed4e8efd7c454e0f1b088e362c8927bb495b534760c167eefe1e415ed2dd9811c95f5ba47d071bd14dc21a13814e0859c396feca4f066600ea835aad8f  fix-gcc-no-pie-specs.patch
 bc8460b78ecab6707e2d6fc78e0733197aad9dc5a88fcd3cae87b02c7503ef389b152944e72c57acf3fa8005343dbf05a8b4608c9493570f20b64189970cf631  abyss-mkconfig.patch

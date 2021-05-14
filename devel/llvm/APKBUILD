@@ -1,6 +1,6 @@
 pkgname=llvm
 pkgver=12.0.0
-pkgrel=3
+pkgrel=4
 pkgdesc="$pkgname"
 arch="all"
 url=https://llvm.org
@@ -32,7 +32,7 @@ _arch_extra="-DCOMPILER_RT_BUILD_SANITIZERS=OFF -DCOMPILER_RT_BUILD_XRAY=OFF -DC
 
 case $CARCH in
         mips64*) _targets="Mips" _lto=OFF _projects="libunwind;libcxxabi;libcxx;compiler-rt;llvm;lld;clang";;
-        riscv64) _targets="RISCV" _lto=OFF _projects="libunwind;libcxxabi;libcxx;compiler-rt;llvm;lld;clang;clang-tools-extra";;
+        riscv64) _lto=OFF _projects="libunwind;libcxxabi;libcxx;compiler-rt;llvm;lld;clang;clang-tools-extra";;
         x86_64) _arch_extra="-DCOMPILER_RT_BUILD_SANITIZERS=ON -DCOMPILER_RT_BUILD_XRAY=ON -DCOMPILER_RT_BUILD_MEMPROF=ON
                 -DLLVM_TOOL_LLVM_ITANIUM_DEMANGLE_FUZZER_BUILD=ON -DLLVM_TOOL_LLVM_MC_ASSEMBLE_FUZZER_BUILD=ON
                 -DLLVM_TOOL_LLVM_MC_DISASSEMBLE_FUZZER_BUILD=ON -DLLVM_TOOL_LLVM_OPT_FUZZER_BUILD=ON

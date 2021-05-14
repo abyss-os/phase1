@@ -8,7 +8,6 @@ license="GPL-3.0-or-later"
 #depends="mkinitfs"
 triggers="grub.trigger=/boot"
 makedepends="linux-dev xz-dev lvm2-dev python3 freetype-dev gettext-tiny zfs-dev"
-install="$pkgname.post-upgrade"
 options="!check"
 subpackages="$pkgname-dev $pkgname-doc"
 

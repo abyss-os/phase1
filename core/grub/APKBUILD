@@ -3,7 +3,7 @@ pkgver=2.04
 pkgrel=2
 pkgdesc="grub bootloader (efi)"
 url="https://www.gnu.org/software/grub/"
-arch="x86_64 aarch64"
+arch="x86_64 aarch64 ppc64le"
 license="GPL-3.0-or-later"
 #depends="mkinitfs"
 triggers="grub.trigger=/boot"

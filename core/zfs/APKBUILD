@@ -1,0 +1,41 @@
+pkgname=zfs
+pkgver=2.0.4
+pkgrel=0
+pkgdesc="ZFS for Linux"
+url="https://zfsonlinux.org"
+arch="all"
+license="CDDL-1.0"
+depends_dev="attr-dev e2fsprogs-dev glib-dev libtirpc-dev openssl-dev util-linux-dev"
+makedepends="$depends_dev automake autoconf libtool linux-dev"
+# later: python3-dev py-cffi py-setuptools
+options="!check"
+subpackages="$pkgname-dev $pkgname-doc $pkgname-openrc"
+source="https://github.com/zfsonlinux/zfs/releases/download/zfs-$pkgver/zfs-$pkgver.tar.gz"
+
+build() {
+	./configure --prefix=/usr \
+		--with-tirpc \
+        --bindir=/usr/bin \
+        --sbindir=/usr/bin \
+        --libdir=/usr/lib \
+		--sysconfdir=/etc \
+		--mandir=/usr/share/man \
+		--infodir=/usr/share/info \
+		--localstatedir=/var \
+		--with-config=user \
+		--with-udevdir=/usr/lib/udev \
+		--disable-systemd \
+		--with-python=3
+
+#	later:	--enable-pyzfs
+	make -j${JOBS}
+}
+
+package() {
+	make DESTDIR="$pkgdir" install
+	rm -rf $pkgdir/usr/share/initramfs-tools $pkgdir/usr/share/tests
+    mv -v $pkgdir/sbin/* $pkgdir/usr/bin/
+    rmdir $pkgdir/sbin
+}
+
+b2sums="7e4780092c0a87d5d187cd5734ddc736574db80b500f155287640ef2230e09335cc9b6b26ec1b7d8ab1b7942673ea49a3007a81da372a6d2ac36f3908913045c  zfs-2.0.4.tar.gz"

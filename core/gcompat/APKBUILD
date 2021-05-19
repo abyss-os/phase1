@@ -1,0 +1,47 @@
+pkgname=gcompat
+pkgver=1.0.0
+pkgrel=0
+pkgdesc="The GNU C Library compatibility layer for musl"
+url="https://code.foxkit.us/adelie/gcompat"
+arch="all"
+options="!check"
+license="NCSA"
+makedepends="libucontext-dev musl-obstack-dev"
+source="https://distfiles.adelielinux.org/source/gcompat/gcompat-$pkgver.tar.xz"
+
+case "$CARCH" in
+	aarch64) _ld="ld-linux-aarch64.so.1" ;;
+	x86_64) _ld="ld-linux-x86-64.so.2" ;;
+	mips*) _ld="ld.so.1" ;;
+	ppc64le) _ld="ld64.so.2" ;;
+esac
+
+build() {
+	make \
+		WITH_LIBUCONTEXT=1 \
+		WITH_OBSTACK=musl-obstack \
+		LINKER_PATH="/usr/lib/ld-musl-$CARCH.so.1" \
+		LOADER_NAME="$_ld"
+}
+
+package() {
+	make \
+		LINKER_PATH="/usr/lib/ld-musl-$CARCH.so.1" \
+		LOADER_NAME="$_ld" \
+		WITH_LIBUCONTEXT=1 \
+		WITH_OBSTACK=musl-obstack \
+		DESTDIR="$pkgdir" \
+		install
+
+    mkdir $pkgdir/usr
+    mv $pkgdir/lib $pkgdir/usr/
+	# Required symlink on 64-bit platforms
+#	case "$CARCH" in
+#		x86_64|ppc64le|mips64|aarch64)
+#			mkdir "$pkgdir"/lib64
+#			ln -s ../lib/$_ld "$pkgdir"/lib64/$_ld
+#			;;
+#	esac
+}
+
+b2sums="96710c8c6dacb758327e399d6cc3adc9b412024560b354c5ac41e1f36b0f5b5697d74ff123954786134225516ea16f54109e577ebb75fe1ed315e3dbc3ee090e  gcompat-1.0.0.tar.xz"

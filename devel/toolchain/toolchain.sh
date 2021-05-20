@@ -41,12 +41,12 @@ if [ $UID -gt 0 ]; then
 fi
 
 # some things
-compiler_links="gcc g++ cc c++ cpp"
+compiler_links="gcc g++ c++ cpp"
 binutils_links="ar mt nm objcopy objdump ranlib readelf readobj size split strings strip addr2line"
 gnu_extra="gnat gnatchop gnatfind gnatlink gnatmake gnatprep gnatbind gnatclean gnatkr gnatls gnatname gnatxref gfortran"
 
 cleanup() {
-	for link in $compiler_links $binutils_links $gnu_extra ld as; do
+	for link in $compiler_links $binutils_links $gnu_extra ld as cc; do
 		rm -f /usr/bin/${link} /usr/bin/${CTARGET}-${link} /usr/bin/*-abyss-linux-${link}
 	done
 }
@@ -86,10 +86,12 @@ if [ "$compiler" != "none" ]; then
 				ln -fvs /usr/bin/clang /usr/bin/${link}
 			done
 			ln -fvs /usr/bin/clang-cpp /usr/bin/cpp;;
+            ln -fvs /usr/bin/clang /usr/bin/cc;;
 		gnu)
 			for link in $compiler_links $gnu_extra; do
 				ln -fvs /usr/bin/gnu-${link} /usr/bin/${link}
 			done
 			ln -fvs /usr/bin/gnu-cpp /usr/bin/cpp;;
+            ln -fvs /usr/bin/gnu-gcc /usr/bin/cc;;
 	esac
 fi

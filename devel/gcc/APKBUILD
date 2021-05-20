@@ -1,6 +1,6 @@
 pkgname=gcc
 pkgver=10.3.0
-pkgrel=0
+pkgrel=1
 pkgdesc="The GNU Compiler Collection"
 url="http://gcc.gnu.org"
 arch="all"
@@ -10,13 +10,9 @@ _gmp=6.2.1
 _mpfr=4.1.0
 _isl=0.23
 _mpc=1.2.1
-makedepends="bison flex texinfo gawk zip zlib-dev linux-dev binutils $pkgname-bootstrap libucontext-dev"
-subpackages="$pkgname-doc libatomic libatomic-dev:libatomicdev libgcc libgomp libstdc++:libcxx"
+makedepends="bison flex texinfo gawk zip zlib-dev linux-dev libucontext-dev binutils"
+subpackages="$pkgname-doc libgcc libstdc++:libcxx"
 provides="$pkgname-bootstrap=$pkgver-r$pkgrel"
-
-case $CARCH in
-	x86_64|aarch64) subpackages="$subpackages gdc libgphobos";;
-esac
 
 source="https://gcc.gnu.org/pub/gcc/releases/gcc-${_pkgbase:-$pkgver}/gcc-${_pkgbase:-$pkgver}.tar.xz
 	002_all_default-relro.patch
@@ -42,8 +38,8 @@ source="https://gcc.gnu.org/pub/gcc/releases/gcc-${_pkgbase:-$pkgver}/gcc-${_pkg
 	0037-gcc-go-link-to-libucontext.patch
 	0038-gcc-go-Disable-printing-of-unaccessible-ppc64-struct.patch
 
-        0016-dlang-update-zlib-binding.patch
-        0017-dlang-fix-fcntl-on-mips-add-libucontext-dep.patch
+    0016-dlang-update-zlib-binding.patch
+    0017-dlang-fix-fcntl-on-mips-add-libucontext-dep.patch
 
 
 	205-nopie.patch
@@ -70,8 +66,6 @@ source="https://gcc.gnu.org/pub/gcc/releases/gcc-${_pkgbase:-$pkgver}/gcc-${_pkg
 	__stack_chk_fail_local.c
 	"
 
-#	gcc-4.8-build-args.patch
-
 # we build out-of-tree
 _gccdir="$srcdir"/gcc-${_pkgbase:-$pkgver}
 _gcclibdir=/usr/lib/gcc/${CTARGET}/$pkgver
@@ -79,7 +73,7 @@ _gcclibexec=/usr/libexec/gcc/${CTARGET}/$pkgver
 
 _builddir="$srcdir/build"
 
-export PATH=/usr/$(apk --print-arch)-abyss-linux-musl/bin:${PATH}
+export PATH=/usr/$CTARGET/bin:/usr/x86_64-pc-linux-musl/bin:${PATH}
 
 prepare() {
 	cd "$_gccdir"
@@ -126,7 +120,7 @@ prepare() {
 	*)	_hash_style_configure="--with-linker-hash-style=gnu" ;;
 	esac
 
-	export AS=gnu-as CC=gnu-gcc CXX=gnu-g++ LD=gnu-ld
+	#export AS=gnu-as CC=gnu-gcc CXX=gnu-g++ LD=gnu-ld
 
 	_languages=c,c++,go
 
@@ -145,17 +139,37 @@ prepare() {
 	echo "  CC $CC CXX $CXX AS $AS LD $LD"
 	echo ""
 
-	mkdir -p "$_builddir"
+}
+
+build() {
+	_languages=c,c++,go
+
+	case $CARCH in
+		x86_64|aarch64) _languages="${_languages},d";;
+	esac
+
+    export LD=gnu-ld CC=$CC CXX=$CXX CC_FOR_TARGET=$CC CXX_FOR_TARGET=$CXX AS=gnu-as AR=gnu-ar
+
+	msg "Configuring the following:"
+	echo ""
+	echo "  CBUILD=$CBUILD"
+	echo "  CHOST=$CHOST"
+	echo "  CTARGET=$CTARGET"
+	echo "  CTARGET_ARCH=$CTARGET_ARCH"
+	echo "  Languages: $_languages"
+	echo "  arch_configure=$_arch_configure"
+	echo "  CC $CC CXX $CXX AS $AS LD $LD"
+	echo ""
+
+	mkdir -p "$_builddir" /usr/$CTARGET
 	cd "$_builddir"
- 	env CC=$CC CXX=$CXX CC_FOR_TARGET=$CC CXX_FOR_TARGET=$CXX AS=$AS LD=$LD \
+ 	#env CC=$CC CXX=$CXX CC_FOR_TARGET=$CC CXX_FOR_TARGET=$CXX AS=$AS LD=$LD \
+
+
 		"$_gccdir"/configure \
-		--prefix=/usr \
-		--program-prefix=gnu- \
+		--prefix=/usr/$CARCH-pc-linux-musl \
 		--mandir=/usr/share/man \
 		--infodir=/usr/share/info \
-		--build=${CBUILD} \
-		--host=${CHOST} \
-		--target=${CTARGET} \
 		--with-pkgversion="Abyss OS" \
 		--disable-fixed-point \
 		--disable-libstdcxx-pch \
@@ -177,10 +191,8 @@ prepare() {
 		--disable-symvers \
 		$_arch_configure \
 		$_hash_style_configure \
-		libat_cv_have_ifunc=no
-}
+		libat_cv_have_ifunc=no gcc_cv_as_flags=''
 
-build() {
 	cd "$_builddir"
 	make -j${JOBS}
 }
@@ -189,10 +201,10 @@ package() {
 	cd "$_builddir"
 	make -j1 DESTDIR="${pkgdir}" install
 
-	ln -s /usr/bin/gnu-gcc ${pkgdir}/usr/bin/gcc
-	ln -s /usr/bin/gnu-c++ ${pkgdir}/usr/bin/g++
-	ln -s /usr/bin/gnu-gdc ${pkgdir}/usr/bin/gdc
-	ln -s /usr/bin/gnu-gccgo ${pkgdir}/usr/bin/gccgo
+#	ln -s /usr/bin/gnu-gcc ${pkgdir}/usr/bin/gcc
+#	ln -s /usr/bin/gnu-c++ ${pkgdir}/usr/bin/g++
+#	ln -s /usr/bin/gnu-gdc ${pkgdir}/usr/bin/gdc
+#	ln -s /usr/bin/gnu-gccgo ${pkgdir}/usr/bin/gccgo
 
 	find "$pkgdir" -name libgtkpeer.a \
 		-o -name libgjsmalsa.a \
@@ -245,7 +257,7 @@ libcxx() {
 	depends=
 
 	mkdir -p "$subpkgdir"/usr/lib
-	mv "$pkgdir"/usr/${_target:+$CTARGET/}lib/libstdc++.so.* "$subpkgdir"/usr/lib/
+	mv "$pkgdir"/usr/${CARCH}-pc-linux-musl/lib/libstdc++.so.* "$subpkgdir"/usr/lib/
 }
 
 libgcc() {
@@ -253,7 +265,7 @@ libgcc() {
 	depends=
 
 	mkdir -p "$subpkgdir"/usr/lib
-	mv "$pkgdir"/usr/${_target:+$CTARGET/}lib/libgcc_s.so.* "$subpkgdir"/usr/lib/
+	mv "$pkgdir"/usr/${CARCH}-pc-linux-musl/lib/libgcc_s.so.* "$subpkgdir"/usr/lib/
 }
 
 libgomp() {

@@ -1,6 +1,6 @@
 pkgname=toolchain
-pkgver=4
-pkgrel=1
+pkgver=5
+pkgrel=0
 pkgdesc="configures toolchain for Abyss"
 url="https://getabyss.com"
 arch="noarch"
@@ -13,4 +13,4 @@ package() {
 	install -m755 $srcdir/toolchain.sh $pkgdir/usr/bin/toolchain
 }
 
-b2sums="596686cd4bc89290d7b0cd239295d9c4d40587d58a4e590dee5843dd8b1795ae908ad8227a2181d9e1abce09193e5956b15eb9ab54ffe65fbc2b9daaa2e4e607  toolchain.sh"
+b2sums="ac8865a66162595cecd58964cba72357ce7e82bff73a9471ea8d9d2a9aa64abd4227963a4b80deb4691acb9bfed569281021f6e1857b6d1ce2ff982b6d86dee1  toolchain.sh"

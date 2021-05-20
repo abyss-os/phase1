@@ -1,6 +1,6 @@
 pkgname=libexecinfo
 pkgver=1.1
-pkgrel=3
+pkgrel=4
 pkgdesc="A quick-n-dirty BSD licensed clone of the GNU libc backtrace facility."
 options="!check" # No testsuite
 url="https://www.freshports.org/devel/libexecinfo"
@@ -9,6 +9,10 @@ license="BSD-2-Clause"
 subpackages="${pkgname}-dev"
 source="$pkgname-$pkgver-$pkgrel.tar.gz::https://github.com/mikroskeem/libexecinfo/archive/$pkgver-$pkgrel.tar.gz"
 builddir="$srcdir/$pkgname-$pkgver-$pkgrel"
+if [ "$CARCH" = "mips64" ]; then
+    makedepends="gcc binutils"
+    export CC=gnu-gcc CXX=gnu-g++
+fi
 
 build() {
 	cd "$builddir"

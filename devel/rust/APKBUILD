@@ -1,6 +1,6 @@
 pkgname=rust
 pkgver=1.52.1
-pkgrel=0
+pkgrel=1
 pkgdesc="The Rust Programming Language"
 url="https://www.rust-lang.org"
 arch="x86_64 ppc64le aarch64"
@@ -36,7 +36,7 @@ _sharedir="usr/share/rust"
 
 ldpath="/$_rlibdir"
 
-export RUST_BACKTRACE=1 PKG_CONFIG_ALLOW_CROSS=1
+export RUST_BACKTRACE=full
 
 _clear_vendor_checksums() {
 	sed -i 's/\("files":{\)[^}]*/\1/' vendor/$1/.cargo-checksum.json
@@ -75,18 +75,10 @@ build() {
 		--set="target.$_target.cc=$CC" \
 		--set="target.$_target.cxx=$CXX" \
 		--set="target.$_target.ar=$AR" \
-		--set="target.$_target.linker=$CC" \
-		--set="target.$_build.musl-root=/usr" \
-		--set="target.$_build.crt-static=false" \
-		--set="target.$_build.cc=$CC" \
-		--set="target.$_build.cxx=$CXX" \
-		--set="target.$_build.ar=$AR" \
-		--set="target.$_build.linker=$CC"
+		--set="target.$_target.linker=$CC"
 
 	sed 's/#deny-warnings = .*/deny-warnings = false/' -i config.toml
 	sed 's|deny(warnings,|deny(|' -i src/bootstrap/lib.rs
-
-	./x.py build --jobs ${JOBS}
 }
 
 package() {

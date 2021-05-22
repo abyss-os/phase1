@@ -85,13 +85,13 @@ if [ "$compiler" != "none" ]; then
 			for link in $compiler_links; do
 				ln -fvs /usr/bin/clang /usr/bin/${link}
 			done
-			ln -fvs /usr/bin/clang-cpp /usr/bin/cpp;;
+			ln -fvs /usr/bin/clang-cpp /usr/bin/cpp
             ln -fvs /usr/bin/clang /usr/bin/cc;;
 		gnu)
 			for link in $compiler_links $gnu_extra; do
 				ln -fvs /usr/bin/gnu-${link} /usr/bin/${link}
 			done
-			ln -fvs /usr/bin/gnu-cpp /usr/bin/cpp;;
+			ln -fvs /usr/bin/gnu-cpp /usr/bin/cpp
             ln -fvs /usr/bin/gnu-gcc /usr/bin/cc;;
 	esac
 fi

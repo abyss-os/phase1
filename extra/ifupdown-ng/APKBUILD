@@ -1,0 +1,35 @@
+pkgname=ifupdown-ng
+pkgver=0.11.2
+pkgrel=0
+pkgdesc="tools for managing network configuration"
+url="https://github.com/ifupdown-ng/ifupdown-ng"
+arch="all"
+license="ISC"
+checkdepends="kyua atf"
+subpackages="$pkgname-openrc"
+source="https://distfiles.dereferenced.org/ifupdown-ng/ifupdown-ng-$pkgver.tar.xz"
+depends="iproute2"
+
+build() {
+	make
+}
+
+check() {
+	make check
+}
+
+package() {
+	make DESTDIR="$pkgdir" EXECUTOR_SCRIPTS_OPT="ppp wireguard ethtool batman wifi vrf gre vxlan mpls" EXECUTOR_SCRIPTS_STUB="bridge bond" install
+    mkdir -p $pkgdir/usr
+    mv -v $pkgdir/sbin $pkgdir/usr/bin
+}
+
+openrc() {
+	pkgdesc="ifupdown-ng openrc init scripts"
+	install_if="$pkgname openrc"
+
+	install -D -m755 "$builddir"/dist/openrc/networking.initd "$subpkgdir"/etc/init.d/ifupdown-ng
+	install -D -m644 "$builddir"/dist/openrc/networking.confd "$subpkgdir"/etc/conf.d/ifupdown-ng
+}
+
+b2sums="bc19abd915ee711ec017823a9c2c7107c5eab1099dc10d05e69b9aa58f406386a5ad6ddb02c0eb5c7d5b1909778e19f41105315e62f982eb0790e4c145207c7f  ifupdown-ng-0.11.2.tar.xz"

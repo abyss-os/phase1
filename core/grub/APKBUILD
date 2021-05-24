@@ -1,6 +1,6 @@
 pkgname=grub
 pkgver=2.04
-pkgrel=3
+pkgrel=4
 pkgdesc="grub bootloader (efi)"
 url="https://www.gnu.org/software/grub/"
 arch="x86_64 ppc64le"
@@ -53,10 +53,12 @@ package() {
 
 	mkdir -p "$pkgdir"/etc/default/
 	cat >"$pkgdir"/etc/default/grub <<-EOF
-	GRUB_DISTRIBUTOR="Abyss OS"
-	GRUB_TIMEOUT=2
-	GRUB_DISABLE_SUBMENU=y
-	GRUB_DISABLE_RECOVERY=true
+    GRUB_DISTRIBUTOR="Abyss OS"
+    GRUB_TIMEOUT=2
+    GRUB_DISABLE_SUBMENU=y
+    GRUB_DISABLE_RECOVERY=true
+    GRUB_CMDLINE_LINUX_DEFAULT=""
+    GRUB_CMDLINE_LINUX=""
 	EOF
 }
 b2sums="413ffb9aaeae1ee3128032914ca426a1a5adb3737895dfe563fdde5a7e0386ac2dbc2f7ddfc4e0a67b3ad90494985d6886c20054b038701feb743e67e2eed9d0  grub-2.04.tar.xz

@@ -15,7 +15,7 @@ build() {
 }
 
 package() {
-	make DESTDIR="$pkgdir" SBINDIR=bin install
+	make DESTDIR="$pkgdir" SBINDIR=/usr/bin install
 }
 
 b2sums="d7abe6c65d408a7570227dbe69fe11e1d72a1f502de21d1fcb7dcff6bfe229804020d5c1ebdda42a3694e31cf87c631faf089746f8df4733b0b1a459c185e2af  iw-5.9.tar.xz"

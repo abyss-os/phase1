@@ -1,0 +1,21 @@
+pkgname=hwids
+pkgver=20201207
+pkgrel=0
+pkgdesc="Hardware identification databases"
+url="https://github.com/gentoo/hwids/"
+arch="noarch"
+license="BSD-3-Clause OR GPL-2.0-or-later"
+subpackages="$pkgname-doc"
+makedepends="eudev-dev"
+source="https://github.com/gentoo/hwids/archive/hwids-$pkgver.tar.gz"
+builddir="$srcdir/hwids-hwids-$pkgver"
+
+build() {
+	make UDEV=yes
+}
+
+package() {
+	make DESTDIR="$pkgdir" MISCDIR="/usr/share/hwdata" UDEV=yes install
+}
+
+b2sums="a968e6daf5686c4f73d9d900fbe80a5b3844c006102ed8801f88e378dc43c1bb66aaeced42bc2703a9c8ad624a1a7167bba485b1bf0c0d0e6043920e015c9177  hwids-20201207.tar.gz"

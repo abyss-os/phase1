@@ -1,6 +1,6 @@
 pkgname=coreutils
 pkgver=8.32
-pkgrel=0
+pkgrel=1
 pkgdesc="The basic file, shell and text manipulation utilities"
 url="https://www.gnu.org/software/coreutils/"
 arch="all"
@@ -10,9 +10,9 @@ source="https://ftp.gnu.org/gnu/coreutils/$pkgname-$pkgver.tar.xz
 		nonsense.patch"
 options="!check"
 builddir="$srcdir"/$pkgname-$pkgver
+subpackages="$pkgname-doc"
 
 build() {
-	cd "$builddir"
 	FORCE_UNSAFE_CONFIGURE=1 ./configure \
 		--build=$CBUILD \
 		--host=$CHOST \
@@ -23,23 +23,12 @@ build() {
 		--disable-nls \
 		--without-gmp \
 		--with-linux-crypto \
-		--with-openssl=auto \
-		--enable-single-binary=symlinks
+		--with-openssl=auto
 	make
 }
 
 package() {
-	cd "$builddir"
-	install -Dm755 ${builddir}/src/coreutils ${pkgdir}/usr/bin/coreutils
-
-	ln -sv /usr/bin/coreutils ${pkgdir}/usr/bin/fmt
-	ln -sv /usr/bin/coreutils ${pkgdir}/usr/bin/join
-}
-
-# XXX - some gnulib tests broken, find a way to patch out gnulib tests
-check() {
-	cd "$builddir"
-	make check
+    make DESTDIR=$pkgdir install
 }
 
 b2sums="0ad99c176c19ec214fcfd0845523e5362f0151827707c759bd46c0fe8d2501c6ad1c29c5b71266f6525857bc0d56c472db0d7fe29953b6c65e2e6c76bdf3c515  coreutils-8.32.tar.xz

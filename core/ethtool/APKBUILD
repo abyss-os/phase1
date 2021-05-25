@@ -1,0 +1,28 @@
+pkgname=ethtool
+pkgver=5.12
+pkgrel=0
+pkgdesc="Utility for controlling network drivers and hardware"
+url="https://mirrors.edge.kernel.org/pub/software/network/ethtool/"
+arch="all"
+license="GPL-2.0-only"
+makedepends="linux-dev libmnl-dev"
+subpackages="$pkgname-doc"
+source="https://www.kernel.org/pub/software/network/ethtool/ethtool-$pkgver.tar.xz"
+
+build() {
+	./configure \
+		--prefix=/usr \
+		--mandir=/usr/share/man \
+        --sbindir=/usr/bin
+	make
+}
+
+check() {
+	make check
+}
+
+package() {
+	make DESTDIR="$pkgdir" install
+}
+
+b2sums="640d4a1576afea60c673a6060b649d10ccb2d2be64a817e4d74daeb6de4da2d30ccb059ff1113e05f9c44898f08beefd706be2ea6e323c42032c4d93926d380a  ethtool-5.12.tar.xz"

@@ -17,8 +17,8 @@ source="https://www.kernel.org/pub/software/utils/pciutils/pciutils-$pkgver.tar.
 build() {
 	sed -i -e "106s/^/\#/" Makefile
 	make CC=$CC OPT="$CFLAGS" \
-		SHARED=yes \
 		PREFIX=/usr \
+        SHARED=yes \
 		SHAREDIR=/usr/share/hwdata \
 		MANDIR=/usr/share/man \
         BINDIR=/usr/bin \
@@ -27,20 +27,19 @@ build() {
 }
 
 package() {
-	make CC=$CC PREFIX="$pkgdir"/usr \
-		SHARED=yes \
-		SHAREDIR="$pkgdir"/usr/share/hwdata \
-		MANDIR="$pkgdir"/usr/share/man \
-        BINDIR=/usr/bin \
-        SBINDIR=/usr/bin \
+	make CC=$CC PREFIX=$pkgdir/usr \
+        SHARED=yes \
+		SHAREDIR=$pkgdir/usr/share/hwdata \
+		MANDIR=$pkgdir/usr/share/man \
+        BINDIR=$pkgdir/usr/bin \
+        SBINDIR=$pkgdir/usr/bin \
 		install
 
-	install -d "$pkgdir"/usr/lib
-	ln -s libpci.so.${pkgver%%.*} "$pkgdir"/usr/lib/libpci.so
-	install -D -m 644 lib/libpci.pc "$pkgdir"/usr/lib/pkgconfig/libpci.pc
-	for i in config.h header.h pci.h types.h; do
-		install -D -m 644 lib/$i "$pkgdir"/usr/include/pci/$i
-	done
+    install -D -m 644 lib/libpci.pc $pkgdir/usr/lib/pkgconfig/libpci.pc
+    for i in config.h header.h pci.h types.h; do
+        install -D -m 644 lib/$i $pkgdir/usr/include/pci/$i
+    done
+    ln -s libpci.so.${pkgver%%.*} $pkgdir/usr/lib/libpci.so
 }
 
 b2sums="7a0ce0a2b94951162d543ea9bed31e7d68c894b9e41f2fc1218c6e2c8153a024494c67266e9dc2da79ceaba681b5bde52ee6525d3d55ce4e6e909df634789a13  pciutils-3.7.0.tar.xz

@@ -1,0 +1,29 @@
+pkgname=libnl
+pkgver=3.5.0
+pkgrel=0
+pkgdesc="Library for applications dealing with netlink sockets"
+url="http://www.infradead.org/~tgr/libnl/"
+arch="all"
+license="LGPL-2.1-or-later"
+makedepends="linux-dev flex bison libtool autoconf automake"
+subpackages="$pkgname-dev $pkgname-doc"
+source="https://github.com/thom311/libnl/releases/download/libnl${pkgver//./_}/libnl-$pkgver.tar.gz"
+
+build() {
+	./configure \
+		--prefix=/usr \
+		--sysconfdir=/etc \
+		--mandir=/usr/share/man \
+		--localstatedir=/var
+	make
+}
+
+check() {
+	make check
+}
+
+package() {
+	make DESTDIR="$pkgdir" install
+}
+
+b2sums="cf21c1ffa89799b91bf4bddb8833d5af5c62eb1c53a078ee55a2888bd8439e1ae6db8886c9c4f937297962faac6873b4cf5211ee3d1e5354d96b5dc545a6fc2d  libnl-3.5.0.tar.gz"

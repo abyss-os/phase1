@@ -1,0 +1,73 @@
+pkgname=wpa_supplicant
+pkgver=2.9
+pkgrel=0
+pkgdesc="utility providing key negotiation for WPA wireless networks"
+url="https://w1.fi/wpa_supplicant/"
+arch="all"
+license="BSD-3-Clause"
+subpackages="$pkgname-doc $pkgname-openrc"
+makedepends="linux-dev openssl-dev dbus-dev libnl-dev"
+source="https://w1.fi/releases/wpa_supplicant-$pkgver.tar.gz
+
+	wpa_supplicant.initd
+	wpa_supplicant.confd
+	wpa_cli.confd
+	wpa_cli.initd
+
+	eloop.patch
+	CVE-2019-16275.patch
+	CVE-2021-0326.patch
+	CVE-2021-27803.patch
+
+	config
+	wpa_cli.sh"
+
+build() {
+	cd "$builddir"/wpa_supplicant
+	cp "$srcdir"/config "$builddir"/wpa_supplicant/.config
+	make LIBDIR=/usr/lib BINDIR=/usr/bin
+}
+
+package() {
+	cd "$builddir"/wpa_supplicant
+	make DESTDIR="$pkgdir" LIBDIR=/usr/lib BINDIR=/usr/bin install
+	install -Dm644 wpa_supplicant.conf \
+		"$pkgdir"/usr/share/doc/wpa_supplicant/examples/wpa_supplicant.conf
+	install -Dm755 "$srcdir"/wpa_cli.sh \
+		"$pkgdir"/etc/wpa_supplicant/wpa_cli.sh
+
+	local man=
+	for man in doc/docbook/*.?; do
+		install -Dm644 "$man" \
+			"$pkgdir"/usr/share/man/man${man##*.}/${man##*/}
+	done
+
+	# dbus
+	cd dbus
+	install -Dm644 dbus-wpa_supplicant.conf \
+		"$pkgdir"/usr/share/dbus-1/system.d/wpa_supplicant.conf
+	install -Dm644 fi.w1.wpa_supplicant1.service \
+		-t "$pkgdir"/usr/share/dbus-1/system-services
+
+	# openrc runscripts
+	install -Dm755 "$srcdir"/wpa_supplicant.initd \
+		"$pkgdir"/etc/init.d/wpa_supplicant
+	install -Dm644 "$srcdir"/wpa_supplicant.confd \
+		"$pkgdir"/etc/conf.d/wpa_supplicant
+	install -Dm755 "$srcdir"/wpa_cli.initd \
+		"$pkgdir"/etc/init.d/wpa_cli
+	install -Dm644 "$srcdir"/wpa_cli.confd \
+		"$pkgdir"/etc/conf.d/wpa_cli
+}
+
+b2sums="f1e2a5cb37b02d5c74116b5bc7f67c47d85f916c972cbd6b881d63a317161294a37c8517aabe6c74f9617c762aaa76d869f318af311473160e87bac8ac2a1807  wpa_supplicant-2.9.tar.gz
+2cadc1e5b831a6ab20228a72ed2bf0bf3ed3420c1a51c1cf77843cd5c65207105cc8ae624c70bbd0c421e42d1567222ac35f410e8b2c74cc64638bdda2bc3fa8  wpa_supplicant.initd
+121e1e75e2a98c27a953370a92c0483df43967a9dcc8f2a523c82639592cb5defab81e3c13bf705849f43c170e1d56518fc161d420853e7b760321d5cdec714d  wpa_supplicant.confd
+32057024c2354fe32522f389bf5f9f5f6c45f2d42b737af5ffae7d958796887fb04d4dbd56655a2d0c3063b7623a66987afe810366765ca693d9fcc44c91feeb  wpa_cli.confd
+f1e15f04e33a96ee439b2be6980128b802daf73659aa270bf50ad2f8e5c69d143ab895b603f0a7b17fa52749293d81d5c12d9ba74cd591d4cd91566a43c24299  wpa_cli.initd
+fb5dad93bdd7fd7069da64b69fd273925fc9b00d74aee79dab983d8def917f8ce90bd51bbe86a553fd86099875079d95381c96143989295661084d0be70eac89  eloop.patch
+fa9fb5db77955095e083a98a067072fccde02bf55f27af226c8aec515b047f28ab37d9f7c9a1bcc18e584ad3e582bc4dd59beabfcf15b5305394b05e687980a6  CVE-2019-16275.patch
+bee896afe292600d0cb8b3628d8e704162b1cf7bc75f6f6f5b6ae31a476cfe5d8b7e02d16e362750b1b85c0a423d7ab69141a4cc2891164400a02206fff8c900  CVE-2021-0326.patch
+73ea2211568bd6c95afaa93356c6a9b7106eb88aa24f841296cad19f8144978082efe6e3647af0e66dd63cb39953d73909991ea2475491a9598aba00740d15cb  CVE-2021-27803.patch
+2675b52e62f41a2f9c8afd09cd975e2a77e7d569d17afcdf47f3986af683dba4a604e3791b2d5033033e9d85937dc376421de1d43bc3aa486c8c3448e55c8397  config
+109f6412c2cda6e833abf9ae4b354d41ade4c7f73ad074494961dade0f60705cc8f2b752ac32f73e8bf62e26408be1c9a8e781a6772f78ed7107171f68233205  wpa_cli.sh"

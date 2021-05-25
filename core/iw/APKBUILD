@@ -1,0 +1,21 @@
+pkgname=iw
+pkgver=5.9
+pkgrel=0
+pkgdesc="nl80211 based CLI configuration utility for wireless devices"
+url="https://wireless.kernel.org/en/users/Documentation/iw"
+arch="all"
+license="ISC"
+makedepends="libnl-dev linux-dev"
+subpackages="$pkgname-doc"
+source="https://www.kernel.org/pub/software/network/iw/iw-$pkgver.tar.xz"
+options="!check"
+
+build() {
+	make V=1
+}
+
+package() {
+	make DESTDIR="$pkgdir" SBINDIR=$pkgdir/bin install
+}
+
+b2sums="d7abe6c65d408a7570227dbe69fe11e1d72a1f502de21d1fcb7dcff6bfe229804020d5c1ebdda42a3694e31cf87c631faf089746f8df4733b0b1a459c185e2af  iw-5.9.tar.xz"

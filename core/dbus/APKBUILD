@@ -1,5 +1,5 @@
 pkgname=dbus
-pkgver=1.13.16
+pkgver=1.13.18
 pkgrel=0
 pkgdesc="Freedesktop.org message bus system"
 url="https://www.freedesktop.org/Software/dbus"
@@ -48,5 +48,5 @@ package() {
 	rm -rf "$pkgdir"/usr/lib/systemd
 }
 
-b2sums="b4f257b973089845f71b13528a4ebf1c6812ccca3cd211776c97c6ac9be1715cc182e8b28a3eb3c9aa2522c054b491ea6fe5cf72b060e11407d60917d94eef2e  dbus-1.13.16.tar.xz
+b2sums="8f20e7f31226e4442ef33119268faba9d1cb3cb61884848882be194aa04469d065c5a088345b53527703bdd2ab24f185b34546db97e75870a424e6abc39344b7  dbus-1.13.18.tar.xz
 e0fd2c24b1cc33187f6ee6ff46d6e5b4221b703e939e28d0449480ec7e988c822e6d0106f6e934ccbc01d9471b0c9f3928214982e9d448884bbed50b472f4aea  dbus.initd"

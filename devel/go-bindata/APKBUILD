@@ -1,0 +1,24 @@
+pkgname=go-bindata
+pkgver="4.0.0"
+pkgrel=0
+pkgdesc="A small utility which generates Go code from any file"
+url="https://github.com/shuLhan/go-bindata"
+arch="all"
+license="custom"
+depends="go"
+makedepends="go"
+source="$pkgname-$pkgver.tar.gz::https://github.com/shuLhan/go-bindata/archive/v${pkgver}.tar.gz"
+
+build() {
+    export GOPATH="$srcdir" GO111MODULE=off
+    mkdir -p "$GOPATH"/src/github.com/shuLhan/
+    mv $srcdir/$pkgname-$pkgver $GOPATH/src/github.com/shuLhan/go-bindata
+    cd $GOPATH/src/github.com/shuLhan/go-bindata
+    go build ./cmd/...
+}
+
+package() {
+    install -Dm755 $srcdir/src/github.com/shuLhan/go-bindata/go-bindata $pkgdir/usr/bin/go-bindata
+}
+
+b2sums="23cc2c8523be9b31ae1cb9b37e67487c5cf4f92113b0cd93d0dd17bd59981cfbccb9ee6e8f4f1dcda991d0eb8d390fe6f5ec49a5b40433a248ccddc2feb2a454  go-bindata-4.0.0.tar.gz"

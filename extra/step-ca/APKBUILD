@@ -1,0 +1,20 @@
+pkgname=step-ca
+pkgver=0.15.15
+pkgrel=0
+pkgdesc="smallstep ca"
+url="https://github.com/smallstep/certificates"
+arch="all"
+license="Apache-2.0"
+makedepends="go"
+source="$pkgname-$pkgver.tar.gz::https://github.com/smallstep/certificates/archive/refs/tags/v$pkgver.tar.gz"
+builddir="$srcdir/certificates-$pkgver"
+
+build() {
+    make bootstrap
+    make build
+}
+
+package() {
+    make DESTDIR=$pkgdir install
+}
+b2sums="c374f43a948feae44f4c58ce00f2b6dacd91fb242211f5b32947538e9f23a949f8c15cab51221262f745621e1a92081a67c77aebfd09868894027123053259a3  step-ca-0.15.15.tar.gz"

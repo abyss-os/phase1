@@ -1,0 +1,26 @@
+pkgname=linux-firmware
+pkgver=20210511
+pkgrel=0
+pkgdesc="firmware files for linux"
+url="https://git.kernel.org/?p=linux/kernel/git/firmware/linux-firmware.git;a=summary"
+arch="all"
+license="custom:multiple"
+makedepends="bsdtar bsdcpio"
+options="!strip !check !archcheck !tracedeps !spdx"
+
+source="https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/snapshot/linux-firmware-$pkgver.tar.gz"
+
+_builddir="$srcdir"/$pkgname-$pkgver
+
+package() {
+	cd "${_builddir}"
+	make DESTDIR="${pkgdir}" FIRMWAREDIR="/usr/lib/firmware" install
+
+	rm -f "${pkgdir}/usr/lib/firmware/{Makefile,README,configure,GPL-3}"
+
+	find "${pkgdir}" \( -name '*.S' -or -name '*.asm' -or \
+		-name '*.c' -or -name '*.h' -or -name '*.pl' -or \
+                -name 'Makefile' \) -exec rm -- {} \;
+}
+
+b2sums="9e6fc462d1c64a4c364095f29bcb55f2bdb88827a3605d6685c416de0ecb203cac1f25e0478b011da94913f0746daed63bc03d8bb70704f63dde6a82015f5a45  linux-firmware-20210511.tar.gz"

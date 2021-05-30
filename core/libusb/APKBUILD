@@ -1,0 +1,31 @@
+pkgname=libusb
+pkgver=1.0.24
+_ver=${pkgver/_/-}
+pkgrel=0
+pkgdesc="Library that enables userspace access to USB devices"
+url="https://libusb.info/"
+arch="all"
+license="LGPL-2.0-or-later"
+subpackages="$pkgname-dev"
+makedepends="linux-dev"
+source="https://github.com/libusb/libusb/releases/download/v$pkgver/libusb-$pkgver.tar.bz2
+	f38f09da98acc63966b65b72029b1f7f81166bef.patch
+	"
+
+build() {
+	./configure \
+		--prefix=/usr \
+		--disable-udev
+	make
+}
+
+check() {
+	make check
+}
+
+package() {
+	make DESTDIR="$pkgdir" install
+}
+
+b2sums="f6188b5af1225cf8b6d1486b6efcf48e837ee4f2e3592adab3ae6aae0a74a67aa54f40f0dd547f951a194d40954f2ee33acf741d2eee0b8449ce64f2edcf1018  libusb-1.0.24.tar.bz2
+ce32c1f90625e2dbdc09eace972db84313d9cd69e3f788c9bc492b496d3967f4ed602ba4a479a1be6ea568a9dfaa55652e8907db55b5bda87d4c6672334dd050  f38f09da98acc63966b65b72029b1f7f81166bef.patch"

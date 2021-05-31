@@ -1,12 +1,8 @@
 pkgname=apk-tools
 pkgver=2.10.4
-pkgrel=12
-pkgdesc="Alpine Package Keeper - package manager for alpine"
-makedepends="openssl zlib-dev openssl-dev linux-dev"
-if [ "$CBUILD" = "$CHOST" ]; then
-	subpackages="$subpackages lua5.2-apk:luaapk"
-	makedepends="$makedepends lua5.2-dev"
-fi
+pkgrel=13
+pkgdesc="Alpine Package Keeper"
+makedepends="zlib-dev openssl-dev linux-dev"
 source="https://dev.alpinelinux.org/archive/$pkgname/$pkgname-$pkgver.tar.xz
 	fix-virtual-package-id-generation.patch
 	lua-apk_time.patch
@@ -30,29 +26,19 @@ license=GPL2
 builddir="$srcdir/$pkgname-$pkgver"
 prepare() {
 	default_prepare
-	cd "$builddir"
 	sed -i -e 's:-Werror::' Make.rules
 	echo "FULL_VERSION=$pkgver-r$pkgrel" > config.mk
-	if [ "$CBUILD" = "$CHOST" ]; then
-		echo "LUAAPK=YesPlease" >> config.mk
-	else
-		echo "LUAAPK=" >> config.mk
-	fi
-	echo "export LUAAPK" >> config.mk
 }
 
 build() {
-	cd "$builddir"
 	make CC=$CC static
 }
 
 check() {
-	cd "$builddir"
 	make CC=$CC check
 }
 
 package() {
-	cd "$builddir"
 	make CC=$CC DESTDIR="$pkgdir" install
 	mkdir -p $pkgdir/usr/bin
 	mv -v $pkgdir/sbin/* $pkgdir/usr/bin/
@@ -87,12 +73,6 @@ package() {
 		"$pkgdir"/usr/bin/apk
 }
 
-luaapk() {
-	pkgdesc="Lua module for apk-tools"
-	mkdir -p "$subpkgdir"/usr/
-	mv "$pkgdir"/usr/lib "$subpkgdir"/usr/lib/
-}
-
 b2sums="58413e1fb6d58373a959f5be7a7130921dc82cebb78a38752f8e553d4799fbfbf94e034cac238c8687586801d2360586276d1f4485539221c962a60d95873a51  apk-tools-2.10.4.tar.xz
 c081a322928918f2dc701c12f015f95dcd83965eafa8b63143169f7acdff7d50cb90e918c0f13fe09c5066615badc632d04d3a8e5db26bbda95edd12c2e9a987  fix-virtual-package-id-generation.patch
 660783d13ea5d1d58e9da01f9e640a5614b13c1fe752261eb23acc957f642fe8b60cd6055be35fa2a2da80c32efab37211ffbcf7f76b3f9531594dbeab19216f  lua-apk_time.patch
@@ -103,7 +83,7 @@ f1b654c42b1aa4abb341c4d7358c22985fe5fa4fdb507ef902f7f2603cbdd8635b227814ccc17e5b
 31ab9ec77642da87185ab5852d8d1654b3302285252f73e4f8dae9f529c3e59d0d69e0dc4f8be9adf689b322f23ad9ccf5517820751e81587d6d7921f3f5dbaa  add-riscv64-to-apk_defines.h.patch
 740c77fa1033536ac02778d44141faf46fc5d5de34b94b0e0dffabcbbd637c8487bcbd2bca3f67ebde4e771ccc22573336e8b599a35b37c8c7bc6cac6d7ac277  use-utc-time.patch
 38da5df36165f7ec7cec527911692fa6c45dc1bff1445fba326afdbe50e5668a01c7bb02eb17a54977060e396a9351ad5a635bea852b145483bdca9706a7ec80  dont-unpack-root.patch
-2d1c5bd0ef457a9174bbcec601f2478afa19bb442d3fa00a4e5e9b7b19377cff394840d36b6123735a0192d02d9ed76c439070d1f463e45e8388557a5ac0f429  repositories
+56d6b815a965db900551afebd8b1f7c44fc36fc09bf147599f5c9c31c1377792c732c22793c66ce2ca6470493ebec2e8b32f26044b5ca5c1d1f8a2d7a42929c5  repositories
 876ab7c9bea3a5ecd18b71135040df1076ef433c5915f72eb5812c753ad04748771eefe817dd36bddc38a97b8a08b4567e4b3a34ed174afd5334c7f9468ef628  https_libfetch.patch
 e1389de375e25a47c7ccc0c6e9c3d0bc5850a4a4885b77bbe38b574eecffce04010de0a3abdde3251daeb085b2e009f4a759d490c2fa0ba03a983a8509d19462  consist-untrust.patch
 a64df00f0ad5ea43814d3f049d7d55dc33c0569475db6217852ce1580ec729b4022623dd86c8dbc3a0c60667117f4864fd21187907330c8461006b338a0a53c7  add_print-endian.patch"

@@ -2,7 +2,7 @@ pkgname=apk-tools
 pkgver=2.10.4
 pkgrel=13
 pkgdesc="Alpine Package Keeper"
-makedepends="zlib-dev openssl-dev linux-dev lua5.4-dev"
+makedepends="zlib-dev openssl-dev linux-dev lua5.2-dev"
 source="https://dev.alpinelinux.org/archive/$pkgname/$pkgname-$pkgver.tar.xz
 	fix-virtual-package-id-generation.patch
 	lua-apk_time.patch

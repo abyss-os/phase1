@@ -8,12 +8,9 @@ license="BSD-3-Clause"
 makedepends="bash go-bootstrap"
 subpackages="$pkgname-doc"
 source="https://golang.org/dl/go${pkgver/_/}.src.tar.gz
-        dont_use_gold_arm64.patch"
+        dont_use_gold_arm64.patch
+        mips-fix-linker.patch"
 options="!check !strip"
-
-case "$CTARGET_ARCH" in
-	mips64*) export GOMIPS64=softfloat ;;
-esac
 
 export GOPATH="$srcdir"
 export GOROOT="$GOPATH"/go
@@ -24,11 +21,13 @@ provides="go-bootstrap=$pkgver-r$pkgrel"
 GOROOT_FINAL=/usr/lib/go
 GOROOT_BOOTSTRAP=$GOROOT_FINAL
 
+case "$CARCH" in
+    mips64*) export GOMIPS64=softfloat GO_LDSO=/usr/lib/ld-musl-${CARCH}-sf.so.1;;
+    riscv64) continue;;
+    *) export GO_LDFLAGS='-buildmode=pie' GO_LDSO=/usr/lib/ld-musl-${CARCH}.so.1;;
+esac
+
 build() {
-	case "$(apk --print-arch)" in
-		mips64*) export GO_LDSO="${GO_LDSO}-sf";;
-		*) export GO_LDSO=/usr/lib/ld-musl-$(apk --print-arch).so.1;;
-	esac
 	cd src
 	./make.bash
 }
@@ -63,4 +62,5 @@ package() {
 }
 
 b2sums="4602a20ced74dba86938283a736d5235fe5dfb34ae742c44cdcd7ae2453d4654ea5757d0be76b6687d1d34c1b8c32681c41398d1a04ae72d491ee1d8b296d16d  go1.16.4.src.tar.gz
-58bf92fc78b8ac8cca86fd2152b80b4ef50d38fd63f01fc19271f883c393b076e9e8b80a387d5104e376067216b20da5860141c5943f9b1bfffd7e3ec1408468  dont_use_gold_arm64.patch"
+58bf92fc78b8ac8cca86fd2152b80b4ef50d38fd63f01fc19271f883c393b076e9e8b80a387d5104e376067216b20da5860141c5943f9b1bfffd7e3ec1408468  dont_use_gold_arm64.patch
+cc2fc12aa214c982d8d2a28af99fd00089afb27e6abb3bdbd9ab4cbe3ca9444af4da38828cd68bae56b31dde24648ceb35a89c93de6b691327eef5fc078e6f57  mips-fix-linker.patch"

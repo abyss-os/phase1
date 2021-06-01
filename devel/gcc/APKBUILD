@@ -1,6 +1,6 @@
 pkgname=gcc
-pkgver=10.3.0
-pkgrel=1
+pkgver=11.1.0
+pkgrel=0
 pkgdesc="The GNU Compiler Collection"
 url="http://gcc.gnu.org"
 arch="all"
@@ -10,15 +10,13 @@ _gmp=6.2.1
 _mpfr=4.1.0
 _isl=0.23
 _mpc=1.2.1
-makedepends="bison flex texinfo gawk zip zlib-dev linux-dev libucontext-dev binutils"
+makedepends="bison flex texinfo gawk zip zlib-dev linux-dev libucontext-dev binutils libssp_nonshared"
 subpackages="$pkgname-doc libgcc libstdc++:libcxx"
 provides="$pkgname-bootstrap=$pkgver-r$pkgrel"
 
 source="https://gcc.gnu.org/pub/gcc/releases/gcc-${_pkgbase:-$pkgver}/gcc-${_pkgbase:-$pkgver}.tar.xz
 	002_all_default-relro.patch
 	003_all_default-fortify-source.patch
-	005_all_default-as-needed.patch
-	gcc-as-needed-gold.patch
 	011_all_default-warn-format-security.patch
 	012_all_default-warn-trampolines.patch
 	020_all_msgfmt-libstdc++-link.patch
@@ -31,7 +29,6 @@ source="https://gcc.gnu.org/pub/gcc/releases/gcc-${_pkgbase:-$pkgver}/gcc-${_pkg
 	0030-gcc-go-Fix-ucontext_t-on-PPC64.patch
 	0031-gcc-go-Fix-handling-of-signal-34-on-musl.patch
 	0032-gcc-go-Use-int64-type-as-offset-argument-for-mmap.patch
-	0033-gcc-go-Fix-st_-a-m-c-tim-fields-in-generated-sysinfo.patch
 	0034-gcc-go-signal-34-is-special-on-musl-libc.patch
 	0035-gcc-go-Prefer-_off_t-over-_off64_t.patch
 	0036-gcc-go-undef-SETCONTEXT_CLOBBERS_TLS-in-proc.c.patch
@@ -52,7 +49,6 @@ source="https://gcc.gnu.org/pub/gcc/releases/gcc-${_pkgbase:-$pkgver}/gcc-${_pkg
 	gcc-pure64.patch
 
 	fix-cxxflags-passing.patch
-	libgnarl-musl.patch
 
 	320-libffi-gnulinux.patch
 
@@ -72,8 +68,6 @@ _gcclibdir=/usr/lib/gcc/${CTARGET}/$pkgver
 _gcclibexec=/usr/libexec/gcc/${CTARGET}/$pkgver
 
 _builddir="$srcdir/build"
-
-export PATH=/usr/$CTARGET/bin:/usr/x86_64-pc-linux-musl/bin:${PATH}
 
 prepare() {
 	cd "$_gccdir"
@@ -107,70 +101,34 @@ prepare() {
 	cd $srcdir
 	config_helper
 
-	local _arch_configure=
-	case "$CTARGET" in
-	aarch64-*-*-*)		_arch_configure="--with-arch=armv8-a --with-abi=lp64";;
-	mips64*-*-*-*)		_arch_configure="--with-arch=mips64 --with-tune=mips64 --with-mips-plt --with-float=soft --with-abi=64";;
-	ppc64le*-*-*-*)		_arch_configure="--with-abi=elfv2 --enable-secureplt --enable-decimal-float=no --enable-targets=powerpcle-linux";;
-	riscv64-*-*-*)		_arch_configure="--with-arch=rv64gc --with-abi=lp64d";;
+	local _arch_configure= _hash_style_configure=
+	case "$CARCH" in
+    	aarch64)		_arch_configure="--with-arch=armv8-a --with-abi=lp64";;
+	    mips64*)		_arch_configure="--with-arch=mips64 --with-tune=mips64 --with-mips-plt --with-float=soft --with-abi=64";;
+	    ppc64le)		_arch_configure="--with-abi=elfv2 --enable-secureplt --enable-decimal-float=no --enable-targets=powerpcle-linux";;
+	    riscv64)		_arch_configure="--with-arch=rv64gc --with-abi=lp64d";;
 	esac
 
-	case "$CTARGET_ARCH" in
-	mips*)	_hash_style_configure="--with-linker-hash-style=sysv" ;;
-	*)	_hash_style_configure="--with-linker-hash-style=gnu" ;;
+	case "$CARCH" in
+    	#mips*)	_hash_style_configure="--with-linker-hash-style=sysv" ;;
+	    *)	_hash_style_configure="--with-linker-hash-style=both" ;;
 	esac
-
-	#export AS=gnu-as CC=gnu-gcc CXX=gnu-g++ LD=gnu-ld
-
-	_languages=c,c++,go
-
-	case $CARCH in
-		x86_64|aarch64) _languages="${_languages},d";;
-	esac
-
-	msg "Configuring the following:"
-	echo ""
-	echo "  CBUILD=$CBUILD"
-	echo "  CHOST=$CHOST"
-	echo "  CTARGET=$CTARGET"
-	echo "  CTARGET_ARCH=$CTARGET_ARCH"
-	echo "  Languages: $_languages"
-	echo "  arch_configure=$_arch_configure"
-	echo "  CC $CC CXX $CXX AS $AS LD $LD"
-	echo ""
 
 }
 
 build() {
-	_languages=c,c++,go
-
-	case $CARCH in
-		x86_64|aarch64) _languages="${_languages},d";;
-	esac
-
-    export LD=gnu-ld CC=$CC CXX=$CXX CC_FOR_TARGET=$CC CXX_FOR_TARGET=$CXX AS=gnu-as AR=gnu-ar
-
-	msg "Configuring the following:"
-	echo ""
-	echo "  CBUILD=$CBUILD"
-	echo "  CHOST=$CHOST"
-	echo "  CTARGET=$CTARGET"
-	echo "  CTARGET_ARCH=$CTARGET_ARCH"
-	echo "  Languages: $_languages"
-	echo "  arch_configure=$_arch_configure"
-	echo "  CC $CC CXX $CXX AS $AS LD $LD"
-	echo ""
-
-	mkdir -p "$_builddir" /usr/$CTARGET
+	mkdir -p "$_builddir"
 	cd "$_builddir"
- 	#env CC=$CC CXX=$CXX CC_FOR_TARGET=$CC CXX_FOR_TARGET=$CXX AS=$AS LD=$LD \
 
-
-		"$_gccdir"/configure \
-		--prefix=/usr/$CARCH-pc-linux-musl \
-		--mandir=/usr/share/man \
+	"$_gccdir"/configure \
+        --build=${CBUILD} \
+        --host=${CHOST} \
+        --target=${CTARGET} \
+        --program-prefix=gnu- \
+	    --prefix=/usr \
+	    --mandir=/usr/share/man \
 		--infodir=/usr/share/info \
-		--with-pkgversion="Abyss OS" \
+		--with-pkgversion="Abyss OS $pkgver" \
 		--disable-fixed-point \
 		--disable-libstdcxx-pch \
 		--disable-multilib \
@@ -178,8 +136,9 @@ build() {
 		--disable-werror \
 		--enable-__cxa_atexit \
 		--enable-default-pie \
+		--enable-default-ssp \
 		--enable-cloog-backend \
-		--enable-languages=$_languages \
+		--enable-languages=c,c++ \
 		--enable-checking=release \
 		--with-system-zlib \
 		--enable-shared \
@@ -201,11 +160,6 @@ package() {
 	cd "$_builddir"
 	make -j1 DESTDIR="${pkgdir}" install
 
-#	ln -s /usr/bin/gnu-gcc ${pkgdir}/usr/bin/gcc
-#	ln -s /usr/bin/gnu-c++ ${pkgdir}/usr/bin/g++
-#	ln -s /usr/bin/gnu-gdc ${pkgdir}/usr/bin/gdc
-#	ln -s /usr/bin/gnu-gccgo ${pkgdir}/usr/bin/gccgo
-
 	find "$pkgdir" -name libgtkpeer.a \
 		-o -name libgjsmalsa.a \
 		-o -name libgij.a \
@@ -219,8 +173,7 @@ package() {
 		-o -name libatomic.a -o -name libasan.a -o -name libtsan.a \) \
 		-a -type f`
 
-	[[ -f "$pkgdir"/usr/lib/libgomp.spec ]] && mv "$pkgdir"/usr/lib/libgomp.spec "$pkgdir"/$_gcclibdir
-	[[ -f "$pkgdir"/usr/lib/libitm.spec ]] && mv "$pkgdir"/usr/lib/libitm.spec "$pkgdir"/$_gcclibdir
+	mv -vf "$pkgdir"/usr/lib/*.spec "$pkgdir"/$_gcclibdir
 
 	# remove ffi
 	rm -f "$pkgdir"/usr/lib/libffi* "$pkgdir"/usr/share/man/man3/ffi*
@@ -240,7 +193,7 @@ libatomic() {
 	depends=
 
 	mkdir -p "$subpkgdir"/usr/lib
-	mv "$pkgdir"/usr/${_target:+$CTARGET/}lib/libatomic.so.* "$subpkgdir"/usr/lib/
+	mv "$pkgdir"/usr/lib/libatomic.so.* "$subpkgdir"/usr/lib/
 }
 
 libatomicdev() {
@@ -248,8 +201,8 @@ libatomicdev() {
 	depends="libatomic"
 
 	mkdir -p "$subpkgdir"/usr/lib
-	mv "$pkgdir"/usr/${_target:+$CTARGET/}lib/libatomic.so "$subpkgdir"/usr/lib/
-	mv "$pkgdir"/usr/${_target:+$CTARGET/}lib/libatomic.a "$subpkgdir"/usr/lib/
+	mv "$pkgdir"/usr/lib/libatomic.so "$subpkgdir"/usr/lib/
+	mv "$pkgdir"/usr/lib/libatomic.a "$subpkgdir"/usr/lib/
 }
 
 libcxx() {
@@ -257,7 +210,7 @@ libcxx() {
 	depends=
 
 	mkdir -p "$subpkgdir"/usr/lib
-	mv "$pkgdir"/usr/${CARCH}-pc-linux-musl/lib/libstdc++.so.* "$subpkgdir"/usr/lib/
+	mv "$pkgdir"/usr/lib/libstdc++.so.* "$subpkgdir"/usr/lib/
 }
 
 libgcc() {
@@ -265,7 +218,7 @@ libgcc() {
 	depends=
 
 	mkdir -p "$subpkgdir"/usr/lib
-	mv "$pkgdir"/usr/${CARCH}-pc-linux-musl/lib/libgcc_s.so.* "$subpkgdir"/usr/lib/
+	mv "$pkgdir"/usr/lib/libgcc_s.so.* "$subpkgdir"/usr/lib/
 }
 
 libgomp() {
@@ -274,40 +227,12 @@ libgomp() {
 	replaces="gcc"
 
 	mkdir -p "$subpkgdir"/usr/lib
-	mv "$pkgdir"/usr/${_target:+$CTARGET/}lib/libgomp.so.* "$subpkgdir"/usr/lib/
+	mv "$pkgdir"/usr/lib/libgomp.so.* "$subpkgdir"/usr/lib/
 }
 
-libgphobos() {
-	pkgdesc="D programming language standard library for GCC"
-	depends=
-
-	mkdir -p "$subpkgdir"/usr/lib
-	mv "$pkgdir"/usr/lib/libgdruntime.so.* "$subpkgdir"/usr/lib/
-	mv "$pkgdir"/usr/lib/libgphobos.so.*  "$subpkgdir"/usr/lib/
-}
-
-gdc() {
-	pkgdesc="GCC-based D language compiler"
-	depends="gcc=$_gccrel libgphobos=$_gccrel musl-dev"
-	depends="$depends libucontext-dev"
-
-	mkdir -p "$subpkgdir/$_gcclibexec" \
-		"$subpkgdir"/$_gcclibdir/include/d/ \
-		"$subpkgdir"/usr/lib \
-		"$subpkgdir"/usr/bin
-
-	mv "$pkgdir/$_gcclibexec/d21" "$subpkgdir/$_gcclibexec/"
-	mv "$pkgdir"/$_gcclibdir/include/d/* "$subpkgdir"/$_gcclibdir/include/d/
-	mv "$pkgdir"/usr/lib/libgdruntime.a "$subpkgdir"/usr/lib/
-	mv "$pkgdir"/usr/lib/libgphobos.a "$subpkgdir"/usr/lib/
-	mv "$pkgdir"/usr/lib/libgphobos.spec "$subpkgdir"/usr/lib/
-	mv "$pkgdir"/usr/bin/gnu-gdc "$subpkgdir"/usr/bin/
-}
-b2sums="ac7898f5eb8a7c5f151a526d1bb38913a68b50a65e4d010ac09fa20b6c801c671c790d780f23ccb8e4ecdfc686f4aa588082ccc9eb5c80c7b0e30788f824c1eb  gcc-10.3.0.tar.xz
+b2sums="fe617e776b0270d11adea21b5c37d889de90865c19ab82d1c37bbd5c5b9c583a98c174606c4f893ca4950a4233e2a58aae93ad6aa7ad33d4e78a31c72371c1ed  gcc-11.1.0.tar.xz
 2a0a7b8a36a74e2d093ec34e93640b486a656d1e8b5d5408751799fab3359283d9e934f3a00deeb8e02e97f1d5cd7a47a30f2bcedf2a8da9b64b2c5717018126  002_all_default-relro.patch
 f375f417bfdaa96aeafe327bf35bf26bf1d350ecc4b5db2ad735bb4e9b636d6f9d06c6a9c1359ccd1c1f6113db8ae3ab2f06ea9f0c72f292d8d5cfbb18c9d4da  003_all_default-fortify-source.patch
-c54506ca5b06c7417ba4db30a413d82baa60b6f992598bd5a6bb49aa767a66bd7f32d5030c643be3a478ee0983a19a0eef866107f52c5dfed2cb4b2dfeb111ac  005_all_default-as-needed.patch
-2b9a82adb1658209742fa259435fae9528c2643a60892278959ba6b6d94de481ebdf2ca6db7bce5bae161eeac3dc0205a2ca6d2d950e1b4d0b9766cd6b6a06bb  gcc-as-needed-gold.patch
 f02d654db021e4a647ac2526ec7d487f5c73ba687066b188601e99f46f6053d7a3515da3fb8d6fc73d5c31c676c21d5aba8619630bffb96a0143de16df73ed35  011_all_default-warn-format-security.patch
 3773fe7d55a5cb2746324277dc27340fdf316f8b797e7d144c44bfd95b46a72e81bf497398533bb891f4990b4785b8991f03cc33b40cfa6113bc17eb33a3d09a  012_all_default-warn-trampolines.patch
 70978cdc9d161365b881a827bc9eb2602037858bbde6072832f6827611c64b5d2f51e049cdee138703b92e49598a170db736f65cd2b836729194cb415ae05f8f  020_all_msgfmt-libstdc++-link.patch
@@ -319,7 +244,6 @@ aad5807e3605ce7efc9d9c8a663f113a070337ded079817c8c5c07e45e3f5df26d2ed349e740fc8f
 18cd82b9c81a59731485cf580a5dbe8a6d34ec71d34738eca8b6d0d437ba1d782409121cf1435b13b6d701306c071fae609b9df0cdf75cb0bd71e85322ae8b92  0030-gcc-go-Fix-ucontext_t-on-PPC64.patch
 6295dcb80602aeae6cc35eabc4c8f245d0a578fe0dc8d2e05b920f7b131cb66d7aaf0c5d2738df5059c1e1606bbff24217a8c1bf9b73f97fcdadb5b4c49c6a71  0031-gcc-go-Fix-handling-of-signal-34-on-musl.patch
 b296f2c3819947ba585ed102420f6492296c5d96318b143427a24d69c2fd7bf34369e572d7a9fc02711befbd0414824315c4fae845d9dc79b25702f34ea6bf5a  0032-gcc-go-Use-int64-type-as-offset-argument-for-mmap.patch
-9f9c33556223c0577d007f46c67cd1ac2c3259f41cb4b3c8a404a966e6f1f8016f6f08415d9355e675173ea8be045cc143763a55a6a8b140a17ff209f1cbd58f  0033-gcc-go-Fix-st_-a-m-c-tim-fields-in-generated-sysinfo.patch
 45c1966f32aa2f0dac37afae72a5996bd936b36999359f8a0f046d4f52a5e222c21975e4cad734e3288a6804e0f059d7ec42db9b607b1453f6ebdf12b48d6961  0034-gcc-go-signal-34-is-special-on-musl-libc.patch
 533bb119a1db8a8356fc1c072be096bde1b739165639316bece111838a6a43e10169ab3c254056e50215f1a500a471fe3864e22261ef7517bc40c9b8c6c10c5e  0035-gcc-go-Prefer-_off_t-over-_off64_t.patch
 a6f1ae365939a44b64fa771711aff581d1fe013bfc13660a0b31fb6e528645210d94aad09ec4475bdfe66e13db4c9b5283f28a51b1b3e7f713ef14a0a1012df8  0036-gcc-go-undef-SETCONTEXT_CLOBBERS_TLS-in-proc.c.patch
@@ -335,7 +259,6 @@ c28b7d17b7bcd0ef74ddecc9b2e0d20de28a0077e068aca7efb75eaba645e05e8b322a247f3c53c6
 40d339c61c437f9485a85e175e2c529f7a8d11477a7bb1ffee16b68a0d83187a665f9a6280979883afaedacb684bb4366b69efaa76c755d9582c34c063976606  gcc-6.1-musl-libssp.patch
 abc92215e54acac596ae835914edd64c25bb1df967b22678b10700a999080afaea711135eb73a33f2bd14d003cf3a7faacd94e914a91d47ddd642d9b31132d31  gcc-pure64.patch
 46f8cb8e5815a84a42d4aa4446a098fb6df4b3e5ef2458a323fd48d17963c30627e41fdb28e787b6d61a58e059b6f7f5a179382e4dcbbbd52d84fee6dcc2407b  fix-cxxflags-passing.patch
-a7458adba9d1a8a3537d0a0e3335ac7ee65081a364f95be1f144d2a2aaba3317412ae05a484c1412da57c55affd67c951f38df1cf8577b9d7121f076ad5a6030  libgnarl-musl.patch
 31788bf24ffa306914306c9f1cce0b4a0e6b65824c3129208bdccde5846d9eb47de5ef2a6efb7a11108c8b5fa48a2fa9bb53c1967cbe9a8a3f1002b60f3081b0  320-libffi-gnulinux.patch
 c2e8e33eb88bba6453f0645092cc2a6b3adfb07788d7f71a3f97e4f09f95934b6dfac929b72f34c7e515d8d07b1f6db2a2bee2bb1158c85e9c41e4246bdafd41  gcc-pure64-mips.patch
 9cd03c6a71839e4cdb3c1f18d718cc4d3097c3f8ec307a5c756bd5df27c68aa013755156b3b156efee1acabfee2269602c6a3a358092ef0d522271c9c56c133d  mpc-1.2.1.tar.gz

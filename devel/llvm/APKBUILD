@@ -1,19 +1,14 @@
 pkgname=llvm
-pkgver=12.0.0
-pkgrel=4
+case "$CARCH" in
+    mips64) pkgver=11.1.0 pkgrel=0;;
+    *)  pkgver=12.0.0 pkgrel=4;;
+esac
+
 pkgdesc="$pkgname"
 arch="all"
 url=https://llvm.org
 license=.
-source="https://github.com/llvm/llvm-project/archive/llvmorg-${pkgver/_/-}.tar.gz
-		mips_softfloat.patch
-		mips_ppc_crt.patch
-		lld-znow.patch
-		riscv_relax.patch
-		tmp-kernel.patch
-		mips_fix_syscall_warning.patch
-		mips-ldso.patch"
-
+source="https://github.com/llvm/llvm-project/archive/llvmorg-${pkgver/_/-}.tar.gz"
 subpackages="$pkgname-dev"
 
 builddir=$srcdir/llvm-project-llvmorg-${pkgver/_/-}
@@ -149,11 +144,4 @@ lld_aalt() {
     DESTDIR=$subpkgdir aalt-bin -R -g llvm -p ld -f /usr/bin/lld
 }
 
-b2sums="f9c3ba8c58571855caa4f206fd285c9b5be66672fb0814cb8bc0964a051f57f5d35013aa1e27cbda502652b37df1ec23474129109e76a42066847860db441dbe  llvmorg-12.0.0.tar.gz
-8e23d19518bc2bba4009c30ba6d8c981e94b6e293a95a29ebbb9be7c9a7a40b21900a7e526529149847a42bd98899306a1af9b99c819e290d4a67e34f4ea32c3  mips_softfloat.patch
-4bcd1888e1376874bfc31239e35088aeda82f09c5c9a7730ff393f49596b742c5b9245a157f377ecfac417af7c4bebbc7770658a5fffc333a3dd1aabaf24bbcb  mips_ppc_crt.patch
-ada8faf1f1bbdfc52b0493ba563b91de954e6613b8be0af7deeabdf0b621a69a45e5acc753ecb487f461360bb2ec99b4f510a8872bff3afe90e9e7b91de12997  lld-znow.patch
-c99d536538e3e4830c618e11214f4fdda6cf377c9ea565b254e2484e52b68202b19b921b09ef4b784897bceac8a3b7bb9331b4b0087a5cafb8a1a3518fb1a1c4  riscv_relax.patch
-66835dfc1460df303d26fe7c5d630b836cbb0e1ef7c39d59695f73f69e2d12af59db72ce16b1ee16f9ff5ea7bd530a9d39b7c98c0f7c89d74c03ab212d17db9a  tmp-kernel.patch
-bad67cfe2f509010d9cff29b361239ae67cc726941b940a5acd7365af4a581e4734a5ca7f9840481be227189c44ce6ae93137c2400036829b41aa4639cef13b4  mips_fix_syscall_warning.patch
-5669318224dd77fd3274f510dedf3f8d07308d4da7530ea3f65b26ddef016c8013b14acde053a6c002ef53b3d27bf413b024c8e02941de235f70bd03b62d2a94  mips-ldso.patch"
+b2sums="f9c3ba8c58571855caa4f206fd285c9b5be66672fb0814cb8bc0964a051f57f5d35013aa1e27cbda502652b37df1ec23474129109e76a42066847860db441dbe  llvmorg-12.0.0.tar.gz"

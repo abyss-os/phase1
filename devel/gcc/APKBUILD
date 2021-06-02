@@ -148,10 +148,9 @@ build() {
 		--disable-libmudflap \
 		--disable-libsanitizer \
 		--disable-symvers \
-        --with-as=/usr/bin/gnu-as
+        --with-as=/usr/bin/gnu-as \
 		$_arch_configure \
-		$_hash_style_configure \
-		libat_cv_have_ifunc=no gcc_cv_as_flags=''
+		$_hash_style_configure
 
 	cd "$_builddir"
 	make -j${JOBS}

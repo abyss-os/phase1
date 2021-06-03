@@ -8,41 +8,24 @@ license="MIT"
 depends="abyss-base"
 subpackages="$pkgname-dev $pkgname-utils libssp_nonshared"
 source="http://www.musl-libc.org/releases/musl-$pkgver.tar.gz
-	__stack_chk_fail_local.c
-	handle-aux-at_base.patch
-	ldconfig
-	getconf.c
-	getent.c
-	iconv.c
-	strndupa.patch
-	sys-cdefs.h
-	sys-queue.h
-	sys-tree.h
-	tryldflags-cflags.patch
-	qsort_r.patch
-	"
-builddir="$srcdir"/musl-$pkgver
-
-case $CARCH in
-	riscv64) makedepends="$makedepends gcc binutils" CC=gcc LD=ld.lld LD=gnu-ld ;;
-esac
+        __stack_chk_fail_local.c
+        ldconfig
+        getconf.c
+        getent.c
+        iconv.c
+        sys-cdefs.h
+        sys-queue.h
+        sys-tree.h"
 
 build() {
-	cd "$builddir"
-
-	[ "$BOOTSTRAP" = "nocc" ] && return 0
-
-	# only needed for first stage bootstrap
 	$CC $CPPFLAGS $CFLAGS -c "$srcdir"/__stack_chk_fail_local.c -o $srcdir/__stack_chk_fail_local.o
 	ar r $srcdir/libssp_nonshared.a $srcdir/__stack_chk_fail_local.o
 
-	# getconf/getent/iconv
 	local i
 	for i in getconf getent iconv ; do
 		$CC $CPPFLAGS $CFLAGS "$srcdir"/$i.c -o $i
 	done
 
-	# note: not autotools
 	LDFLAGS="$LDFLAGS -Wl,-soname,libc.musl-${CARCH}.so.1" \
 	CC=$CC ./configure \
 		--build=$CBUILD \
@@ -61,41 +44,23 @@ build() {
 }
 
 package() {
-	cd "$builddir"
+    case "$CARCH" in
+        aarch64)    ARCH="aarch64" ;;
+        x86_64)     ARCH="x86_64" ;;
+        ppc64le)    ARCH="powerpc64" ;;
+        mips64*)    ARCH="${CARCH}-sf" ;;
+        riscv64)    ARCH="riscv64" ;;
+    esac
 
-	case "$CARCH" in
-	aarch64*)	ARCH="aarch64" ;;
-	x86_64)		ARCH="x86_64" ;;
-	ppc64*)		ARCH="powerpc64" ;;
-	mips64*)	ARCH="${CARCH}-sf" ;;
-	riscv64)	ARCH="riscv64" ;;
-	esac
+	make DESTDIR="$pkgdir" install
 
-	if [ "$BOOTSTRAP" = "nocc" ]; then
-		make ARCH="$ARCH" prefix=/usr DESTDIR="$pkgdir" install-headers
-	else
-		make DESTDIR="$pkgdir" install
-
-		#cp libssp_nonshared.a "$pkgdir"/usr/lib
-
-		# make LDSO the be the real file, and libc the symlink
-		local LDSO=$(make -f Makefile --eval "$(echo -e 'print-ldso:\n\t@echo $$(basename $(LDSO_PATHNAME))')" print-ldso)
-		mv -f "$pkgdir"/usr/lib/libc.so "$pkgdir"/usr/lib/"$LDSO"
-		ln -svf "$LDSO" "$pkgdir"/usr/lib/libc.musl-${CARCH}.so.1
-		ln -svf "$LDSO" "$pkgdir"/usr/lib/libc.so
-		ln -svf "$LDSO" "$pkgdir"/usr/lib/libc.so.6
-
-		# figure this out later (jwh)
-		if [ "$CARCH" = "mips64" -o "$CARCH" = "mips64el" ]; then
-			ln -svf "$LDSO" "$pkgdir"/usr/lib/ld-musl-${CARCH}.so.1
-		fi
-
-		mkdir -p "$pkgdir"/usr/bin
-		ln -sv /usr/lib/"$LDSO" $pkgdir/usr/bin/ldd
-
-		#ln -svf "$LDSO" "$pkgdir"/usr/lib/libintl.so.1
-		#ln -svf "$LDSO" "$pkgdir"/usr/lib/libintl.so
-	fi
+	mkdir -p "$pkgdir"/usr/bin
+	local LDSO=$(make -f Makefile --eval "$(echo -e 'print-ldso:\n\t@echo $$(basename $(LDSO_PATHNAME))')" print-ldso)
+	mv -f "$pkgdir"/usr/lib/libc.so "$pkgdir"/usr/lib/"$LDSO"
+#	ln -svf "$LDSO" $pkgdir/usr/lib/libc.musl-${CARCH}.so.1
+#	ln -svf "$LDSO" $pkgdir/usr/lib/libc.so
+#	ln -svf "$LDSO" $pkgdir/usr/lib/libc.so.6
+	ln -svf "$LDSO" $pkgdir/usr/bin/ldd
 
 	install -m644 $srcdir/sys-cdefs.h $pkgdir/usr/include/sys/cdefs.h
 	install -m644 $srcdir/sys-queue.h $pkgdir/usr/include/sys/queue.h
@@ -128,14 +93,10 @@ libssp_nonshared()
 
 b2sums="a000357ed52e417d8cebe5537df658dc0f8f02f2da3efcd79125544ad63e11e05fa96136551d0bfeb09a3f6c9a2260bffcfbd329ea92e6a7b62aa690f48968aa  musl-1.2.2.tar.gz
 a70433fea40342429ef7e21fc4338a4d600e902c44c21765434104c5d602267695c403da33479d352328f84c41c99bc46757e5ae18e42f6a0479789bf04323ea  __stack_chk_fail_local.c
-5edec5b375218e2c8c7692fc592d80a6905e1949dbdf3c8375f64821a15bcb9212266155dbd2fad2d14cb9de583646be8f61c5ba50c817f0bef6352dbb81fa70  handle-aux-at_base.patch
 535d64c6883883ad7d8efbfa67d76a9f2120ee126fe69a06e29513a68c8c2a2cff27f2fddfb4bddb19e9d8c4c3a56314dd1dd96ec25d1759829df97fa32d191f  ldconfig
 ba49a573fc16d51780a0b0b81fbf7b64a1142f1dbad203c9609a59b6b07e7404f676c415383ae88c0aede95694821f6ee381bffd93cc3330501e17dc07d122bd  getconf.c
 ed500b8e32a9c99b879c89925a65f21a292918cf40f7c27b7201eaf5af59ed9e1319568990563ab410f516b59d7d2650f1c077d9358a8d51f4b53a5ba1ee7aa1  getent.c
 070ca87b30c90ab98c27d5faf7a2fcb64ff7c67ca212ee6072165b2146979c551f714954dbd465462a171837c59b6ea027e0206458a2df0f977e45f01be3ce48  iconv.c
-6be9131696bec2ec59e6973d97c83da8ff638bdd99f9f75ae33db61948ab322dd67e21c5e6575716aeb627c1569ceb59bd1fb6b186bca6a5f4ddfbb189290847  strndupa.patch
 4939f599e69813fc06b3ed76ecde5ae53abc8d14a347dbb63124a609b10b165247deafee7ed5e14a5ee0c3dd0aa49cd832a7fb0d1235a7411ab33cf5602064fe  sys-cdefs.h
 aecac845baf529553acf24bcc3a20eb6b127b11e291ac655b1e0b84f51ba2a3d7a36479a2b1a3561d6ce1854471db4af3abfd460f866caf2c1f17a6db8b9f4d1  sys-queue.h
-8b53aa32fbc576c405a4d53a45de42f9b7dd59a2b5501158aad208ded7c3f3a392f07bcc12d0f180e868e3c4905b30222206a52d59599d5027044f552a487b90  sys-tree.h
-9b50e080654a0ea666209e8871fa24f45beb31e5eacc3e964b15e797c1a980cc865d5eef0ecdf1a584cfe5a57224e1e323376585e1220dae1591617ab7905bbb  tryldflags-cflags.patch
-db41ecdcbaf9b6a4f095109b0bde87a0b9ddd44268498eeb9568170678d2f9d6c55b063d525ad3d41f10f871e81e3e046a90996d6761a3b251669c0917caa519  qsort_r.patch"
+8b53aa32fbc576c405a4d53a45de42f9b7dd59a2b5501158aad208ded7c3f3a392f07bcc12d0f180e868e3c4905b30222206a52d59599d5027044f552a487b90  sys-tree.h"

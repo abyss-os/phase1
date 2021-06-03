@@ -1,19 +1,15 @@
 pkgname=python3
 pkgver=3.9.5
 _basever="${pkgver%.*}"
-pkgrel=2
+pkgrel=3
 pkgdesc="A high-level scripting language"
 url="https://www.python.org"
 arch="all"
 license="custom"
 provides="python"
 subpackages="$pkgname-dev $pkgname-doc"
-makedepends="expat-dev openssl-dev zlib-dev ncurses-dev bzip2-dev xz-dev
-	sqlite-dev libffi-dev tcl-dev linux-dev gdbm-dev readline-dev mpdecimal-dev"
-source="https://www.python.org/ftp/python/$pkgver/Python-$pkgver.tar.xz
-	musl-find_library.patch
-	mpdecimal-2.5.1.patch
-	fix-xattrs-glibc.patch"
+makedepends="expat-dev openssl-dev zlib-dev ncurses-dev bzip2-dev xz-dev sqlite-dev libffi-dev tcl-dev linux-dev gdbm-dev readline-dev mpdecimal-dev"
+source="https://www.python.org/ftp/python/$pkgver/Python-$pkgver.tar.xz"
 builddir="$srcdir/Python-$pkgver"
 
 prepare() {
@@ -26,6 +22,7 @@ prepare() {
 
 	case "${CARCH}" in
 		riscv64) _opts="--disable-optimizations --disable-profiling";;
+		mips64*) _opts="--enable-optimizations";;
 		*) _opts="--enable-optimizations --with-system-libmpdec --with-lto";;
 	esac
 
@@ -65,7 +62,4 @@ package() {
 	ln -sv /usr/bin/python3 $pkgdir/usr/bin/python
 }
 
-b2sums="0072376ac69728436ee422da58c1680170cd60c76ac7d623d7a29c9001e6acace1a8d75a1805e65c9b11a30c55c9e67ed66712ec22b0b94ee6873995c935141d  Python-3.9.5.tar.xz
-e05b5e9fdc01baa063f7dc64ec47a14d9658233df32146a79944fdd20a70d4604539c24bf6fca977555f15fe322f3dbee7c8d7e1fc64ed0238981a4e9b88e5d6  musl-find_library.patch
-5183ff08383fa2ea44d7c10ef9256f3af64aa40a5a5b21a64c1090f829a66a5c998ca829f961fb47bf73cf8c5a482b49c72017659e14c1123945d91feced2896  mpdecimal-2.5.1.patch
-82d33650dc2f3c9f8cf0a7dbcba877f1154577a10d5756021a5067798114bc00ea3d45410b1ca96873862e759e66811d3a31a766f4c36265fb868659880c35a1  fix-xattrs-glibc.patch"
+b2sums="0072376ac69728436ee422da58c1680170cd60c76ac7d623d7a29c9001e6acace1a8d75a1805e65c9b11a30c55c9e67ed66712ec22b0b94ee6873995c935141d  Python-3.9.5.tar.xz"

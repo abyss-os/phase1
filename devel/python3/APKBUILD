@@ -23,11 +23,14 @@ prepare() {
 	case "${CARCH}" in
 		riscv64) _opts="--disable-optimizations --disable-profiling";;
 		mips64*) _opts="--enable-optimizations";;
-		*) _opts="--enable-optimizations --with-system-libmpdec --with-lto";;
+		*) _opts="--enable-optimizations";;
 	esac
 
 	export CFLAGS="-fno-semantic-interposition"
 	./configure \
+        --build=$CTARGET \
+        --host=$CTARGET \
+        --target=$CTARGET \
 		--prefix=/usr \
 		--libdir=/usr/lib \
 		--enable-ipv6 \
@@ -36,6 +39,7 @@ prepare() {
 		--with-computed-gotos \
 		--with-dbmliborder=gdbm:ndbm \
 		--with-system-expat \
+        --with-system-libmpdec \
 		--without-ensurepip \
 		--with-libm="" \
 		$_opts

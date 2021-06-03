@@ -1,5 +1,5 @@
 pkgname=packer
-pkgver=1.7.0
+pkgver=1.7.2
 pkgrel=0
 pkgdesc="Build Automated Machine Images"
 url="https://www.packer.io/"
@@ -8,17 +8,9 @@ license="MPL-2.0"
 makedepends="go"
 source="$pkgname-$pkgver.tar.gz::https://github.com/hashicorp/packer/archive/v$pkgver.tar.gz
 	riscv64.patch"
-builddir="$srcdir/src/github.com/hashicorp/$pkgname"
-
-prepare() {
-	mkdir -p ${builddir%/*}
-	mv $srcdir/$pkgname-$pkgver "$builddir"/
-	default_prepare
-}
 
 build() {
-	GO111MODULE=off GOPATH="$srcdir" go build -v -o bin/$pkgname \
-		-ldflags "-X main.GitCommit=v$pkgver -X github.com/hashicorp/packer/version.Prerelease= -s -w"
+    go build -v -o bin/$pkgname -ldflags "-X main.GitCommit=v$pkgver -X github.com/hashicorp/packer/version.Prerelease= -s -w"
 }
 
 check() {
@@ -30,10 +22,5 @@ package() {
 	install -Dm755 "$builddir"/bin/$pkgname "$pkgdir"/usr/bin/$pkgname
 }
 
-cleanup_srcdir() {
-	go clean -modcache
-	default_cleanup_srcdir
-}
-
-b2sums="149499ae95c5ce045ad68d4e1407d197164402ff5bf26065ccc5803c025a7910b3f684a46669cd5fea6372b3836e95bcc175067cf212a36ae3cd44443477b7de  packer-1.7.0.tar.gz
+b2sums="6599c9bb19380ed08d186b1f1bd5d9ad581425acce59920a02d4dcdc5237e8f9f9f9af264b4d1ed93f39a56061b9c391fcccdd2582393af420d72421abbd1beb  packer-1.7.2.tar.gz
 076f16bca99d08a303b60ee4b136b18d1eb448e4216786fb357981a6ed38eb3587229881cd4a85e2efe3328d6b512f8932834d677edc4615493f8f94667d884a  riscv64.patch"

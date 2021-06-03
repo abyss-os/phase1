@@ -1,44 +1,16 @@
 pkgname=icu
-pkgver=67.1
-
-# convert x.y.z to x_y_z
+pkgver=69.1
 _ver=${pkgver//./_}
-
 pkgrel=0
 pkgdesc="International Components for Unicode library"
 url="http://www.icu-project.org/"
 arch="all"
 license="MIT ICU Unicode-TOU"
 subpackages="$pkgname-dev $pkgname-doc"
-depends=
-depends_dev="$pkgname=$pkgver-r$pkgrel"
-checkdepends="diffutils python3"
-makedepends=
 source="https://github.com/unicode-org/icu/releases/download/release-${pkgver//./-}/${pkgname}4c-$_ver-src.tgz"
-
 builddir="$srcdir"/icu/source
 
-prepare() {
-	cd "$builddir"
-	default_prepare
-	update_config_sub
-
-	# strtod_l() is not supported by musl; also xlocale.h is missing
-	# It is not possible to disable its use via configure switches or env vars
-	# so monkey patching is needed. Idea was stollen from openembedded
-	# https://github.com/openembedded/openembedded-core/blob/master/meta/recipes-support/icu/icu.inc#L30
-	sed -i -e 's,DU_HAVE_STRTOD_L=1,DU_HAVE_STRTOD_L=0,' configure.ac
-	sed -i -e 's,DU_HAVE_STRTOD_L=1,DU_HAVE_STRTOD_L=0,' configure
-
-	local x
-	# https://bugs.icu-project.org/trac/ticket/6102
-	for x in ARFLAGS CFLAGS CPPFLAGS CXXFLAGS FFLAGS LDFLAGS; do
-		sed -i -e "/^${x} =.*/s:@${x}@::" "config/Makefile.inc.in"
-	done
-}
-
 build() {
-	cd "$builddir"
 	CC=$CC CXX=$CXX ./configure \
 		--build=$CBUILD \
 		--host=$CHOST \
@@ -49,22 +21,11 @@ build() {
 		--disable-samples \
 		--enable-static \
 		--mandir=/usr/share/man
-	mkdir -p data/out # work around build issue
 	make
 }
 
-check() {
-	cd "$builddir"
-	return 0
-	make check
-}
-
 package() {
-	cd "$builddir"
 	make -j1 DESTDIR="$pkgdir" install
-	chmod +x "$pkgdir"/usr/bin/icu-config
-	install -Dm644 "$srcdir"/icu/license.html \
-		"$pkgdir"/usr/share/licenses/icu/license.html
 }
 
-b2sums="f8a263b5c3e5e8ffea88a3bb766cb265aac026b5f9b2f45a1f06076f99f9f0dc3a4512487652d774ccfc8dc65f8f4c40a974e0aa2aa4381ee0c9885f6b871779  icu4c-67_1-src.tgz"
+b2sums="ef95a04e238f0de96e969d580ef64000ab04a4a0003e8f31fd02baab35387d5ab2c4d792ae0d14f3de8e48aa28570237ccd67fb32e03b13d1572e4a995b1de76  icu4c-69_1-src.tgz"

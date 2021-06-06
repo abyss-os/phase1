@@ -1,6 +1,6 @@
 pkgname=musl
 pkgver=1.2.2
-pkgrel=2
+pkgrel=3
 pkgdesc="the musl c library (libc) implementation"
 url="http://www.musl-libc.org/"
 arch="all"
@@ -17,6 +17,14 @@ source="http://www.musl-libc.org/releases/musl-$pkgver.tar.gz
         sys-queue.h
         sys-tree.h"
 
+case "$CARCH" in
+    aarch64)    LDSO="aarch64" ;;
+    x86_64)     LDSO="x86_64" ;;
+    ppc64le)    LDSO="powerpc64" ;;
+    mips64*)    LDSO="${CARCH}-sf" ;;
+    riscv64)    LDSO="riscv64" ;;
+esac
+
 build() {
 	$CC $CPPFLAGS $CFLAGS -c "$srcdir"/__stack_chk_fail_local.c -o $srcdir/__stack_chk_fail_local.o
 	ar r $srcdir/libssp_nonshared.a $srcdir/__stack_chk_fail_local.o
@@ -26,7 +34,7 @@ build() {
 		$CC $CPPFLAGS $CFLAGS "$srcdir"/$i.c -o $i
 	done
 
-	LDFLAGS="$LDFLAGS -Wl,-soname,libc.musl-${CARCH}.so.1" \
+	LDFLAGS="$LDFLAGS -Wl,-soname,ld-musl-${LDSO}.so.1" \
 	CC=$CC ./configure \
 		--build=$CBUILD \
 		--host=$CHOST \
@@ -44,23 +52,14 @@ build() {
 }
 
 package() {
-    case "$CARCH" in
-        aarch64)    ARCH="aarch64" ;;
-        x86_64)     ARCH="x86_64" ;;
-        ppc64le)    ARCH="powerpc64" ;;
-        mips64*)    ARCH="${CARCH}-sf" ;;
-        riscv64)    ARCH="riscv64" ;;
-    esac
-
+    provides="so:libc.musl-$LDSO.so.1"
 	make DESTDIR="$pkgdir" install
 
 	mkdir -p "$pkgdir"/usr/bin
-	local LDSO=$(make -f Makefile --eval "$(echo -e 'print-ldso:\n\t@echo $$(basename $(LDSO_PATHNAME))')" print-ldso)
-	mv -f "$pkgdir"/usr/lib/libc.so "$pkgdir"/usr/lib/"$LDSO"
-#	ln -svf "$LDSO" $pkgdir/usr/lib/libc.musl-${CARCH}.so.1
-#	ln -svf "$LDSO" $pkgdir/usr/lib/libc.so
-#	ln -svf "$LDSO" $pkgdir/usr/lib/libc.so.6
-	ln -svf "$LDSO" $pkgdir/usr/bin/ldd
+	mv -f "$pkgdir"/usr/lib/libc.so "$pkgdir"/usr/lib/ld-musl-"$LDSO".so.1
+    ln -sv ld-musl-"$LDSO".so.1 $pkgdir/usr/lib/libc.so
+    ln -sv ld-musl-"$LDSO".so.1 $pkgdir/usr/lib/libc.musl-"$LDSO".so.1
+	ln -sv ../lib/ld-musl-"$LDSO".so.1 $pkgdir/usr/bin/ldd
 
 	install -m644 $srcdir/sys-cdefs.h $pkgdir/usr/include/sys/cdefs.h
 	install -m644 $srcdir/sys-queue.h $pkgdir/usr/include/sys/queue.h

@@ -1,0 +1,39 @@
+diff --git a/cat/CMakeLists.txt b/cat/CMakeLists.txt
+index 4fe6354..4373a05 100644
+--- a/cat/CMakeLists.txt
++++ b/cat/CMakeLists.txt
+@@ -24,7 +24,7 @@ IF(ENABLE_CAT)
+   IF(ENABLE_CAT_SHARED)
+     TARGET_LINK_LIBRARIES(bsdcat archive ${ADDITIONAL_LIBS})
+   ELSE(ENABLE_CAT_SHARED)
+-    TARGET_LINK_LIBRARIES(bsdcat archive_static ${ADDITIONAL_LIBS})
++    TARGET_LINK_LIBRARIES(bsdcat archive_static ${ADDITIONAL_LIBS} -static)
+     SET_TARGET_PROPERTIES(bsdcat PROPERTIES COMPILE_DEFINITIONS
+     				 LIBARCHIVE_STATIC)
+   ENDIF(ENABLE_CAT_SHARED)
+diff --git a/cpio/CMakeLists.txt b/cpio/CMakeLists.txt
+index 85fda77..a2b7d5b 100644
+--- a/cpio/CMakeLists.txt
++++ b/cpio/CMakeLists.txt
+@@ -33,7 +33,7 @@ IF(ENABLE_CPIO)
+   IF(ENABLE_CPIO_SHARED)
+     TARGET_LINK_LIBRARIES(bsdcpio archive ${ADDITIONAL_LIBS})
+   ELSE(ENABLE_CPIO_SHARED)
+-    TARGET_LINK_LIBRARIES(bsdcpio archive_static ${ADDITIONAL_LIBS})
++    TARGET_LINK_LIBRARIES(bsdcpio archive_static ${ADDITIONAL_LIBS} -static)
+     SET_TARGET_PROPERTIES(bsdcpio PROPERTIES COMPILE_DEFINITIONS
+     				  LIBARCHIVE_STATIC)
+   ENDIF(ENABLE_CPIO_SHARED)
+diff --git a/tar/CMakeLists.txt b/tar/CMakeLists.txt
+index 6434791..3191fb4 100644
+--- a/tar/CMakeLists.txt
++++ b/tar/CMakeLists.txt
+@@ -37,7 +37,7 @@ IF(ENABLE_TAR)
+   IF(ENABLE_TAR_SHARED)
+     TARGET_LINK_LIBRARIES(bsdtar archive ${ADDITIONAL_LIBS})
+   ELSE(ENABLE_TAR_SHARED)
+-    TARGET_LINK_LIBRARIES(bsdtar archive_static ${ADDITIONAL_LIBS})
++    TARGET_LINK_LIBRARIES(bsdtar archive_static ${ADDITIONAL_LIBS} -static)
+     SET_TARGET_PROPERTIES(bsdtar PROPERTIES COMPILE_DEFINITIONS
+     				 LIBARCHIVE_STATIC)
+   ENDIF(ENABLE_TAR_SHARED)

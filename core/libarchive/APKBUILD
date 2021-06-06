@@ -1,30 +1,43 @@
 pkgname=libarchive
 pkgver=3.5.1
-pkgrel=2
+pkgrel=3
 pkgdesc="library that can create and read several streaming archive formats"
 url="https://libarchive.org/"
 arch="all"
 license="BSD-2-Clause BSD-3-Clause Apache-2.0"
-makedepends="acl-dev bzip2-dev expat-dev lz4-dev openssl-dev xz-dev zlib-dev zstd-dev"
+makedepends="acl-dev bzip2-dev expat-dev lz4-dev openssl-dev xz-dev zlib-dev zstd-dev samurai"
 subpackages="$pkgname-dev $pkgname-doc bsdtar bsdcpio bsdcat"
 source="https://www.libarchive.org/downloads/$pkgname-$pkgver.tar.gz"
-builddir="$srcdir/$pkgname-$pkgver"
 
 build () {
-	cd "$builddir"
-	./configure \
-		--build=$CBUILD \
-		--host=$CHOST \
-		--prefix=/usr \
-		--libdir=/usr/lib \
-		--sbindir=/usr/bin \
-		--without-xml2
-	make
+    cmake -G Ninja -DCMAKE_INSTALL_PREFIX=/usr \
+        -DENABLE_MBEDTLS=OFF \
+        -DENABLE_NETTLE=OFF \
+        -DENABLE_OPENSSL=ON \
+        -DENABLE_LIBB2=OFF \
+        -DENABLE_LZ4=ON \
+        -DENABLE_LZO=ON \
+        -DENABLE_LZMA=ON \
+        -DENABLE_ZSTD=ON \
+        -DENABLE_ZLIB=ON \
+        -DENABLE_BZip2=ON \
+        -DENABLE_EXPAT=ON \
+        -DENABLE_LIBXML2=OFF \
+        -DENABLE_LibGCC=OFF \
+        -DENABLE_XATTR=ON \
+        -DENABLE_ACL=ON \
+        -DENABLE_ICONV=ON \
+        -DENABLE_TAR_SHARED=OFF \
+        -DENABLE_CPIO_SHARED=OFF \
+        -DENABLE_CAT_SHARED=OFF \
+        -DENABLE_INSTALL=ON \
+    .
+
+    ninja -j${JOBS}
 }
 
 package() {
-	cd "$builddir"
-	make DESTDIR="$pkgdir" install
+	DESTDIR="$pkgdir" ninja install
 }
 
 bsdtar() {

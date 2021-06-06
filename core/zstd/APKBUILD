@@ -1,6 +1,6 @@
 pkgname=zstd
-pkgver=1.4.8
-pkgrel=1
+pkgver=1.5.0
+pkgrel=0
 pkgdesc="Zstandard - Fast real-time compression algorithm"
 url="https://www.zstd.net"
 arch="all"
@@ -12,14 +12,12 @@ source="zstd-$pkgver.tar.gz::https://github.com/facebook/zstd/archive/v$pkgver.t
 options="!check"
 
 build() {
-	cd "$builddir"
 	unset CPPFLAGS
-	make HAVE_PTHREAD=1 HAVE_ZLIB=0 HAVE_LZMA=0 HAVE_LZ4=0 MOREFLAGS="-O2"
+	make HAVE_PTHREAD=1 HAVE_ZLIB=0 HAVE_LZMA=0 HAVE_LZ4=0 MOREFLAGS="$CFLAGS" lib-mt
 }
 
 package() {
-	cd "$builddir"
 	make PREFIX="/usr" DESTDIR="$pkgdir" install
 }
 
-b2sums="950d03c408e9d3fc2081969553c46247a1b8c13a22542effbf70373625bbfeb2a810e0adf0e1c6180cef590e7a28487191b1a577982fddc7a00d1507b461efd5  zstd-1.4.8.tar.gz"
+b2sums="e503d17478b94128eb3ec578178f9d7023e941434dcc07790e12fd6c9933518f34fba5d7795ab7b145e4e499597644a6edd2830106649c5a749c962d5afe2f31  zstd-1.5.0.tar.gz"

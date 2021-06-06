@@ -1,6 +1,6 @@
 pkgname=pigz
-pkgver=2.4
-pkgrel=1
+pkgver=2.6
+pkgrel=0
 pkgdesc="Parallel implementation of gzip"
 url="http://zlib.net/pigz/"
 arch="all"
@@ -9,20 +9,15 @@ makedepends="zlib-dev"
 subpackages="$pkgname-doc"
 source="https://zlib.net/pigz/pigz-$pkgver.tar.gz"
 
-builddir="$srcdir/$pkgname-$pkgver"
-
 build() {
-	cd "$builddir"
 	make CFLAGS="$CFLAGS" CXXFLAGS="$CXXFLAGS -std=gnu++98" CC=$CC CXX=$CXX
 }
 
 check() {
-	cd "$builddir"
 	make CFLAGS="$CFLAGS" CXXFLAGS="$CXXFLAGS -std=gnu++98" CC=$CC CXX=$CXX tests
 }
 
 package() {
-	cd "$builddir"
 	mkdir -p "$pkgdir"/usr/bin
 	mkdir -p "$pkgdir"/usr/share/man/man1
 	for i in pigz unpigz; do
@@ -31,4 +26,4 @@ package() {
 	install -m644 pigz.1 "$pkgdir"/usr/share/man/man1
 }
 
-b2sums="763fe3975c6a83f46b94741d4e16b40a4edef20b7677e8d32b99856498f951edebd86634c227b0f212f0aff87fd3626e21348fdb3839a6abfb21a547bed88be6  pigz-2.4.tar.gz"
+b2sums="8e1a8ca593896fc947a7d6ffaa71d9be69d347f7cf1ed2f635b8480aa05708f4679a4768cf3a18ac515ea94dd8352dd4158bd3c9d1b6fdebd82ad1b582d04cba  pigz-2.6.tar.gz"

@@ -10,6 +10,7 @@ checkdepends="python3"
 makedepends="openssl-dev nghttp2-dev zlib-dev autoconf automake libtool perl zstd-dev"
 subpackages="$pkgname-doc $pkgname-dev"
 source="https://curl.haxx.se/download/$pkgname-$pkgver.tar.xz"
+options="!check"
 
 build() {
 	./configure \

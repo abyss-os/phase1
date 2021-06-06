@@ -1,5 +1,5 @@
 pkgname=curl
-pkgver=7.76.1
+pkgver=7.77.0
 pkgrel=0
 pkgdesc="URL retrival utility and library"
 url="https://curl.haxx.se/"
@@ -10,11 +10,6 @@ checkdepends="python3"
 makedepends="openssl-dev nghttp2-dev zlib-dev autoconf automake libtool perl zstd-dev"
 subpackages="$pkgname-doc $pkgname-dev"
 source="https://curl.haxx.se/download/$pkgname-$pkgver.tar.xz"
-
-#prepare() {
-#	default_prepare
-#	autoreconf -vfi
-#}
 
 build() {
 	./configure \
@@ -28,7 +23,8 @@ build() {
 		--without-libidn2 \
 		--with-nghttp2 \
 		--disable-ldap \
-		--with-pic
+		--with-pic \
+        --with-openssl
 	make
 }
 
@@ -40,4 +36,4 @@ package() {
 	make install DESTDIR="$pkgdir"
 }
 
-b2sums="56452871fbd998f0c9a5af86b3853ed1dfc956c39380e5da472b4f382db45926ac3aa9e395ae7d2812aac0f0f29bee28343218810a169beb592c5224e0a4f018  curl-7.76.1.tar.xz"
+b2sums="433b3179dcf2c3363514b72bf9c54286873d8e5559b33e543ba8f3e7df25a619c5be13a8aacb9361c4464b646af4d1fb214d4de57a17f3de7e8f379777214d13  curl-7.77.0.tar.xz"

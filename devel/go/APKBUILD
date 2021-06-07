@@ -22,7 +22,7 @@ GOROOT_BOOTSTRAP=$GOROOT_FINAL
 export GO_LDSO=/usr/lib/$(readlink /usr/lib/libc.so) GOMIPS64=softfloat GO_LDFLAGS='-buildmode=pie'
 
 case "$CARCH" in
-    ppc64le) export GO_LDFLAGS='';;
+    ppc64le|mips64) export GO_LDFLAGS='';;
 esac
 
 build() {

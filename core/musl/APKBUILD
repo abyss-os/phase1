@@ -18,12 +18,18 @@ source="http://www.musl-libc.org/releases/musl-$pkgver.tar.gz
         sys-tree.h"
 
 case "$CARCH" in
-    aarch64)    LDSO="aarch64" ;;
     x86_64)     LDSO="x86_64" ;;
-    ppc64le)    LDSO="ppc64le" ;;
+    aarch64)    LDSO="aarch64" ;;
+    ppc64le)    LDSO="powerpc64le" ;;
     mips64*)    LDSO="${CARCH}-sf" ;;
     riscv64)    LDSO="riscv64" ;;
 esac
+
+if [ "$CARCH" = "ppc64le" ]; then
+provides="so:libc.musl-$LDSO.so.1 so:libc.musl-ppc64le.so.1"
+else
+provides="so:libc.musl-$LDSO.so.1"
+fi
 
 build() {
 	$CC $CPPFLAGS $CFLAGS -c "$srcdir"/__stack_chk_fail_local.c -o $srcdir/__stack_chk_fail_local.o
@@ -34,11 +40,7 @@ build() {
 		$CC $CPPFLAGS $CFLAGS "$srcdir"/$i.c -o $i
 	done
 
-	LDFLAGS="$LDFLAGS -Wl,-soname,ld-musl-${LDSO}.so.1" \
 	CC=$CC ./configure \
-		--build=$CBUILD \
-		--host=$CHOST \
-		--target=$CTARGET \
 		--prefix=/usr \
 		--libdir=/usr/lib \
 		--syslibdir=/usr/lib \
@@ -52,27 +54,26 @@ build() {
 }
 
 package() {
-    # this needs to stay in place until ppc64le is rebuilt
-    if [ "$CARCH" = "ppc64le" ]; then
-        provides="so:libc.musl-$LDSO.so.1 so:ld-musl-$LDSO.so.1 so:libc.musl-powerpc64le.so.1"
-    else
-        provides="so:libc.musl-$LDSO.so.1 so:ld-musl-$LDSO.so.1"
-    fi
 	make DESTDIR="$pkgdir" install
 
-	mkdir -p "$pkgdir"/usr/bin
-	mv -f "$pkgdir"/usr/lib/libc.so "$pkgdir"/usr/lib/ld-musl-"$LDSO".so.1
-    ln -sv ld-musl-"$LDSO".so.1 $pkgdir/usr/lib/libc.so
-    ln -sv ld-musl-"$LDSO".so.1 $pkgdir/usr/lib/libc.musl-"$LDSO".so.1
-	ln -sv ../lib/ld-musl-"$LDSO".so.1 $pkgdir/usr/bin/ldd
+    local LDMUSL=$(make -f Makefile --eval "$(echo -e 'print-ldso:\n\t@echo $$(basename $(LDSO_PATHNAME))')" print-ldso)
+	mv -f $pkgdir/usr/lib/libc.so $pkgdir/usr/lib/$LDMUSL
+
+    # links
+    ln -sv $LDMUSL $pkgdir/usr/lib/libc.so
+    ln -sv $LDMUSL $pkgdir/usr/lib/libc.musl-${LDSO}.so.1
+
     if [ "$CARCH" = "ppc64le" ]; then
-        ln -sv ld-musl-"$LDSO".so.1 $pkgdir/usr/lib/libc.musl-powerpc64le.so.1
+        msg "libc.musl-ppc64le.so.1 compat link"
+        ln -sv $LDMUSL $pkgdir/usr/lib/libc.musl-ppc64le.so.1
     fi
 
 	install -m644 $srcdir/sys-cdefs.h $pkgdir/usr/include/sys/cdefs.h
 	install -m644 $srcdir/sys-queue.h $pkgdir/usr/include/sys/queue.h
 	install -m644 $srcdir/sys-tree.h $pkgdir/usr/include/sys/tree.h
 
+	mkdir -p "$pkgdir"/usr/bin
+	ln -sv ../lib/$LDMUSL $pkgdir/usr/bin/ldd
 }
 
 utils() {
@@ -107,3 +108,4 @@ ed500b8e32a9c99b879c89925a65f21a292918cf40f7c27b7201eaf5af59ed9e1319568990563ab4
 4939f599e69813fc06b3ed76ecde5ae53abc8d14a347dbb63124a609b10b165247deafee7ed5e14a5ee0c3dd0aa49cd832a7fb0d1235a7411ab33cf5602064fe  sys-cdefs.h
 aecac845baf529553acf24bcc3a20eb6b127b11e291ac655b1e0b84f51ba2a3d7a36479a2b1a3561d6ce1854471db4af3abfd460f866caf2c1f17a6db8b9f4d1  sys-queue.h
 8b53aa32fbc576c405a4d53a45de42f9b7dd59a2b5501158aad208ded7c3f3a392f07bcc12d0f180e868e3c4905b30222206a52d59599d5027044f552a487b90  sys-tree.h"
+

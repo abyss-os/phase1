@@ -7,9 +7,7 @@ arch="all"
 license="BSD-3-Clause"
 makedepends="bash go-bootstrap"
 subpackages="$pkgname-doc"
-source="https://golang.org/dl/go${pkgver/_/}.src.tar.gz
-        dont_use_gold_arm64.patch
-        mips-fix-linker.patch"
+source="https://golang.org/dl/go${pkgver/_/}.src.tar.gz"
 options="!check"
 
 export GOPATH="$srcdir"
@@ -62,6 +60,4 @@ package() {
 	cp -a doc/* "$ddoc"
 }
 
-b2sums="a6565deb34b6cb167c41fc3af2e3bbdc8e22333adc9109de67c9e1f4bffb3d2c6e7d289e310f777d69092b3ee7a4dd706e13b0fe9ae5b0a16f270569953039df  go1.16.5.src.tar.gz
-58bf92fc78b8ac8cca86fd2152b80b4ef50d38fd63f01fc19271f883c393b076e9e8b80a387d5104e376067216b20da5860141c5943f9b1bfffd7e3ec1408468  dont_use_gold_arm64.patch
-cc2fc12aa214c982d8d2a28af99fd00089afb27e6abb3bdbd9ab4cbe3ca9444af4da38828cd68bae56b31dde24648ceb35a89c93de6b691327eef5fc078e6f57  mips-fix-linker.patch"
+b2sums="a6565deb34b6cb167c41fc3af2e3bbdc8e22333adc9109de67c9e1f4bffb3d2c6e7d289e310f777d69092b3ee7a4dd706e13b0fe9ae5b0a16f270569953039df  go1.16.5.src.tar.gz"

@@ -20,7 +20,7 @@ source="http://www.musl-libc.org/releases/musl-$pkgver.tar.gz
 case "$CARCH" in
     aarch64)    LDSO="aarch64" ;;
     x86_64)     LDSO="x86_64" ;;
-    ppc64le)    LDSO="powerpc64le" ;;
+    ppc64le)    LDSO="ppc64le" ;;
     mips64*)    LDSO="${CARCH}-sf" ;;
     riscv64)    LDSO="riscv64" ;;
 esac
@@ -54,7 +54,7 @@ build() {
 package() {
     # this needs to stay in place until ppc64le is rebuilt
     if [ "$CARCH" = "ppc64le" ]; then
-        provides="so:libc.musl-$LDSO.so.1 so:ld-musl-$LDSO.so.1 so:libc.musl-$CARCH.so.1"
+        provides="so:libc.musl-$LDSO.so.1 so:ld-musl-$LDSO.so.1 so:libc.musl-powerpc64le.so.1"
     else
         provides="so:libc.musl-$LDSO.so.1 so:ld-musl-$LDSO.so.1"
     fi
@@ -66,7 +66,7 @@ package() {
     ln -sv ld-musl-"$LDSO".so.1 $pkgdir/usr/lib/libc.musl-"$LDSO".so.1
 	ln -sv ../lib/ld-musl-"$LDSO".so.1 $pkgdir/usr/bin/ldd
     if [ "$CARCH" = "ppc64le" ]; then
-        ln -sv ld-musl-"$LDSO".so.1 $pkgdir/usr/lib/libc.musl-"$CARCH".so.1
+        ln -sv ld-musl-"$LDSO".so.1 $pkgdir/usr/lib/libc.musl-powerpc64le.so.1
     fi
 
 	install -m644 $srcdir/sys-cdefs.h $pkgdir/usr/include/sys/cdefs.h

@@ -1,5 +1,5 @@
 pkgname=busybox
-pkgver=1.33.0
+pkgver=1.33.1
 pkgrel=0
 pkgdesc="Size optimized toolbox of many common UNIX utilities"
 url="https://busybox.net/"
@@ -47,5 +47,5 @@ aalt() {
 	done
 }
 
-b2sums="bc25c2187cd7e357dd2f75b3eaae33ab9da318bbcec861e0b6b00da8466a86a17a71933035958f70badb9f1f143fa7f11f114c12a52f3680042730471f56cefe  busybox-1.33.0.tar.bz2
+b2sums="2dce3427ab7703c56cbb3bdc0c93c1fe1c6dc24c5b467b6213b8f9cf55223ec63136b3837970e41293cc3d55d320599945d29a69a4ef8b4b3ab9fb5e2a527632  busybox-1.33.1.tar.bz2
 5e58af938584edebf0c097bd2e58deb3b1376281d8cd54f2bc9b600d33d7fc5f0cba5ce28138f1f05a651fec4afd6bccd1a28b831358f752fcca7b6d4b46dfd6  busyboxconfig"

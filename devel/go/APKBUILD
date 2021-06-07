@@ -1,6 +1,6 @@
 pkgname=go
 pkgver=1.16.5
-pkgrel=0
+pkgrel=1
 pkgdesc="Go programming language compiler"
 url="https://golang.org/"
 arch="all"
@@ -10,7 +10,7 @@ subpackages="$pkgname-doc"
 source="https://golang.org/dl/go${pkgver/_/}.src.tar.gz
         dont_use_gold_arm64.patch
         mips-fix-linker.patch"
-options="!check !strip"
+options="!check"
 
 export GOPATH="$srcdir"
 export GOROOT="$GOPATH"/go
@@ -21,8 +21,10 @@ provides="go-bootstrap=$pkgver-r$pkgrel"
 GOROOT_FINAL=/usr/lib/go
 GOROOT_BOOTSTRAP=$GOROOT_FINAL
 
+export GO_LDSO=/usr/lib/$(readlink /usr/lib/libc.so) GOMIPS64=softfloat GO_LDFLAGS='-buildmode=pie'
+
 case "$CARCH" in
-    *) export GOMIPS64=softfloat GO_LDFLAGS='-buildmode=pie' GO_LDSO=/usr/lib/ld-musl-${CBUILD_ARCH}.so.1;;
+    ppc64le) export GO_LDFLAGS='';;
 esac
 
 build() {

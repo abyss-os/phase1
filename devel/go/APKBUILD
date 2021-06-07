@@ -1,6 +1,6 @@
 pkgname=go
-pkgrel=1
-pkgver=1.16.4
+pkgver=1.16.5
+pkgrel=0
 pkgdesc="Go programming language compiler"
 url="https://golang.org/"
 arch="all"
@@ -22,12 +22,11 @@ GOROOT_FINAL=/usr/lib/go
 GOROOT_BOOTSTRAP=$GOROOT_FINAL
 
 case "$CARCH" in
-    mips64*) export GOMIPS64=softfloat GO_LDSO=/usr/lib/ld-musl-${CARCH}-sf.so.1;;
-    riscv64) continue;;
-    *) export GO_LDFLAGS='-buildmode=pie' GO_LDSO=/usr/lib/ld-musl-${CARCH}.so.1;;
+    *) export GOMIPS64=softfloat GO_LDFLAGS='-buildmode=pie' GO_LDSO=/usr/lib/ld-musl-${CBUILD_ARCH}.so.1;;
 esac
 
 build() {
+    msg "Using LDSO: ${GO_LDSO}, flags: ${GO_LDFLAGS}"
 	cd src
 	./make.bash
 }
@@ -61,6 +60,6 @@ package() {
 	cp -a doc/* "$ddoc"
 }
 
-b2sums="4602a20ced74dba86938283a736d5235fe5dfb34ae742c44cdcd7ae2453d4654ea5757d0be76b6687d1d34c1b8c32681c41398d1a04ae72d491ee1d8b296d16d  go1.16.4.src.tar.gz
+b2sums="a6565deb34b6cb167c41fc3af2e3bbdc8e22333adc9109de67c9e1f4bffb3d2c6e7d289e310f777d69092b3ee7a4dd706e13b0fe9ae5b0a16f270569953039df  go1.16.5.src.tar.gz
 58bf92fc78b8ac8cca86fd2152b80b4ef50d38fd63f01fc19271f883c393b076e9e8b80a387d5104e376067216b20da5860141c5943f9b1bfffd7e3ec1408468  dont_use_gold_arm64.patch
 cc2fc12aa214c982d8d2a28af99fd00089afb27e6abb3bdbd9ab4cbe3ca9444af4da38828cd68bae56b31dde24648ceb35a89c93de6b691327eef5fc078e6f57  mips-fix-linker.patch"

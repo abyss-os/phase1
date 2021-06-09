@@ -1,0 +1,39 @@
+pkgname=traefik
+pkgver=2.4.8
+pkgrel=0
+pkgdesc="The Cloud Native Edge Router"
+url="https://traefik.io/"
+arch="all"
+license="MIT"
+makedepends="go go-bindata libcap"
+install="$pkgname.pre-install"
+pkgusers="$pkgname"
+pkggroups="$pkgname"
+subpackages="$pkgname-openrc"
+source="$pkgname-$pkgver.tar.gz::https://github.com/containous/traefik/releases/download/v$pkgver/traefik-v$pkgver.src.tar.gz
+	traefik.initd
+	traefik.confd"
+
+unpack() {
+    mkdir -p $srcdir/$pkgname-$pkgver
+    bsdtar xf $srcdir/$pkgname-$pkgver.tar.gz -C $srcdir/$pkgname-$pkgver
+}
+
+build() {
+    go generate -v
+    go build -v -o $srcdir/$pkgname ./cmd/$pkgname
+}
+
+package() {
+	install -Dm755 $srcdir/$pkgname "$pkgdir"/usr/bin/$pkgname
+	setcap cap_net_bind_service=+ep "$pkgdir"/usr/bin/$pkgname
+
+	install -Dm755 "$srcdir"/$pkgname.initd "$pkgdir"/etc/init.d/$pkgname
+	install -Dm644 "$srcdir"/$pkgname.confd "$pkgdir"/etc/conf.d/$pkgname
+
+	install -dm750 -o $pkgname -g $pkgname "$pkgdir"/etc/$pkgname
+}
+
+b2sums="d0d8efbf5387cce44ae0416c1f1277308aeba03a1ef5b5c344ad838e3248ef8ac12ef03cec268b9ce2776fdcfb9f0d6f1649ec4858dee58fb635e492ee59b858  traefik-2.4.8.tar.gz
+bc0ccccaa3d00589050999a2c427e27fe8c98c992fdfcf302e24eefae0882ab73f7fa3b53d0bb57f0685dc15dea2ea93a9fb7780f3fe208cdfd80482087f25b7  traefik.initd
+51fca403174146418f4b98ec26748bab9e6a7ead4850a62d8afa7079a2beb32d40087b2f1e4d6613e38d666dac158e2e8c86fc027ac9caefc1f92bd17dde9163  traefik.confd"

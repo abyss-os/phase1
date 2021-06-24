@@ -1,6 +1,6 @@
 pkgname=rust
-pkgver=1.52.1
-pkgrel=1
+pkgver=1.53.0
+pkgrel=0
 pkgdesc="The Rust Programming Language"
 url="https://www.rust-lang.org"
 arch="x86_64 ppc64le aarch64"
@@ -13,23 +13,18 @@ options="!archcheck !check"
 
 subpackages="$pkgname-doc cargo cargo-bash-completions:_cargo_bashcomp:noarch cargo-zsh-completion:_cargo_zshcomp:noarch"
 
-source="https://static.rust-lang.org/dist/rustc-$pkgver-src.tar.gz
-	alpine-move-py-scripts-to-share.patch
-	install-template-shebang.patch
-	libunwind.patch
-	libz-sys_checksum.patch
-    llvm_crt.patch
-	"
+source="https://static.rust-lang.org/dist/rustc-$pkgver-src.tar.gz"
 builddir="$srcdir/rustc-$pkgver-src"
 
-case "${CARCH}" in
-	riscv64) _rustarch="riscv64gc";;
-	ppc64le) _rustarch="powerpc64le";;
-	*) _rustarch="${CARCH}";;
+_arch=$CARCH _libc=musl AR=llvm-ar
+
+case $CARCH in
+	riscv64) _arch=riscv64gc CC=gnu-gcc CXX=gnu-g++ AR=gnu-ar makedepends="$makedepends binutils gcc";;
+	ppc64le) _arch=powerpc64le;;
+    mips64*) _libc=muslabi64;;
 esac
 
-_build="${_rustarch}-unknown-linux-musl"
-_target="${_rustarch}-unknown-linux-musl"
+_target="${_arch}-unknown-linux-${_libc}"
 
 _rlibdir="usr/lib/rustlib/$_target/lib"
 _sharedir="usr/share/rust"
@@ -42,17 +37,15 @@ _clear_vendor_checksums() {
 	sed -i 's/\("files":{\)[^}]*/\1/' vendor/$1/.cargo-checksum.json
 }
 
-prepare() {
-	default_prepare
-	sed -i /LD_LIBRARY_PATH/d src/bootstrap/bootstrap.py
-	_clear_vendor_checksums libc
-	rm -rf src/llvm-project/
-}
+#prepare() {
+#	default_prepare
+#	sed -i /LD_LIBRARY_PATH/d src/bootstrap/bootstrap.py
+#}
 
 build() {
-	AR=llvm-ar
+	_clear_vendor_checksums libz-sys
 	./configure \
-		--build="$_build" \
+		--build="$_target" \
 		--host="$_target" \
 		--target="$_target" \
 		--prefix="/usr" \
@@ -172,9 +165,4 @@ _mv() {
 	mv "$@"
 }
 
-b2sums="9bbc36861f4594b10737809326d01015ab593a9cc309f76c38272dd01539a841f8f133359c80e1407830f0ab4d37131dd99463f394af22ad4cc09c66952fc608  rustc-1.52.1-src.tar.gz
-5efa52ab75426ddad6c84e97713a6e792721083218638fe88b4fba4803f1902be973662cc0d3fb859a898ecceaa9bd78ee323a8446f569cd4e156ba9fc29ae60  alpine-move-py-scripts-to-share.patch
-4de9b6c3afcbc649eb3b9147d52e78cc87f32f794cb10ec22ff272f7d3edd8b9acd11a64c47dff85de090215b3493c97f39cdc7524d81f8e45df4ced22fa3879  install-template-shebang.patch
-16c6b43a4cbe7e678fdd9c7cfbd90e79ee2e847bb9086e77536b1a50ddba65799775a34cb229c8568d9689f8e7c36ab0c3beed04f27f74ae5a9c232ac1237dd7  libunwind.patch
-785fad915314a40e226760d0e61ba17dbecd51e91d9d4f690a8700ecf6394ae91d7d0a256ec0335f04e3b6f0a96c3d9d3433815c22f60825f4ddf18664dec1b3  libz-sys_checksum.patch
-138b756c02981e70b5b396a67a1d8f2df76e9573c25a879d4ff1de2deec842aac63cd403ee9bc4483621d7cb1801f12661422216aea6f19d8bcf149810e05f23  llvm_crt.patch"
+b2sums="1fab8c3a72bc54655cb3536b78f33b1646a4072c786c5121da83f71cd71fd59d6ea9ed88998336b5115d1314bad8bacd666f62941798d2e03d799313fa6350e4  rustc-1.53.0-src.tar.gz"

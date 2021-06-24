@@ -1,0 +1,32 @@
+# Contributor:
+maintainer=
+pkgname="utf8proc"
+pkgver="2.6.1"
+pkgrel=0
+pkgdesc="A clean C library for processing UTF-8 Unicode data."
+url="https://juliastrings.github.io/utf8proc/"
+arch="all"
+license="MIT"
+depends=""
+depends_dev=""
+makedepends=""
+install=""
+subpackages="$pkgname-dev"
+source="utf8proc-$pkgver.tar.gz::https://github.com/JuliaStrings/utf8proc/archive/refs/tags/v$pkgver.tar.gz"
+builddir="$srcdir/utf8proc-$pkgver"
+options="!check" # checks require ruby
+
+build() {
+	make
+	return
+}
+
+check() {
+	make check
+}
+
+package() {
+	make DESTDIR="$pkgdir" prefix=/usr install
+}
+
+b2sums="aa2545136e084a44b2e3470e9395c15327b8d6fbe48e3145336366e208fb0e2565961c302a9117f8275e5b8a218d48a7059b5c1d2cfdff11e8341dc1bfb820a9  utf8proc-2.6.1.tar.gz"

@@ -1,15 +1,16 @@
 pkgname=fcft
-pkgver=2.4.0
+pkgver=2.4.1
 pkgrel=0
 pkgdesc="A small font loading and glyph rasterization library."
 url="https://codeberg.org/dnkl/fcft"
 arch="all"
 license="MIT"
 depends=""
-makedepends="meson samurai fontconfig-dev freetype-dev pixman-dev tllist scdoc scdoc-dev"
+makedepends="meson samurai fontconfig-dev freetype-dev harfbuzz-dev pixman-dev tllist scdoc scdoc-dev"
 install=""
 subpackages="$pkgname-dev $pkgname-doc"
-source="${distfilesm}/$pkgname-$pkgver.tar.gz"
+#source="${distfilesm}/$pkgname-$pkgver.tar.gz"
+source="$pkgname-$pkgver.tar.gz::https://codeberg.org/dnkl/fcft/archive/$pkgver.tar.gz"
 builddir="$srcdir/$pkgname"
 options="!check"
 
@@ -29,4 +30,4 @@ package() {
 	DESTDIR="$pkgdir" samu -C output install
 }
 
-b2sums="1926d26b633cf768257340f093de734513678f3b5e62cb2fa89fd08496d06b36de89fe797a5328c35a5b467d3ea48214d5a3e76660d2effaea0f28fddbc7bd48  fcft-2.4.0.tar.gz"
+b2sums="d33c087ec4bf6f0b2bba6da0110abe50de5f232beac970e657416e73f1d02fd54d342686d954e67eca86e5f676d793d94edae52f64a85ea62e662a8552289ae4  fcft-2.4.1.tar.gz"

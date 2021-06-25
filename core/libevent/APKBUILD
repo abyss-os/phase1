@@ -1,5 +1,5 @@
 pkgname=libevent
-pkgver=2.1.11
+pkgver=2.1.12
 _pkgver=$pkgver-stable
 pkgrel=0
 pkgdesc="An event notification library"
@@ -53,4 +53,4 @@ static() {
 	mv "$pkgdir"/usr/lib/*.a "$subpkgdir"/usr/lib
 }
 
-b2sums="c6721589834bff027a8149ee0076e1877fba000d1712a405e20030192d9c81b892d0930bc1a4774650bef4cb08c60ac81b5928dc17346492ae7e4ded2125579a  libevent-2.1.11-stable.tar.gz"
+b2sums="bc1ace15f639ecef2e6b3f95976b8830c1d86f1d06606dd949e2978611fdf9859ed4eb9292d13e6e90e3835063edb94aae64a15c518d5dabe680f37d5a7f5290  libevent-2.1.12-stable.tar.gz"

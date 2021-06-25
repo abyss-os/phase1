@@ -1,6 +1,6 @@
 pkgname=grub
-pkgver=2.04
-pkgrel=4
+pkgver=2.06
+pkgrel=0
 pkgdesc="grub bootloader (efi)"
 url="https://www.gnu.org/software/grub/"
 arch="x86_64 ppc64le"
@@ -61,6 +61,6 @@ package() {
     GRUB_CMDLINE_LINUX=""
 	EOF
 }
-b2sums="413ffb9aaeae1ee3128032914ca426a1a5adb3737895dfe563fdde5a7e0386ac2dbc2f7ddfc4e0a67b3ad90494985d6886c20054b038701feb743e67e2eed9d0  grub-2.04.tar.xz
+b2sums="2a40b9b03d7bb3b9e7b1309ab274d686f01b3c42e7035ebc6e5a0e59a59c3b7362ba518341664b314cb0dbc8222bb10ea05ce09f08ce9d58a293207cb909e417  grub-2.06.tar.xz
 bc8460b78ecab6707e2d6fc78e0733197aad9dc5a88fcd3cae87b02c7503ef389b152944e72c57acf3fa8005343dbf05a8b4608c9493570f20b64189970cf631  abyss-mkconfig.patch
 8b29ad40ebc3a7be39ac45a787ad125a639e1989e9b12608fdc5007ba403db8027a0ad621edd6c54d2ecb0d319707b2f51e8ddd32b125028c42d848cba14828a  lang-C.UTF-8.patch"

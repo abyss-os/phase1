@@ -1,6 +1,6 @@
 pkgname="scdoc"
-pkgver="1.11.0"
-pkgrel=1
+pkgver="1.11.1"
+pkgrel=0
 pkgdesc="A simple man page generator for POSIX systems."
 url="https://git.sr.ht/~sircmpwn/scdoc"
 arch="all"
@@ -20,4 +20,4 @@ package() {
 	make install DESTDIR="$pkgdir" PREFIX=/usr
 }
 
-b2sums="3aec60e51b949dc94e8339e400c366428a217c1bd44f79716cbd6993a7f8051a0796dc96163e071db4808c0edde071408e3eb1ee0ae3bb8ccd718479960ab8f3  scdoc-1.11.0.tar.gz"
+b2sums="a5c1b5424466cfa6c7bebe155786983f7bc2e1a882c4358266a12e188e9a9a1a8085eb5d435d6a3a6664f071b401eedcad74378b589fe5fe7f42e0f6773edc48  scdoc-1.11.1.tar.gz"

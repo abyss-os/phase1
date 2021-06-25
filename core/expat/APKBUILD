@@ -1,5 +1,5 @@
 pkgname=expat
-pkgver=2.2.10
+pkgver=2.4.1
 pkgrel=0
 pkgdesc="An XML Parser library written in C"
 url="http://www.libexpat.org/"
@@ -26,4 +26,4 @@ package() {
 	make DESTDIR="$pkgdir/" install
 }
 
-b2sums="5d84d7dec5aae6ca7906bd2a2b8a249457111e064295b83b6c9927b5ef0dc97e7220bac1da17781e24541259ae81b60a2314cd372bfbdfc2e08fab082377df4a  expat-2.2.10.tar.xz"
+b2sums="2ae66d284a03176ef7290093f59bb7ad98011dfbf3c7c3515ba4e4b99f849474def6ce6d9844c944fed22d86ac4ea1a38863646be914d9432eda7b69d890be65  expat-2.4.1.tar.xz"

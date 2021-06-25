@@ -1,5 +1,5 @@
 pkgname=cmake
-pkgver=3.19.6
+pkgver=3.20.5
 pkgrel=0
 pkgdesc="Cross-platform, open-source make system"
 url="https://www.cmake.org"
@@ -60,4 +60,4 @@ package() {
 	rm -rf ${pkgdir}/usr/doc
 }
 
-b2sums="5480ea3f3d159cd6471623ec73dfd73ab20ceb21744b2acc8bdbd27b8be7338e2ab8ae81366bbc3af474be49723567421450dfd6b7c51c65f36494c04fe13946  cmake-3.19.6.tar.gz"
+b2sums="f073d7c3968c714be315f5014076c785790ed47e9a746f2d16bc59769fb6862009f67c2e118038c6c9d8390b709f2b4ed4a4dfc41a93996fedd9d7d77111b84a  cmake-3.20.5.tar.gz"

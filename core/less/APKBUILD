@@ -1,6 +1,6 @@
 pkgname=less
-pkgver=551
-pkgrel=2
+pkgver=590
+pkgrel=0
 pkgdesc="File pager"
 url="http://www.greenwoodsoftware.com/less/"
 arch="all"
@@ -29,4 +29,4 @@ package() {
 	make DESTDIR="$pkgdir" install
 }
 
-b2sums="033a043340f888616c8342703597b9232ae1c8e62775d3ee0187599c3d9d9824fdbc7543ca90cdc535b2077a8bcbefe322887ad29289620191d8cf6ff86ddd04  less-551.tar.gz"
+b2sums="0f640f1b6b4d4925c4904ee77460e8becd2dae168fe5c1483bf6a9cfabe9eb0abdc4d4811507ba88a2b4cff6c238158bd8b4463b63d3d7863b44ce8538d32adb  less-590.tar.gz"

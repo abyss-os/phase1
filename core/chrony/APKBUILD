@@ -1,5 +1,5 @@
 pkgname=chrony
-pkgver=4.0
+pkgver=4.1
 pkgrel=0
 _ver=${pkgver/_/-}
 pkgdesc="NTP client and server programs"
@@ -64,7 +64,7 @@ package() {
 	touch "$pkgdir"/var/lib/chrony/chrony.drift
 }
 
-b2sums="1d4035977be3603b34024c5c1c2aa5f2b4aca03fe7dc1eb41be2e9aeefa06e20a5f74776c50bdadaffba10ae25e7980bcbd9cf2b999bd73087728afe7a80253e  chrony-4.0.tar.gz
+b2sums="f9c4b44c521ee592c109b8a3d500b9cb3ea4fbf0d7dce9d8754498ad41ce2ac87c913cf72a38557ce5f28208672163b21b067307f723fd91cc91d71f69e739ef  chrony-4.1.tar.gz
 6727ca2c33b55341cd5e61151867b3d93a5f2aaba55b73bb0972f611c3cbd83302e8f6836fe5ed0fc3e3e2c49a3977bb4d0cf478375958dc233bcbcbf16f6e5b  fix-tests.patch
 d72ccb5fe80728b5643117d5bbab2a5763ea43bf13e60c2c56f7a0b5a6915f9452f0b63c26035d1c7a0d02d7f5030752c53283ab0ca822241394fceb5143257a  max_resolve_interval.patch
 40e9c0a95adaaa7a0a790c11f672638de2a7a63481a6a8ff2e1671b61d43d0515d7a3340e8438c666f15705fd840a6c79f4575adc686cc24e95285671c3acf54  chronyd.confd

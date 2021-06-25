@@ -1,5 +1,5 @@
 pkgname=ccache
-pkgver=4.2
+pkgver=4.3
 pkgrel=0
 pkgdesc="A fast C/C++ compiler cache"
 url="https://ccache.dev/"
@@ -32,4 +32,4 @@ package() {
 	done
 }
 
-b2sums="932db2e4f6ef9d98359fe44f931d083acb9fd32661d9baec5a2d0cfffc9301a999b04e4628d31513ec809bf43e3e94d71f9b92a1c83bcebbaf5e35e219596704  ccache-4.2.tar.xz"
+b2sums="6ab48aa587b4dc86020e3b0f722003dc5c03709626e143a1d38506b6072f9963fc76e89b6d18128dfc28035bf8d24e46ea44f219db69a1b3a294416f0b023090  ccache-4.3.tar.xz"

@@ -1,20 +1,18 @@
 pkgname=htop
-pkgver=2.2.0
-pkgrel=1
+pkgver=3.0.5
+pkgrel=0
 pkgdesc="Interactive process viewer"
 url="http://hisham.hm/htop"
 arch="all"
 license="GPL-2.0-or-later"
 depends=""
-makedepends="ncurses-dev python3"
+makedepends="ncurses-dev automake"
 subpackages="$pkgname-doc"
 options="!check" # no upstream/available test-suite
-source="http://hisham.hm/htop/releases/$pkgver/$pkgname-$pkgver.tar.gz
-	fix-python-path.patch"
+source="$pkgname-$pkgver.tar.gz::https://github.com/htop-dev/htop/archive/refs/tags/$pkgver.tar.gz"
 
-builddir="$srcdir"/$pkgname-$pkgver
 build() {
-	cd "$builddir"
+	./autogen.sh
 	./configure \
 		--build=$CBUILD \
 		--host=$CHOST \
@@ -28,9 +26,7 @@ build() {
 }
 
 package() {
-	cd "$builddir"
 	make DESTDIR="$pkgdir" install
 }
 
-b2sums="323a3bfe5032b6d59a3f751831a2af6aa7ae7e9ecceb35828812cb375d919de51f401ffe59fffdfc83a72c8dace879c5d5a0e857511c20e2126d11cdc4101b0b  htop-2.2.0.tar.gz
-78b373290e07dd269e407f634469518ff523bd7fcaed57afc89bc7e55dca55f48743d1ee27171c040983543001d06074db98c17b228a6d6b5d81ed20ea048761  fix-python-path.patch"
+b2sums="a6e62f99ef349809d11bb14b4d515036601aa457507b34a96354607f136cc4e0d3d40a715f1576c70833db051d989fa55142b4f8bba0f5f432ea3676364d9575  htop-3.0.5.tar.gz"

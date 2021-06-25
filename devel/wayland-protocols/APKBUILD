@@ -1,8 +1,8 @@
 # Contributor:
 # Maintainer:
 pkgname="wayland-protocols"
-pkgver="1.20"
-pkgrel=2
+pkgver="1.21"
+pkgrel=0
 pkgdesc="Wayland protocols."
 url="https://wayland.freedesktop.org/"
 arch="all"
@@ -34,4 +34,4 @@ package() {
 	make DESTDIR="$pkgdir" install
 }
 
-b2sums="2278d79ba9abd7c88654fd362e7b4876c391fbaff493a08272dbe6cc0b9700c83be1284f9ef5407f09a48b9562dfe5e83b56b4e9cb8f374dbbfe523c48bff926  wayland-protocols-1.20.tar.gz"
+b2sums="07ad3ffd288b8b7e3507045a582515e08b1b3423277d70dfef0ef06c2cdb4d80c432d5ad4f421ab283e5ce958391445c25559bf94cfd787dd51cd8dc22fc2e5e  wayland-protocols-1.21.tar.gz"

@@ -1,5 +1,5 @@
 pkgname=sudo
-pkgver=1.9.5p2
+pkgver=1.9.7p1
 if [ "${pkgver%_*}" != "$pkgver" ]; then
 	_realver=${pkgver%_*}${pkgver#*_}
 else
@@ -48,5 +48,5 @@ package() {
 	rm -rf "$pkgdir"/var/run
 }
 
-b2sums="41913887463e4f775564af8d614fb5ed762200aa777dc789ec333842d4f432323474fc952a531fe929b33607cdfbcd18d7fe7470a15d67139deaf855841ed11f  sudo-1.9.5p2.tar.gz
+b2sums="fff3eab8b4de6276135229c5fe12e7eced98af988b7686600e6a63b8615f6357ab2c5f95ef6f1872534476c4398a28c4f468ffc316e0cff7d4b32e6068aa97d4  sudo-1.9.7p1.tar.gz
 b9e8f03cc64e1b53ec1ebb168ab8010b911fd9d8d3cb49fc5a4fabca714b4456f3443f2d115a2f8846b965092a8c87250d042457b3fedd87d0a052bb218ab370  fix-tests.patch"

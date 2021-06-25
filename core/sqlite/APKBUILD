@@ -1,5 +1,5 @@
 pkgname=sqlite
-pkgver=3.35.5
+pkgver=3.36.0
 pkgrel=0
 pkgdesc="C library that implements an SQL database engine"
 url="https://www.sqlite.org/"
@@ -58,5 +58,5 @@ package() {
 		"$pkgdir"/usr/share/licenses/$pkgname/license.txt
 }
 
-b2sums="92743574453379024ec2db8db384aacbb64b6da7cbfad70d1ac2760591e0913013d7174ef439165be3bc939e07e3c5aaf591087715074fc70dd4a0c9fbaeb257  sqlite-autoconf-3350500.tar.gz
+b2sums="9773de365bccff7a4255f0438bda64a988bb6c1352cf732a0a7348c81ff4441cd8f20e3c44cef8d0951ded50046f9a8a9d92344bf74b7f172ea5c5a30576a943  sqlite-autoconf-3360000.tar.gz
 847d2f10831a4a7a2dfb12c142c418fffc74829f3fde24f9a343bb6e0f7b7de110a909ca97da77aaa7462056f8ce009ffbcb86d7ecd3a4f36fa80ee598ca921e  license.txt"

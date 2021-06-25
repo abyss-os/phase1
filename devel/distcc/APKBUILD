@@ -1,5 +1,5 @@
 pkgname=distcc
-pkgver=3.3.3
+pkgver=3.4
 pkgrel=2
 pkgdesc="Distributed C, C++, Obj C compiler"
 url="https://github.com/distcc/distcc"
@@ -13,7 +13,6 @@ source="https://github.com/distcc/distcc/releases/download/v$pkgver/distcc-$pkgv
 	distcc-hardened.patch
 	distccd.initd
 	distccd.confd
-	python3-compat.patch
 	"
 
 prepare() {
@@ -61,8 +60,7 @@ pump() {
 	mv "$pkgdir"/usr/lib/python* "$subpkgdir"/usr/lib/
 }
 
-b2sums="b393fdb20eb555dec794bf55c1287dd804a576e0a5db9f2fa84c3924a40185a193231aea807353918430297c9c83c7592aaaafd521cf73c92a72bf30b8a69caa  distcc-3.3.3.tar.gz
+b2sums="8dc9baa6b1f65f2bb3621e4e643d7d15d55e2338de4d6a7f20a572d9ec280925b4421a294f40c9fcfba8d4193a6bd1871eb8caf13dd2c2a8a81834671f6bc8bc  distcc-3.4.tar.gz
 4b78fce2ab19b3832006a8b0092d3d38df07ce8225eb367c90256a158a41121e09269cd4bf59a1fc450db58eafe09e757f6e3ca4ae074a4567676701228c8289  distcc-hardened.patch
 9ba0cabd99188210999c8ded2d9041498957db121c6d21e0ba6b677b38c612384cad5b68451ecb8f4c2c56e3a132be00953ae6134f1320f010cc2830ef53053e  distccd.initd
-08c76a6da566ce80ef6c4a94cf98c22340380c08877b7f425b270253a321c94b21a34b08c567cd9f6b28991733155da472401e6d819c64fcf7f34b424caa965d  distccd.confd
-a81c190d73ddf8c679640696be9aa66bd0f3095c03af431864cc8e5cba2cf74d2525065c4bd53fc7258dcaeba5a7ed20995b11fe08c8b02164e3cfa520c83819  python3-compat.patch"
+08c76a6da566ce80ef6c4a94cf98c22340380c08877b7f425b270253a321c94b21a34b08c567cd9f6b28991733155da472401e6d819c64fcf7f34b424caa965d  distccd.confd"

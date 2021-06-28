@@ -6,7 +6,7 @@ url="https://cairographics.org/"
 arch="all"
 options="!check"
 license="LGPL-2.0-or-later MPL-1.1"
-makedepends="expat-dev glib-dev libpng-dev zlib-dev fontconfig-dev freetype-dev pixman-dev"
+makedepends="expat-dev glib-dev libpng-dev zlib-dev fontconfig-dev freetype-dev pixman-dev gettext-tiny-dev"
 subpackages="$pkgname-dev $pkgname-doc"
 source="https://cairographics.org/releases/cairo-$pkgver.tar.xz
 	musl-stacksize.patch

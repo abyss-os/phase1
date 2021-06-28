@@ -2,14 +2,14 @@
 maintainer=
 pkgname="harfbuzz"
 pkgver="2.8.1"
-pkgrel=1
+pkgrel=2
 pkgdesc="The HarfBuzz text shaping library."
 url="https://harfbuzz.github.io/"
 arch="all"
 license="MIT"
 depends=""
 depends_dev=""
-makedepends="meson cairo-dev freetype-dev glib-dev"
+makedepends="meson cairo-dev freetype-dev glib-dev gettext-tiny-dev"
 install=""
 subpackages="$pkgname-dev"
 source="https://github.com/harfbuzz/harfbuzz/releases/download/$pkgver/harfbuzz-$pkgver.tar.xz"

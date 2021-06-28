@@ -1,11 +1,11 @@
 pkgname="pixman"
 pkgver="0.40.0"
-pkgrel=1
+pkgrel=2
 pkgdesc="A low-level software library for pixel manipulation."
 url="http://www.pixman.org/"
 arch="all !pcc64le"
 license="MIT"
-makedepends="meson"
+makedepends="meson samurai"
 subpackages="$pkgname-dev"
 source="https://www.cairographics.org/releases/pixman-$pkgver.tar.gz"
 builddir="$srcdir/pixman-$pkgver"

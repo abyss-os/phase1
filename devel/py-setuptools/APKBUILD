@@ -1,7 +1,7 @@
 pkgname=py-setuptools
 _pkgname=setuptools
 pkgver=56.2.0
-pkgrel=0
+pkgrel=1
 pkgdesc="Python library for creating PEG parsers"
 url="https://github.com/pyparsing/pyparsing"
 arch="noarch"

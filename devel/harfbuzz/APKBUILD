@@ -15,6 +15,10 @@ subpackages="$pkgname-dev"
 source="https://github.com/harfbuzz/harfbuzz/releases/download/$pkgver/harfbuzz-$pkgver.tar.xz"
 builddir="$srcdir/harfbuzz-$pkgver"
 
+case "$CARCH" in
+    riscv64|mips64*) options="!check";;
+esac
+
 build() {
 	meson \
 		--prefix=/usr \

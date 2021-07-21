@@ -1,5 +1,5 @@
 pkgname="dqlite"
-pkgver="1.7.0"
+pkgver="1.8.0"
 pkgrel=0
 pkgdesc="dqlite"
 url="https://dqlite.io"
@@ -23,4 +23,4 @@ package() {
 	make DESTDIR=$pkgdir install
 }
 
-b2sums="3eeaaf5bbadfc09803e70d38fcd3ab23c212dc2700ad8ecdde720932b0ad2e32016503eaa8a738139a178bb926a7818497629699ec68eec8c2111f377b40b4a3  dqlite-1.7.0"
+b2sums="0e3bc8badf6b7e0447eebd86069785dca51c4dfda527ee7b838da971830ad65e443c130484b25c901aee5ac4e14c81df84756734aac3fd58a2fdbc67a664c1fb  dqlite-1.8.0"

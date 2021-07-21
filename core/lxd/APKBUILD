@@ -1,7 +1,7 @@
 pkgname=lxd
-pkgver=4.14
+pkgver=4.16
 _qemu=5.2.0
-pkgrel=2
+pkgrel=0
 pkgdesc="a container hypervisor and a new user experience for LXC"
 url="https://linuxcontainers.org/lxd/"
 arch="all"

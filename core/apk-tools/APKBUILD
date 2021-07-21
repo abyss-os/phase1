@@ -13,10 +13,6 @@ build() {
 	make CC=$CC LUA=no static
 }
 
-check() {
-	make CC=$CC LUA=no check
-}
-
 package() {
 	install -Dm755 "$srcdir"/$pkgname-$pkgver/src/apk.static \
 		"$pkgdir"/usr/bin/apk

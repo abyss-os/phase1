@@ -13,10 +13,7 @@ install="$pkgname.pre-install"
 options="!check"
 source="https://linuxcontainers.org/downloads/$pkgname/$pkgname-$pkgver.tar.gz
 	$pkgname.confd
-	$pkgname.initd
-	lxd-dont-go-get.patch
-	add-missing-includes.patch
-	seccomp_werror.patch"
+	$pkgname.initd"
 
 build() {
 	export GOPATH="$builddir/_dist" CGO_CFLAGS="-Wno-error -Wignored-attributes" GO111MODULE=auto
@@ -57,7 +54,4 @@ bashcomp() {
 
 b2sums="b78f2e61fb4b4e0e53f733b67ebf0a5d222b36bd029437a5cdf4021fab2d4bbfe89aaefc560ec8ee123677b2acaefef9e0bb9f6bd3e715d28aab08e66b2e3b2c  lxd-4.16.tar.gz
 0c53ad54c956fa067e83ae53467cfcdb8ace2e14972b762dcf8715493d89a74da376f37386626b8b96b27df163e3d8ce13b96858191b6d0000d90a0ce08cc137  lxd.confd
-ed0c53b6255a320ff8c1a41da70ff495395b9a99d305ca25f9e017f7821e9a1caaef26677bf448107e235b6ee10bcd1181150c299dce55c1e7b70f5686105650  lxd.initd
-870d6d9a35ab4ccfb641531b5d806ef76c41deb22ad53bbe6af3d90a93252fc7a81428cd8557c7a42915880d4ff14d76d7fff3dccb2a10b989df4b9c5c616b16  lxd-dont-go-get.patch
-7e6d3bf71a4d5a4b7fa46fe2e45c815782bb6337528c2c3026c1619abcae9ca89fc073a62b5ffaa6f84fe46650028e74a98fd40ed7e68a31df9c97b4a73474a6  add-missing-includes.patch
-3d9b8bea9658c2fbed17c827343c6b17b4af6517eee4f431494209ae911eb0f31220ccf38749993bfa20731a410aa5a1ac03e9a15a8ca4deb42a8df40103d991  seccomp_werror.patch"
+ed0c53b6255a320ff8c1a41da70ff495395b9a99d305ca25f9e017f7821e9a1caaef26677bf448107e235b6ee10bcd1181150c299dce55c1e7b70f5686105650  lxd.initd"

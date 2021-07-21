@@ -1,8 +1,8 @@
 pkgname=apk-tools
-pkgver=4.0.0
+pkgver=4.0.1
 pkgrel=0
 pkgdesc="apk"
-makedepends="zlib-dev openssl-dev linux-dev scdoc"
+makedepends="zlib-dev openssl-dev linux-dev"
 url="https://git.alpinelinux.org/cgit/apk-tools/"
 arch="all"
 license="GPL2"
@@ -18,11 +18,6 @@ check() {
 }
 
 package() {
-	make CC=$CC LUA=no DESTDIR="$pkgdir" install
-#	mkdir -p $pkgdir/usr/bin
-#	mv -v $pkgdir/sbin/* $pkgdir/usr/bin/
-#	rmdir -v $pkgdir/sbin
-
 	install -Dm755 "$srcdir"/$pkgname-$pkgver/src/apk.static \
 		"$pkgdir"/usr/bin/apk
 
@@ -34,9 +29,7 @@ package() {
 	install -Dm700 "$srcdir"/repositories \
 		"$pkgdir"/etc/apk/repositories
 
-	# the shipped README is empty
-	rm -r "$pkgdir"/usr/share/
 }
 
-b2sums="e716b92c5b4ee1ce0a8c50077abfec2b18af6545159f2a7bfe4f0b46d7ab0c064b02cf8336e3aadb462d89c1a66732b280f696f257216393e9b20936847ab470  apk-tools-4.0.0.tar.gz
+b2sums="161e2d315eb4ab6ad83eee8499517f62b7c97267a4acba864343858e65aa3cb8dd7893676423eb566af303ec0340467d82872da4883c6b6344eab5a8a0c1853f  apk-tools-4.0.1.tar.gz
 56d6b815a965db900551afebd8b1f7c44fc36fc09bf147599f5c9c31c1377792c732c22793c66ce2ca6470493ebec2e8b32f26044b5ca5c1d1f8a2d7a42929c5  repositories"

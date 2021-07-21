@@ -1,5 +1,5 @@
 pkgname="raft"
-pkgver="0.10.1"
+pkgver="0.11.1"
 pkgrel=0
 pkgdesc="Fully asynchronous C implementation of the Raft consensus protocol."
 url="https://github.com/canonical/raft"
@@ -26,4 +26,4 @@ package() {
 	make DESTDIR=$pkgdir install
 }
 
-b2sums="42ef22dfc89f05a3a9f130011c0f906201126a1615f9a60648587e014bbb63e038b3afd1593c2c07b046c3c35ef07deaa45cdce58062707409e4dbd3a9f7516e  raft-0.10.1"
+b2sums="10e62a392bdbb98f262068ad2bcfbcd24488918fbb7d4c3b13101c3d771ff8b9d592bad31bfe69cfcb4d6e9c93e1d38da24d11a3167d37208906af4e354c9280  raft-0.11.1"

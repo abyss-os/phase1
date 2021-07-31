@@ -1,14 +1,14 @@
 pkgname=python3
-pkgver=3.9.5
+pkgver=3.9.6
 _basever="${pkgver%.*}"
-pkgrel=4
+pkgrel=0
 pkgdesc="A high-level scripting language"
 url="https://www.python.org"
 arch="all"
 license="custom"
 provides="python"
 subpackages="$pkgname-dev $pkgname-doc"
-makedepends="expat-dev openssl-dev zlib-dev ncurses-dev bzip2-dev xz-dev sqlite-dev libffi-dev tcl-dev linux-dev gdbm-dev readline-dev mpdecimal-dev"
+makedepends="expat-dev openssl-dev zlib-dev ncurses-dev bzip2-dev xz-dev sqlite-dev libffi-dev tcl-dev linux-dev gdbm-dev readline-dev"
 source="https://www.python.org/ftp/python/$pkgver/Python-$pkgver.tar.xz"
 builddir="$srcdir/Python-$pkgver"
 
@@ -39,7 +39,6 @@ prepare() {
 		--with-computed-gotos \
 		--with-dbmliborder=gdbm:ndbm \
 		--with-system-expat \
-        --with-system-libmpdec \
 		--without-ensurepip \
 		--with-libm="" \
 		$_opts
@@ -66,4 +65,4 @@ package() {
 	ln -sv /usr/bin/python3 $pkgdir/usr/bin/python
 }
 
-b2sums="0072376ac69728436ee422da58c1680170cd60c76ac7d623d7a29c9001e6acace1a8d75a1805e65c9b11a30c55c9e67ed66712ec22b0b94ee6873995c935141d  Python-3.9.5.tar.xz"
+b2sums="0d8586b2935088eeab7138cf2210c1a74f1bf7359359d25750af5f69de55eb39c92f518b887a8b749c772ed7d33e85b912928ae6d878514eb58d85ef210f54f0  Python-3.9.6.tar.xz"

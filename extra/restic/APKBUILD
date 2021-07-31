@@ -1,0 +1,33 @@
+pkgname=restic
+pkgver=0.12.0
+pkgrel=0
+pkgdesc="Fast, secure, efficient backup program"
+url="https://restic.net/"
+arch="all !riscv64"
+license="BSD-2-Clause"
+makedepends="go"
+subpackages="$pkgname-doc $pkgname-bash-completion $pkgname-zsh-completion"
+source="https://github.com/restic/restic/releases/download/v$pkgver/restic-$pkgver.tar.gz"
+
+export GOPATH="$srcdir"
+
+build() {
+    go build ./cmd/...
+}
+
+package() {
+    install -Dm755 $pkgname "$pkgdir"/usr/bin/$pkgname
+
+    local man
+    for man in doc/man/*.?; do
+        install -Dm644 "$man" \
+            "$pkgdir"/usr/share/man/man${man##*.}/${man##*/}
+    done
+
+    install -Dm644 doc/bash-completion.sh \
+        "$pkgdir"/usr/share/bash-completion/completions/$pkgname
+    install -Dm644 doc/zsh-completion.zsh \
+        "$pkgdir"/usr/share/zsh/site-functions/_$pkgname
+}
+
+b2sums="d5f581d1e03eb02cc6482baf32d2ceae2ea583a6db598caeac818fcc7653488d7219588f2a1df73b86e472297fdc3a85bd3a123f5faa7143119a34d0443e397b  restic-0.12.0.tar.gz"

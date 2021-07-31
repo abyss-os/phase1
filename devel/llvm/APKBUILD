@@ -1,14 +1,14 @@
 pkgname=llvm
 case "$CARCH" in
     mips64) pkgver=11.1.0 pkgrel=0;;
-    *)  pkgver=12.0.0 pkgrel=4;;
+    *)  pkgver=12.0.1 pkgrel=4;;
 esac
 
 pkgdesc="$pkgname"
 arch="all"
 url=https://llvm.org
 license=.
-source="https://github.com/llvm/llvm-project/archive/llvmorg-12.0.0.tar.gz
+source="https://github.com/llvm/llvm-project/archive/llvmorg-12.0.1.tar.gz
         https://github.com/llvm/llvm-project/archive/llvmorg-11.1.0.tar.gz"
 subpackages="$pkgname-dev"
 
@@ -145,5 +145,5 @@ lld_aalt() {
     DESTDIR=$subpkgdir aalt-bin -R -g llvm -p ld -f /usr/bin/lld
 }
 
-b2sums="f9c3ba8c58571855caa4f206fd285c9b5be66672fb0814cb8bc0964a051f57f5d35013aa1e27cbda502652b37df1ec23474129109e76a42066847860db441dbe  llvmorg-12.0.0.tar.gz
+b2sums="f41de787bc73ff2edfda1b22cc8602be6f65f37dd9e4c8888533cfa8c3ccdcf4f108aaab9de23ab0ab987966eb160f2a553a0bdff99461e71ddd5bfcd086090d  llvmorg-12.0.1.tar.gz
 ca842ff4afff8f44c82b5e7383962a9c45ca1c93b64fa4c6ebcd70a1d3849dbad2b8e4e24fba02d144c6266d7fab3607ebc6999b28c229cb35256cf40f26a985  llvmorg-11.1.0.tar.gz"

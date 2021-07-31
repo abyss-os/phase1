@@ -1,7 +1,7 @@
 pkgname=llvm
 case "$CARCH" in
     mips64) pkgver=11.1.0 pkgrel=0;;
-    *)  pkgver=12.0.1 pkgrel=4;;
+    *)  pkgver=12.0.1 pkgrel=0;;
 esac
 
 pkgdesc="$pkgname"
@@ -15,7 +15,7 @@ subpackages="$pkgname-dev"
 builddir=$srcdir/llvm-project-llvmorg-${pkgver/_/-}
 _builddir="$srcdir/build"
 
-makedepends="cmake ncurses-dev libedit-dev samurai libffi-dev python3-dev libexecinfo-dev libxml2-dev lua5.4-dev xz-dev swig llvm-bootstrap"
+makedepends="cmake ncurses-dev libedit-dev samurai libffi-dev python3-dev libexecinfo-dev libxml2-dev xz-dev swig llvm-bootstrap"
 provides="clang $pkgname-bootstrap=$pkgver-r$pkgrel"
 replaces="lld llvm-binutils"
 

@@ -1,12 +1,12 @@
 pkgname=rust
 pkgver=1.53.0
-pkgrel=2
+pkgrel=0
 pkgdesc="The Rust Programming Language"
 url="https://www.rust-lang.org"
 arch="x86_64 ppc64le aarch64"
 license="Apache-2.0 AND MIT"
 
-makedepends="python3 file coreutils curl-dev libgit2-dev openssl-dev zlib-dev rust-bootstrap cargo-bootstrap"
+makedepends="python3 file coreutils curl-dev libgit2-dev openssl-dev zlib-dev rust-bootstrap cargo-boostrap"
 
 provides="rust-bootstrap=$pkgver-r$pkgrel"
 options="!archcheck !check"
@@ -16,31 +16,20 @@ subpackages="$pkgname-doc cargo cargo-bash-completions:_cargo_bashcomp:noarch ca
 source="https://static.rust-lang.org/dist/rustc-$pkgver-src.tar.gz"
 builddir="$srcdir/rustc-$pkgver-src"
 
-_arch=$CARCH _libc=musl AR=llvm-ar
+_arch=$CTARGET _libc=musl AR=llvm-ar
 
-case $CARCH in
+case $CTARGET in
 	riscv64) _arch=riscv64gc CC=gnu-gcc CXX=gnu-g++ AR=gnu-ar makedepends="$makedepends binutils gcc";;
-	ppc64le) _arch=powerpc64le;;
     mips64*) _libc=muslabi64;;
 esac
 
 _target="${_arch}-unknown-linux-${_libc}"
-
-_rlibdir="usr/lib/rustlib/$_target/lib"
-_sharedir="usr/share/rust"
-
-ldpath="/$_rlibdir"
 
 export RUST_BACKTRACE=full
 
 _clear_vendor_checksums() {
 	sed -i 's/\("files":{\)[^}]*/\1/' vendor/$1/.cargo-checksum.json
 }
-
-#prepare() {
-#	default_prepare
-#	sed -i /LD_LIBRARY_PATH/d src/bootstrap/bootstrap.py
-#}
 
 build() {
 	_clear_vendor_checksums libz-sys
@@ -78,53 +67,10 @@ build() {
 package() {
 	DESTDIR="$pkgdir" ./x.py install
 
-	cd "$pkgdir"
-
-	_mv usr/lib/rustlib/etc/*.py $_sharedir/etc/
-	rmdir -p usr/lib/rustlib/etc 2>/dev/null || true
-
-	cd usr/lib/rustlib
+	cd $pkgdir/usr/lib/rustlib
 	rm components install.log manifest-* rust-installer-version uninstall.sh
-	if [ "$_build" != "$_target" ]; then
-		rm -rf "$pkgdir"/usr/lib/rustlib/$_build
-	fi
-}
+	rm -rfv $pkgdir/usr/lib/rustlib/etc
 
-stdlib() {
-	pkgdesc="Standard library for Rust (static rlibs)"
-	depends=
-
-	_mv "$pkgdir"/$_rlibdir/*.rlib "$subpkgdir"/$_rlibdir/
-}
-
-analysis() {
-	pkgdesc="Compiler analysis data for the Rust standard library"
-	depends="$pkgname-stdlib=$pkgver-r$pkgrel"
-
-	_mv "$pkgdir"/$_rlibdir/../analysis "$subpkgdir"/${_rlibdir%/*}/
-}
-
-gdb() {
-	pkgdesc="GDB pretty printers for Rust"
-	depends="$pkgname=$pkgver-r$pkgrel gdb"
-
-	mkdir -p "$subpkgdir"
-	cd "$subpkgdir"
-
-	_mv "$pkgdir"/usr/bin/rust-gdb usr/bin/
-	_mv "$pkgdir"/$_sharedir/etc/gdb_*.py $_sharedir/etc/
-}
-
-lldb() {
-	local _pyver=${_python#python}
-	pkgdesc="LLDB pretty printers for Rust"
-	depends="$pkgname=$pkgver-r$pkgrel lldb py$_pyver-lldb"
-
-	mkdir -p "$subpkgdir"
-	cd "$subpkgdir"
-
-	_mv "$pkgdir"/usr/bin/rust-lldb usr/bin/
-	_mv "$pkgdir"/$_sharedir/etc/lldb_*.py $_sharedir/etc/
 }
 
 cargo() {
@@ -133,7 +79,7 @@ cargo() {
 	depends="$pkgname=$pkgver-r$pkgrel"
 	provides="cargo-bootstrap=$pkgver-r$pkgrel"
 
-	_mv "$pkgdir"/usr/bin/cargo "$subpkgdir"/usr/bin/
+	mv $pkgdir/usr/bin/cargo $subpkgdir/usr/bin/
 }
 
 _cargo_bashcomp() {
@@ -142,10 +88,8 @@ _cargo_bashcomp() {
 	depends=""
 	install_if="cargo=$pkgver-r$pkgrel bash-completion"
 
-	cd "$pkgdir"
-	_mv etc/bash_completion.d/cargo \
-		"$subpkgdir"/usr/share/bash-completion/completions/
-	rmdir -p etc/bash_completion.d 2>/dev/null || true
+	mv $pkgdir/etc/bash_completion.d/cargo $subpkgdir/usr/share/bash-completion/completions/
+	rm -rfv $pkgdir/etc/bash_completion.d
 }
 
 _cargo_zshcomp() {
@@ -154,16 +98,8 @@ _cargo_zshcomp() {
 	depends=""
 	install_if="cargo=$pkgver-r$pkgrel zsh"
 
-	cd "$pkgdir"
-	_mv usr/share/zsh/site-functions/_cargo \
-		"$subpkgdir"/usr/share/zsh/site-functions/
-	rmdir -p usr/share/zsh/site-functions 2>/dev/null || true
-}
-
-_mv() {
-	local dest; for dest; do true; done  # get last argument
-	mkdir -p "$dest"
-	mv "$@"
+	mv $pkgdir/usr/share/zsh/site-functions/_cargo $subpkgdir/usr/share/zsh/site-functions/
+	rm -rfv $pkgdir/usr/share/zsh/site-functions
 }
 
 b2sums="1fab8c3a72bc54655cb3536b78f33b1646a4072c786c5121da83f71cd71fd59d6ea9ed88998336b5115d1314bad8bacd666f62941798d2e03d799313fa6350e4  rustc-1.53.0-src.tar.gz"

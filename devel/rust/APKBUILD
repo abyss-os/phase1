@@ -1,6 +1,6 @@
 pkgname=rust
 pkgver=1.53.0
-pkgrel=0
+pkgrel=1
 pkgdesc="The Rust Programming Language"
 url="https://www.rust-lang.org"
 arch="x86_64 ppc64le aarch64"
@@ -59,6 +59,7 @@ build() {
 		--enable-vendor \
 		--enable-locked-deps \
 		--enable-llvm-link-shared \
+        --llvm-libunwind=system \
 		--enable-option-checking \
 		--python="python3" \
 		--set="rust.musl-root=/usr" \

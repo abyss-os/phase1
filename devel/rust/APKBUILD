@@ -80,6 +80,7 @@ cargo() {
 	depends="$pkgname=$pkgver-r$pkgrel"
 	provides="cargo-bootstrap=$pkgver-r$pkgrel"
 
+    mkdir -p $subpkgdir/usr/bin
 	mv $pkgdir/usr/bin/cargo $subpkgdir/usr/bin/
 }
 

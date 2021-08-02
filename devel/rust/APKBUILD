@@ -11,7 +11,7 @@ makedepends="python3 file coreutils curl-dev libgit2-dev openssl-dev zlib-dev sa
 provides="rust-bootstrap=$pkgver-r$pkgrel"
 options="!archcheck !check"
 
-subpackages="$pkgname-doc cargo cargo-bash-completions:_cargo_bashcomp:noarch cargo-zsh-completion:_cargo_zshcomp:noarch"
+subpackages="$pkgname-doc cargo"
 
 source="https://static.rust-lang.org/dist/rustc-$pkgver-src.tar.gz"
 builddir="$srcdir/rustc-$pkgver-src"
@@ -82,28 +82,6 @@ cargo() {
 
     mkdir -p $subpkgdir/usr/bin
 	mv $pkgdir/usr/bin/cargo $subpkgdir/usr/bin/
-}
-
-_cargo_bashcomp() {
-	pkgdesc="Bash completions for cargo"
-	license="Apache-2.0 MIT"
-	depends=""
-	install_if="cargo=$pkgver-r$pkgrel bash-completion"
-
-    mkdir -p subpkgdir/usr/share/bash-completion/completions
-	mv $pkgdir/etc/bash_completion.d/cargo $subpkgdir/usr/share/bash-completion/completions/
-	rm -rfv $pkgdir/etc/bash_completion.d
-}
-
-_cargo_zshcomp() {
-	pkgdesc="ZSH completions for cargo"
-	license="Apache-2.0 MIT"
-	depends=""
-	install_if="cargo=$pkgver-r$pkgrel zsh"
-
-    mkdir -p $subpkgdir/usr/share/zsh/site-functions
-	mv $pkgdir/usr/share/zsh/site-functions/_cargo $subpkgdir/usr/share/zsh/site-functions/
-	rm -rfv $pkgdir/usr/share/zsh/site-functions
 }
 
 b2sums="1fab8c3a72bc54655cb3536b78f33b1646a4072c786c5121da83f71cd71fd59d6ea9ed88998336b5115d1314bad8bacd666f62941798d2e03d799313fa6350e4  rustc-1.53.0-src.tar.gz"

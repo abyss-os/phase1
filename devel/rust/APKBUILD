@@ -90,6 +90,7 @@ _cargo_bashcomp() {
 	depends=""
 	install_if="cargo=$pkgver-r$pkgrel bash-completion"
 
+    mkdir -p subpkgdir/usr/share/bash-completion/completions
 	mv $pkgdir/etc/bash_completion.d/cargo $subpkgdir/usr/share/bash-completion/completions/
 	rm -rfv $pkgdir/etc/bash_completion.d
 }
@@ -100,6 +101,7 @@ _cargo_zshcomp() {
 	depends=""
 	install_if="cargo=$pkgver-r$pkgrel zsh"
 
+    mkdir -p $subpkgdir/usr/share/zsh/site-functions
 	mv $pkgdir/usr/share/zsh/site-functions/_cargo $subpkgdir/usr/share/zsh/site-functions/
 	rm -rfv $pkgdir/usr/share/zsh/site-functions
 }

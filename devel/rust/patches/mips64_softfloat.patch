@@ -1,0 +1,23 @@
+From 77e4019b7fe8a9c1895d839e14fd441d82ed3b9b Mon Sep 17 00:00:00 2001
+From: Joe Holden <jwh@zorins.us>
+Date: Sat, 22 May 2021 08:33:17 +0000
+Subject: [PATCH] mips64 soft float
+
+---
+ .../rustc_target/src/spec/mips64_unknown_linux_muslabi64.rs     | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/compiler/rustc_target/src/spec/mips64_unknown_linux_muslabi64.rs b/compiler/rustc_target/src/spec/mips64_unknown_linux_muslabi64.rs
+index 329fbd227..ab80963be 100644
+--- a/compiler/rustc_target/src/spec/mips64_unknown_linux_muslabi64.rs
++++ b/compiler/rustc_target/src/spec/mips64_unknown_linux_muslabi64.rs
+@@ -4,7 +4,7 @@ use crate::spec::{Target, TargetOptions};
+ pub fn target() -> Target {
+     let mut base = super::linux_musl_base::opts();
+     base.cpu = "mips64r2".to_string();
+-    base.features = "+mips64r2".to_string();
++    base.features = "+mips64r2,+soft-float".to_string();
+     base.max_atomic_width = Some(64);
+     Target {
+         // LLVM doesn't recognize "muslabi64" yet.
+

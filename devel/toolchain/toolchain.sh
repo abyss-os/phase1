@@ -72,8 +72,8 @@ if [ "$binutils" != "none" ]; then
 	done
 	# special case for ld due to lld
 	case $binutils in
-		llvm) ln -fvs /usr/bin/ld.lld /usr/bin/ld && ln -fsv /usr/bin/clang /usr/bin/as;;
-		*) ln -fsv /usr/bin/${binutils}-ld /usr/bin/ld && ln -fsv /usr/bin/gnu-as /usr/bin/as;;
+		llvm) ln -fvs ld.lld /usr/bin/ld && ln -fsv clang /usr/bin/as;;
+		gnu) ln -fsv gnu-ld /usr/bin/ld && ln -fsv gnu-as /usr/bin/as && ln -fsv gnu-ld.bfd /usr/bin/ld.bfd && ln -fsv gnu-ld.gold /usr/bin/ld.gold;;
 	esac
 fi
 

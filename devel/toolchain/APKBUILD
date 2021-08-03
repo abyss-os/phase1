@@ -1,6 +1,6 @@
 pkgname=toolchain
 pkgver=7
-pkgrel=0
+pkgrel=1
 pkgdesc="configures toolchain for Abyss"
 url="https://abyss.run"
 arch="noarch"

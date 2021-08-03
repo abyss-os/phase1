@@ -33,7 +33,6 @@ _clear_vendor_checksums() {
 }
 
 build() {
-	_clear_vendor_checksums libz-sys
 	./configure \
 		--build="$_target" \
 		--host="$_target" \

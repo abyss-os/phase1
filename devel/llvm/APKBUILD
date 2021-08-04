@@ -1,7 +1,7 @@
 pkgname=llvm
 case "$CARCH" in
-    mips64) pkgver=11.1.0 pkgrel=0;;
-    *)  pkgver=12.0.1 pkgrel=0;;
+    mips64) pkgver=11.1.0 pkgrel=1;;
+    *)  pkgver=12.0.1 pkgrel=1;;
 esac
 
 pkgdesc="$pkgname"

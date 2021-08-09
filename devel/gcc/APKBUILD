@@ -10,56 +10,16 @@ _gmp=6.2.1
 _mpfr=4.1.0
 _isl=0.23
 _mpc=1.2.1
-makedepends="bison flex texinfo gawk zip zlib-dev linux-dev libucontext-dev binutils libssp_nonshared"
+makedepends="bison flex texinfo gawk zip zlib-dev linux-dev libucontext-dev binutils gcc-bootstrap"
+depends="binutils"
 subpackages="$pkgname-doc libgcc libstdc++:libcxx"
 provides="$pkgname-bootstrap=$pkgver-r$pkgrel"
 
 source="https://gcc.gnu.org/pub/gcc/releases/gcc-${_pkgbase:-$pkgver}/gcc-${_pkgbase:-$pkgver}.tar.xz
-	002_all_default-relro.patch
-	003_all_default-fortify-source.patch
-	011_all_default-warn-format-security.patch
-	012_all_default-warn-trampolines.patch
-	020_all_msgfmt-libstdc++-link.patch
-	050_all_libiberty-asprintf.patch
-	051_all_libiberty-pic.patch
-	053_all_libitm-no-fortify-source.patch
-
-	0028-gcc-go-Use-_off_t-type-instead-of-_loff_t.patch
-	0029-gcc-go-Don-t-include-sys-user.h.patch
-	0030-gcc-go-Fix-ucontext_t-on-PPC64.patch
-	0031-gcc-go-Fix-handling-of-signal-34-on-musl.patch
-	0032-gcc-go-Use-int64-type-as-offset-argument-for-mmap.patch
-	0034-gcc-go-signal-34-is-special-on-musl-libc.patch
-	0035-gcc-go-Prefer-_off_t-over-_off64_t.patch
-	0036-gcc-go-undef-SETCONTEXT_CLOBBERS_TLS-in-proc.c.patch
-	0037-gcc-go-link-to-libucontext.patch
-	0038-gcc-go-Disable-printing-of-unaccessible-ppc64-struct.patch
-
-    0016-dlang-update-zlib-binding.patch
-    0017-dlang-fix-fcntl-on-mips-add-libucontext-dep.patch
-
-
-	205-nopie.patch
-	0002-posix_memalign.patch
-
-	libgcc-always-build-gcceh.a.patch
-	gcc-4.9-musl-fortify.patch
-	gcc-6.1-musl-libssp.patch
-	gcc-pure64.patch
-
-	fix-cxxflags-passing.patch
-
-	320-libffi-gnulinux.patch
-
-	gcc-pure64-mips.patch
-
-	https://ftp.gnu.org/gnu/mpc/mpc-$_mpc.tar.gz
-	https://ftp.gnu.org/gnu/gmp/gmp-$_gmp.tar.xz
-	https://ftp.gnu.org/gnu/mpfr/mpfr-$_mpfr.tar.xz
-	http://isl.gforge.inria.fr/isl-$_isl.tar.gz
-
-	__stack_chk_fail_local.c
-	"
+        https://ftp.gnu.org/gnu/mpc/mpc-$_mpc.tar.gz
+        https://ftp.gnu.org/gnu/gmp/gmp-$_gmp.tar.xz
+        https://ftp.gnu.org/gnu/mpfr/mpfr-$_mpfr.tar.xz
+        http://isl.gforge.inria.fr/isl-$_isl.tar.gz"
 
 # we build out-of-tree
 _gccdir="$srcdir"/gcc-${_pkgbase:-$pkgver}
@@ -71,23 +31,7 @@ _builddir="$srcdir/build"
 prepare() {
 	cd "$_gccdir"
 
-	_err=
-	for i in $source; do
-		case "$i" in
-		*.patch)
-			msg "Applying $i"
-			patch -p1 -i "$srcdir"/$i || _err="$_err $i"
-			;;
-		esac
-	done
-
-	if [ -n "$_err" ]; then
-		error "The following patches failed:"
-		for i in $_err; do
-			echo "  $i"
-		done
-		return 1
-	fi
+    default_prepare
 
 	echo ${pkgver} > gcc/BASE-VER
 
@@ -102,14 +46,13 @@ prepare() {
 
 	local _arch_configure= _hash_style_configure=
 	case "$CARCH" in
-    	aarch64)		_arch_configure="--with-arch=armv8-a --with-abi=lp64";;
+	    aarch64)		_arch_configure="--with-arch=armv8-a --with-abi=lp64";;
 	    mips64*)		_arch_configure="--with-arch=mips64 --with-tune=mips64 --with-mips-plt --with-float=soft --with-abi=64";;
 	    ppc64le)		_arch_configure="--with-abi=elfv2 --enable-secureplt --enable-decimal-float=no --enable-targets=powerpcle-linux";;
 	    riscv64)		_arch_configure="--with-arch=rv64gc --with-abi=lp64d";;
 	esac
 
 	case "$CARCH" in
-    	#mips*)	_hash_style_configure="--with-linker-hash-style=sysv" ;;
 	    *)	_hash_style_configure="--with-linker-hash-style=both" ;;
 	esac
 
@@ -119,6 +62,7 @@ build() {
 	mkdir -p "$_builddir"
 	cd "$_builddir"
 
+	env CC=gnu-gcc CXX=gnu-g++ LD=gnu-ld \
 	"$_gccdir"/configure \
         --build=${CBUILD} \
         --host=${CHOST} \
@@ -147,12 +91,14 @@ build() {
 		--disable-libmudflap \
 		--disable-libsanitizer \
 		--disable-symvers \
-        --with-as=/usr/bin/gnu-as \
+        	--with-as=/usr/bin/gnu-as \
+		--with-ld=/usr/bin/gnu-ld \
+		--enable-bootstrap \
 		$_arch_configure \
 		$_hash_style_configure
 
 	cd "$_builddir"
-	make -j${JOBS}
+	make
 }
 
 package() {
@@ -230,37 +176,7 @@ libgomp() {
 }
 
 b2sums="69b61234ac436edfea2933df68c434a2ce7aa4454ef4da573e82587e1a42dc420189e949cfdadaf4cb37fc0de9674822210a95b77ff03aca0dbedfe67df19cc6  gcc-11.2.0.tar.xz
-2a0a7b8a36a74e2d093ec34e93640b486a656d1e8b5d5408751799fab3359283d9e934f3a00deeb8e02e97f1d5cd7a47a30f2bcedf2a8da9b64b2c5717018126  002_all_default-relro.patch
-f375f417bfdaa96aeafe327bf35bf26bf1d350ecc4b5db2ad735bb4e9b636d6f9d06c6a9c1359ccd1c1f6113db8ae3ab2f06ea9f0c72f292d8d5cfbb18c9d4da  003_all_default-fortify-source.patch
-f02d654db021e4a647ac2526ec7d487f5c73ba687066b188601e99f46f6053d7a3515da3fb8d6fc73d5c31c676c21d5aba8619630bffb96a0143de16df73ed35  011_all_default-warn-format-security.patch
-3773fe7d55a5cb2746324277dc27340fdf316f8b797e7d144c44bfd95b46a72e81bf497398533bb891f4990b4785b8991f03cc33b40cfa6113bc17eb33a3d09a  012_all_default-warn-trampolines.patch
-70978cdc9d161365b881a827bc9eb2602037858bbde6072832f6827611c64b5d2f51e049cdee138703b92e49598a170db736f65cd2b836729194cb415ae05f8f  020_all_msgfmt-libstdc++-link.patch
-71763a85ba2ccec603e44e895cef4fff1a12f53941b37a9e64b108e66f24de3995c9eba5071053de207a77ac71efa528d8bdf714e3f1a84abbb423994b673552  050_all_libiberty-asprintf.patch
-284f01e91907506e65d5267d158341e3f439a57086d9f6b2ff59e94047afd2fd7818469a526d13802f45ddeef65d908ca31723a8dbe0bb268be7d200e56c88e9  051_all_libiberty-pic.patch
-8f8f35d28a4f511f23b7ae3276d6519255f2e8651ba35563c465133e053e7001d7568821cb235491eb2c1a2bd5771a9cea5325e880b35363127f05efd5feaf7b  053_all_libitm-no-fortify-source.patch
-fd8274aab9c39d86e44ad226d9dd31873769af0aa33679a18debd210e91b99efc0cbf9eb4333fcf3930fb16b9fe32a8602056c7157d1aaaf77d94e30ab79d088  0028-gcc-go-Use-_off_t-type-instead-of-_loff_t.patch
-aad5807e3605ce7efc9d9c8a663f113a070337ded079817c8c5c07e45e3f5df26d2ed349e740fc8f6ac685d28cac4e79f3ff9efa7103f3fc2f5a846d75b505af  0029-gcc-go-Don-t-include-sys-user.h.patch
-18cd82b9c81a59731485cf580a5dbe8a6d34ec71d34738eca8b6d0d437ba1d782409121cf1435b13b6d701306c071fae609b9df0cdf75cb0bd71e85322ae8b92  0030-gcc-go-Fix-ucontext_t-on-PPC64.patch
-6295dcb80602aeae6cc35eabc4c8f245d0a578fe0dc8d2e05b920f7b131cb66d7aaf0c5d2738df5059c1e1606bbff24217a8c1bf9b73f97fcdadb5b4c49c6a71  0031-gcc-go-Fix-handling-of-signal-34-on-musl.patch
-b296f2c3819947ba585ed102420f6492296c5d96318b143427a24d69c2fd7bf34369e572d7a9fc02711befbd0414824315c4fae845d9dc79b25702f34ea6bf5a  0032-gcc-go-Use-int64-type-as-offset-argument-for-mmap.patch
-45c1966f32aa2f0dac37afae72a5996bd936b36999359f8a0f046d4f52a5e222c21975e4cad734e3288a6804e0f059d7ec42db9b607b1453f6ebdf12b48d6961  0034-gcc-go-signal-34-is-special-on-musl-libc.patch
-533bb119a1db8a8356fc1c072be096bde1b739165639316bece111838a6a43e10169ab3c254056e50215f1a500a471fe3864e22261ef7517bc40c9b8c6c10c5e  0035-gcc-go-Prefer-_off_t-over-_off64_t.patch
-a6f1ae365939a44b64fa771711aff581d1fe013bfc13660a0b31fb6e528645210d94aad09ec4475bdfe66e13db4c9b5283f28a51b1b3e7f713ef14a0a1012df8  0036-gcc-go-undef-SETCONTEXT_CLOBBERS_TLS-in-proc.c.patch
-7a8f0929192fee885a2ab7542f47ee4484465f65d008dac18a756bdf98f04ee4785ab6ae72dc84c3a64e82593bda58eee8da02ac5cb0d4b060bdcd210f55c584  0037-gcc-go-link-to-libucontext.patch
-920f785ba792118030316c734854d40ee98905094b5164e4f016cd5876bd70e81036949849468579ec378601c9159a8ecc7c8f268002ebc8a5b55d7b627864c9  0038-gcc-go-Disable-printing-of-unaccessible-ppc64-struct.patch
-ce189eb27c5fd5de9c6339a68256da1cefb9370905f2de22802a9c4196cc8845b45cabd6c830983d28f8e06a836ef0f6fb3998f8392d139b83c20d42875f76aa  0016-dlang-update-zlib-binding.patch
-2352c56df04dd98accbaa896e065a02f69b318493d5351b49238f5732b040b851ca2b47387ce01bc02bf8fdc58bef7a508832ab6320d037838fd0eea3cb8b644  0017-dlang-fix-fcntl-on-mips-add-libucontext-dep.patch
-d5c73a0466635f26e26c6e2572199cb7d818441fb6bb874ed141bbfcec6784559e4e8cb0240b0decf04ef18a32e252fbd14589351d489178fc7215277a90c6a2  205-nopie.patch
-c28b7d17b7bcd0ef74ddecc9b2e0d20de28a0077e068aca7efb75eaba645e05e8b322a247f3c53c6604400af8e78135f7c18400deb18e80b7cf7325eeceaf13f  0002-posix_memalign.patch
-61028ae55879a7304b7f5c5aae51874a44eaf66d6350436136c5e22d4069cb8c6cd200634da0cb6c857f345e170fbdc212ff02a10e8c0c805e4ed1d278d2d4cf  libgcc-always-build-gcceh.a.patch
-00289d9b6efd40d32c9a8008b5695cfbb7b38e84cf9549d77cb69753ce65ac7c0a0ad8dcc37fe43bd1c1a5ee8de7b4ea645835cd0dfa5442e823a02ef1567554  gcc-4.9-musl-fortify.patch
-40d339c61c437f9485a85e175e2c529f7a8d11477a7bb1ffee16b68a0d83187a665f9a6280979883afaedacb684bb4366b69efaa76c755d9582c34c063976606  gcc-6.1-musl-libssp.patch
-abc92215e54acac596ae835914edd64c25bb1df967b22678b10700a999080afaea711135eb73a33f2bd14d003cf3a7faacd94e914a91d47ddd642d9b31132d31  gcc-pure64.patch
-46f8cb8e5815a84a42d4aa4446a098fb6df4b3e5ef2458a323fd48d17963c30627e41fdb28e787b6d61a58e059b6f7f5a179382e4dcbbbd52d84fee6dcc2407b  fix-cxxflags-passing.patch
-31788bf24ffa306914306c9f1cce0b4a0e6b65824c3129208bdccde5846d9eb47de5ef2a6efb7a11108c8b5fa48a2fa9bb53c1967cbe9a8a3f1002b60f3081b0  320-libffi-gnulinux.patch
-c2e8e33eb88bba6453f0645092cc2a6b3adfb07788d7f71a3f97e4f09f95934b6dfac929b72f34c7e515d8d07b1f6db2a2bee2bb1158c85e9c41e4246bdafd41  gcc-pure64-mips.patch
 9cd03c6a71839e4cdb3c1f18d718cc4d3097c3f8ec307a5c756bd5df27c68aa013755156b3b156efee1acabfee2269602c6a3a358092ef0d522271c9c56c133d  mpc-1.2.1.tar.gz
 c0d85f175392a50cfa01bc6b0a312b235946ad8b4f6f84f6dabd33d7a6f2cc75c9b0e1e33057be07750bfa0145b7c4cf3b6188a5be6ca9d7271ec2276c84ebcb  gmp-6.2.1.tar.xz
 41d1be0c4b557760f12a4525ad3a84b6e2cd6f0927c935fcfba577ac0490e582d1ae4b581dce58e21e705cf9d7c88373054d7fb7a94bb32c69b339f99a25dc68  mpfr-4.1.0.tar.xz
-36f3f10704315eaa23e2ad39ab069d418d0152ea753de5f2da2f6e70d63f1322d33027329274dffe87634bcdd50d9806f3477b35927198dee8cfc4e3f54381e6  isl-0.23.tar.gz
-a70433fea40342429ef7e21fc4338a4d600e902c44c21765434104c5d602267695c403da33479d352328f84c41c99bc46757e5ae18e42f6a0479789bf04323ea  __stack_chk_fail_local.c"
+36f3f10704315eaa23e2ad39ab069d418d0152ea753de5f2da2f6e70d63f1322d33027329274dffe87634bcdd50d9806f3477b35927198dee8cfc4e3f54381e6  isl-0.23.tar.gz"

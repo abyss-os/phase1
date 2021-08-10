@@ -1,11 +1,10 @@
 pkgname="dqlite"
 pkgver="1.9.0"
-pkgrel=0
+pkgrel=1
 pkgdesc="dqlite"
 url="https://dqlite.io"
 arch="all"
 license="LGPLv3"
-depends="sqlite raft libuv-dev"
 makedepends="autoconf automake sqlite-dev raft-dev libuv-dev"
 subpackages="$pkgname-dev"
 source="$pkgname-$pkgver::https://github.com/canonical/dqlite/archive/v${pkgver}.tar.gz"

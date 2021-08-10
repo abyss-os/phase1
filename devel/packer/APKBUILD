@@ -9,8 +9,8 @@ makedepends="go"
 source="$pkgname-$pkgver.tar.gz::https://github.com/hashicorp/packer/archive/v$pkgver.tar.gz"
 
 build() {
-    #go mod vendor
-    go build -v -o bin/$pkgname -ldflags "-X main.GitCommit=v$pkgver -X github.com/hashicorp/packer/version.Prerelease= -s -w" -mod=readonly
+    go mod vendor
+    go build -v -o bin/$pkgname -ldflags "-X main.GitCommit=v$pkgver -X github.com/hashicorp/packer/version.Prerelease= -s -w"
 }
 
 check() {

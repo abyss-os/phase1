@@ -1,6 +1,5 @@
 pkgname=lxd
-pkgver=4.16
-_qemu=5.2.0
+pkgver=4.17
 pkgrel=0
 pkgdesc="a container hypervisor and a new user experience for LXC"
 url="https://linuxcontainers.org/lxd/"
@@ -16,11 +15,12 @@ source="https://linuxcontainers.org/downloads/$pkgname/$pkgname-$pkgver.tar.gz
 	$pkgname.initd"
 
 build() {
-	export GOPATH="$builddir/_dist" CGO_CFLAGS="-Wno-error -Wignored-attributes" GO111MODULE=auto
+	export GOPATH="$builddir/_dist" CGO_CFLAGS="-Wno-error -Wignored-attributes" GO111MODULE=off CGO_LDFLAGS_ALLOW="(-Wl,-wrap,pthread_create)|(-Wl,-z,now)"
 
 	go install -v -x -tags libsqlite3 github.com/lxc/lxd/lxd
-	for bin in lxc fuidshift lxc-to-lxd lxd-benchmark lxd-p2c lxd-agent; do
-		go install -v -x github.com/lxc/lxd/$bin
+
+    for bin in lxc fuidshift lxc-to-lxd lxd-benchmark lxd-p2c lxd-agent; do
+        go install -v -x github.com/lxc/lxd/$bin
 	done
 }
 
@@ -40,6 +40,10 @@ package() {
 		install -Dm755 bin/$tool "$pkgdir"/usr/bin/$tool
 	done
 
+    mkdir -p "$pkgdir"/var/lib/lxd
+    chmod 755 "$pkgdir"/var/lib/lxd
+    chgrp $pkgname "$pkgdir"/var/lib/lxd
+
 }
 
 bashcomp() {
@@ -52,6 +56,6 @@ bashcomp() {
 	cp scripts/bash/lxd-client "$subpkgdir"/usr/share/bash-completion/completions/lxd-client
 }
 
-b2sums="b78f2e61fb4b4e0e53f733b67ebf0a5d222b36bd029437a5cdf4021fab2d4bbfe89aaefc560ec8ee123677b2acaefef9e0bb9f6bd3e715d28aab08e66b2e3b2c  lxd-4.16.tar.gz
-0c53ad54c956fa067e83ae53467cfcdb8ace2e14972b762dcf8715493d89a74da376f37386626b8b96b27df163e3d8ce13b96858191b6d0000d90a0ce08cc137  lxd.confd
+b2sums="8d4ec6a63daa348cebb50e9cc7568626dfba39fc2e409fe562ed9fe115478754df5a10803c0bde10112d6f70e0236f276cdc14c62f9a6f2b505c04e0bc270443  lxd-4.17.tar.gz
+a5318b21249418f216624709b22d6ee657d1f88c0b7fca6a74f9b8d1f557310fc31d350be852cf78bf542225ec2f93e70bb7e00799fa5d639912f2b1ac98e6fb  lxd.confd
 ed0c53b6255a320ff8c1a41da70ff495395b9a99d305ca25f9e017f7821e9a1caaef26677bf448107e235b6ee10bcd1181150c299dce55c1e7b70f5686105650  lxd.initd"

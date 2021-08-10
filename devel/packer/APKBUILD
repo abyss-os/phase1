@@ -1,16 +1,16 @@
 pkgname=packer
-pkgver=1.7.2
+pkgver=1.7.4
 pkgrel=0
 pkgdesc="Build Automated Machine Images"
 url="https://www.packer.io/"
 arch="all"
 license="MPL-2.0"
 makedepends="go"
-source="$pkgname-$pkgver.tar.gz::https://github.com/hashicorp/packer/archive/v$pkgver.tar.gz
-	riscv64.patch"
+source="$pkgname-$pkgver.tar.gz::https://github.com/hashicorp/packer/archive/v$pkgver.tar.gz"
 
 build() {
-    go build -v -o bin/$pkgname -ldflags "-X main.GitCommit=v$pkgver -X github.com/hashicorp/packer/version.Prerelease= -s -w"
+    #go mod vendor
+    go build -v -o bin/$pkgname -ldflags "-X main.GitCommit=v$pkgver -X github.com/hashicorp/packer/version.Prerelease= -s -w" -mod=readonly
 }
 
 check() {
@@ -22,5 +22,4 @@ package() {
 	install -Dm755 "$builddir"/bin/$pkgname "$pkgdir"/usr/bin/$pkgname
 }
 
-b2sums="6599c9bb19380ed08d186b1f1bd5d9ad581425acce59920a02d4dcdc5237e8f9f9f9af264b4d1ed93f39a56061b9c391fcccdd2582393af420d72421abbd1beb  packer-1.7.2.tar.gz
-076f16bca99d08a303b60ee4b136b18d1eb448e4216786fb357981a6ed38eb3587229881cd4a85e2efe3328d6b512f8932834d677edc4615493f8f94667d884a  riscv64.patch"
+b2sums="090bf731f8723d6fddedf142c14048deabd40d94aa356e71bd727b81a7913e772fe03ac73de8666904745313ec2692753f31cb52e2270a05a1c7e2fc8189bc12  packer-1.7.4.tar.gz"

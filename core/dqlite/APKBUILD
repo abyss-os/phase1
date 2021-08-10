@@ -1,5 +1,5 @@
 pkgname="dqlite"
-pkgver="1.8.0"
+pkgver="1.9.0"
 pkgrel=0
 pkgdesc="dqlite"
 url="https://dqlite.io"
@@ -12,15 +12,13 @@ source="$pkgname-$pkgver::https://github.com/canonical/dqlite/archive/v${pkgver}
 builddir="$srcdir/$pkgname-$pkgver"
 
 build() {
-	cd $builddir
 	autoreconf -if
 	./configure --prefix=/usr
 	make
 }
 
 package() {
-	cd $builddir
 	make DESTDIR=$pkgdir install
 }
 
-b2sums="0e3bc8badf6b7e0447eebd86069785dca51c4dfda527ee7b838da971830ad65e443c130484b25c901aee5ac4e14c81df84756734aac3fd58a2fdbc67a664c1fb  dqlite-1.8.0"
+b2sums="7a6179e87ff8e37d19ab28a11bcd02531297095f83fffc936aa8b719be737cbba359b62daeea8de6d4bc599a4bf579a3471ab632fae27186d5f2358324b518df  dqlite-1.9.0"

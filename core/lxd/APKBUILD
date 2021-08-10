@@ -10,6 +10,7 @@ makedepends="lxc-dev go dqlite-dev raft-dev sqlite-dev libuv-dev libcap-dev eude
 subpackages="$pkgname-bash-completion:bashcomp:noarch $pkgname-openrc"
 install="$pkgname.pre-install"
 options="!check"
+pkggroups="$pkgname"
 source="https://linuxcontainers.org/downloads/$pkgname/$pkgname-$pkgver.tar.gz
 	$pkgname.confd
 	$pkgname.initd"

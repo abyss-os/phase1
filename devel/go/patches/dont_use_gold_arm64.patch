@@ -1,12 +1,12 @@
 diff --git a/src/cmd/link/internal/ld/lib.go b/src/cmd/link/internal/ld/lib.go
-index 0366bc7..4c5b3ff 100644
+index 644faeb..845ffcd 100644
 --- a/src/cmd/link/internal/ld/lib.go
 +++ b/src/cmd/link/internal/ld/lib.go
-@@ -1485,26 +1485,8 @@ func (ctxt *Link) hostlink() {
+@@ -1387,26 +1387,8 @@ func (ctxt *Link) hostlink() {
  			altLinker = "lld"
  		}
  
--		if ctxt.Arch.InFamily(sys.ARM, sys.ARM64) && objabi.GOOS == "linux" {
+-		if ctxt.Arch.InFamily(sys.ARM, sys.ARM64) && buildcfg.GOOS == "linux" {
 -			// On ARM, the GNU linker will generate COPY relocations
 -			// even with -znocopyreloc set.
 -			// https://sourceware.org/bugzilla/show_bug.cgi?id=19962
@@ -26,8 +26,8 @@ index 0366bc7..4c5b3ff 100644
 -					log.Fatalf("ARM external linker must be gold (issue #15696), but is not: %s", out)
 -				}
 -			}
-+		if objabi.GOOS == "linux" {
++		if buildcfg.GOOS == "linux" {
 +			altLinker = "lld"
  		}
  	}
- 	if ctxt.Arch.Family == sys.ARM64 && objabi.GOOS == "freebsd" {
+ 	if ctxt.Arch.Family == sys.ARM64 && buildcfg.GOOS == "freebsd" {

@@ -1,6 +1,6 @@
 pkgname=apk-tools
 pkgver=4.0.1
-pkgrel=0
+pkgrel=1
 pkgdesc="apk"
 makedepends="zlib-dev openssl-dev linux-dev"
 url="https://git.alpinelinux.org/cgit/apk-tools/"
@@ -10,7 +10,7 @@ source="$pkgname-$pkgver.tar.gz::https://github.com/abyss-os/apk-tools/archive/r
         repositories"
 
 build() {
-	make CC=$CC LUA=no static
+	make CC=$CC LUA=no VERSION=$pkgver static
 }
 
 package() {

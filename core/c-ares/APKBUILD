@@ -1,5 +1,5 @@
 pkgname=c-ares
-pkgver=1.17.1
+pkgver=1.17.2
 pkgrel=0
 pkgdesc="An asynchronously DNS/names resolver library"
 url="https://c-ares.haxx.se/"
@@ -35,4 +35,4 @@ package() {
 	make -j1 DESTDIR="$pkgdir" install
 }
 
-b2sums="31dac21ecae231e2a201dc1ba954c1a0663a06f93eb8e7e033ca3c6d385f53e07af0b04854739f1ee8a7f0693f67f620143e152ef092b49342c62279a0480905  c-ares-1.17.1.tar.gz"
+b2sums="c6f5ad65ca75f8467b624daf3caaee2f35d6e4714ce46ebe1bbf79447feecf8615915b00fa5e7bd1e97c6232864e06c53a792fbadf36a5399883529769273e24  c-ares-1.17.2.tar.gz"

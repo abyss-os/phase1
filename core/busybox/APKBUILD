@@ -1,5 +1,5 @@
 pkgname=busybox
-pkgver=1.33.1
+pkgver=1.34.0
 pkgrel=0
 pkgdesc="Size optimized toolbox of many common UNIX utilities"
 url="https://busybox.net/"
@@ -7,7 +7,8 @@ arch="all"
 license="GPL-2.0"
 makedepends="linux-dev bash"
 checkdepends="zip"
-triggers="busybox.trigger=/usr/bin"
+triggers="$pkgname.trigger=/usr/bin"
+install="$pkgname.post-install"
 provides="/bin/sh"
 source="https://busybox.net/downloads/$pkgname-$pkgver.tar.bz2
 	busyboxconfig"
@@ -47,5 +48,5 @@ aalt() {
 	done
 }
 
-b2sums="2dce3427ab7703c56cbb3bdc0c93c1fe1c6dc24c5b467b6213b8f9cf55223ec63136b3837970e41293cc3d55d320599945d29a69a4ef8b4b3ab9fb5e2a527632  busybox-1.33.1.tar.bz2
-5e58af938584edebf0c097bd2e58deb3b1376281d8cd54f2bc9b600d33d7fc5f0cba5ce28138f1f05a651fec4afd6bccd1a28b831358f752fcca7b6d4b46dfd6  busyboxconfig"
+b2sums="ea8b06c08ce0abf0fc2742a3231417d169aa0ad7024bb3672816c8ab410d8df11836f68e5e1ac0c7358e2c50a796a114ee4a67bacb1022b2c48daafa98cfc8e5  busybox-1.34.0.tar.bz2
+af247b822e42bfee4523a001cb1c29bcfb7d5345ce03e689480d88119c85ef2e1a49034173f43d237140fcdd30656acdaec67b2b24e46db3ecd3708dfa30198e  busyboxconfig"

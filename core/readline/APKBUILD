@@ -1,6 +1,6 @@
 pkgname=readline
-pkgver=8.1.0
-pkgrel=2
+pkgver=8.1.1
+pkgrel=0
 _myver=${pkgver%.*}
 pkgdesc="GNU readline library"
 url="https://tiswww.cwru.edu/php/chet/readline/rltop.html"
@@ -65,4 +65,5 @@ libhistory() {
 
 b2sums="f0feca1ea3517b2b613adacac8c997cce0e86aa2f410c82a40ce1a2e128067112b4c68dbf25b808291c28c47583345abac994ce10b8d117958afcb96ee5e7c69  readline-8.1.tar.gz
 eff138ed1ddc2810cce0ce4eacf2587d4a1b9f489692863f0e78d720456a316df43787dd21df4ad6d617c3c7d766a6e81fb8ba5ba460e6717b799bf7c60b98f1  fix-ncurses-underlinking.patch
-152befdb21662d434c217cc9a4ba61bfc0889ccca85f0422a7796bf595731f3184f5592fa9a09d743feca5ee01a69ddfb9cf7c62d3d388b6eb688b9c9025f6e7  inputrc"
+152befdb21662d434c217cc9a4ba61bfc0889ccca85f0422a7796bf595731f3184f5592fa9a09d743feca5ee01a69ddfb9cf7c62d3d388b6eb688b9c9025f6e7  inputrc
+7ec4e5c39a224a70643b44b88bcfef5198e199c76f2a34f0b0ce24f1747dd46be49ddf93871c474cda64322b4358127fec4c2401d19422f84934546bbe1f3bf2  readline81-001.diff"

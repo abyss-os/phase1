@@ -1,26 +1,18 @@
 pkgname=iptables
 pkgver=1.8.7
-pkgrel=1
+pkgrel=2
 pkgdesc="Linux kernel firewall, NAT and packet mangling tools"
 url="https://www.netfilter.org/projects/iptables/index.html"
 arch="all"
 license="GPL-2.0-or-later"
 depends="libnftnl"
-makedepends="libnftnl-dev bison flex autoconf automake linux-dev"
+makedepends="libnftnl-dev bison flex autoconf automake linux-dev libpcap-dev"
 subpackages="$pkgname-doc $pkgname-dev $pkgname-openrc"
 source="https://www.netfilter.org/projects/iptables/files/iptables-$pkgver.tar.bz2
 	iptables.initd
 	iptables.confd
 	ip6tables.confd
 	"
-builddir="$srcdir/$pkgname-$pkgver"
-
-prepare() {
-	default_prepare
-
-	sed -i -e '/if_packet/i#define __aligned_u64 __u64 __attribute__((aligned(8)))' \
-		extensions/libxt_pkttype.c
-}
 
 build() {
 	export CFLAGS="$CFLAGS -D_GNU_SOURCE"
@@ -34,11 +26,9 @@ build() {
 		--without-kernel \
 		--enable-devel \
 		--enable-libipq \
-		--enable-shared
-
-	# do not use rpath
-	sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
-	sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
+		--enable-shared \
+        --enable-bpf-compiler \
+        --enable-nfsynproxy
 
 	make
 }
@@ -50,6 +40,18 @@ package() {
 	install -D -m644 "$srcdir"/iptables.confd "$pkgdir"/etc/conf.d/iptables
 	install -D -m755 "$srcdir"/iptables.initd "$pkgdir"/etc/init.d/ip6tables
 	install -D -m644 "$srcdir"/ip6tables.confd "$pkgdir"/etc/conf.d/ip6tables
+
+    # nft whether you like it or not
+    find $pkgdir/usr/bin -type l -delete
+    for t in arptables ebtables iptables; do
+        ln -s xtables-nft-multi $pkgdir/usr/bin/$t
+        ln -s xtables-nft-multi $pkgdir/usr/bin/${t}-restore
+        ln -s xtables-nft-multi $pkgdir/usr/bin/${t}-save
+    done
+    # some extra ones
+    for t in iptables-translate ip6tables-translate xtables-monitor; do
+        ln -s xtables-nft-multi $pkgdir/usr/bin/$t
+    done
 }
 
 b2sums="fd4dcff142eaadde2a14ce3eb5e45d41c326752553b52900c77fd2e2a20c0685d0a04b95755995e914df47658834d52216d6465c2ae9cd6abc6eb122b95cc976  iptables-1.8.7.tar.bz2

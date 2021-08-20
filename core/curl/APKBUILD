@@ -1,6 +1,6 @@
 pkgname=curl
-pkgver=7.77.0
-pkgrel=1
+pkgver=7.78.0
+pkgrel=0
 pkgdesc="URL retrival utility and library"
 url="https://curl.haxx.se/"
 arch="all"

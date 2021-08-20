@@ -1,13 +1,13 @@
 pkgname=ncurses
-pkgver=6.2_p20210220
+pkgver=6.2_p20210814
 _ver=${pkgver/_p/-}
 pkgrel=0
 pkgdesc="Console display library"
 url="https://www.gnu.org/software/ncurses/"
 arch="all"
-options="!check" # "tests" are actual demo programs, not a test suite.
+options="!check"
 license="MIT"
-subpackages="$pkgname-dev $pkgname-doc"
+subpackages="$pkgname-dev $pkgname-doc $pkgname-terminfo:terminfo:noarch"
 source="https://invisible-mirror.net/archives/ncurses/current/ncurses-${_ver}.tgz"
 builddir="$srcdir"/ncurses-$_ver
 replaces="$pkgname-libs"
@@ -70,4 +70,14 @@ dev() {
 	ln -s libncurses.so "$subpkgdir"/usr/lib/libcurses.so
 }
 
-b2sums="e4e3fd33a4fb86a31f43fb5f6f93260c54e6be966bc21d4cfebe6ecd2394056e83fde897ceb7b220a724f6e9b508d4c1217a1b0e79d59ff2784c93ddb3bc64c8  ncurses-6.2-20210220.tgz"
+terminfo() {
+    pkgdesc="$pkgdesc"
+
+    mkdir -p "$subpkgdir"/usr/share "$subpkgdir"/usr/lib $subpkgdir/etc
+    mv "$pkgdir"/etc/terminfo/ "$subpkgdir"/etc/
+    mv "$pkgdir"/usr/share/terminfo "$subpkgdir"/usr/share
+    # also move symlink
+    mv "$pkgdir"/usr/lib/terminfo "$subpkgdir"/usr/lib/
+}
+
+b2sums="ce68cf928bb24fba0e7c1a1c13052e79b5ab3156028f84d4da0f352ef190ea9d0f1f6f5fd62fefe74b6e65c606806cec60d7d60f614ecbd410c82bc443c7d932  ncurses-6.2-20210814.tgz"

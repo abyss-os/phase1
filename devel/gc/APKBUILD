@@ -1,0 +1,28 @@
+pkgname=gc
+pkgver=8.0.4
+pkgrel=0
+pkgdesc="A garbage collector for C and C++"
+url="https://hboehm.info/gc/"
+arch="all"
+license="custom:GPL-like"
+makedepends="linux-dev"
+subpackages="$pkgname-dev $pkgname-doc"
+source="http://hboehm.info/gc/gc_source/gc-$pkgver.tar.gz"
+
+build() {
+	export CFLAGS="$CFLAGS -D_GNU_SOURCE -DNO_GETCONTEXT -DUSE_MMAP -DHAVE_DL_ITERATE_PHDR"
+	./configure \
+		--build=$CBUILD \
+		--host=$CHOST \
+		--prefix=/usr \
+		--datadir=/usr/share/doc/gc \
+		--enable-static \
+		--enable-cplusplus
+	make
+}
+
+package() {
+	make DESTDIR="$pkgdir" install
+}
+
+b2sums="ec42378c964fc573e53f6f58aa22fa63a0b421c91b81336acfeb2e2afdb5c89514edace3a9500699e13ff1cadc4205ea245af4f0dfa5e439ed9b78cabf6058f7  gc-8.0.4.tar.gz"

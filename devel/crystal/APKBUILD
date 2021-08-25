@@ -14,7 +14,7 @@ source="$pkgname-$pkgver.tar.gz::https://github.com/crystal-lang/$pkgname/archiv
 	https://dev.alpinelinux.org/archive/crystal/crystal-$_bootver-x86_64-alpine-linux-musl.tar.gz
 	https://dev.alpinelinux.org/archive/crystal/crystal-$_bootver-aarch64-alpine-linux-musl.tar.gz"
 builddir="$srcdir/$pkgname-$pkgver"
-provides="$pkgname-bootstrap=$pkgname-r$pkgrel"
+provides="$pkgname-bootstrap=$pkgver-r$pkgrel"
 
 _coredir="/usr/lib/$pkgname/core"
 _shardsdir="/usr/lib/$pkgname/shards"

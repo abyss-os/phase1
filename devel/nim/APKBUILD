@@ -1,41 +1,34 @@
 pkgname=nim
 pkgver=1.4.8
-pkgrel=0
+pkgrel=1
 pkgdesc="A systems and applications programming language"
 url="https://nim-lang.org/"
 arch="all"
 license="MIT"
-subpackages="$pkgname-dev"
-depends="libucontext-dev"
-#makedepends="nim-bootstrap"
+depends="pcre"
+makedepends="nim-bootstrap nim-dev libucontext-dev"
 source="https://nim-lang.org/download/$pkgname-$pkgver.tar.xz"
 builddir="$srcdir/$pkgname-$pkgver"
 provides="nim-bootstrap=$pkgver-r$pkgel"
 
 build() {
-	./build.sh
-	./bin/nim c koch
+	msg koch
+	nim compile -d:release koch
+	msg boot
 	./koch boot -d:release
+	msg tools
 	./koch tools -d:release
 }
 
 package() {
 	mkdir -p $pkgdir/usr/bin
-	#DESTDIR="$pkgdir" ./install.sh /usr/bin
-    DESTDIR="$pkgdir" ./koch install /usr/bin
+	DESTDIR="$pkgdir" ./koch install /usr/bin
+	rm -rf $pkgdir/usr/share/doc
+	install -D -m755 tools/niminst/niminst $pkgdir/usr/bin/
+	for t in nim-gdb nim-gdb.bash nimble nimfind nimgrep nimpretty nimsuggest testament; do
+		install -D -m755 bin/$t $pkgdir/usr/bin/
+	done
 
-#	for f in nimble nimsuggest nimgrep; do
-#		cp ./bin/$f $pkgdir/usr/bin/;
-#	done
-
-#	cd "$pkgdir"
-#	mkdir -p usr/include
-#	local file; for file in usr/lib/nim/*.h; do
-#		mv $file usr/include/
-#		ln -s ../../include/${file##*/} usr/lib/nim/${file##*/}
-#	done
-
-#	rm -rf $pkgdir/usr/share/doc
 }
 
 b2sums="961b38275c4f9de87ac522c5b47368ce7f5543811a2dfd7b4f3fd79a104bcd0458caaaaab1705f99eb42c64735ca5f71d5018f8a8275a430d883233b28b1d412  nim-1.4.8.tar.xz"

@@ -1,5 +1,5 @@
 pkgname=util-linux
-pkgver=2.36.2
+pkgver=2.37.2
 
 case $pkgver in
 	*.*.*) _v=${pkgver%.*};;
@@ -14,26 +14,12 @@ license="GPL-2.0 GPL-2.0-or-later LGPL-2.0-or-later BSD Public-Domain"
 depends="findmnt"
 makedepends="zlib-dev ncurses-dev linux-dev libcap-ng-dev acl-dev attr-dev autoconf automake libtool"
 options="suid"
-source="https://www.kernel.org/pub/linux/utils/$pkgname/v${_v}/$pkgname-$pkgver.tar.xz
-	ttydefaults.h
-	"
+source="https://www.kernel.org/pub/linux/utils/$pkgname/v${_v}/$pkgname-$pkgver.tar.xz"
 subpackages="$pkgname-doc $pkgname-dev $pkgname-bash-completion:bashcomp:noarch
 	libuuid libblkid libmount libsmartcols libfdisk sfdisk cfdisk
 	findmnt:_findmnt mcookie blkid setpriv"
 
-builddir="$srcdir/$pkgname-$pkgver"
-prepare() {
-	default_prepare
-
-	cd "$builddir"
-	cp "$srcdir"/ttydefaults.h include/
-	libtoolize --force && aclocal -I m4 && autoconf \
-		&& automake --add-missing
-}
-
 build() {
-	cd "$builddir"
-
 	# login utils are provided by shadow (with PAM) or busybox (no PAM) --nenolod
 		./configure \
 		--build=$CBUILD \
@@ -151,5 +137,4 @@ _findmnt() {
 	mv "$pkgdir"/usr/bin/findmnt "$subpkgdir"/usr/bin
 }
 
-b2sums="17e49515f8d0430f3ed26b80bf1d6e811d847141020d0dae1340dc92887549b7b711f3db6e3913120871fc912435def73586a7aef09d8d9cc6ff7ca331b2770f  util-linux-2.36.2.tar.xz
-db5861e6f809b1537a065e5af769bf539c9f96889cf39b703f5b1575a982d9f13fc37e46c8282c2d90f69bc4998bd1bc013db4336871a382ad2f0d5a045df231  ttydefaults.h"
+b2sums="40ab80485781dfc58e6d0e98dae115b96f11ee0cc370524e1e13d3c4a4dfed3a5a4a248311f8ca645f6f84bbaf4785412ca8282b840af4e37a01312764885abe  util-linux-2.37.2.tar.xz"

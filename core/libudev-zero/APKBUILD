@@ -1,0 +1,23 @@
+pkgname=libudev-zero
+pkgver=0.5.2
+pkgrel=0
+pkgdesc="Daemonless replacement for libudev"
+url="https://github.com/illiliti/libudev-zero"
+arch="all"
+license="ISC"
+options="!check"
+makedepends="linux-dev"
+replaces="udev"
+provides="udev"
+provider_priority=10
+subpackages="$pkgname-dev"
+source="$pkgname-$pkgver.tar.gz::https://github.com/illiliti/libudev-zero/archive/$pkgver.tar.gz"
+
+build() {
+	make PREFIX=/usr
+}
+
+package() {
+	make DESTDIR=$pkgdir PREFIX=/usr install
+}
+b2sums="367a6b6b8192f7b4e06fd6da4ad3e89af49fcc3994e6e3b5b192467614d65995302d5c2f461435d247833b62f3a43aaa49068f68b2c3e9e7570bef6d45666b45  libudev-zero-0.5.2.tar.gz"

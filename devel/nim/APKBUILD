@@ -6,18 +6,18 @@ url="https://nim-lang.org/"
 arch="all"
 license="MIT"
 depends="pcre"
-makedepends="nim-bootstrap nim-dev libucontext-dev"
+makedepends="nim-bootstrap libucontext-dev"
 source="https://nim-lang.org/download/$pkgname-$pkgver.tar.xz"
 builddir="$srcdir/$pkgname-$pkgver"
 provides="nim-bootstrap=$pkgver-r$pkgel"
 
 build() {
 	msg koch
-	nim compile -d:release koch
+	nim compile -d:release --cc:env koch
 	msg boot
-	./koch boot -d:release
+	./koch boot -d:release --cc:env
 	msg tools
-	./koch tools -d:release
+	./koch tools -d:release --cc:env
 }
 
 package() {

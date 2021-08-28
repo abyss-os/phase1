@@ -13,11 +13,11 @@ provides="nim-bootstrap=$pkgver-r$pkgel"
 
 build() {
 	msg koch
-	nim compile -d:release --cc:env koch
+	nim compile -d:release koch
 	msg boot
-	./koch boot -d:release --cc:env
+	./koch boot -d:release
 	msg tools
-	./koch tools -d:release --cc:env
+	./koch tools -d:release
 }
 
 package() {

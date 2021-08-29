@@ -1,6 +1,6 @@
 pkgname=zerotier-one
-pkgver=1.6.2
-pkgrel=1
+pkgver=1.6.5
+pkgrel=0
 pkgdesc="ZeroTier One allows systems to join and participate in ZeroTier virtual networks."
 url="https://www.zerotier.com/"
 arch="all"
@@ -8,15 +8,11 @@ license="GPL-3.0-or-later"
 makedepends="linux-dev binutils"
 subpackages="$pkgname-doc $pkgname-openrc"
 source="$pkgname-$pkgver.tar.gz::https://github.com/zerotier/ZeroTierOne/archive/$pkgver.tar.gz
-	zerotier-one.initd
-	ppc64le-make-linux.patch
-	fix-missing-include.patch
-	"
+	zerotier-one.initd"
 builddir="$srcdir"/ZeroTierOne-$pkgver
 
 build() {
-	# XXX: fixme
-	make LD=gnu-ld AS=gnu-as
+    make AS=gnu-as
 }
 
 check() {
@@ -30,7 +26,5 @@ package() {
 		"$pkgdir"/etc/init.d/$pkgname
 }
 
-b2sums="91da6c85f8d3dfd993a9aea9cd2a8b33e560d5475413fde8bef0a69df7d89503a66b1967ac336bd2213f6ffc35e452f665d37ceb8d9ae53cf5e5d4d352775e74  zerotier-one-1.6.2.tar.gz
-09f1149b6f620c3337d85f389e3e11774d094c61c38ed0a11e4a4f7cc63e5931274f6afad3bc9d7d3b0e73b474d6e2c141fbf898e007385cebfd34bba89ee21b  zerotier-one.initd
-ac80c6330c4aee511ba3539bc3a4b9afab00be490d02bbf91292afbacccba905f3c3587abeae8c6fe13a26afbcfc24fdee82700aef3f02bdbe38aef828292ffc  ppc64le-make-linux.patch
-ea0a503e8329f90d65d5c292aa69998ec81f53dadaa1713c25b461a51507984af62cac589d69582457be86c212537f9ac498d970a0e3949d31f81611b61ba914  fix-missing-include.patch"
+b2sums="72c207b1ca27745b836bd7db688cf0492e7a643688eac844f4820abe2694859ac567971071f920e4dfc3666f9582d86f3fdccf99c9c8cde9e04e6eee2a372d23  zerotier-one-1.6.5.tar.gz
+09f1149b6f620c3337d85f389e3e11774d094c61c38ed0a11e4a4f7cc63e5931274f6afad3bc9d7d3b0e73b474d6e2c141fbf898e007385cebfd34bba89ee21b  zerotier-one.initd"

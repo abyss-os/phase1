@@ -37,17 +37,12 @@ esac
 prepare() {
 	default_prepare
 	mkdir -p "$_builddir" && cd "$_builddir"
-	cp -v "$srcdir"/config."${ARCH:-$CARCH}" .config
-
-	_make listnewconfig oldconfig
+	cp -v "$srcdir"/config."$CARCH" .config
 }
 
 build() {
 	cd "$_builddir"
-	case $CARCH in
-		ppc64le|riscv64) _make headers ;;
-		*) _make ;;
-	esac
+	_make
 }
 
 package() {
@@ -65,10 +60,7 @@ package() {
 
 	# modules are disabled at the moment
 	#_make install modules_install headers_install
-	case $CARCH in
-		ppc64le|mips64*|riscv64) _make headers_install ;;
-		*) _make install headers_install ;;
-	esac
+     _make install headers_install
 
 	install -d "$pkgdir"/usr
 	mv -v "$pkgdir"/lib "$pkgdir"/usr/

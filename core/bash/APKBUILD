@@ -1,5 +1,5 @@
 pkgname=bash
-pkgver=5.1.4
+pkgver=5.1.8
 _patchlevel=${pkgver##*.}
 _myver=${pkgver%.*}
 _patchbase=${_myver/./}
@@ -30,14 +30,6 @@ done
 builddir="$srcdir/$pkgname-$_myver"
 
 prepare() {
-	cd "$builddir"
-
-	# NOTE: This section is for applying the vendor patches, which are required to fix
-	# security holes.  `default_prepare` does *not* apply vendor patches in the format
-	# shipped with bash.  We also need to make sure vendor patches are applied before
-	# our own.
-	# If you disagree, please request an experimental rebuild with bash as /bin/sh,
-	# before removing this section.
 	for p in $source; do
 		case $p in
 		*/bash[0-9][0-9]-[0-9]*)
@@ -51,7 +43,6 @@ prepare() {
 }
 
 build() {
-	cd "$builddir"
 	./configure \
 		--build=$CBUILD \
 		--host=$CHOST \
@@ -69,13 +60,10 @@ build() {
 }
 
 check() {
-	cd "$builddir"
-	return 0
 	make test
 }
 
 package() {
-	cd "$builddir"
 	make DESTDIR="$pkgdir" install
 
 	rm -rf "$pkgdir"/usr/share/locale
@@ -93,4 +81,8 @@ b2sums="42059556694b604911b5b7936f94d42d8923f2931f3ebacefd95454274c7baadb1ec9762
 7918eb48d4afe91a167eed666f0d15ca220e002d824cfc5ebb753430144a8bf884e8895e6d050158153e08c115fb0b90659608ed98b18aec737e75b5e61098f3  bash51-001
 70336d2ef04c63fa29a625a2719c0b36f7e34818cadbb4b09e1434d72d6695dd882c758a00f2ea48f38d3918abc15f494780825b7d2f7cfc6c747a3be89ac497  bash51-002
 6dd284666273016d3b9007537502d75ad7c4e1347c3a13dcdab2325e4f191a149180ee86f9904fc96291ed8217e1d26dcd2b8b20c283ea616f322dbd293d1998  bash51-003
-dbbe2713c1cc4aa6de99366c1d91e136d1a7a86ac11108e8dd1aea3823ba0f9e005f48f1507acd1f86ce2f3c2f4ac60ae04ff066e5587229e7f19aefbe4d6e39  bash51-004"
+dbbe2713c1cc4aa6de99366c1d91e136d1a7a86ac11108e8dd1aea3823ba0f9e005f48f1507acd1f86ce2f3c2f4ac60ae04ff066e5587229e7f19aefbe4d6e39  bash51-004
+573dafdff4a0d11cf6c458d6a3c9087b728542000fce5e16266636444278b7a9b4c75b05e6de31648e2b1ad5ffc2b55336d9fec088ea2c4c6c854eb7e16527aa  bash51-005
+3b32c69cef9438f66afaad0279627567d6aac32fabbec5af899552427489f2a87b148a3886bc30139647ec4204241c2e77cad83cdae1251176b7ec54699e1445  bash51-006
+f2802bc7267efe69abecb5c4d0cf5879bb57219e9e972d4c74f86ca88f99ba4dd3d9314beaca9c426351ffe429ddb4a03615776f569bad9962df7c5094d52a28  bash51-007
+9820066c99c8ed5f6322fceb2346f8900ac77b6c50c75de39c9ff7472c33f78b054f8bd0493ce7a4b8e17c70456d867aa6791e892246bce64624549a95c3211d  bash51-008"

@@ -13,11 +13,6 @@ source="https://www.openssl.org/source/openssl-$pkgver.tar.gz"
 build() {
 	local _target _optflags
 
-	# openssl will prepend crosscompile always core CC et al
-	CC=${CC#${CROSS_COMPILE}}
-	CXX=${CXX#${CROSS_COMPILE}}
-	CPP=${CPP#${CROSS_COMPILE}}
-
 	# determine target OS for openssl
 	case "$CARCH" in
 	aarch64*) _target="linux-aarch64" ;;
@@ -41,10 +36,7 @@ build() {
 }
 
 check() {
-	case "${CARCH}" in
-		riscv64) echo skip;;
-		*) make test;;
-	esac
+    make TESTS=-test_afalg test
 }
 
 package() {
@@ -58,7 +50,6 @@ package() {
 
 _libcrypto() {
 	pkgdesc="Crypto library from openssl"
-	replaces="libressl2.7-libcrypto"
 	mkdir -p "$subpkgdir"/usr/lib
 	mv "$pkgdir"/etc "$subpkgdir"/
 	mv "$pkgdir"/usr/lib/libcrypto* "$subpkgdir"/usr/lib/

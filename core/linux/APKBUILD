@@ -1,5 +1,5 @@
 pkgname=linux
-pkgver=5.12.8
+pkgver=5.13.13
 _pkgver=${pkgver/_/-}
 pkgrel=0
 pkgdesc="Linux kernel"
@@ -8,7 +8,6 @@ url="http://kernel.org"
 makedepends="bash flex bison gsed bc linux-dev openssl-dev findutils rsync ncurses-dev"
 options="!strip"
 source="https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/linux-$pkgver.tar.xz
-	kernel-no-perl.patch
 	config.aarch64
 	config.x86_64
 	config.riscv64
@@ -25,10 +24,20 @@ license="GPL-2.0"
 builddir="$srcdir"/linux-"$_pkgver"
 _builddir="$srcdir"/build
 
+# map for CARCH->kernel arch
+case $CARCH in
+    x86_64) KARCH=x86;;
+    aarch64) KARCH=arm64;;
+    mips64*) KARCH=mips;;
+    ppc64le) KARCH=powerpc;;
+    riscv64) KARCH=riscv;;
+    *) msg "Unknown arch"; return 1;;
+esac
+
 prepare() {
 	default_prepare
 	mkdir -p "$_builddir" && cd "$_builddir"
-	cp -v "$srcdir"/config."$CARCH" .config
+	cp -v "$srcdir"/config."${ARCH:-$CARCH}" .config
 
 	_make listnewconfig oldconfig
 }
@@ -75,26 +84,26 @@ _make() {
 		INSTALL_MOD_PATH="$pkgdir"/usr \
 		INSTALL_HDR_PATH="$pkgdir"/usr \
 		INSTALL_PATH="$pkgdir"/boot \
+        ARCH=$KARCH \
 		"$@"
 }
 _oldconfig() {
 	cd "$_builddir"
 	cp -v "$srcdir"/config."$CARCH" .config
 	_make oldconfig
-	mv -v .config "$startdir"/newconfig."$CARCH"
+	mv -v .config "$startdir"/config."$CARCH"
 }
 _menuconfig() {
 	cd "$_builddir"
 	[[ ! -f .config ]] && cp -v "$srcdir"/config."$CARCH" .config
 	_make menuconfig
-	cp -v .config "$startdir"/newconfig."$CARCH"
+	cp -v .config "$startdir"/config."$CARCH"
 }
 
-b2sums="c2d0c2239c5b440cc93e1e0e312511497eccf9e5cef61707c7f42fa924f66defdd4275575341b46b3ee45269c705dd2ba2e2c68fb1dd4ced438b852803180ddb  linux-5.12.8.tar.xz
-7d2686a5cbb0384e6daa7e1315988597fa4316913048ad0c8a118acc138403393843501549f6b4be0903b27abddba2bc2155b60d19116f51d8f225d950b403eb  kernel-no-perl.patch
-5e7a2d34c0bbafc07bfbaf20cf55149a7ee46fc64cbae015618cf96d095a470361c972f1e838f00949a7aa05adb1a0713245db1f1e59d46776b32bdcdf07b685  config.aarch64
-6b80f59f12a6fb293c9800a7b18097027ad18085827cefc6afd63375fe35a743644005ec7973ee5254d6c6d5cb8f0a957bc84a6ac3281ed00f2170ee5261025a  config.x86_64
-d28e84afbc73cb9ae069b74ac12bf6c6f651d50665ae33d05e8ba6fd3ac7b3eed789858823b17cb3ea134cc1c76a501e722ebe1429cb45c627fe5e981c65fc42  config.riscv64
-f7ec2129f67b2f3656484e5933a4eea1e15b4f3bcdc477d045d7f152621709c8d5c44d575f0c1cbb80eda6af1b409b3a9688a415fa1b7f1ed47f8bf2ec01493b  config.mips64
-f7ec2129f67b2f3656484e5933a4eea1e15b4f3bcdc477d045d7f152621709c8d5c44d575f0c1cbb80eda6af1b409b3a9688a415fa1b7f1ed47f8bf2ec01493b  config.mips64el
-d28e84afbc73cb9ae069b74ac12bf6c6f651d50665ae33d05e8ba6fd3ac7b3eed789858823b17cb3ea134cc1c76a501e722ebe1429cb45c627fe5e981c65fc42  config.ppc64le"
+b2sums="c763adef68a11c42a6e9435522300c5327a9dd3c8b25f1c41e0fdc536e224aac83dbb13d86bb52973304520f1cc28c4c9158baddf6087af54b1e5fbe010be485  linux-5.13.13.tar.xz
+7d291a7657571e106c8a071420d7fa4bfccb97a3acff6533d746fcb222f022f51a1abf370289abdee3f17b40a724d8f01b37a7a865e0bbb4b166494980ce4a8d  config.aarch64
+f906125cc6412148160a54cd5ebf8d63e2db45bbec32423133418b766ffa0c8531f48a9004da8b3a1a342535bcfa039edd9952fc0f08a0a97e9618c34236bdb3  config.x86_64
+2c6ecaf3b29d9d12447bb7ea8f92eb4fdc052788904854b3f5e0f51328465e9d0a0ed474322c192b345d4e9a7b79b37a7c291e1cd6d0d699a6fbf9cb7b1fcfeb  config.riscv64
+52df7f1ea912baa5f7efd0a2a71ef8843367fef6c833018d2f735d55d8518a932cbe8af6834b00cf6abb862b6754e0c2c59c8f9683d601ffde0144fac42dac26  config.mips64
+e06144f0f241c43096d9dcc72d52166b3b449b0bdffd15ddf6f629157409d81972a0087d5073e2197293b4b517955a68cd48b199ec0a1a6a10c609e37d136a14  config.mips64el
+1401196295273ae933b986a8b52276d678f58591c76b9626f96ffc414f889abcad08a6054bf92ed7395a774a48d3873794ed768658a028240c5271a7c4cf7363  config.ppc64le"

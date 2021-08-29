@@ -1,5 +1,5 @@
 pkgname=openssh
-pkgver=8.6_p1
+pkgver=8.7_p1
 _pkgver=${pkgver%_*}${pkgver#*_}
 pkgrel=0
 pkgdesc="Port of OpenBSD's free SSH release"
@@ -11,8 +11,6 @@ makedepends="openssl-dev zlib-dev libedit-dev linux-dev linux-pam-dev"
 subpackages="$pkgname-doc $pkgname-openrc"
 
 source="https://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/$pkgname-$_pkgver.tar.gz
-	fix-utmp.patch
-	sftp-interactive.patch
 	sshd.initd
 	sshd.confd
 	"
@@ -59,8 +57,6 @@ package() {
 	sed -i 's/#UseDNS yes/UseDNS no/' "$pkgdir"/etc/ssh/sshd_config
 }
 
-b2sums="261a0f1a6235275894d487cce37537755c86835e3a34871462fe29bfe72b49cd9a6b6a547aea4bd554f0957e110c84458cc75a5f2560717fb04804d62228562a  openssh-8.6p1.tar.gz
-7a561f2ac629a31d7a6a679dffbc5991e0a46fb926e12c2b62dc0bedcea89cbaa15129b4e57018f9aa391d26516a234c7dd0e455b8b9e87d66509630bd3ecc89  fix-utmp.patch
-5bceac66a1396b688ee7f9215fb7cbb9c23f811bcb23760980683b4130ab1e251ce974c4e28036452c8f6b42fd8b6c24e0df3121598e6db777a169133d4a2d84  sftp-interactive.patch
+b2sums="9fdb8898485053d08c9eca419c15d0d03b7a60152cf6a9d7f1beed3a21c9e6ac3bd9f854580e6e474fb0c871f3d4be9ef4b49bee8c355d9e5769a5505f4e6ea9  openssh-8.7p1.tar.gz
 1710b87e98c05800a5b92bd40c808cf0c1534817203fa048579b006732c177b6e036f7b79ed1e5d6fc3cd3812220fa6f3cfc6d699bdad05ca53714825c511d02  sshd.initd
 31fde16600eb14d1e7e4dafb17c131f27b7c74fe4929da9866b88267f641f62033fdf061fd96fa3c4e6cccbe0d3eaf179861779e63a0d6d2edc118e032d4f693  sshd.confd"

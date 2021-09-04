@@ -15,7 +15,6 @@ source="https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/linux-$pkgver.t
 	config.mips64el
 	config.ppc64le
 	"
-install="$pkgname.pre-upgrade"
 subpackages="$pkgname-dev"
 
 arch="all"
@@ -42,30 +41,34 @@ prepare() {
 
 build() {
 	cd "$_builddir"
-	_make
+    _make
+    case $CARCH in
+        aarch64) _make dtbs;;
+    esac
 }
 
 package() {
 	cd "$_builddir"
-	install -d "$pkgdir"/boot "$pkgdir"/lib/modules
+	install -d "$pkgdir"/boot "$pkgdir"/usr/lib/modules
 
-	case "$CARCH" in
-		arm*)
-			install -d "$pkgdir"/boot/dtb
-			for i in arch/arm/boot/dts/*.dtb; do
-				install -m644 "$i" ${pkgdir}/boot/dtb/
+	case $CARCH in
+		aarch64)
+			install -d $pkgdir/boot/dtb
+			for i in $_builddir/arch/arm64/boot/dts/*.dtb; do
+				install -m644 "$i" $pkgdir/boot/dtb/
 			done
 			;;
 	esac
 
 	# modules are disabled at the moment
 	#_make install modules_install headers_install
-     _make install headers_install
+     _make headers_install
 
-	install -d "$pkgdir"/usr
-	mv -v "$pkgdir"/lib "$pkgdir"/usr/
-
-    mv -v $pkgdir/boot/vmlinuz $pkgdir/boot/vmlinuz-$pkgver
+    case $CARCH in
+        x86_64) _make install && mv -v $pkgdir/boot/vmlinuz $pkgdir/boot/vmlinuz-$pkgver;;
+        aarch64) _make install;;
+        *) msg "No kernel yet";;
+    esac
 }
 
 # DO NOT USE THESE FUNCTIONS UNLESS YOU'RE A DEV AND KNOW WHAT YOU'RE DOING AND WHY
@@ -92,10 +95,9 @@ _menuconfig() {
 	cp -v .config "$startdir"/config."$CARCH"
 }
 
-b2sums="c763adef68a11c42a6e9435522300c5327a9dd3c8b25f1c41e0fdc536e224aac83dbb13d86bb52973304520f1cc28c4c9158baddf6087af54b1e5fbe010be485  linux-5.13.13.tar.xz
-fd31bb26478e85640d0569f08f0aa51b9a96fb80687ca51c4e34c53914ed59d92c0fa5de50bfe3d74e6308dbaa5e1d2ab569fe59120eba8d74e13f471039f3fb  config.aarch64
-a2ac415ec1ff025e1aa889c223f3a41a7414c29578609c2c2ebb548e374666b8729ecdbe0f52ce2312a136f4d3bb658652eeaa1c2a7138bc3597c0d42524345d  config.x86_64
-2c6ecaf3b29d9d12447bb7ea8f92eb4fdc052788904854b3f5e0f51328465e9d0a0ed474322c192b345d4e9a7b79b37a7c291e1cd6d0d699a6fbf9cb7b1fcfeb  config.riscv64
+b2sums="54af77285efbe9162e70d1e837529a2c5d7833f50f390503cf59ab9dee11765fc931884d8c06a4b875ebba79d98d01684606839a10a997deda52fbaa80b07dcd  config.aarch64
 52df7f1ea912baa5f7efd0a2a71ef8843367fef6c833018d2f735d55d8518a932cbe8af6834b00cf6abb862b6754e0c2c59c8f9683d601ffde0144fac42dac26  config.mips64
 e06144f0f241c43096d9dcc72d52166b3b449b0bdffd15ddf6f629157409d81972a0087d5073e2197293b4b517955a68cd48b199ec0a1a6a10c609e37d136a14  config.mips64el
-1401196295273ae933b986a8b52276d678f58591c76b9626f96ffc414f889abcad08a6054bf92ed7395a774a48d3873794ed768658a028240c5271a7c4cf7363  config.ppc64le"
+1401196295273ae933b986a8b52276d678f58591c76b9626f96ffc414f889abcad08a6054bf92ed7395a774a48d3873794ed768658a028240c5271a7c4cf7363  config.ppc64le
+2c6ecaf3b29d9d12447bb7ea8f92eb4fdc052788904854b3f5e0f51328465e9d0a0ed474322c192b345d4e9a7b79b37a7c291e1cd6d0d699a6fbf9cb7b1fcfeb  config.riscv64
+ffe348494b9059bc0bc6a0d07a94131b233e4b143e903bdb215e517f8230aabd66739775b667bf5ad2e2c2f2dd7f7f535ba00401abc16e3cac4fca39a3c03c4e  config.x86_64"

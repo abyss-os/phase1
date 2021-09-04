@@ -71,28 +71,3 @@ steps:
         from_secret: ABYSS_PRIVKEY
       ABYSS_PUBKEY:
         from_secret: ABYSS_PUBKEY
-
----
-kind: pipeline
-type: exec
-name: mips64
-
-platform:
-  os: linux
-  arch: mips64
-
-steps:
-  - name: build
-    commands:
-      - ./.scripts/drone.sh
-    environment:
-      GH_TOKEN:
-        from_secret: github_token
-      MC_HOST_master:
-        from_secret: MC_HOST_master
-      ABYSS_KEYBASE:
-        from_secret: ABYSS_KEYBASE
-      ABYSS_PRIVKEY:
-        from_secret: ABYSS_PRIVKEY
-      ABYSS_PUBKEY:
-        from_secret: ABYSS_PUBKEY

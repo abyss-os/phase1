@@ -1,12 +1,11 @@
 pkgname=dhcpcd
 pkgver=9.4.0
-pkgrel=0
+pkgrel=1
 pkgdesc="RFC2131 compliant DHCP client"
 url="https://roy.marples.name/projects/dhcpcd"
 arch="all"
 license="BSD-2-Clause"
 makedepends="linux-dev dbus-dev"
-install="$pkgname.post-upgrade"
 subpackages="$pkgname-doc $pkgname-openrc"
 source="https://github.com/rsmarples/dhcpcd/archive/$pkgname-$pkgver.tar.gz
 	busybox-logger.patch

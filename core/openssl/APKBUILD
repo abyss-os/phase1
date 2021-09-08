@@ -1,5 +1,5 @@
 pkgname=openssl
-pkgver=1.1.1l
+pkgver=3.0.0
 _abiver=${pkgver%.*}
 pkgrel=0
 pkgdesc="Toolkit for Transport Layer Security (TLS)"
@@ -29,7 +29,7 @@ build() {
 		--openssldir=/etc/ssl \
 		shared no-zlib $_optflags \
 		no-async no-comp no-idea no-mdc2 no-rc5 no-ec2m \
-		no-sm2 no-sm4 no-ssl2 no-ssl3 no-seed \
+		no-sm2 no-sm4 no-ssl3 no-seed \
 		no-weak-ssl-ciphers \
 		$CPPFLAGS $CFLAGS $LDFLAGS -Wa,--noexecstack
 	make
@@ -53,7 +53,7 @@ _libcrypto() {
 	mkdir -p "$subpkgdir"/usr/lib
 	mv "$pkgdir"/etc "$subpkgdir"/
 	mv "$pkgdir"/usr/lib/libcrypto* "$subpkgdir"/usr/lib/
-	mv "$pkgdir"/usr/lib/engines-$_abiver "$subpkgdir"/usr/lib/
+	mv "$pkgdir"/usr/lib/engines-${_abiver%.*} "$subpkgdir"/usr/lib/
 }
 
 _libssl() {
@@ -63,4 +63,4 @@ _libssl() {
 	mv "$pkgdir"/usr/lib/libssl* "$subpkgdir"/usr/lib/
 }
 
-b2sums="9e8739015db63a013c05587e3d164d67c3f65f1f6c5fc75e4592bcd038c036cde88a7bc95fbc1f1b4ed876f6124ca4dabcd4f5dbb45d1b84299f2efe1a59431a  openssl-1.1.1l.tar.gz"
+b2sums="64721ee958fc47d57a479dffff91be5692d80d10a6727d804f8a9da66fcaea799b67fda8987f9ecdfb2777ec42033c5e8a6a135e30784d6422eb3c65e676abe6  openssl-3.0.0.tar.gz"

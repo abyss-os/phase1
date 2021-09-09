@@ -45,4 +45,4 @@ package() {
 	rm -rf ${pkgdir}/usr/sbin
 }
 
-b2sums="cb0e5960112cc3ec2cd9c0a6fddce53f3aa81bf8a7327cac42c873ddce656042f738b3779d8a5f0e463edd11bd495add2c327d91d376dc49d958dadd9d56a14d  ca-certificates-20191127.tar.xz"
+b2sums="710b6177709f236012bdc6523f0cc67bbb9c7e9a7e0238fd6f25c8087e636d1cfd510ee47a2da3798df0dd75447d97d511fbeee3e697cf14718d4fab2018e0e2  ca-certificates-20191127.tar.bz2"

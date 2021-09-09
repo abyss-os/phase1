@@ -11,7 +11,6 @@ source="$pkgname-$pkgver.tgz::https://github.com/rhash/RHash/archive/v$pkgver.ta
 builddir="$srcdir/RHash-$pkgver"
 
 build() {
-	cd "$builddir"
 	./configure --prefix=/usr \
 		--enable-openssl \
 		--disable-openssl-runtime \
@@ -21,12 +20,10 @@ build() {
 }
 
 check() {
-	make -C "$builddir" test-shared
+	make test-shared
 }
 
 package() {
-	cd "$builddir"
-
 	make DESTDIR="$pkgdir" install
 	make DESTDIR="$pkgdir" \
 		install-lib-headers install-lib-shared install-lib-so-link

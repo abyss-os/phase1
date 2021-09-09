@@ -6,8 +6,7 @@ url="https://www.git-scm.com/"
 arch="all"
 license="GPL-2.0-or-later"
 makedepends="zlib-dev openssl-dev curl-dev expat-dev perl-dev pcre2-dev asciidoc xmlto perl-error gettext-tiny"
-# note that order matters
-subpackages="$pkgname-doc $pkgname-bash-completion:completion:noarch"
+subpackages="$pkgname-bash-completion:completion:noarch"
 source="https://www.kernel.org/pub/software/scm/git/git-$pkgver.tar.xz
 	git-daemon.initd
 	git-daemon.confd
@@ -35,9 +34,7 @@ build() {
 }
 
 package() {
-	make CC=$CC CXX=$CXX prefix=/usr DESTDIR="$pkgdir" INSTALLDIRS=vendor \
-		perllibdir=$(_perl_config vendorlib) \
-		install install-man
+	make CC=$CC CXX=$CXX prefix=/usr DESTDIR="$pkgdir" INSTALLDIRS=vendor install
 
 	mkdir -p "$pkgdir"/var/git
 	install -Dm755 "$srcdir"/git-daemon.initd "$pkgdir"/etc/init.d/git-daemon

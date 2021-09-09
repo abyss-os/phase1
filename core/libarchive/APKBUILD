@@ -5,7 +5,7 @@ pkgdesc="library that can create and read several streaming archive formats"
 url="https://libarchive.org/"
 arch="all"
 license="BSD-2-Clause BSD-3-Clause Apache-2.0"
-makedepends="acl-dev bzip2-dev expat-dev lz4-dev openssl-dev xz-dev zlib-dev zstd-dev samurai"
+makedepends="acl-dev bzip2-dev expat-dev lz4-dev openssl-dev xz-dev zlib-dev zstd-dev samurai cmake"
 subpackages="$pkgname-dev $pkgname-doc bsdtar bsdcpio bsdcat"
 source="https://www.libarchive.org/downloads/$pkgname-$pkgver.tar.gz"
 

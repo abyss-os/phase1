@@ -1,6 +1,6 @@
 pkgname=libarchive
-pkgver=3.5.1
-pkgrel=3
+pkgver=3.5.2
+pkgrel=0
 pkgdesc="library that can create and read several streaming archive formats"
 url="https://libarchive.org/"
 arch="all"
@@ -61,4 +61,4 @@ bsdcat() {
 	mv "$pkgdir"/usr/bin/bsdcat "$subpkgdir"/usr/bin/
 }
 
-b2sums="243dfda2bd4582bbc20679328b89aae0c530475c822dcf9ff25c65df2017b8f18bb616142d6ab016ccea4a5aa1b410d46b913c2ee0afefd2fdb1a41cf51585d9  libarchive-3.5.1.tar.gz"
+b2sums="1fc6ee0166573658dc5e0f170113c07ecdaa76b287cbf68bdee63ccd198dad615b3f2803a3fc1aed303cd1f7f32033e6d8e782ef6a8a991562cdc2a375894c9e  libarchive-3.5.2.tar.gz"

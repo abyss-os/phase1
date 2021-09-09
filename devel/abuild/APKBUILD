@@ -1,6 +1,6 @@
 pkgname=abuild
 pkgver=4.0.70
-pkgrel=0
+pkgrel=1
 pkgdesc="Script to build Abyss OS packages"
 url="https://github.com/abyss-os/abuild"
 arch="all"

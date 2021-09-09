@@ -5,8 +5,7 @@ pkgdesc="Cross-platform, open-source make system"
 url="https://www.cmake.org"
 arch="all"
 license="BSD-3-Clause"
-makedepends="bzip2-dev curl-dev expat-dev libarchive-dev linux-dev
-	libuv-dev ncurses-dev rhash-dev xz-dev zlib-dev cmake-bootstrap zstd-dev nghttp2-dev samurai"
+makedepends="bzip2-dev curl-dev expat-dev linux-dev libuv-dev ncurses-dev rhash-dev xz-dev zlib-dev zstd-dev nghttp2-dev samurai"
 options="!checkroot !check" # disable for now
 checkdepends="file musl-utils"
 subpackages="$pkgname-bash-completion"
@@ -21,33 +20,20 @@ source="https://www.cmake.org/files/$_v/cmake-${pkgver}.tar.gz"
 
 build() {
 	mkdir build && cd build
-	cmake	-G Ninja \
-		-DCMAKE_INSTALL_PREFIX=/usr \
-		-DCMAKE_USE_SYSTEM_BZIP2=ON \
-		-DCMAKE_USE_SYSTEM_CURL=ON \
-		-DCMAKE_USE_SYSTEM_EXPAT=ON \
-		-DCMAKE_USE_SYSTEM_FORM=OFF \
-		-DCMAKE_USE_SYSTEM_JSONCPP=OFF \
-		-DCMAKE_USE_SYSTEM_KWIML=OFF \
-		-DCMAKE_USE_SYSTEM_LIBARCHIVE=ON \
-		-DCMAKE_USE_SYSTEM_LIBLZMA=ON \
-		-DCMAKE_USE_SYSTEM_LIBRHASH=ON \
-		-DCMAKE_USE_SYSTEM_LIBUV=ON \
-		-DCMAKE_USE_SYSTEM_NGHTTP2=ON \
-		-DCMAKE_USE_SYSTEM_ZLIB=ON \
-		-DCMAKE_USE_SYSTEM_ZSTD=ON \
-	..
-	ninja -j${JOBS}
+        ../bootstrap \
+                --prefix=/usr \
+                --mandir=/share/man \
+                --datadir=/share/$pkgname \
+                --docdir=/share/doc/$pkgname \
+                --system-libs \
+                --no-system-jsoncpp \
+                --no-system-libarchive \
+                --parallel=${JOBS}
+        make -j${JOBS}
 }
 
 check() {
-	cd "$builddir/build"
-	# Excluded tests:
-	#	BootstrapTest: we actualy bootstrap it every time so why test it.
-	#	CMakeOnly.MajorVersionSelection-PythonInterp_2: we have no Python2
-	#	kwsys.testSystemTools: "TestFileAccess incorrectly indicated that this is a writable file:
-	# $builddir/build/Source/kwsys/testSystemToolsNewDir/testNewFile.txt"
-	#	BundleUtilities: Fails in CI
+	cd build
 	bin/ctest \
 		-j "$JOBS" \
 		--output-on-failure \
@@ -55,8 +41,8 @@ check() {
 }
 
 package() {
-	cd $startdir/src/$pkgname-$pkgver/build
-	DESTDIR="$pkgdir" ninja install
+	cd build
+	DESTDIR="$pkgdir" make install
 	rm -rf ${pkgdir}/usr/doc
 }
 

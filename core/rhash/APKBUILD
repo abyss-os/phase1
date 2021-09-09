@@ -2,7 +2,7 @@ pkgname=rhash
 pkgver=1.4.2
 pkgrel=0
 pkgdesc="Utility for calculation and verification of hash sums and magnet links"
-url="http://rhash.anz.ru"
+url="https://github.com/rhash/RHash"
 arch="all"
 license="custom"
 makedepends="openssl-dev"
@@ -13,7 +13,6 @@ builddir="$srcdir/RHash-$pkgver"
 build() {
 	./configure --prefix=/usr \
 		--enable-openssl \
-		--disable-openssl-runtime \
         --cc=$CC \
 		--extra-cflags="$CFLAGS"
 	make

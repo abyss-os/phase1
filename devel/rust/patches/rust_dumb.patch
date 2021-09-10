@@ -1,0 +1,39 @@
+diff --git a/compiler/rustc_interface/src/tests.rs b/compiler/rustc_interface/src/tests.rs
+index b1e4e3ba..c8b6f7c1 100644
+--- a/compiler/rustc_interface/src/tests.rs
++++ b/compiler/rustc_interface/src/tests.rs
+@@ -542,7 +542,7 @@ fn test_codegen_options_tracking_hash() {
+     untracked!(incremental, Some(String::from("abc")));
+     // `link_arg` is omitted because it just forwards to `link_args`.
+     untracked!(link_args, vec![String::from("abc"), String::from("def")]);
+-    untracked!(link_self_contained, Some(true));
++    untracked!(link_self_contained, Some(false));
+     untracked!(linker, Some(PathBuf::from("linker")));
+     untracked!(linker_flavor, Some(LinkerFlavor::Gcc));
+     untracked!(no_stack_check, true);
+diff --git a/compiler/rustc_session/src/options.rs b/compiler/rustc_session/src/options.rs
+index 172337ac..685be228 100644
+--- a/compiler/rustc_session/src/options.rs
++++ b/compiler/rustc_session/src/options.rs
+@@ -924,7 +924,7 @@ options! {
+         "extra arguments to append to the linker invocation (space separated)"),
+     link_dead_code: Option<bool> = (None, parse_opt_bool, [TRACKED],
+         "keep dead code at link time (useful for code coverage) (default: no)"),
+-    link_self_contained: Option<bool> = (None, parse_opt_bool, [UNTRACKED],
++    link_self_contained: Option<bool> = (Some(false), parse_opt_bool, [UNTRACKED],
+         "control whether to link Rust provided C objects/libraries or rely
+         on C toolchain installed in the system"),
+     linker: Option<PathBuf> = (None, parse_opt_pathbuf, [UNTRACKED],
+diff --git a/vendor/rustc-ap-rustc_session/src/options.rs b/vendor/rustc-ap-rustc_session/src/options.rs
+index c9f95ed1..869dc605 100644
+--- a/vendor/rustc-ap-rustc_session/src/options.rs
++++ b/vendor/rustc-ap-rustc_session/src/options.rs
+@@ -907,7 +907,7 @@ options! {
+         "extra arguments to append to the linker invocation (space separated)"),
+     link_dead_code: Option<bool> = (None, parse_opt_bool, [TRACKED],
+         "keep dead code at link time (useful for code coverage) (default: no)"),
+-    link_self_contained: Option<bool> = (None, parse_opt_bool, [UNTRACKED],
++    link_self_contained: Option<bool> = (Some(false), parse_opt_bool, [UNTRACKED],
+         "control whether to link Rust provided C objects/libraries or rely
+         on C toolchain installed in the system"),
+     linker: Option<PathBuf> = (None, parse_opt_pathbuf, [UNTRACKED],

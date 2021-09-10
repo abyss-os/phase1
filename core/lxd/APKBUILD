@@ -1,11 +1,11 @@
 pkgname=lxd
-pkgver=4.17
+pkgver=4.18
 pkgrel=0
 pkgdesc="a container hypervisor and a new user experience for LXC"
 url="https://linuxcontainers.org/lxd/"
 arch="all"
 license="Apache-2.0"
-depends="netcat-openbsd cgmanager squashfs-tools rsync shadow lxc iptables dnsmasq gtar iproute2"
+depends="netcat-openbsd cgmanager squashfs-tools rsync iptables dnsmasq gtar iproute2"
 makedepends="lxc-dev go dqlite-dev raft-dev sqlite-dev libuv-dev libcap-dev eudev-dev acl-dev"
 subpackages="$pkgname-bash-completion:bashcomp:noarch $pkgname-openrc"
 install="$pkgname.pre-install"
@@ -16,30 +16,25 @@ source="https://linuxcontainers.org/downloads/$pkgname/$pkgname-$pkgver.tar.gz
 	$pkgname.initd"
 
 build() {
-	export GOPATH="$builddir/_dist" CGO_CFLAGS="-Wno-error -Wignored-attributes" GO111MODULE=off CGO_LDFLAGS_ALLOW="(-Wl,-wrap,pthread_create)|(-Wl,-z,now)"
+	export CGO_CFLAGS="-Wno-error -Wignored-attributes" CGO_LDFLAGS_ALLOW="(-Wl,-wrap,pthread_create)|(-Wl,-z,now)"
 
-	go install -v -x -tags libsqlite3 github.com/lxc/lxd/lxd
-
-    for bin in lxc fuidshift lxc-to-lxd lxd-benchmark lxd-p2c lxd-agent; do
-        go install -v -x github.com/lxc/lxd/$bin
+    for bin in lxc lxd fuidshift lxc-to-lxd lxd-benchmark lxd-p2c lxd-agent; do
+        msg $bin
+        go build -o bin/$bin -x ./$bin
 	done
 }
 
 package() {
-	export GOPATH="$builddir/_dist"
-
-	cd ${GOPATH}
-	install -Dm755 bin/$pkgname "$pkgdir"/usr/bin/$pkgname
-	install -Dm755 bin/lxc "$pkgdir"/usr/bin/lxc
+    for bin in lxc lxd fuidshift lxc-to-lxd lxd-benchmark lxd-p2c lxd-agent; do
+        install -Dm755 bin/$bin $pkgdir/usr/bin/$bin
+	done
 
 	install -Dm755 "$srcdir"/lxd.initd \
 		"$pkgdir"/etc/init.d/lxd
 	install -Dm644 "$srcdir"/lxd.confd \
 		"$pkgdir"/etc/conf.d/lxd
 
-	for tool in fuidshift lxc-to-lxd lxd-benchmark lxd-p2c lxd-agent; do
-		install -Dm755 bin/$tool "$pkgdir"/usr/bin/$tool
-	done
+
 
     mkdir -p "$pkgdir"/var/lib/lxd
     chmod 755 "$pkgdir"/var/lib/lxd
@@ -57,6 +52,6 @@ bashcomp() {
 	cp scripts/bash/lxd-client "$subpkgdir"/usr/share/bash-completion/completions/lxd-client
 }
 
-b2sums="8d4ec6a63daa348cebb50e9cc7568626dfba39fc2e409fe562ed9fe115478754df5a10803c0bde10112d6f70e0236f276cdc14c62f9a6f2b505c04e0bc270443  lxd-4.17.tar.gz
+b2sums="96311473ade85065120211e9f046708f8cc03e0dccd47f70f470712f7a7d85c948773ec42908d3e28cd76f718130b7460856b0f297327ef9d843bc852c87998a  lxd-4.18.tar.gz
 a5318b21249418f216624709b22d6ee657d1f88c0b7fca6a74f9b8d1f557310fc31d350be852cf78bf542225ec2f93e70bb7e00799fa5d639912f2b1ac98e6fb  lxd.confd
 ed0c53b6255a320ff8c1a41da70ff495395b9a99d305ca25f9e017f7821e9a1caaef26677bf448107e235b6ee10bcd1181150c299dce55c1e7b70f5686105650  lxd.initd"

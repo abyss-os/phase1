@@ -9,11 +9,11 @@ makedepends="cargo openssl-dev"
 source="$pkgname-$pkgver.tar.gz::https://github.com/mozilla/sccache/archive/v$pkgver.tar.gz"
 
 build() {
-	env RUSTFLAGS="-C linker=$CC" cargo build --release --locked
+	env RUSTFLAGS="-Clinker=$CC -Clink-self-contained=no" cargo build --release --locked
 }
 
 check() {
-	env RUSTFLAGS="-C linker=$CC" cargo test --release --locked
+	env RUSTFLAGS="-Clinker=$CC -Clink-self-contained=no" cargo test --release --locked
 }
 
 package() {

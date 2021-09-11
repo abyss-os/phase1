@@ -13,10 +13,6 @@ build() {
 	env RUSTFLAGS="-Clinker=$CC" cargo build --release
 }
 
-check() {
-	env RUSTFLAGS="-Clinker=$CC -Clink-self-contained=no" cargo test --release
-}
-
 package() {
 	install -Dm0755 target/release/$pkgname -t "$pkgdir"/usr/bin
 }

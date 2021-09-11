@@ -1,14 +1,16 @@
 pkgname=openssl
 pkgver=3.0.0
+_commit=0ce9b022cb421b564bed9ebc9469e96258ec175d
 _abiver=${pkgver%.*}
-pkgrel=0
+pkgrel=1
 pkgdesc="Toolkit for Transport Layer Security (TLS)"
 url="https://www.openssl.org"
 arch="all"
 license="OpenSSL"
 makedepends="perl linux-dev"
 subpackages="$pkgname-dev $pkgname-doc libcrypto$_abiver:_libcrypto libssl$_abiver:_libssl"
-source="https://www.openssl.org/source/openssl-$pkgver.tar.gz"
+source="$pkgname-$pkgver.tar.gz::https://github.com/quictls/openssl/archive/$_commit.tar.gz"
+builddir=$srcdir/$pkgname-$_commit
 
 build() {
 	local _target _optflags
@@ -63,4 +65,4 @@ _libssl() {
 	mv "$pkgdir"/usr/lib/libssl* "$subpkgdir"/usr/lib/
 }
 
-b2sums="64721ee958fc47d57a479dffff91be5692d80d10a6727d804f8a9da66fcaea799b67fda8987f9ecdfb2777ec42033c5e8a6a135e30784d6422eb3c65e676abe6  openssl-3.0.0.tar.gz"
+b2sums="e586242bc34db3ca06ce3f563584eaf34d8c9db0df6ca1fd7ac0eb2214e4202ceb45436ee41f45963241014652eb8a977c5548bbe4b5c9fa2bd2740602060739  openssl-3.0.0.tar.gz"

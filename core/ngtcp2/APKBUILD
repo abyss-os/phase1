@@ -1,7 +1,7 @@
 pkgname=ngtcp2
 pkgver=0.0.20210911.0314
 _commit=becfcafedd9c5508c3d95bb1bb77915cf3dc8f09
-pkgrel=0
+pkgrel=1
 pkgdesc="ngtcp2"
 url="https://nghttp2.org"
 arch="all"

@@ -1,0 +1,49 @@
+pkgname=tor
+pkgver=0.4.6.7
+pkgrel=0
+pkgdesc="Anonymous network connectivity"
+url="https://www.torproject.org/"
+arch="all"
+license="BSD-3-Clause"
+pkgusers="tor"
+makedepends="libcap-dev libseccomp-dev libevent-dev openssl-dev ca-certificates zlib-dev xz-dev zstd-dev"
+install="$pkgname.pre-install"
+subpackages="$pkgname-openrc"
+source="https://www.torproject.org/dist/tor-$pkgver.tar.gz
+	tor.initd
+	tor.confd"
+
+build() {
+	./configure \
+		--build="$CBUILD" \
+		--host="$CHOST" \
+		--prefix=/usr \
+		--sysconfdir=/etc \
+		--localstatedir=/var \
+		--mandir=/usr/share/man \
+		--disable-html-manual \
+		--enable-zstd \
+		--disable-asciidoc \
+		--disable-manpage
+	make
+}
+
+check() {
+	make test
+}
+
+package() {
+	make DESTDIR="$pkgdir" install
+
+	install -dm0755 -o "$pkgusers" \
+		"$pkgdir"/var/lib/"$pkgname" \
+		"$pkgdir"/var/log/"$pkgname"
+
+	install -Dm0755 "$srcdir"/"$pkgname".initd \
+		"$pkgdir"/etc/init.d/"$pkgname"
+	install -Dm0644 "$srcdir"/"$pkgname".confd \
+		"$pkgdir"/etc/conf.d/"$pkgname"
+}
+b2sums="da6b0fe0de6a334713cf881dece6ef5a932b0f4374a7dde1e1cb78b4b43944fd6156d84bd98c8be734a7cf81b99cb36187544028c3e4800d38d11d7286d19e12  tor-0.4.6.7.tar.gz
+2e32390c0e91279016b298cdda473fe622a1546e5039de7c00c62d6880fd8fc8a3ceb8bc50376fa90982b68dad85d519bfbdaac82b8a85f8b2a07f460ef05407  tor.initd
+c7c5faede80621313ea77f632fb2133447c7ae2f68262ac60cd4a73dc0da160837c6fe3cbf2b5a1e97772876789fd1a57c7395d1bb80d9366d861968ce14ecc1  tor.confd"

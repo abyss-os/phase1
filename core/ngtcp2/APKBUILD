@@ -6,28 +6,19 @@ pkgdesc="ngtcp2"
 url="https://nghttp2.org"
 arch="all"
 license="MIT"
-makedepends="autoconf automake libtool openssl-dev libev-dev"
+makedepends="openssl-dev libev-dev cmake samurai nghttp3-dev"
 subpackages="$pkgname-dev"
 source="$pkgname-$pkgver.tar.gz::https://github.com/ngtcp2/ngtcp2/archive/$_commit.tar.gz"
 builddir="$srcdir"/$pkgname-$_commit
 
 build() {
-	autoreconf -vif
-	CC=$CC CXX=$CXX ./configure \
-		--build=$CBUILD \
-		--host=$CHOST \
-		--prefix=/usr \
-		--sbindir=/usr/bin \
-		--sysconfdir=/etc \
-		--mandir=/usr/share/man \
-		--infodir=/usr/share/info \
-		--localstatedir=/var \
-		--enable-static \
-		--enable-lib-only
+	rm -rf build && mkdir build && cd build
+	cmake -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_INSTALL_SBINDIR=bin ..
 	make
 }
 
 package() {
+	cd build
 	make DESTDIR="$pkgdir" install
 }
 

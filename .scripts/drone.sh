@@ -40,3 +40,5 @@ for PKG in $(git log ...${DRONE_COMMIT_BEFORE} --format=format: --name-only | gr
 		abuild -ri || exit 1
 	fi
 done
+
+rm -rf /var/cache/distfiles/*

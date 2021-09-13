@@ -44,20 +44,22 @@ build() {
 }
 
 package() {
-	cd "$_builddir"
-	install -d "$pkgdir"/boot "$pkgdir"/usr/lib/modules
+    cd "$_builddir"
+    install -d "$pkgdir"/boot "$pkgdir"/usr/lib/modules
 
-	case $CARCH in
-		aarch64)
-			install -d $pkgdir/boot/dtb
-			for i in $_builddir/arch/arm64/boot/dts/*.dtb; do
-				install -m644 "$i" $pkgdir/boot/dtb/
-			done
-			;;
-	esac
+    case $CARCH in
+        aarch64)
+            if [ -d $_builddir/arch/arm64/boot/dts ]; then
+                install -d $pkgdir/boot/dtb
+                for i in $_builddir/arch/arm64/boot/dts/*.dtb; do
+                    install -m644 "$i" $pkgdir/boot/dtb/
+                done
+            fi
+            ;;
+    esac
 
-	# modules are disabled at the moment
-	#_make install modules_install
+    # modules are disabled at the moment
+    #_make install modules_install
 
     case $CARCH in
         x86_64) _make install && mv -v $pkgdir/boot/vmlinuz $pkgdir/boot/vmlinuz-$pkgver;;
@@ -92,5 +94,5 @@ _menuconfig() {
 
 b2sums="c4d2bcffe7149f66e37d05f7c13ebfe59263e7474a6f536317cc092eb9d7e917651059edaf71b26022310c67c1f2f017b2147e53bebcbfcc3f2c92dc6213a721  linux-5.14.3.tar.xz
 9e3cdb4007c573695189d4e55e163fe7090e0aaa3f3a92aff97f7563dcf9e75ffd8553a974aed09ff1dbed736721ecf1f887afdc47485fb5be648312ddeaaf32  config.aarch64
-f2907d21920f3742cdc7e5733f6ae18c7ffdb63f875b53625b5ef27aa6663d5c9296ce87d59b946f42809dc1dfcb6a83ff0b55e79dd626f21d6caf61d3083f8f  config.x86_64
+7b1cd3192f52883bbc6bb9108a41ad146bd7828c4f8269ca912c9a97eebf08e582d021225ab62f42ce8d30a89c40d44c1ee264423d10457a8ecab37741aa64ae  config.x86_64
 1401196295273ae933b986a8b52276d678f58591c76b9626f96ffc414f889abcad08a6054bf92ed7395a774a48d3873794ed768658a028240c5271a7c4cf7363  config.ppc64le"

@@ -6,7 +6,7 @@ url="https://abyss.run"
 arch="noarch"
 license="MIT"
 options="!check"
-
+builddir=$srcdir
 depends_arch=""
 
 depends="abyss-base llvm-dev libcxx-dev abuild linux-headers musl-dev toolchain git bash kati $depends_arch"

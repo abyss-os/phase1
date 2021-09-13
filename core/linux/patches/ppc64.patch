@@ -1,0 +1,33 @@
+diff --git a/arch/powerpc/Makefile b/arch/powerpc/Makefile
+index 6505d66f1..7780a1407 100644
+--- a/arch/powerpc/Makefile
++++ b/arch/powerpc/Makefile
+@@ -166,7 +166,7 @@ CFLAGS-$(CONFIG_PPC32)	+= $(call cc-option,-mno-readonly-in-sdata)
+ 
+ ifdef CONFIG_PPC_BOOK3S_64
+ ifdef CONFIG_CPU_LITTLE_ENDIAN
+-CFLAGS-$(CONFIG_GENERIC_CPU) += -mcpu=power8
++CFLAGS-$(CONFIG_GENERIC_CPU) += $(call as-option,-Wa$(comma)-mcpu=power8)
+ CFLAGS-$(CONFIG_GENERIC_CPU) += $(call cc-option,-mtune=power9,-mtune=power8)
+ else
+ CFLAGS-$(CONFIG_GENERIC_CPU) += $(call cc-option,-mtune=power7,$(call cc-option,-mtune=power5))
+@@ -238,15 +238,15 @@ KBUILD_CFLAGS += -fno-asynchronous-unwind-tables
+ # often slow when they are implemented at all
+ KBUILD_CFLAGS		+= $(call cc-option,-mno-string)
+ 
+-cpu-as-$(CONFIG_40x)		+= -Wa,-m405
+-cpu-as-$(CONFIG_44x)		+= -Wa,-m440
++cpu-as-$(CONFIG_40x)		+= $(call as-option,-Wa$(comma)-m405)
++cpu-as-$(CONFIG_44x)		+= $(call as-option,-Wa$(comma)-m440)
+ cpu-as-$(CONFIG_ALTIVEC)	+= $(call as-option,-Wa$(comma)-maltivec)
+-cpu-as-$(CONFIG_E500)		+= -Wa,-me500
++cpu-as-$(CONFIG_E500)		+= $(call as-option,-Wa$(comma)-me500)
+ 
+ # When using '-many -mpower4' gas will first try and find a matching power4
+ # mnemonic and failing that it will allow any valid mnemonic that GAS knows
+ # about. GCC will pass -many to GAS when assembling, clang does not.
+-cpu-as-$(CONFIG_PPC_BOOK3S_64)	+= -Wa,-mpower4 -Wa,-many
++cpu-as-$(CONFIG_PPC_BOOK3S_64)	+= $(call as-option,-Wa$(comma)-mpower4) $(call as-option,-Wa$(comma)-many)
+ cpu-as-$(CONFIG_PPC_E500MC)	+= $(call as-option,-Wa$(comma)-me500mc)
+ 
+ KBUILD_AFLAGS += $(cpu-as-y)

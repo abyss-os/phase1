@@ -5,7 +5,7 @@ pkgrel=0
 pkgdesc="Linux kernel"
 url="http://kernel.org"
 #depends="mkinitfs"
-makedepends="bash flex bison gsed bc linux-dev openssl-dev findutils rsync ncurses-dev"
+makedepends="bash flex bison gsed bc linux-headers openssl-dev findutils rsync ncurses-dev"
 options="!strip"
 source="https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/linux-$pkgver.tar.xz
 	config.aarch64
@@ -23,7 +23,7 @@ _builddir="$srcdir"/build
 
 # map for CARCH->kernel arch
 case $CARCH in
-    x86_64) KARCH=x86;;
+    x86_64) KARCH=x86 makedepends="$makedepends elfutils-dev";;
     aarch64) KARCH=arm64;;
     mips64*) KARCH=mips;;
     ppc64le) KARCH=powerpc;;
@@ -39,9 +39,10 @@ prepare() {
 
 build() {
 	cd "$_builddir"
-    _make
     case $CARCH in
-        aarch64) _make dtbs;;
+        aarch64) _make dtbs && _make ;;
+        ppc64le) msg "Doesn't built yet";;
+        *) _make;;
     esac
 }
 

@@ -1,0 +1,47 @@
+pkgname=linux-headers
+pkgver=5.14.3
+_pkgver=${pkgver/_/-}
+pkgrel=0
+pkgdesc="Linux kernel"
+url="http://kernel.org"
+#depends="mkinitfs"
+makedepends="bash flex bison gsed bc linux-dev openssl-dev findutils rsync ncurses-dev"
+options="!strip"
+source="https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/linux-$pkgver.tar.xz"
+provides="linux-dev"
+replaces="linux-dev"
+arch="all"
+license="GPL-2.0"
+
+builddir="$srcdir"/linux-"$_pkgver"
+
+# map for CARCH->kernel arch
+case $CARCH in
+    x86_64) KARCH=x86;;
+    aarch64) KARCH=arm64;;
+    mips64*) KARCH=mips;;
+    ppc64le) KARCH=powerpc;;
+    riscv64) KARCH=riscv;;
+    *) msg "Unknown arch"; return 1;;
+esac
+
+build() {
+    _make mrproper allyesconfig
+}
+
+package() {
+     _make headers_install
+}
+
+_make() {
+	make -j${JOBS} -C "$builddir" O="$_builddir" \
+		LLVM=1 LLVM_IAS=1 \
+		KBUILD_BUILD_VERSION="$(( pkgrel + 1 ))-abyss" \
+		INSTALL_MOD_PATH="$pkgdir"/usr \
+		INSTALL_HDR_PATH="$pkgdir"/usr \
+		INSTALL_PATH="$pkgdir"/boot \
+        ARCH=$KARCH \
+		"$@"
+}
+
+b2sums="c4d2bcffe7149f66e37d05f7c13ebfe59263e7474a6f536317cc092eb9d7e917651059edaf71b26022310c67c1f2f017b2147e53bebcbfcc3f2c92dc6213a721  linux-5.14.3.tar.xz"

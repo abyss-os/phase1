@@ -1,6 +1,6 @@
 pkgname=mandoc
 pkgver=1.14.5
-pkgrel=3
+pkgrel=4
 pkgdesc="mdoc/man compiler"
 url="http://mdocml.bsd.lv/"
 arch="all"
@@ -10,12 +10,8 @@ checkdepends="perl"
 install="$pkgname.post-deinstall"
 triggers="$pkgname.trigger=/usr/share/man/*"
 subpackages="$pkgname-doc $pkgname-dev"
-source="http://mdocml.bsd.lv/snapshots/$pkgname-$pkgver.tar.gz
-	outdated-warn-disable.patch
-	idiocy.patch
-	"
-provides="groff mldocml"
-replaces="groff mldocml"
+source="http://mdocml.bsd.lv/snapshots/$pkgname-$pkgver.tar.gz"
+provides="groff mldocml nroff"
 
 prepare() {
 	default_prepare
@@ -26,8 +22,8 @@ MANDIR=/usr/share/man
 LIBDIR=/usr/lib
 CFLAGS="$CFLAGS"
 UTF8_LOCALE="C.UTF-8"
-MANPATH_DEFAULT="/usr/share/man:/usr/local/man"
-LN="ln -sf"
+MANPATH_DEFAULT="/usr/share/man"
+LN="ln -s"
 SBINDIR=/usr/bin
 EOF
 }
@@ -47,6 +43,4 @@ package() {
 	ln -sv /usr/bin/mandoc $pkgdir/usr/bin/nroff
 }
 
-b2sums="27aaf97e7226e989b33861d2a255304bb64a7cd43ca026568f4b044035241c3315a0d73673b023d9ca5b80575b8c584889832bbd86b80aaa49bb785b37559367  mandoc-1.14.5.tar.gz
-210553884925c143bd4ae24c24543defc600cca5a612493bc4c1a9de91fd8e6cce004dd499a5cc060bc566ec30c0cff16751947eb3cf1ff386c78b8fe2dbd7bb  outdated-warn-disable.patch
-d5f3cbb59a3981d3ec20e677bfb36a5a2a46c86664292ea5e7d0c3f35584a2879cc94de923cf16d2f5b745d383d8d97e54a8a0ef923a4e752e02316fd1daac45  idiocy.patch"
+b2sums="27aaf97e7226e989b33861d2a255304bb64a7cd43ca026568f4b044035241c3315a0d73673b023d9ca5b80575b8c584889832bbd86b80aaa49bb785b37559367  mandoc-1.14.5.tar.gz"

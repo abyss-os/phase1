@@ -1,0 +1,26 @@
+diff --git a/mk/files.mk b/mk/files.mk
+index 513ab1f..70002a8 100644
+--- a/mk/files.mk
++++ b/mk/files.mk
+@@ -17,7 +17,7 @@
+ 
+ FILES_INSTALL_OWN ?= -o ${SHAREOWN} -g ${SHAREGRP}
+ FILESMODE ?= ${SHAREMODE}
+-FILES_COPY ?= -C
++FILES_COPY ?=
+ 
+ FILESGROUPS ?= FILES
+ FILESGROUPS := ${FILESGROUPS:O:u}
+diff --git a/mk/inc.mk b/mk/inc.mk
+index 5fc14b3..e18e93c 100644
+--- a/mk/inc.mk
++++ b/mk/inc.mk
+@@ -19,7 +19,7 @@
+ INC_INSTALL_OWN ?= -o ${LIBOWN} -g ${LIBGRP}
+ .endif
+ INCMODE ?= 444
+-INC_COPY ?= -C
++INC_COPY ?=
+ INCSDIR ?= ${INCDIR}
+ 
+ STAGE_INCSDIR?= ${STAGE_OBJTOP}${INCSDIR}

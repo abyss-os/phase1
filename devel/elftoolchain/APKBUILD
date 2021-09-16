@@ -1,0 +1,28 @@
+pkgname=elftoolchain
+pkgver=0.7.1
+pkgrel=0
+pkgdesc="."
+url="."
+arch="all"
+license="BSD"
+makedepends="bmake mandoc libarchive-dev"
+subpackages="$pkgname-dev $pkgname-doc"
+source="https://netcologne.dl.sourceforge.net/project/elftoolchain/Sources/$pkgname-$pkgver/$pkgname-$pkgver.tar.bz2"
+#builddir="$srcdir/"
+
+build() {
+    rm -rf test
+    sed -i -e "s@cc@${CC}@" common/native-elf-format
+    bmake
+}
+
+package() {
+    bmake DESTDIR="$pkgdir" install
+
+    # rename stuff
+    for f in $pkgdir/usr/bin/*; do
+        mv -v $pkgdir/usr/bin/${f##*/} $pkgdir/usr/bin/elftoolchain-${f##*/}
+    done
+}
+
+b2sums="f86204b3c89433948eaf2cd2edc57abf9b77bfab777dc2a840b7aa5fbddfd31665bd27f31d7af2dea09fab0118e201b12802b4da85f8210af29094661f6f1fe5  elftoolchain-0.7.1.tar.bz2"

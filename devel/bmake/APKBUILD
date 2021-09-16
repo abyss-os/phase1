@@ -1,0 +1,22 @@
+pkgname=bmake
+pkgver=20210808
+pkgrel=0
+pkgdesc="Portable version of the NetBSD make build tool"
+url="http://www.crufty.net/help/sjg/bmake.html"
+arch="all"
+license="BSD-2-Clause"
+source="http://www.crufty.net/ftp/pub/sjg/bmake-$pkgver.tar.gz"
+builddir="$srcdir/$pkgname"
+
+build() {
+	sh ./boot-strap --with-default-sys-path=/usr/share/mk op=build
+}
+
+package() {
+	sh ./boot-strap --prefix=/usr --with-mksrc=/usr/share/mk \
+			--install-destdir="$pkgdir" op=install
+
+	rm -rf $pkgdir/usr/share/man $pkgdir/usr/share/doc
+}
+
+b2sums="27ff99395e7cdc00a118ebfb5b043180ffbd9d5385b008c49baae8bf953e45e277aeb133d736bd282c1ffc08bd7c3b87b4dc23d0b188a86469116e1d94ed2409  bmake-20210808.tar.gz"

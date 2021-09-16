@@ -1,5 +1,5 @@
 pkgname=toolchain
-pkgver=8
+pkgver=9
 pkgrel=0
 pkgdesc="configures toolchain for Abyss"
 url="https://abyss.run"

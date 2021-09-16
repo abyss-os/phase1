@@ -5,7 +5,9 @@ usage() {
 	echo "Usage:"
 	echo "$0 [show|<compiler> <binutils>]"
 	echo
-	echo "Possible values: llvm, gnu, none"
+	echo "Possible values:"
+    echo " - compiler: llvm, gnu, none"
+    echo " - binutils: llvm, gnu, elftoolchain, none"
 	exit 1
 }
 
@@ -23,6 +25,7 @@ if [ x"$1" = x"show" ]; then
 	case $blink in
 		lld|ld.lld) binutils=llvm;;
 		gnu-ld) binutils=gnu;;
+        elftoolchain-ld) binutils=elftoolchain;;
 		none) binutils=$blink;;
 		*) binutils=unknown;;
 	esac
@@ -42,11 +45,13 @@ fi
 
 # some things
 compiler_links="gcc g++ c++ cpp"
-binutils_links="ar mt nm objcopy objdump ranlib readelf readobj size split strings strip addr2line"
-gnu_extra="gnat gnatchop gnatfind gnatlink gnatmake gnatprep gnatbind gnatclean gnatkr gnatls gnatname gnatxref gfortran"
+binutils_links="ar nm objcopy objdump ranlib readelf size strings strip addr2line"
+gnu_extra="mt readobj split"
+llvm_extra="mt readobj split"
+elftoolchain_extra="brandelf findtextrel"
 
 cleanup() {
-	for link in $compiler_links $binutils_links $gnu_extra ld as cc; do
+	for link in $compiler_links $binutils_links $gnu_extra $llvm_extra $elftoolchain_extra ld as cc ld.bfd ld.gold; do
 		rm -f /usr/bin/${link} /usr/bin/${CTARGET}-${link} /usr/bin/*-abyss-linux-${link}
 	done
 }
@@ -57,7 +62,7 @@ case $1 in
 esac
 
 case $2 in
-	llvm|gnu|none) binutils=${2};;
+	llvm|gnu|elftoolchain|none) binutils=${2};;
 	*) usage;;
 esac
 
@@ -66,15 +71,27 @@ cleanup
 
 if [ "$binutils" != "none" ]; then
 	echo "linking binutils..."
-	# setup binutils
+    # setup binutils
 	for link in $binutils_links; do
 		ln -fvs /usr/bin/${binutils}-${link} /usr/bin/${link}
 	done
-	# special case for ld due to lld
-	case $binutils in
-		llvm) ln -fvs ld.lld /usr/bin/ld && ln -fsv clang /usr/bin/as && ln -fsv gnu-ld.bfd /usr/bin/ld.bfd && ln -fsv gnu-ld.gold /usr/bin/ld.gold;;
-		gnu) ln -fsv gnu-ld /usr/bin/ld && ln -fsv gnu-as /usr/bin/as && ln -fsv gnu-ld.bfd /usr/bin/ld.bfd && ln -fsv gnu-ld.gold /usr/bin/ld.gold;;
-	esac
+    case $binutils in
+        llvm)
+            for link in $llvm_extra; do
+                ln -fvs /usr/bin/${binutils}-${link} /usr/bin/${link}
+            done
+            ln -fvs ld.lld /usr/bin/ld && ln -fsv clang /usr/bin/as && ln -fsv gnu-ld.bfd /usr/bin/ld.bfd && ln -fsv gnu-ld.gold /usr/bin/ld.gold;;
+        gnu)
+            for link in $gnu_extra; do
+                ln -fvs /usr/bin/${binutils}-${link} /usr/bin/${link}
+            done
+            ln -fsv $binutils-ld /usr/bin/ld && ln -fsv $binutils-as /usr/bin/as && ln -fsv $binutils-ld.bfd /usr/bin/ld.bfd && ln -fsv $binutils-ld.gold /usr/bin/ld.gold;;
+        elftoolchain)
+            for link in $elftoolchain_extra; do
+                ln -fvs /usr/bin/${binutils}-${link} /usr/bin/${link}
+            done
+            ln -fsv $binutils-ld /usr/bin/ld;;
+    esac
 fi
 
 if [ "$compiler" != "none" ]; then

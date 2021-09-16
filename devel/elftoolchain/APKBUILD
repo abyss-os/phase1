@@ -5,7 +5,7 @@ pkgdesc="."
 url="."
 arch="all"
 license="BSD"
-makedepends="bmake libarchive-dev"
+makedepends="bmake libarchive-dev nroff"
 subpackages="$pkgname-dev"
 source="https://netcologne.dl.sourceforge.net/project/elftoolchain/Sources/$pkgname-$pkgver/$pkgname-$pkgver.tar.bz2"
 

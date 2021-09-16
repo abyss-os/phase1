@@ -1,6 +1,6 @@
 pkgname=bmake
 pkgver=20210808
-pkgrel=0
+pkgrel=1
 pkgdesc="Portable version of the NetBSD make build tool"
 url="http://www.crufty.net/help/sjg/bmake.html"
 arch="all"

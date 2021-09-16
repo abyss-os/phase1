@@ -5,10 +5,9 @@ pkgdesc="."
 url="."
 arch="all"
 license="BSD"
-makedepends="bmake mandoc libarchive-dev"
-subpackages="$pkgname-dev $pkgname-doc"
+makedepends="bmake libarchive-dev"
+subpackages="$pkgname-dev"
 source="https://netcologne.dl.sourceforge.net/project/elftoolchain/Sources/$pkgname-$pkgver/$pkgname-$pkgver.tar.bz2"
-#builddir="$srcdir/"
 
 build() {
     rm -rf test
@@ -18,6 +17,8 @@ build() {
 
 package() {
     bmake DESTDIR="$pkgdir" install
+
+    rm -rf $pkgdir/usr/share/man $pkgdir/usr/share/doc
 
     # rename stuff
     for f in $pkgdir/usr/bin/*; do

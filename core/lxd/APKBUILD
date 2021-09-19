@@ -56,6 +56,7 @@ agent() {
     depends=""
     pkgdesc="LXD guest agent"
 
+    cd $builddir
     install -Dm755 bin/lxd-agent $subpkgdir/usr/bin/lxd-agent && rm -f bin/lxd-agent
 }
 

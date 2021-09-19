@@ -7,7 +7,7 @@ arch="all"
 license="Apache-2.0"
 depends="netcat-openbsd cgmanager squashfs-tools rsync iptables dnsmasq gtar iproute2"
 makedepends="lxc-dev go dqlite-dev raft-dev sqlite-dev libuv-dev libcap-dev eudev-dev acl-dev"
-subpackages="$pkgname-bash-completion:bashcomp:noarch $pkgname-openrc"
+subpackages="$pkgname-bash-completion:bashcomp:noarch $pkgname-openrc $pkgname-agent:agent"
 install="$pkgname.pre-install"
 options="!check"
 pkggroups="$pkgname"
@@ -25,7 +25,7 @@ build() {
 }
 
 package() {
-    for bin in lxc lxd fuidshift lxc-to-lxd lxd-benchmark lxd-p2c lxd-agent; do
+    for bin in lxc lxd fuidshift lxc-to-lxd lxd-benchmark lxd-p2c; do
         install -Dm755 bin/$bin $pkgdir/usr/bin/$bin
 	done
 
@@ -47,10 +47,17 @@ bashcomp() {
 	pkgdesc="Bash completions for $pkgname"
 	install_if="$pkgname=$pkgver-r$pkgrel bash-completion"
 
-	cd "$builddir"
 	mkdir -p "$subpkgdir"/usr/share/bash-completion/completions
 	cp scripts/bash/lxd-client "$subpkgdir"/usr/share/bash-completion/completions/lxd-client
 }
+
+agent() {
+    depends=""
+    pkgdesc="LXD guest agent"
+
+    install -Dm755 bin/lxd-agent $subpkgdir/usr/bin/lxd-agent && rm -f bin/lxd-agent
+}
+
 
 b2sums="96311473ade85065120211e9f046708f8cc03e0dccd47f70f470712f7a7d85c948773ec42908d3e28cd76f718130b7460856b0f297327ef9d843bc852c87998a  lxd-4.18.tar.gz
 a5318b21249418f216624709b22d6ee657d1f88c0b7fca6a74f9b8d1f557310fc31d350be852cf78bf542225ec2f93e70bb7e00799fa5d639912f2b1ac98e6fb  lxd.confd

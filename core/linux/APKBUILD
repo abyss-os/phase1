@@ -1,11 +1,11 @@
 pkgname=linux
-pkgver=5.14.3
+pkgver=5.14.6
 _pkgver=${pkgver/_/-}
 pkgrel=0
 pkgdesc="Linux kernel"
 url="http://kernel.org"
 #depends="mkinitfs"
-makedepends="bash flex bison gsed bc linux-headers openssl-dev findutils rsync ncurses-dev elftoolchain-dev"
+makedepends="bash flex bison gsed bc linux-headers openssl-dev findutils rsync ncurses-dev elfutils-dev"
 options="!strip"
 source="https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/linux-$pkgver.tar.xz
 	config.aarch64
@@ -92,7 +92,7 @@ _menuconfig() {
 	cp -v .config "$startdir"/config."$CARCH"
 }
 
-b2sums="c4d2bcffe7149f66e37d05f7c13ebfe59263e7474a6f536317cc092eb9d7e917651059edaf71b26022310c67c1f2f017b2147e53bebcbfcc3f2c92dc6213a721  linux-5.14.3.tar.xz
+b2sums="a60c98265c4e795cb8fad90c57b9237b586423c6c8d6961c2f64db13bc6203925e3e6d79ff8858f32363a45f7f1a463de1014fddf9f4a14216a3d3ba638327d6  linux-5.14.6.tar.xz
 f1571cae8772d99573a21a37665f1d7b1958e34ed092370a83d938d28f447c65735ff5655ba136b7b4447003caa894df42a7bddf0a908c1c97e6fea26a0478cd  config.aarch64
-7b1cd3192f52883bbc6bb9108a41ad146bd7828c4f8269ca912c9a97eebf08e582d021225ab62f42ce8d30a89c40d44c1ee264423d10457a8ecab37741aa64ae  config.x86_64
+91f7df28fd9ded7a1ff8b2b64b7dccfac157c9bdc7d15cca7201efe4fb44b0df5c1225671bc503de79162e7b734c4694a05e5344ac3091aa1703c93de735e3fb  config.x86_64
 1401196295273ae933b986a8b52276d678f58591c76b9626f96ffc414f889abcad08a6054bf92ed7395a774a48d3873794ed768658a028240c5271a7c4cf7363  config.ppc64le"

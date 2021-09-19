@@ -1,6 +1,6 @@
 pkgname=lxd
 pkgver=4.18
-pkgrel=0
+pkgrel=1
 pkgdesc="a container hypervisor and a new user experience for LXC"
 url="https://linuxcontainers.org/lxd/"
 arch="all"
@@ -47,6 +47,7 @@ bashcomp() {
 	pkgdesc="Bash completions for $pkgname"
 	install_if="$pkgname=$pkgver-r$pkgrel bash-completion"
 
+    cd $builddir
 	mkdir -p "$subpkgdir"/usr/share/bash-completion/completions
 	cp scripts/bash/lxd-client "$subpkgdir"/usr/share/bash-completion/completions/lxd-client
 }

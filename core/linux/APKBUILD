@@ -1,7 +1,7 @@
 pkgname=linux
 pkgver=5.14.6
 _pkgver=${pkgver/_/-}
-pkgrel=0
+pkgrel=1
 pkgdesc="Linux kernel"
 url="http://kernel.org"
 #depends="mkinitfs"

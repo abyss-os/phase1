@@ -1,5 +1,5 @@
 pkgname=packer
-pkgver=1.7.4
+pkgver=1.7.5
 pkgrel=0
 pkgdesc="Build Automated Machine Images"
 url="https://www.packer.io/"
@@ -22,4 +22,4 @@ package() {
 	install -Dm755 "$builddir"/bin/$pkgname "$pkgdir"/usr/bin/$pkgname
 }
 
-b2sums="090bf731f8723d6fddedf142c14048deabd40d94aa356e71bd727b81a7913e772fe03ac73de8666904745313ec2692753f31cb52e2270a05a1c7e2fc8189bc12  packer-1.7.4.tar.gz"
+b2sums="ae078e3b89cd11fab500ca6c05637a257c3f531f4cd5126e15d282e98d2060ffb31ad1580fe52d52451fc85f07b4ebc23944c6562419cba6030d67dd91571fc4  packer-1.7.5.tar.gz"

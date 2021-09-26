@@ -1,13 +1,12 @@
 pkgname=coreutils
-pkgver=8.32
-pkgrel=1
+pkgver=9.0
+pkgrel=0
 pkgdesc="The basic file, shell and text manipulation utilities"
 url="https://www.gnu.org/software/coreutils/"
 arch="all"
 license="GPL-3.0-or-later"
 makedepends="bash acl-dev attr-dev perl"
-source="https://ftp.gnu.org/gnu/coreutils/$pkgname-$pkgver.tar.xz
-		nonsense.patch"
+source="https://ftp.gnu.org/gnu/coreutils/$pkgname-$pkgver.tar.xz"
 options="!check"
 builddir="$srcdir"/$pkgname-$pkgver
 subpackages="$pkgname-doc"
@@ -31,5 +30,4 @@ package() {
     make DESTDIR=$pkgdir install
 }
 
-b2sums="0ad99c176c19ec214fcfd0845523e5362f0151827707c759bd46c0fe8d2501c6ad1c29c5b71266f6525857bc0d56c472db0d7fe29953b6c65e2e6c76bdf3c515  coreutils-8.32.tar.xz
-5fbfbfa94e79823b139f9cf095444aeb34f7441caf59694d8d6e726e13437c1604c7d856d3304334d4207c0bebb2dcdaefdc766229fc4b26086c63de01de0089  nonsense.patch"
+b2sums="59617cd25fd4c70f51bfbef851bd83e73f9c9ba5c11eb539f7f75c0184d55832e004b28e9268fb8064db145cb071ead2b9c0c3346bc35a11934ffe1b15bf17ac  coreutils-9.0.tar.xz"

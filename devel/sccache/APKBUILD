@@ -1,6 +1,6 @@
 pkgname=sccache
 pkgver=0.2.15
-pkgrel=0
+pkgrel=1
 pkgdesc="shared compilation cache for C/C++ and Rust"
 url="https://github.com/mozilla/sccache/"
 arch="x86_64 aarch64 ppc64le"

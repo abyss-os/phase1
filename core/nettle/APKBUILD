@@ -1,5 +1,5 @@
 pkgname=nettle
-pkgver=3.7.2
+pkgver=3.7.3
 pkgrel=0
 pkgdesc="A low-level cryptographic library"
 url="https://www.lysator.liu.se/~nisse/nettle/"
@@ -11,7 +11,7 @@ source="https://ftp.gnu.org/gnu/$pkgname/$pkgname-$pkgver.tar.gz"
 builddir="$srcdir/$pkgname-$pkgver"
 
 build() {
-	./configure \
+	CC=$CC ./configure \
 		--build=$CBUILD \
 		--host=$CHOST \
 		--prefix=/usr \
@@ -23,8 +23,7 @@ build() {
 		--localstatedir=/var \
 		--enable-fat \
 		--enable-shared \
-		--disable-openssl \
-		--disable-static
+		--disable-openssl
 	make
 	# strip comments in fields from .pc as it confuses pkgconf
 	sed -i -e 's/ \#.*//' *.pc
@@ -39,9 +38,4 @@ package() {
 	make DESTDIR="$pkgdir" install
 }
 
-dev() {
-    default_dev
-    depends="gmp-dev"
-}
-
-b2sums="0195f973afd76d33805de4621cd340a041144b24a20ccab03a58749dba82ea12b063f779aeeeb3f063be5e1bb74dec4c8c8f72b3dd01aff033e908a9f534ad01  nettle-3.7.2.tar.gz"
+b2sums="8d8efbbff98fc1f3eff3296681d3d72346e78392f356aebfe80138ae6ae1ebf3695bd7f74b906beef0cf3625ba6d84bdb43c0f6707f54f4d98870d50c90ac9a3  nettle-3.7.3.tar.gz"

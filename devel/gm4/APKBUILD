@@ -1,6 +1,6 @@
 pkgname=gm4
 pkgver=1.4.19
-pkgrel=0
+pkgrel=1
 pkgdesc="GNU macro processor"
 url="https://www.gnu.org/software/m4"
 makedepends=texinfo
@@ -10,6 +10,7 @@ license="GPL-3.0+"
 subpackages="$pkgname-doc"
 source="https://ftp.gnu.org/gnu/m4/m4-$pkgver.tar.gz"
 builddir=$srcdir/m4-$pkgver
+conflicts="om4"
 
 build() {
 	./configure \
@@ -27,6 +28,7 @@ package() {
 	make install DESTDIR="$pkgdir"
 	rm -rf "$pkgdir"/usr/lib/charset.alias
 	rmdir -p "$pkgdir"/usr/lib 2>/dev/null || true
+    ln -sv $pkgname $pkgdir/usr/bin/m4
 }
 
 b2sums="8406c2569280b19f51801f0cb60dac95ce72753b9fe2ec4392c4fda34aa72350be2b3eadd58f86d1dbad783fb886100636c4537fd4c5c1f517632fe88e7e40b1  m4-1.4.19.tar.gz"

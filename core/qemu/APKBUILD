@@ -1,32 +1,18 @@
 pkgname=qemu
-pkgver=6.0.0
-pkgrel=1
+pkgver=6.1.0
+pkgrel=0
 pkgdesc="QEMU is a generic machine emulator and virtualizer"
 url="https://qemu.org/"
 arch="all"
 license="GPL-2.0 LGPL-2"
 makedepends="meson bash bison curl-dev flex glib-dev openssl-dev libaio-dev libcap-dev libcap-ng-dev
     libjpeg-turbo-dev libpng-dev libseccomp-dev libxml2-dev linux-dev lzo-dev ncurses-dev
-    perl python3 texinfo util-linux-dev zlib-dev zstd-dev pixman-dev nghttp2-dev spice-dev"
-
+    perl python3 texinfo util-linux-dev zlib-dev zstd-dev pixman-dev nghttp2-dev spice-dev libudev-zero-dev"
 pkggroups="qemu"
-install="$pkgname.pre-install $pkgname.post-install $pkgname.pre-upgrade"
+install="$pkgname.pre-install $pkgname.post-install"
 options="suid !strip !check"
 
 source="https://wiki.qemu-project.org/download/qemu-$pkgver.tar.xz
-	0006-linux-user-signal.c-define-__SIGRTMIN-MAX-for-non-GN.patch
-	0001-linux-user-fix-build-with-musl-on-aarch64.patch
-	musl-F_SHLCK-and-F_EXLCK.patch
-	fix-sigevent-and-sigval_t.patch
-	xattr_size_max.patch
-	ignore-signals-33-and-64-to-allow-golang-emulation.patch
-	0001-linux-user-fix-build-with-musl-on-ppc64le.patch
-	MAP_SYNC-fix.patch
-	fix-sockios-header.patch
-	mips-softfloat.patch
-	fix-sendmsg.patch
-	0001-virtio-host-input-use-safe-64-bit-time-accessors-for.patch
-	0002-virtio-user-input-use-safe-64-bit-time-accessors-for.patch
 	$pkgname-guest-agent.confd
 	$pkgname-guest-agent.initd
 	80-kvm.rules"
@@ -109,20 +95,7 @@ guest() {
 		"$subpkgdir"/etc/conf.d/$pkgname-guest-agent
 }
 
-b2sums="7746329d3e13782b7c346ce4052cc517cfc65cd9b2d514d199e4d5b8570ca79566ec04b0c114db2e97c84e68eb551e0d4cdce1b14b91a88fe08d2a5f682c1418  qemu-6.0.0.tar.xz
-dada69e04571b5f90372d28eef65e63df551531819c3b150c8a29f9c5400aace5ebf5c5372b0ac95e3148484dd976c6184a9c42661073a601d86e31b74671c6f  0006-linux-user-signal.c-define-__SIGRTMIN-MAX-for-non-GN.patch
-dcf7343044bec8cd5801555b234c18710486d7da55214f1dba24e4b29ccabebb3cf6a9ed3e21576ffbc689bf79b8090cddebce3787891026b19a82cbc3719285  0001-linux-user-fix-build-with-musl-on-aarch64.patch
-e21b013f54a571572ab095396273486c1d7f031f1e10001a10dd5f7f6cb753e7b76468d01966debf6011d3473e62a3b6e1abe661b91baf962306668ef3bbb152  musl-F_SHLCK-and-F_EXLCK.patch
-e3be45d1cfb224d4b22fe61978c15ea1ae4a71143a938e7583c94fed404bef727b1116fda2c30cc4482e95616c7bca9004c4a23076dda15db5928d93d505d0a4  fix-sigevent-and-sigval_t.patch
-62dbff1e6cce6643ffca2be9404ecc4eed4230f9a36c19ab96ccee90b0f981e62bfa8672ea09d57bfe079d79cc8edb993b2a1cfd6c6c8e6ff5d99541eb02a508  xattr_size_max.patch
-98f514d9ad308c7688767334884ee8ed8c602d6374eac235465e396cfa5c6c7c395a5fd17496c5b1b588746acfa90c6acdfd6a3e4ac2ff30ce404ca85eabd03c  ignore-signals-33-and-64-to-allow-golang-emulation.patch
-782e1e8223a208466bb7e6d35701e4fb33543402f81c372dcbaeb60f805ad8fbbab67d875a7d34c2178221a1bc24752856bd8f5a3354eb0d74e13f5f77251f5d  0001-linux-user-fix-build-with-musl-on-ppc64le.patch
-5a4398318111d2b0192b6bfb1f153c965d03ef5bc345c9d5ad859897ccefa36e6077acb25d3654f66b52498df2ecd77dec146e728961190e728bd285de061f20  MAP_SYNC-fix.patch
-7c52407724f530f77f42da748c53d73a0114a05be30173a3295a1e3ec92abe36117a8fea6ae8ad0be3ecd2e9ef968df11b451fe4e72a9c88e31a0a2060902824  fix-sockios-header.patch
-799585f5f0495a01c4aa40520d0a5408a9b75adc6466bf06ca5a3d5d80b09eaa5b4850f5390af5c0711ec31851a9633ccfc60ee256639b4c27511d0caaa72fe5  mips-softfloat.patch
-f01620bd626e6b6ae4d4d225cd4cf91fc7f128b7d8ffbad135d545a027fd32b07ff82d1a6f1f52619071a238f770c8c35cdef238f8b3e2daf6bdbd4d8b22c7db  fix-sendmsg.patch
-6343ca04eba65496a5323fa2eaf630171fa4df4d9584b794dc434133ed1febd8abc6841adaa0a5bd6660b34c99f3040359264a21dea2c338d72986d5ee0e3e81  0001-virtio-host-input-use-safe-64-bit-time-accessors-for.patch
-b0cfd635a0a1ef760d8bcaaa911b91a93fbec26847f99daa7bec1751693ec0a90e2a6d04882a08e6897f8d39e8870e1edd95f33eb2d30b9185a44b0e247c8c6b  0002-virtio-user-input-use-safe-64-bit-time-accessors-for.patch
+b2sums="412eecf6d39debd6089b26d3b22e5d25c6c8c30d2eaf31b17c25cc2b3a1b10794a30218dfb151c78801aa295255aa974b297f1fe05b93f14334f203c2af5ccee  qemu-6.1.0.tar.xz
 069a8ad1f12a8a887b383715eaccff1566a11c90230e21efce1b26e5484cd8182d37817cc7da0ab0e07a8e75dce90219f59cfec2463244e0e1a0f550f4ec55f6  qemu-guest-agent.confd
 88465088a792ff3a39ea3e29fc43ebba0b6e45c5826693abca567eed17714538f3333a9c45c6c8051924ba86d0d3502e304a226aaf5e5e5c71f30772a315be06  qemu-guest-agent.initd
 8a4ff2796f75076be99919c82c0ba9821f1e2d03ca2a37c12abc761933f86eba381763750049e20cf6ae47e2d7c98286576a1fb2f03a3791e8104ae0f9e3a052  80-kvm.rules"

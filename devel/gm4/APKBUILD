@@ -11,6 +11,7 @@ subpackages="$pkgname-doc"
 source="https://ftp.gnu.org/gnu/m4/m4-$pkgver.tar.gz"
 builddir=$srcdir/m4-$pkgver
 provides="m4"
+replaces="om4"
 
 build() {
 	./configure \

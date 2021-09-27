@@ -1,18 +1,16 @@
 pkgname=flex
 pkgver=2.6.4
-pkgrel=2
+pkgrel=3
 pkgdesc="A tool for generating text-scanning programs"
 url="https://github.com/westes/flex"
 arch="all"
 license="BSD-2-Clause AND LGPL-2.0-or-later"
-depends="m4"
-depends_dev="flex"
-makedepends="$depends_dev help2man file"
+depends="gm4"
+makedepends="flex help2man file"
 subpackages="$pkgname-doc $pkgname-dev"
 source="https://github.com/westes/$pkgname/releases/download/v$pkgver/$pkgname-$pkgver.tar.gz"
 
 build() {
-	cd "$builddir"
 	CXX=$CXX CC=$CC CC_FOR_BUILD=$CC ./configure \
 		--build=$CBUILD \
 		--host=$CHOST \
@@ -29,12 +27,10 @@ build() {
 }
 
 check() {
-	cd "$builddir"
 	make check
 }
 
 package() {
-	cd "$builddir"
 	make install DESTDIR="$pkgdir"
 	ln -s flex "$pkgdir"/usr/bin/lex
 }

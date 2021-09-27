@@ -1,24 +1,15 @@
 pkgname=gmp
 pkgver=6.2.1
-pkgrel=0
+pkgrel=1
 pkgdesc="A free library for arbitrary precision arithmetic"
 url="https://gmplib.org/"
 arch="all"
 license="LGPL-3.0"
-makedepends="m4 texinfo libtool"
-depends=
-subpackages="$pkgname-doc $pkgname-dev libgmpxx"
+makedepends="gm4 texinfo libtool"
+subpackages="$pkgname-doc $pkgname-dev"
 source="https://gmplib.org/download/gmp/gmp-$pkgver.tar.xz"
 
-prepare() {
-	cd "$builddir"
-	default_prepare
-	# force update to libtool with fixed cross-build support
-	libtoolize -f
-}
-
 build() {
-	cd "$builddir"
 	./configure \
 		--build=$CBUILD \
 		--host=$CHOST \
@@ -33,25 +24,7 @@ build() {
 }
 
 package() {
-	cd "$builddir"
 	make -j1 DESTDIR="${pkgdir}" install
-}
-
-check() {
-	cd "$builddir"
-	return 0
-	[ "$CBUILD" = "$CHOST" ] && make check
-}
-
-libgmpxx() {
-	pkgdesc="C++ support for gmp"
-	mkdir -p "$subpkgdir"/usr/lib/
-	mv "$pkgdir"/usr/lib/libgmpxx.so.* "$subpkgdir"/usr/lib/
-}
-
-doc() {
-	default_doc
-	replaces="gmp5-doc"
 }
 
 b2sums="c0d85f175392a50cfa01bc6b0a312b235946ad8b4f6f84f6dabd33d7a6f2cc75c9b0e1e33057be07750bfa0145b7c4cf3b6188a5be6ca9d7271ec2276c84ebcb  gmp-6.2.1.tar.xz"

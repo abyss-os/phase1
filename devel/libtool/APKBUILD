@@ -1,24 +1,17 @@
-# Maintainer: Natanael Copa <ncopa@alpinelinux.org>
 pkgname=libtool
 pkgver=2.4.6
-pkgrel=2
+pkgrel=3
 pkgdesc="A generic library support script"
 arch="all"
 license="LGPL-2.0+"
 url="https://www.gnu.org/software/libtool"
-source="http://ftp.gnu.org/pub/gnu/libtool/${pkgname}-${pkgver}.tar.gz
-	libtool-fix-cross-compile.patch
-	"
+source="http://ftp.gnu.org/pub/gnu/libtool/${pkgname}-${pkgver}.tar.gz"
 depends="libltdl"
-makedepends="m4 help2man file diffutils automake"
+makedepends="gm4 help2man file diffutils automake"
 checkdepends="gawk autoconf automake gzip"
-subpackages="libltdl $pkgname-doc"
-options="libtool"
-
-builddir="$srcdir"/$pkgname-$pkgver
+subpackages="$pkgname-doc"
 
 build() {
-	cd "$builddir"
 	./configure \
 		--build=$CBUILD \
 		--host=$CHOST \
@@ -29,26 +22,9 @@ build() {
 	make
 }
 
-# Note: slow testsuite
-check() {
-	cd "$builddir"
-	# Test 70 and 117 are known to fail
-	# Test 170 repeats the entire test suite with shorter max_cmd_len
-	# Test 102 fails: cannot find the library 'ltdl/libltdlc.la'
-	make check TESTSUITEFLAGS="1-69 71-101 103-116 118-169"
-}
-
 package() {
-	cd "$builddir"
 	make DESTDIR="$pkgdir" install
 	rm "$pkgdir"/usr/lib/*.a
-}
-
-libltdl() {
-	pkgdesc="Runtime libraries for GNU Libtool Dynamic Module Loader"
-	depends=
-	mkdir -p "$subpkgdir/usr/lib"
-	mv "$pkgdir/usr/lib/libltdl.so"* "$subpkgdir/usr/lib/"
 }
 
 b2sums="75126f6d725d8abb91e1e07d460116095ed7bf29a85e76f38f28ec477d378af548cb96b99e6738157106f86f2cefd928e2ceecc53a5d2adb1329ea94623430f2  libtool-2.4.6.tar.gz

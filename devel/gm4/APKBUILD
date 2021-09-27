@@ -10,7 +10,7 @@ license="GPL-3.0+"
 subpackages="$pkgname-doc"
 source="https://ftp.gnu.org/gnu/m4/m4-$pkgver.tar.gz"
 builddir=$srcdir/m4-$pkgver
-conflicts="om4"
+provides="m4"
 
 build() {
 	./configure \

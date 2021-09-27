@@ -7,17 +7,20 @@ arch="all"
 license="BSD"
 subpackages="$pkgname-doc"
 source="https://github.com/ibara/m4/releases/download/$pkgname-$pkgver/$pkgname-$pkgver.tar.gz"
+provides="m4"
+replaces="m4"
 
 build() {
-	./configure \
-		--prefix=/usr \
-		--bindir=/usr/bin \
-		--sbindir=/usr/bin
-	make -j1
+    ./configure \
+        --prefix=/usr \
+        --bindir=/usr/bin \
+        --sbindir=/usr/bin
+    make -j1
 }
 
 package() {
-	make -j1 install DESTDIR="$pkgdir"
+    make -j1 install DESTDIR="$pkgdir"
+    ln -sv $pkgname $pkgdir/usr/bin/m4
 }
 
 b2sums="8b94898899fcf9b0150e890ee906cc6375ae97fb497cceeb9e412ad8aca8285f60ac7710e0864cfa0e391a6ed67bbb2263e2ce8f346c175b1047f37c4261e546  om4-6.7.tar.gz"

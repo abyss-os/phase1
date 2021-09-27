@@ -1,13 +1,13 @@
 pkgname=arch-install-scripts
 pkgver=24
-pkgrel=0
+pkgrel=1
 pkgdesc="Scripts to aid in installing Arch Linux"
 arch="noarch"
 url="https://projects.archlinux.org/arch-install-scripts.git"
 license="GPL-2.0-only"
 depends="bash coreutils pacman util-linux"
-makedepends="m4 asciidoc"
-source="https://git.archlinux.org/arch-install-scripts.git/snapshot/arch-install-scripts-$pkgver.tar.gz"
+makedepends="gm4 asciidoc"
+source="$pkgname-$pkgver.tar.gz::https://github.com/archlinux/$pkgname/archive/refs/tags/v$pkgver.tar.gz"
 subpackages="$pkgname-doc"
 
 build() {

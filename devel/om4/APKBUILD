@@ -1,0 +1,23 @@
+pkgname=om4
+pkgver=6.7
+pkgrel=0
+pkgdesc="OpenBSD m4"
+url="https://github.com/ibara/m4"
+arch="all"
+license="BSD"
+subpackages="$pkgname-doc"
+source="https://github.com/ibara/m4/releases/download/$pkgname-$pkgver/$pkgname-$pkgver.tar.gz"
+
+build() {
+	./configure \
+		--prefix=/usr \
+		--bindir=/usr/bin \
+		--sbindir=/usr/bin
+	make
+}
+
+package() {
+	make install DESTDIR="$pkgdir"
+}
+
+b2sums="8b94898899fcf9b0150e890ee906cc6375ae97fb497cceeb9e412ad8aca8285f60ac7710e0864cfa0e391a6ed67bbb2263e2ce8f346c175b1047f37c4261e546  om4-6.7.tar.gz"

@@ -6,11 +6,12 @@ url="https://github.com/abyss-os/abuild"
 arch="all"
 license="GPL-2.0"
 depends="sudo pax-utils openssl apk-tools bsdtar
-	 attr pkgconf patch bzip2 xz zlib lzip diffutils flex
+	 attr pkgconf patch bzip2 xz lzip diffutils flex
 	 bison unzip gmake file musl-utils pigz gzip zstd-dev
-	 libcxx-dev llvm-dev libtool curl pkgconf zlib-dev
+	 libcxx-dev llvm-dev libtool curl pkgconf
 	 openssl-dev musl-dev automake autoconf signify gtar"
-subpackages="abuild-rootbld:_rootbld:noarch $pkgname-doc"
+makedepends="zlib-dev"
+subpackages="$pkgname-doc"
 options="suid !check"
 source="$pkgname-v$pkgver.tar.gz::https://github.com/abyss-os/abuild/archive/v$pkgver.tar.gz"
 
@@ -25,12 +26,6 @@ package() {
 
 	install -m 644 abuild.conf "$pkgdir"/etc/abuild.conf
 	install -d -m 775 -g abuild "$pkgdir"/var/cache/distfiles
-}
-
-_rootbld() {
-	pkgdesc="Build packages in chroot"
-	depends="abuild bubblewrap git"
-	mkdir -p "$subpkgdir"
 }
 
 b2sums="28eb0b372c0dc24792e171d456ab88b59d3fa781c37ca487f8f2a9dd98071101bbf8cf7e9f668fe156a8e0ac80a2685033de6f9b46201ca0514078eb1b96c975  abuild-v4.0.70.tar.gz"

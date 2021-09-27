@@ -8,7 +8,7 @@ license="BSD"
 subpackages="$pkgname-doc"
 source="https://github.com/ibara/m4/releases/download/$pkgname-$pkgver/$pkgname-$pkgver.tar.gz"
 provides="m4"
-replaces="m4"
+replaces="gm4"
 
 build() {
     ./configure \

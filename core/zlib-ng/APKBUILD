@@ -1,35 +1,33 @@
 pkgname=zlib-ng
 pkgver=2.0.5
-pkgrel=1
+pkgrel=2
 pkgdesc="A compression/decompression Library"
 arch="all"
 license="zlib"
 url="https://github.com/zlib-ng/zlib-ng"
-subpackages="$pkgname-dev $pkgname-doc"
+makedepends="samurai cmake"
+subpackages="$pkgname-dev"
 source="$pkgname-$pkgver.tar.gz::https://github.com/zlib-ng/zlib-ng/archive/$pkgver.tar.gz"
 replaces="zlib"
-provides="zlib so:libz.so.1"
-
 
 build() {
-	./configure \
-		--prefix=/usr \
-		--libdir=/usr/lib \
-		--shared \
-		--zlib-compat
-	make
-}
-
-check() {
-	cd "$builddir"
-	make check
+    rm -rf build ; mkdir build && cd build
+    	cmake -G Ninja ../ \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DZLIB_COMPAT=ON
+    ninja
 }
 
 package() {
-	cd "$builddir"
-	make install \
-		pkgconfigdir="/usr/lib/pkgconfig" \
-		DESTDIR="$pkgdir"
+    cd build
+    DESTDIR=$pkgdir samu install
+}
+
+dev() {
+    replaces="zlib-dev"
+    default_dev
 }
 
 b2sums="70a7a4a4f5bcc792fcf5f41487160aa15481bc5512ddd567f59ac96ebd1b8ff7c1edb7e5887f16ee502a75fabb36caf88f0d88563a0d860679b0bfd0e0b9f12a  zlib-ng-2.0.5.tar.gz"

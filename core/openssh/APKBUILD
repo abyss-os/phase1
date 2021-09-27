@@ -1,7 +1,7 @@
 pkgname=openssh
-pkgver=8.7_p1
+pkgver=8.8_p1
 _pkgver=${pkgver%_*}${pkgver#*_}
-pkgrel=1
+pkgrel=0
 pkgdesc="Port of OpenBSD's free SSH release"
 url="https://www.openssh.com/portable.html"
 arch="all"
@@ -57,6 +57,6 @@ package() {
 	sed -i 's/#UseDNS yes/UseDNS no/' "$pkgdir"/etc/ssh/sshd_config
 }
 
-b2sums="9fdb8898485053d08c9eca419c15d0d03b7a60152cf6a9d7f1beed3a21c9e6ac3bd9f854580e6e474fb0c871f3d4be9ef4b49bee8c355d9e5769a5505f4e6ea9  openssh-8.7p1.tar.gz
+b2sums="3a054ce19781aceca5ab1a0839d7435d88aff4481e8c74b91ffd2046dc8b6f03d6bf584ecda066c0496acf43cea9ab4085f26a29e34e20736e752f204b8c76c3  openssh-8.8p1.tar.gz
 1710b87e98c05800a5b92bd40c808cf0c1534817203fa048579b006732c177b6e036f7b79ed1e5d6fc3cd3812220fa6f3cfc6d699bdad05ca53714825c511d02  sshd.initd
 31fde16600eb14d1e7e4dafb17c131f27b7c74fe4929da9866b88267f641f62033fdf061fd96fa3c4e6cccbe0d3eaf179861779e63a0d6d2edc118e032d4f693  sshd.confd"

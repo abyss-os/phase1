@@ -1,6 +1,6 @@
 pkgname=zlib-ng
 pkgver=2.0.5
-pkgrel=0
+pkgrel=1
 pkgdesc="A compression/decompression Library"
 arch="all"
 license="zlib"

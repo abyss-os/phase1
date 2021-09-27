@@ -39,7 +39,6 @@ build() {
         --with-mmap \
         --with-system-zlib \
         --enable-lto \
-        --enable-targets= \
         $_extra_args
     make
 }

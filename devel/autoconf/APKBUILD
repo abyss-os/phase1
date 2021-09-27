@@ -1,14 +1,14 @@
 pkgname=autoconf
 pkgver=2.71
-pkgrel=0
+pkgrel=1
 pkgdesc="A GNU tool for automatically configuring source code"
 arch="noarch"
 license="GPL-2.0-or-later"
 url="https://www.gnu.org/software/autoconf"
-depends="m4 perl"
+depends="om4 perl"
 subpackages="$pkgname-doc"
 options="!check"
-source="ftp://ftp.gnu.org/pub/gnu/$pkgname/$pkgname-$pkgver.tar.gz"
+source="https://ftp.gnu.org/pub/gnu/$pkgname/$pkgname-$pkgver.tar.xz"
 
 builddir="$srcdir"/$pkgname-$pkgver
 
@@ -23,11 +23,6 @@ build() {
 	make
 }
 
-check() {
-	cd "$builddir"
-	make check
-}
-
 package() {
 	cd "$builddir"
 	make DESTDIR="$pkgdir" install
@@ -36,4 +31,4 @@ package() {
 	rm -f "$pkgdir"/usr/share/info/standards.info
 }
 
-b2sums="1884479b3ff08c7e1a67cd75b208457bf904ec77f0d765d1eb372fa2e6f590db6048125288f1ef46823d2ed664316a22ecee4afbdf08561462533e53d68dc6b5  autoconf-2.71.tar.gz"
+b2sums="7fd4b98b4cfff10720e8da6ee91045637991643b50fcb3e47a0ecfcc01600f7b7b36fd1c0a5f08b68a418f1bdbd8d5a98de1008157595dd37cc3a31facb61416  autoconf-2.71.tar.xz"

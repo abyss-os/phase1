@@ -1,37 +1,27 @@
 pkgname=zlib
-pkgver=1.2.11
-pkgrel=2
+pkgver=2.0.5
+pkgrel=0
 pkgdesc="A compression/decompression Library"
 arch="all"
 license="zlib"
-url="http://zlib.net"
-depends=""
-subpackages="$pkgname-dev $pkgname-doc"
-source="https://zlib.net/$pkgname-$pkgver.tar.gz"
-
-builddir="$srcdir/$pkgname-$pkgver"
+url="https://github.com/zlib-ng/zlib-ng"
+makedepends="samurai cmake"
+subpackages="$pkgname-dev"
+source="$pkgname-$pkgver.tar.gz::https://github.com/zlib-ng/zlib-ng/archive/$pkgver.tar.gz"
 
 build() {
-	cd "$builddir"
-	# we trade size for a little more speed.
-	export CFLAGS="$CFLAGS -O2"
-	CHOST="${CHOST}" ./configure \
-		--prefix=/usr \
-		--libdir=/usr/lib \
-		--shared
-	make
-}
-
-check() {
-	cd "$builddir"
-	make check
+    rm -rf build ; mkdir build && cd build
+    	cmake -G Ninja ../ \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DZLIB_COMPAT=ON
+    ninja -j${JOBS}
 }
 
 package() {
-	cd "$builddir"
-	make install \
-		pkgconfigdir="/usr/lib/pkgconfig" \
-		DESTDIR="$pkgdir"
+    cd build
+    DESTDIR=$pkgdir samu install
 }
 
-b2sums="6bfc4bca5dcadba8a0d4121a2b3ed0bfe440c261003521862c8e6381f1a6f0a72d3fc037351d30afd7ef321e8e8d2ec817c046ac749f2ca0c97fbdc2f7e840b7  zlib-1.2.11.tar.gz"
+b2sums="70a7a4a4f5bcc792fcf5f41487160aa15481bc5512ddd567f59ac96ebd1b8ff7c1edb7e5887f16ee502a75fabb36caf88f0d88563a0d860679b0bfd0e0b9f12a  zlib-ng-2.0.5.tar.gz"

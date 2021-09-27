@@ -1,5 +1,5 @@
 pkgname=libudev-zero
-pkgver=0.5.2
+pkgver=1.0.0
 pkgrel=0
 pkgdesc="Daemonless replacement for libudev"
 url="https://github.com/illiliti/libudev-zero"
@@ -20,4 +20,4 @@ build() {
 package() {
 	make DESTDIR=$pkgdir PREFIX=/usr install
 }
-b2sums="367a6b6b8192f7b4e06fd6da4ad3e89af49fcc3994e6e3b5b192467614d65995302d5c2f461435d247833b62f3a43aaa49068f68b2c3e9e7570bef6d45666b45  libudev-zero-0.5.2.tar.gz"
+b2sums="5c263d98cf3a7ecfaf4441deb6413fa8a2c1b627765cb7429760fab218fc34ca9490c5af2d545a3ee402a9e8cc6c3841438c2e3ddf382629f42c59d398961edb  libudev-zero-1.0.0.tar.gz"

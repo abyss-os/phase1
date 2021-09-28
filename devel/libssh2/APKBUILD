@@ -1,18 +1,15 @@
 pkgname=libssh2
-pkgver=1.9.0
-pkgrel=1
+pkgver=1.10.0
+pkgrel=0
 pkgdesc="library for accessing ssh1/ssh2 protocol servers"
 url="https://libssh2.org/"
 arch="all"
 license="BSD-3-Clause"
 makedepends="openssl-dev zlib-dev"
 subpackages="$pkgname-dev $pkgname-doc"
-source="http://www.libssh2.org/download/libssh2-$pkgver.tar.gz
-	CVE-2019-17498.patch
-	"
+source="https://github.com/libssh2/libssh2/releases/download/libssh2-$pkgver/libssh2-$pkgver.tar.gz"
 
 build() {
-	cd "$builddir"
 	./configure \
 		--build=$CBUILD \
 		--host=$CHOST \
@@ -25,13 +22,10 @@ build() {
 }
 
 check() {
-	cd "$builddir"
 	make check
 }
 
 package() {
-	cd "$builddir"
 	make DESTDIR="$pkgdir" install
 }
-b2sums="7bce5cd38b88654f0ca0f8b562e4bddc56346e3359e5873000cad7619607b2ec01c3945112dd8815d5de6daf650a750a4727cebe7d8996cc62f07ded06f3235f  libssh2-1.9.0.tar.gz
-467b0a90fd8300c6d5ceb74dc08c56a6704321ca4bdad467af0d764f4f6ddcb743b38194df8eaa2ae70134cfed08bf0054b77d61b3ccd4e6012844be8aa33d39  CVE-2019-17498.patch"
+b2sums="0e6f571cc723e0050bf7ba7492f361ef222547dcbc311019cb6762f01405b4906e0418207a7d484c5170bee5e6f666827a7ea0d0cf233f684f999f896ce0b415  libssh2-1.10.0.tar.gz"

@@ -1,6 +1,6 @@
 pkgname=hwloc
 pkgver=2.5.0
-pkgrel=0https://www.open-mpi.org/software/hwloc/
+pkgrel=0
 pkgdesc="Portable abstraction of hierarchical hardware architectures"
 url="https://www.open-mpi.org/"
 arch="all"

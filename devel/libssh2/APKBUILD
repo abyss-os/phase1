@@ -8,6 +8,7 @@ license="BSD-3-Clause"
 makedepends="openssl-dev zlib-dev"
 subpackages="$pkgname-dev $pkgname-doc"
 source="https://github.com/libssh2/libssh2/releases/download/libssh2-$pkgver/libssh2-$pkgver.tar.gz"
+options="!check"
 
 build() {
 	./configure \

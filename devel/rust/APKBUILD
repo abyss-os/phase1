@@ -1,30 +1,24 @@
 pkgname=rust
 pkgver=1.55.0
-pkgrel=2
+pkgrel=3
 pkgdesc="The Rust Programming Language"
 url="https://www.rust-lang.org"
 arch="x86_64 ppc64le aarch64"
 license="Apache-2.0 AND MIT"
-
-makedepends="python3 file coreutils curl-dev libgit2-dev openssl-dev zlib-dev samurai rust-bootstrap cargo-bootstrap"
-
+makedepends="python3 file coreutils curl-dev openssl-dev zlib-dev samurai rust-bootstrap cargo-bootstrap"
 provides="rust-bootstrap=$pkgver-r$pkgrel"
 options="!archcheck !check"
-
 subpackages="$pkgname-doc cargo"
-
 source="https://static.rust-lang.org/dist/rustc-$pkgver-src.tar.gz"
 builddir="$srcdir/rustc-$pkgver-src"
 
 _arch=$CARCH _libc=musl AR=llvm-ar
-
+_target="${_arch}-unknown-linux-${_libc}"
 case $CARCH in
 	riscv64) _arch=riscv64gc CC=gnu-gcc CXX=gnu-g++ AR=gnu-ar makedepends="$makedepends binutils gcc";;
     mips64*) _libc=muslabi64;;
     ppc64le) _arch=powerpc64le;;
 esac
-
-_target="${_arch}-unknown-linux-${_libc}"
 
 export RUST_BACKTRACE=full
 

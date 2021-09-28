@@ -1,5 +1,5 @@
 pkgname=libgit2
-pkgver=0.99.0
+pkgver=1.3.0
 pkgrel=0
 pkgdesc="A linkable library for Git"
 url="https://libgit2.org/"
@@ -9,42 +9,33 @@ makedepends="curl-dev libssh2-dev http-parser-dev python3 cmake zlib-dev openssl
 subpackages="$pkgname-dev"
 source="$pkgname-$pkgver.tar.gz::https://github.com/libgit2/libgit2/archive/v$pkgver.tar.gz"
 
-prepare() {
-	default_prepare
-	mkdir -p "$builddir"/build
-	sed -i 's|/usr/bin/env python|/usr/bin/env python3|' tests/generate.py
-}
+#prepare() {
+#	default_prepare
+#	mkdir -p "$builddir"/build
+#	sed -i 's|/usr/bin/env python|/usr/bin/env python3|' tests/generate.py
+#}
 
 build() {
-	cd "$builddir"/build
+    rm -rf build && mkdir build
+	cd build
 
-	cmake .. \
-		-DCMAKE_BUILD_TYPE=Release \
-		-DCMAKE_INSTALL_PREFIX=/usr \
-		-DCMAKE_C_FLAGS="$CFLAGS"
-	make
-
-	# Build static library
-	mkdir -p "$builddir"/build-static
-	cd "$builddir"/build-static
-
-	cmake .. \
-		-DCMAKE_BUILD_TYPE=Release \
+	cmake -DCMAKE_BUILD_TYPE=Release \
 		-DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_C_FLAGS="$CFLAGS" \
-		-DBUILD_SHARED_LIBS=OFF
+		-DBUILD_SHARED_LIBS=ON \
+		-DBUILD_STATIC_LIBS=ON \
+        ..
 	make
 }
 
 check() {
-	cd "$builddir"/build
+	cd build
 	# Test 'offline' fails on s390x, aarch64 and ppc64le
 	ctest -E offline
 }
 
 package() {
 	make -C build DESTDIR="$pkgdir" install
-	make -C build-static DESTDIR="$pkgdir" install
 }
 
-b2sums="2ff6c48d29844c8efd292b636c018403f49ae5eef1ef41e2c8755cc35d935677fa965b52c05724aa133f8542a266bb0e0fabb34fcf710127332bd6137ea4ff12  libgit2-0.99.0.tar.gz"
+b2sums="b701c105bb0a5bdcdd5ed1db180662ad4949c540944664d5d8c2f5d78998f15d15bd3669ae3e3d43bfa1b81207c0a94b7e49fc76e57f4cc8ef791ab26e62fc70  libgit2-1.3.0.tar.gz"

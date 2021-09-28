@@ -5,37 +5,38 @@ pkgdesc="A linkable library for Git"
 url="https://libgit2.org/"
 arch="all"
 license="GPL-2.0-only WITH GCC-exception-2.0"
-makedepends="curl-dev libssh2-dev http-parser-dev python3 cmake zlib-dev openssl-dev"
+makedepends="curl-dev libssh2-dev http-parser-dev cmake zlib-dev openssl-dev"
 subpackages="$pkgname-dev"
 source="$pkgname-$pkgver.tar.gz::https://github.com/libgit2/libgit2/archive/v$pkgver.tar.gz"
 
-#prepare() {
-#	default_prepare
-#	mkdir -p "$builddir"/build
-#	sed -i 's|/usr/bin/env python|/usr/bin/env python3|' tests/generate.py
-#}
-
 build() {
-    rm -rf build && mkdir build
+	rm -rf build && mkdir build
 	cd build
 
 	cmake -DCMAKE_BUILD_TYPE=Release \
 		-DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_C_FLAGS="$CFLAGS" \
 		-DBUILD_SHARED_LIBS=ON \
-		-DBUILD_STATIC_LIBS=ON \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+        ..
+	make
+
+	cd $builddir
+	rm -rf build-static && mkdir build-static
+	cd build-static
+
+	cmake -DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_C_FLAGS="$CFLAGS" \
+		-DBUILD_SHARED_LIBS=OFF \
+		-DCMAKE_INSTALL_LIBDIR=lib \
         ..
 	make
 }
 
-check() {
-	cd build
-	# Test 'offline' fails on s390x, aarch64 and ppc64le
-	ctest -E offline
-}
-
 package() {
 	make -C build DESTDIR="$pkgdir" install
+	make -C build-static DESTDIR="$pkgdir" install
 }
 
 b2sums="b701c105bb0a5bdcdd5ed1db180662ad4949c540944664d5d8c2f5d78998f15d15bd3669ae3e3d43bfa1b81207c0a94b7e49fc76e57f4cc8ef791ab26e62fc70  libgit2-1.3.0.tar.gz"

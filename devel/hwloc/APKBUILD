@@ -1,11 +1,11 @@
 pkgname=hwloc
-pkgver=2.4.0
-pkgrel=0
+pkgver=2.5.0
+pkgrel=0https://www.open-mpi.org/software/hwloc/
 pkgdesc="Portable abstraction of hierarchical hardware architectures"
 url="https://www.open-mpi.org/"
 arch="all"
 license="BSD-3-Clause"
-makedepends="cairo-dev eudev-dev libxml2-dev ncurses-dev"
+makedepends="cairo-dev libudev-zero-dev libxml2-dev ncurses-dev"
 subpackages="$pkgname-dev $pkgname-doc"
 source="https://www.open-mpi.org/software/hwloc/v${pkgver%.*}/downloads/hwloc-$pkgver.tar.bz2"
 options="!check"
@@ -23,4 +23,4 @@ package() {
 	make -C "$builddir" DESTDIR="$pkgdir" install
 }
 
-b2sums="fb444ebeafdd131cf929dcac718b0ce2e7af598a9777f7005e4adf3155e9ddc36222e9708970e2de9dd2659bb2d2baec3531e363eca747c11410da7ecd8c0cdf  hwloc-2.4.0.tar.bz2"
+b2sums="684367afa5fc056b9bf04b3a95bd8239ec70127d5e582948ca16a09323614ad0ef77278a120544af0a740b456f1ba24bffc861b9f132293fafb7da0597d0b688  hwloc-2.5.0.tar.bz2"

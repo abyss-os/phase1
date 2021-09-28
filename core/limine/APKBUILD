@@ -1,0 +1,23 @@
+pkgname=limine
+pkgver=2.58
+pkgrel=0
+pkgdesc="x86/x86_64 BIOS/UEFI Bootloader"
+url="https://limine-bootloader.org/"
+arch="x86_64"
+license="BSD"
+depends=""
+makedepends="nasm binutils mtools"
+install=""
+#subpackages="$pkgname-dev $pkgname-doc"
+source="https://github.com/limine-bootloader/limine/releases/download/v$pkgver/limine-v$pkgver.tar.xz"
+builddir=$srcdir/$pkgname-v$pkgver
+
+build() {
+    make CC=$CC TOOLCHAIN=llvm TOOLCHAIN_CC=clang TOOLCHAIN_LD=gnu-ld TOOLCHAIN_OBJCOPY=gnu-objcopy PREFIX=/usr limine-uefi limine-bios
+}
+
+package() {
+    make CC=$CC TOOLCHAIN=llvm TOOLCHAIN_CC=clang TOOLCHAIN_LD=gnu-ld TOOLCHAIN_OBJCOPY=gnu-objcopy PREFIX=/usr DESTDIR=$pkgdir PREFIX=/usr install
+}
+
+b2sums="462ea49251fbb7d0a00d783b3962e84c3fe4e838dc4cb3805e8f39fd50ae48510cf11996a2dbf18e26373a44eaa84ac3a95811394caf76ca709ab18f70bf2fe8  limine-v2.58.tar.xz"

@@ -24,6 +24,7 @@ build() {
 		--localstatedir=/var \
 		--buildtype=release \
 		--sbindir=/usr/bin \
+		--libdir=/usr/lib \
 		. output
 	ninja -C output
 }

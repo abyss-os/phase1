@@ -5,10 +5,7 @@ pkgdesc="x86/x86_64 BIOS/UEFI Bootloader"
 url="https://limine-bootloader.org/"
 arch="x86_64"
 license="BSD"
-depends=""
 makedepends="nasm binutils mtools"
-install=""
-#subpackages="$pkgname-dev $pkgname-doc"
 source="https://github.com/limine-bootloader/limine/releases/download/v$pkgver/limine-v$pkgver.tar.xz"
 builddir=$srcdir/$pkgname-v$pkgver
 

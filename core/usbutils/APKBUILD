@@ -1,21 +1,14 @@
 pkgname=usbutils
-pkgver=013
+pkgver=014
 pkgrel=0
 pkgdesc="USB Device Utilities"
 url="http://linux-usb.sourceforge.net/"
 arch="all"
 license="GPL-2.0-or-later"
 depends="hwids"
-makedepends="libusb-dev eudev-dev autoconf automake bash libtool linux-dev"
+makedepends="libusb-dev libudev-zero-dev autoconf automake bash libtool linux-dev"
 subpackages="$pkgname-doc"
-source="https://www.kernel.org/pub/linux/utils/usb/usbutils/usbutils-$pkgver.tar.xz
-	hwdata.patch
-	"
-
-prepare() {
-	default_prepare
-	./autogen.sh
-}
+source="https://www.kernel.org/pub/linux/utils/usb/usbutils/usbutils-$pkgver.tar.xz"
 
 build() {
 	./configure \
@@ -33,5 +26,4 @@ package() {
 	make DESTDIR="$pkgdir" install
 }
 
-b2sums="d6e7925e180ba90f27ca12f13ed985f34e51b230ec08188c91bf39bb8e64baa319aa63d473318e1a4cb21b53808e8610f837ea0bb85657072f1c70107d037873  usbutils-013.tar.xz
-724d50d5d78790cf9e587f59aaa8b23459539d09920557fef889287585e27b93b1d401cca3c13e3a8c4af0f5213ccd8ca192edfbcf94cff94d9f5cdbe44717ac  hwdata.patch"
+b2sums="aea4f8edd3c7d7bc400fd63a8702b6d0bb50b8ed07196c4a0ed20a615eacf6373794afb9e7d5d81408dc3382848e965ecf8bc1bbec20837e4d1f96ba47cc40b5  usbutils-014.tar.xz"

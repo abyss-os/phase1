@@ -13,12 +13,12 @@ source="https://static.rust-lang.org/dist/rustc-$pkgver-src.tar.gz"
 builddir="$srcdir/rustc-$pkgver-src"
 
 _arch=$CARCH _libc=musl AR=llvm-ar
-_target="${_arch}-unknown-linux-${_libc}"
 case $CARCH in
 	riscv64) _arch=riscv64gc CC=gnu-gcc CXX=gnu-g++ AR=gnu-ar makedepends="$makedepends binutils gcc";;
     mips64*) _libc=muslabi64;;
     ppc64le) _arch=powerpc64le;;
 esac
+_target="${_arch}-unknown-linux-${_libc}"
 
 export RUST_BACKTRACE=full
 

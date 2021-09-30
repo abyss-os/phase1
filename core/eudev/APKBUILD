@@ -33,7 +33,7 @@ build() {
 		--enable-split-usr \
 		--enable-manpages \
 		--disable-hwdb \
-		--enable-kmod \
+		--enable-kmod
 	make
 }
 

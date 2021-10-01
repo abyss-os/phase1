@@ -25,10 +25,6 @@ _arch_extra="-DCOMPILER_RT_BUILD_SANITIZERS=OFF -DCOMPILER_RT_BUILD_XRAY=OFF -DC
 case $CARCH in
         mips64*) _targets="Mips" _lto=OFF _projects="libunwind;libcxxabi;libcxx;compiler-rt;llvm;lld;clang";;
         riscv64) _lto=OFF _projects="libunwind;libcxxabi;libcxx;compiler-rt;llvm;lld;clang;clang-tools-extra";;
-        x86_64) _arch_extra="-DCOMPILER_RT_BUILD_SANITIZERS=ON -DCOMPILER_RT_BUILD_XRAY=ON -DCOMPILER_RT_BUILD_MEMPROF=ON
-                -DLLVM_TOOL_LLVM_ITANIUM_DEMANGLE_FUZZER_BUILD=ON -DLLVM_TOOL_LLVM_MC_ASSEMBLE_FUZZER_BUILD=ON
-                -DLLVM_TOOL_LLVM_MC_DISASSEMBLE_FUZZER_BUILD=ON -DLLVM_TOOL_LLVM_OPT_FUZZER_BUILD=ON
-                -DLLVM_TOOL_LLVM_MICROSOFT_DEMANGLE_FUZZER_BUILD=ON";;
 esac
 
 prepare() {
@@ -104,7 +100,6 @@ prepare() {
 			-DCOMPILER_RT_INCLUDE_TESTS=OFF \
 			-DCOMPILER_RT_INCLUDE_TESTS=OFF \
 			-DCOMPILER_RT_BUILD_LIBFUZZER=OFF \
-			-DENABLE_EXPERIMENTAL_NEW_PASS_MANAGER=TRUE \
 			-DLLVM_USE_NEWPM=ON \
             $_arch_extra \
 			$builddir/llvm

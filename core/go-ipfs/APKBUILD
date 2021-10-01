@@ -1,5 +1,5 @@
 pkgname=go-ipfs
-pkgver=0.8.0
+pkgver=0.10.0
 pkgrel=0
 pkgdesc="Inter Platnetary File System (IPFS), a peer-to-peer hypermedia distribution protocol"
 url="https://ipfs.io/"
@@ -13,8 +13,7 @@ install="$pkgname.pre-install $pkgname.post-install"
 subpackages="$pkgname-openrc $pkgname-bash-completion:bashcomp:noarch"
 source="$pkgname-$pkgver.tar.gz::https://github.com/ipfs/go-ipfs/archive/v$pkgver.tar.gz
 	ipfs.initd
-	ipfs.confd
-	client_golang_riscv.patch"
+	ipfs.confd"
 builddir="$srcdir/$pkgname-$pkgver"
 
 build() {
@@ -48,7 +47,6 @@ bashcomp() {
 		"$subpkgdir"/usr/share/bash-completion/completions/$pkgname
 }
 
-b2sums="fcee266794ddd2fd80ea712ba3a0ad93124228236483855b503465828ccec6d4e8682efddbe6ffe93fb4da12941c011233456714b432ed938cd4cc84ddd22697  go-ipfs-0.8.0.tar.gz
+b2sums="a896570b1a9c9095db56fb0094647ccac388b103e44cb1a579c1250dbd3b06fc51fd6d40ea1bf3753170e85c8a938a77e49aede806f30556f5359b82b83ee3e9  go-ipfs-0.10.0.tar.gz
 57c1a12bc333fe7f0ae9cd95253197e1fd953942928c6ed16dc11d615e4f9a3e4e8113eee930f791fdd640f9805e4d666ff2614e456d628e4d744632434c9e90  ipfs.initd
-7ecaa40f2a4097690f9d8091da5891e0bbfb0f298bed4a59769c8d0ef978a2471865a01177950da5869b61f3b8c124f43eab97daf297c06efecdc25785a5846d  ipfs.confd
-046f5c5629e248ca2e21afa1d8a33ad1df949d01f19a5cae3530a660be1d879bfffe5b22251502971cdda5915ec7dae020c392092e2b48e445af031cb6698740  client_golang_riscv.patch"
+7ecaa40f2a4097690f9d8091da5891e0bbfb0f298bed4a59769c8d0ef978a2471865a01177950da5869b61f3b8c124f43eab97daf297c06efecdc25785a5846d  ipfs.confd"

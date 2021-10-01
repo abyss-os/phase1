@@ -1,7 +1,7 @@
 # in reality, we only package select libraries from the previous major LLVM version in order to make upgrades easier
 pkgname=llvm-compat
-pkgver=11.1.0
-pkgrel=2
+pkgver=12.0.1
+pkgrel=0
 pkgdesc="$pkgname $pkgver (libs only)"
 arch="all"
 url=https://llvm.org
@@ -16,16 +16,7 @@ case $CARCH in
         *) echo "Unknown arch" ; return 1 ;;
 esac
 
-source="https://github.com/llvm/llvm-project/archive/llvmorg-${pkgver/_/-}.tar.gz
-		mips_softfloat.patch
-		mips_ppc_crt.patch
-		clang-pie-ssp.patch
-		lld-znow.patch
-		riscv_relax.patch
-		tmp-kernel.patch
-		mips_fix_syscall_warning.patch
-		mips-ldso.patch
-		mips-reloc.patch"
+source="https://github.com/llvm/llvm-project/archive/llvmorg-${pkgver/_/-}.tar.gz"
 
 builddir=$srcdir/llvm-project-llvmorg-${pkgver/_/-}
 _builddir="$srcdir/build"
@@ -111,7 +102,7 @@ prepare() {
 			-DCOMPILER_RT_BUILD_XRAY=OFF \
 			-DCOMPILER_RT_INCLUDE_TESTS=OFF \
 			-DCOMPILER_RT_BUILD_LIBFUZZER=OFF \
-			-DENABLE_EXPERIMENTAL_NEW_PASS_MANAGER=TRUE \
+            -DLLVM_USE_NEWPM=ON \
 			$builddir/llvm
 }
 
@@ -125,13 +116,4 @@ package() {
 	install -D $_builddir/lib/libLLVM-${pkgver%%.*}.so ${pkgdir}/usr/lib/libLLVM-${pkgver%%.*}.so
 }
 
-b2sums="ca842ff4afff8f44c82b5e7383962a9c45ca1c93b64fa4c6ebcd70a1d3849dbad2b8e4e24fba02d144c6266d7fab3607ebc6999b28c229cb35256cf40f26a985  llvmorg-11.1.0.tar.gz
-8e23d19518bc2bba4009c30ba6d8c981e94b6e293a95a29ebbb9be7c9a7a40b21900a7e526529149847a42bd98899306a1af9b99c819e290d4a67e34f4ea32c3  mips_softfloat.patch
-b1784c607ad18ab83c0287dd22401c818046fb29c57ced4ea5399e691222ec18b20f5bcb3b6a745f569e738904aaf3ff98a1a01543277d1f5ed6534a19594c1f  mips_ppc_crt.patch
-7991221eca8a3f32607de7da91c02928d95cfae8d2af3516d403d2edd1a43bf7bb97280b6584146cd9ed51123b2bfe686a460ac1035131d115207d55a7debcfa  clang-pie-ssp.patch
-ada8faf1f1bbdfc52b0493ba563b91de954e6613b8be0af7deeabdf0b621a69a45e5acc753ecb487f461360bb2ec99b4f510a8872bff3afe90e9e7b91de12997  lld-znow.patch
-c99d536538e3e4830c618e11214f4fdda6cf377c9ea565b254e2484e52b68202b19b921b09ef4b784897bceac8a3b7bb9331b4b0087a5cafb8a1a3518fb1a1c4  riscv_relax.patch
-66835dfc1460df303d26fe7c5d630b836cbb0e1ef7c39d59695f73f69e2d12af59db72ce16b1ee16f9ff5ea7bd530a9d39b7c98c0f7c89d74c03ab212d17db9a  tmp-kernel.patch
-bad67cfe2f509010d9cff29b361239ae67cc726941b940a5acd7365af4a581e4734a5ca7f9840481be227189c44ce6ae93137c2400036829b41aa4639cef13b4  mips_fix_syscall_warning.patch
-5669318224dd77fd3274f510dedf3f8d07308d4da7530ea3f65b26ddef016c8013b14acde053a6c002ef53b3d27bf413b024c8e02941de235f70bd03b62d2a94  mips-ldso.patch
-3235e9deab771138f5cf72ddc3f61a4742d910561c7d3fea31e52b8a1d0288249b8afa6681f8bfebe27ca403a356863ab0d0a225d6031a4783598276c5748fb5  mips-reloc.patch"
+b2sums="f41de787bc73ff2edfda1b22cc8602be6f65f37dd9e4c8888533cfa8c3ccdcf4f108aaab9de23ab0ab987966eb160f2a553a0bdff99461e71ddd5bfcd086090d  llvmorg-12.0.1.tar.gz"

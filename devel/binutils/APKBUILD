@@ -45,6 +45,7 @@ build() {
 package() {
 	make -j1 install DESTDIR="$pkgdir"
     # compat
+    mkdir -p $pkgdir/usr/bin
     ln -sv /usr/toolchain/gnu/bin/ld $pkgdir/usr/bin/gnu-ld
     ln -sv /usr/toolchain/gnu/bin/as $pkgdir/usr/bin/gnu-as
 }

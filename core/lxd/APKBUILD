@@ -1,6 +1,6 @@
 pkgname=lxd
-pkgver=4.18
-pkgrel=1
+pkgver=4.19
+pkgrel=0
 pkgdesc="a container hypervisor and a new user experience for LXC"
 url="https://linuxcontainers.org/lxd/"
 arch="all"
@@ -61,6 +61,6 @@ agent() {
 }
 
 
-b2sums="96311473ade85065120211e9f046708f8cc03e0dccd47f70f470712f7a7d85c948773ec42908d3e28cd76f718130b7460856b0f297327ef9d843bc852c87998a  lxd-4.18.tar.gz
+b2sums="0f4031119b42ad863ecec8d7df6a93922e5cafd31bd184fb2bf1e89acc01f459245aadac7c70bc4972a24e50420a775f4f8a8b600107a04c087db0facd0959e3  lxd-4.19.tar.gz
 a5318b21249418f216624709b22d6ee657d1f88c0b7fca6a74f9b8d1f557310fc31d350be852cf78bf542225ec2f93e70bb7e00799fa5d639912f2b1ac98e6fb  lxd.confd
 ed0c53b6255a320ff8c1a41da70ff495395b9a99d305ca25f9e017f7821e9a1caaef26677bf448107e235b6ee10bcd1181150c299dce55c1e7b70f5686105650  lxd.initd"

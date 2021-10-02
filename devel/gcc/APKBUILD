@@ -1,6 +1,6 @@
 pkgname=gcc
 pkgver=11.2.0
-pkgrel=0
+pkgrel=1
 pkgdesc="The GNU Compiler Collection"
 url="http://gcc.gnu.org"
 arch="all"
@@ -21,40 +21,33 @@ source="https://gcc.gnu.org/pub/gcc/releases/gcc-${_pkgbase:-$pkgver}/gcc-${_pkg
         https://ftp.gnu.org/gnu/mpfr/mpfr-$_mpfr.tar.xz
         https://mirror.sobukus.de/files/src/isl/isl-$_isl.tar.xz"
 
-# we build out-of-tree
-_gccdir="$srcdir"/gcc-${_pkgbase:-$pkgver}
-_gcclibdir=/usr/lib/gcc/${CTARGET}/$pkgver
-_gcclibexec=/usr/libexec/gcc/${CTARGET}/$pkgver
+_gccprefix=/usr/toolchain/gnu
+_gccdir="$srcdir"/gcc-$pkgver
+_gcclibdir=$_gccprefix/lib/gcc/${CTARGET}/$pkgver
+_gcclibexec=$_gccprefix/libexec/gcc/${CTARGET}/$pkgver
 
 _builddir="$srcdir/build"
+
+_arch_configure=""
+_hash_style_configure=""
+case "$CARCH" in
+    aarch64)		_arch_configure="--with-arch=armv8-a --with-abi=lp64";;
+    mips64*)		_arch_configure="--with-arch=mips64 --with-tune=mips64 --with-mips-plt --with-float=soft --with-abi=64";;
+    ppc64le)		_arch_configure="--with-abi=elfv2 --enable-secureplt --enable-decimal-float=no --enable-targets=powerpcle-linux";;
+    riscv64)		_arch_configure="--with-arch=rv64gc --with-abi=lp64d";;
+esac
 
 prepare() {
 	cd "$_gccdir"
 
-    default_prepare
-
-	echo ${pkgver} > gcc/BASE-VER
-
 	msg "Linking sources..."
-	for i in gmp mpfr mpc; do
+	for i in gmp mpfr mpc isl; do
 		rm -f $srcdir/$i
 		ln -sfv $srcdir/$i-$(eval echo "\$_$i") $srcdir/gcc-$pkgver/$i
 	done
 
 	cd $srcdir
-	config_helper
-
-	local _arch_configure= _hash_style_configure=
-	case "$CARCH" in
-	    aarch64)		_arch_configure="--with-arch=armv8-a --with-abi=lp64";;
-	    mips64*)		_arch_configure="--with-arch=mips64 --with-tune=mips64 --with-mips-plt --with-float=soft --with-abi=64";;
-	    ppc64le)		_arch_configure="--with-abi=elfv2 --enable-secureplt --enable-decimal-float=no --enable-targets=powerpcle-linux";;
-	    riscv64)		_arch_configure="--with-arch=rv64gc --with-abi=lp64d";;
-	esac
-
-	case "$CARCH" in
-	    *)	_hash_style_configure="--with-linker-hash-style=both" ;;
-	esac
+    default_prepare
 
 }
 
@@ -62,13 +55,12 @@ build() {
 	mkdir -p "$_builddir"
 	cd "$_builddir"
 
-	env CC=gnu-gcc CXX=gnu-g++ LD=gnu-ld \
+	env CC=gnu-gcc CXX=gnu-g++ \
 	"$_gccdir"/configure \
         --build=${CBUILD} \
         --host=${CHOST} \
         --target=${CTARGET} \
-        --program-prefix=gnu- \
-	    --prefix=/usr \
+	    --prefix=$_gccprefix \
 	    --mandir=/usr/share/man \
 		--infodir=/usr/share/info \
 		--with-pkgversion="Abyss OS $pkgver" \
@@ -91,11 +83,11 @@ build() {
 		--disable-libmudflap \
 		--disable-libsanitizer \
 		--disable-symvers \
-        --with-as=/usr/bin/gnu-as \
-		--with-ld=/usr/bin/gnu-ld \
+        --with-as=$_gccprefix/bin/gnu-as \
+        --with-ld=$_gccprefix/bin/gnu-ld \
 		--disable-bootstrap \
+        --with-linker-hash-style=both \
 		$_arch_configure \
-		$_hash_style_configure
 
 	cd "$_builddir"
 	make
@@ -118,19 +110,11 @@ package() {
 		-o -name libatomic.a -o -name libasan.a -o -name libtsan.a \) \
 		-a -type f`
 
-	mv -vf "$pkgdir"/usr/lib/*.spec "$pkgdir"/$_gcclibdir
+	mv -vf "$pkgdir"${_gccprefix}/lib/*.spec "$pkgdir"/$_gcclibdir
 
 	# remove ffi
-	rm -f "$pkgdir"/usr/lib/libffi* "$pkgdir"/usr/share/man/man3/ffi*
+	rm -f "$pkgdir"${_gccprefix}/lib/libffi* "$pkgdir"/usr/share/man/man3/ffi*
 	find "$pkgdir" -name 'ffi*.h' | xargs rm -f
-
-	local gdblib=${_target:+$CTARGET/}lib
-	if [ -d "$pkgdir"/usr/$gdblib/ ]; then
-		for i in $(find "$pkgdir"/usr/$gdblib/ -type f -maxdepth 1 -name "*-gdb.py"); do
-			mkdir -p "$pkgdir"/usr/share/gdb/python/auto-load/usr/$gdblib
-			mv "$i" "$pkgdir"/usr/share/gdb/python/auto-load/usr/$gdblib/
-		done
-	fi
 }
 
 libcxx() {
@@ -138,7 +122,7 @@ libcxx() {
 	depends=
 
 	mkdir -p "$subpkgdir"/usr/lib
-	mv "$pkgdir"/usr/lib/libstdc++.so.* "$subpkgdir"/usr/lib/
+	mv "$pkgdir"${_gccprefix}/lib/libstdc++.so.* "$subpkgdir"/usr/lib/
 }
 
 libgcc() {
@@ -146,7 +130,7 @@ libgcc() {
 	depends=
 
 	mkdir -p "$subpkgdir"/usr/lib
-	mv "$pkgdir"/usr/lib/libgcc_s.so.* "$subpkgdir"/usr/lib/
+	mv "$pkgdir"${_gccprefix}/lib/libgcc_s.so.* "$subpkgdir"/usr/lib/
 }
 
 b2sums="69b61234ac436edfea2933df68c434a2ce7aa4454ef4da573e82587e1a42dc420189e949cfdadaf4cb37fc0de9674822210a95b77ff03aca0dbedfe67df19cc6  gcc-11.2.0.tar.xz

@@ -1,3 +1,4 @@
+
 pkgname=gcc
 pkgver=11.2.0
 pkgrel=0
@@ -8,9 +9,9 @@ license="GPL LGPL"
 _gccrel=$pkgver-r$pkgrel
 _gmp=6.2.1
 _mpfr=4.1.0
-_isl=0.23
+_isl=0.24
 _mpc=1.2.1
-makedepends="bison flex texinfo gawk zip zlib-dev linux-dev libucontext-dev binutils gcc-bootstrap"
+makedepends="bison flex texinfo gawk zip zlib-dev linux-dev libucontext-dev binutils libssp_nonshared"
 depends="binutils"
 subpackages="$pkgname-doc libgcc libstdc++:libcxx"
 provides="$pkgname-bootstrap=$pkgver-r$pkgrel"
@@ -19,7 +20,7 @@ source="https://gcc.gnu.org/pub/gcc/releases/gcc-${_pkgbase:-$pkgver}/gcc-${_pkg
         https://ftp.gnu.org/gnu/mpc/mpc-$_mpc.tar.gz
         https://ftp.gnu.org/gnu/gmp/gmp-$_gmp.tar.xz
         https://ftp.gnu.org/gnu/mpfr/mpfr-$_mpfr.tar.xz
-        http://isl.gforge.inria.fr/isl-$_isl.tar.gz"
+        https://mirror.sobukus.de/files/src/isl/isl-$_isl.tar.xz"
 
 # we build out-of-tree
 _gccdir="$srcdir"/gcc-${_pkgbase:-$pkgver}
@@ -62,7 +63,7 @@ build() {
 	mkdir -p "$_builddir"
 	cd "$_builddir"
 
-	env CC=gnu-gcc CXX=gnu-g++ LD=gnu-ld \
+	#env CC=gnu-gcc CXX=gnu-g++ LD=gnu-ld \
 	"$_gccdir"/configure \
         --build=${CBUILD} \
         --host=${CHOST} \
@@ -91,7 +92,7 @@ build() {
 		--disable-libmudflap \
 		--disable-libsanitizer \
 		--disable-symvers \
-        	--with-as=/usr/bin/gnu-as \
+        --with-as=/usr/bin/gnu-as \
 		--with-ld=/usr/bin/gnu-ld \
 		--enable-bootstrap \
 		$_arch_configure \
@@ -133,23 +134,6 @@ package() {
 	fi
 }
 
-libatomic() {
-	pkgdesc="GCC Atomic library"
-	depends=
-
-	mkdir -p "$subpkgdir"/usr/lib
-	mv "$pkgdir"/usr/lib/libatomic.so.* "$subpkgdir"/usr/lib/
-}
-
-libatomicdev() {
-	pkgdesc="GCC Atomic library (dev)"
-	depends="libatomic"
-
-	mkdir -p "$subpkgdir"/usr/lib
-	mv "$pkgdir"/usr/lib/libatomic.so "$subpkgdir"/usr/lib/
-	mv "$pkgdir"/usr/lib/libatomic.a "$subpkgdir"/usr/lib/
-}
-
 libcxx() {
 	pkgdesc="GNU C++ standard runtime library"
 	depends=
@@ -166,17 +150,8 @@ libgcc() {
 	mv "$pkgdir"/usr/lib/libgcc_s.so.* "$subpkgdir"/usr/lib/
 }
 
-libgomp() {
-	pkgdesc="GCC shared-memory parallel programming API library"
-	depends=
-	replaces="gcc"
-
-	mkdir -p "$subpkgdir"/usr/lib
-	mv "$pkgdir"/usr/lib/libgomp.so.* "$subpkgdir"/usr/lib/
-}
-
 b2sums="69b61234ac436edfea2933df68c434a2ce7aa4454ef4da573e82587e1a42dc420189e949cfdadaf4cb37fc0de9674822210a95b77ff03aca0dbedfe67df19cc6  gcc-11.2.0.tar.xz
 9cd03c6a71839e4cdb3c1f18d718cc4d3097c3f8ec307a5c756bd5df27c68aa013755156b3b156efee1acabfee2269602c6a3a358092ef0d522271c9c56c133d  mpc-1.2.1.tar.gz
 c0d85f175392a50cfa01bc6b0a312b235946ad8b4f6f84f6dabd33d7a6f2cc75c9b0e1e33057be07750bfa0145b7c4cf3b6188a5be6ca9d7271ec2276c84ebcb  gmp-6.2.1.tar.xz
 41d1be0c4b557760f12a4525ad3a84b6e2cd6f0927c935fcfba577ac0490e582d1ae4b581dce58e21e705cf9d7c88373054d7fb7a94bb32c69b339f99a25dc68  mpfr-4.1.0.tar.xz
-36f3f10704315eaa23e2ad39ab069d418d0152ea753de5f2da2f6e70d63f1322d33027329274dffe87634bcdd50d9806f3477b35927198dee8cfc4e3f54381e6  isl-0.23.tar.gz"
+39cbfd18ad05778e3a5a44429261b45e4abc3efe7730ee890674d968890fe5e52c73bc1f8d271c7c3bc72d5754e3f7fcb209bd139e823d19cb9ea4ce1440164d  isl-0.24.tar.xz"

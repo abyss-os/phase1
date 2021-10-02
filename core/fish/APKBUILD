@@ -1,0 +1,36 @@
+pkgname=fish
+pkgver=3.3.1
+pkgrel=0
+pkgdesc="Modern interactive commandline shell"
+url="https://fishshell.com/"
+arch="all"
+license="GPL-2.0-only"
+depends="bc"
+makedepends="cmake ncurses-dev pcre2-dev gettext-tiny-dev"
+install="$pkgname.post-install $pkgname.pre-deinstall"
+source="https://github.com/fish-shell/fish-shell/releases/download/$pkgver/fish-$pkgver.tar.xz"
+
+build() {
+	cmake -B build \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_SHARED_LIBS=True \
+		-DCMAKE_BUILD_TYPE=None \
+		-DCMAKE_INSTALL_SYSCONFDIR=/etc \
+		-DBUILD_DOCS=OFF
+	cmake --build build
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+	rm -fr "$pkgdir"/usr/share/$pkgname/groff $pkgdir/usr/share/doc $pkgdir/usr/share/man
+
+	mkdir -p "$pkgdir"/usr/lib
+	mv "$pkgdir"/usr/share/pkgconfig "$pkgdir"/usr/lib
+
+	rm "$pkgdir"/usr/share/fish/completions/docker.fish
+	rm "$pkgdir"/usr/share/fish/completions/flatpak.fish
+}
+
+
+b2sums="61b2bf96526d957d3f9706df5a76d4d9b4ccf55a1ff2b7b66f1a0d5d126a220df9984551f5adb06dcedbfb5674b93c4f3d75ef991585980a29d4dd84f7697559  fish-3.3.1.tar.xz"

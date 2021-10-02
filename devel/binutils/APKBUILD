@@ -20,10 +20,10 @@ build() {
 	esac
 
 	./configure \
-        --prefix=/usr/toolchain/gnu \
+        --prefix=/usr/toolchain/binutils/gnu \
         --mandir=/usr/share/man \
         --infodir=/usr/share/info \
-        --sbindir=/usr/toolchain/gnu/bin \
+        --sbindir=/usr/toolchain/binutils/gnu/bin \
         --disable-multilib \
         --enable-ld=default \
         --enable-gold=yes \
@@ -46,8 +46,8 @@ package() {
 	make -j1 install DESTDIR="$pkgdir"
     # compat
     mkdir -p $pkgdir/usr/bin
-    ln -sv /usr/toolchain/gnu/bin/ld $pkgdir/usr/bin/gnu-ld
-    ln -sv /usr/toolchain/gnu/bin/as $pkgdir/usr/bin/gnu-as
+    ln -sv /usr/toolchain/binutils/gnu/bin/ld $pkgdir/usr/bin/gnu-ld
+    ln -sv /usr/toolchain/binutils/gnu/bin/as $pkgdir/usr/bin/gnu-as
 }
 
 aalt() {

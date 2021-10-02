@@ -10,7 +10,7 @@ _gmp=6.2.1
 _mpfr=4.1.0
 _isl=0.24
 _mpc=1.2.1
-makedepends="bison flex texinfo gawk zip zlib-dev linux-dev libucontext-dev binutils libssp_nonshared"
+makedepends="bison flex texinfo gawk zip zlib-dev linux-dev libucontext-dev binutils gcc-bootstrap"
 depends="binutils"
 subpackages="$pkgname-doc libgcc libstdc++:libcxx"
 provides="$pkgname-bootstrap=$pkgver-r$pkgrel"
@@ -62,7 +62,7 @@ build() {
 	mkdir -p "$_builddir"
 	cd "$_builddir"
 
-	#env CC=gnu-gcc CXX=gnu-g++ LD=gnu-ld \
+	env CC=gnu-gcc CXX=gnu-g++ LD=gnu-ld \
 	"$_gccdir"/configure \
         --build=${CBUILD} \
         --host=${CHOST} \
@@ -93,7 +93,7 @@ build() {
 		--disable-symvers \
         --with-as=/usr/bin/gnu-as \
 		--with-ld=/usr/bin/gnu-ld \
-		--enable-bootstrap \
+		--disable-bootstrap \
 		$_arch_configure \
 		$_hash_style_configure
 

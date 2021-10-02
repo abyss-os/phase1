@@ -1,6 +1,6 @@
 pkgname=binutils
 pkgver=2.37
-pkgrel=0
+pkgrel=1
 pkgdesc="Tools necessary to build programs"
 url="https://www.gnu.org/software/binutils/"
 makedepends="bison flex texinfo zlib-dev"
@@ -20,11 +20,10 @@ build() {
 	esac
 
 	./configure \
-        --program-prefix=gnu- \
-        --prefix=/usr \
+        --prefix=/usr/toolchain/gnu \
         --mandir=/usr/share/man \
         --infodir=/usr/share/info \
-        --sbindir=/usr/bin \
+        --sbindir=/usr/toolchain/gnu/bin \
         --disable-multilib \
         --enable-ld=default \
         --enable-gold=yes \
@@ -45,6 +44,9 @@ build() {
 
 package() {
 	make -j1 install DESTDIR="$pkgdir"
+    # compat
+    ln -sv /usr/toolchain/gnu/bin/ld $pkgdir/usr/bin/gnu-ld
+    ln -sv /usr/toolchain/gnu/bin/as $pkgdir/usr/bin/gnu-as
 }
 
 aalt() {

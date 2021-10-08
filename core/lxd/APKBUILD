@@ -16,8 +16,8 @@ source="https://linuxcontainers.org/downloads/$pkgname/$pkgname-$pkgver.tar.gz
 	$pkgname.initd"
 
 build() {
-	export CGO_CFLAGS="-Wno-error -Wignored-attributes" CGO_LDFLAGS_ALLOW="(-Wl,-wrap,pthread_create)|(-Wl,-z,now)"
-
+	export CGO_CFLAGS="-Wno-error -Wignored-attributes -w" CGO_LDFLAGS_ALLOW="(-Wl,-wrap,pthread_create)|(-Wl,-z,now)"
+    export GOFLAGS="-buildmode=pie -trimpath"
     for bin in lxc lxd fuidshift lxc-to-lxd lxd-benchmark lxd-p2c lxd-agent; do
         msg $bin
         go build -o bin/$bin -x ./$bin
@@ -63,4 +63,4 @@ agent() {
 
 b2sums="0f4031119b42ad863ecec8d7df6a93922e5cafd31bd184fb2bf1e89acc01f459245aadac7c70bc4972a24e50420a775f4f8a8b600107a04c087db0facd0959e3  lxd-4.19.tar.gz
 a5318b21249418f216624709b22d6ee657d1f88c0b7fca6a74f9b8d1f557310fc31d350be852cf78bf542225ec2f93e70bb7e00799fa5d639912f2b1ac98e6fb  lxd.confd
-ed0c53b6255a320ff8c1a41da70ff495395b9a99d305ca25f9e017f7821e9a1caaef26677bf448107e235b6ee10bcd1181150c299dce55c1e7b70f5686105650  lxd.initd"
+9b8383629089bb37e60ed23e9c031638e29af25687773ac64368998d5b3ec94508fdb4836ed75a5a4865db0b725f70fb967b975f1d3580d66eb80f35998b0c58  lxd.initd"

@@ -1,7 +1,6 @@
-#!/sbin/openrc-run
-# (c) 2016 Alpine Linux
+#!/usr/bin/openrc-run
 
-command="/usr/sbin/lxd"
+command="/usr/bin/lxd"
 command_args="${LXD_OPTIONS}"
 command_background="true"
 pidfile="/var/run/${RC_SVCNAME}.pid"
@@ -13,3 +12,8 @@ depend() {
 }
 
 export PATH=/usr/libexec/lxd:$PATH
+
+stop() {
+    if [ -e /var/lib/lxd/unix.socket ]; then
+        $command shutdown
+}

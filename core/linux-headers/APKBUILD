@@ -1,10 +1,9 @@
 pkgname=linux-headers
-pkgver=5.14.9
+pkgver=5.14.10
 _pkgver=${pkgver/_/-}
 pkgrel=0
 pkgdesc="Linux kernel"
 url="http://kernel.org"
-#depends="mkinitfs"
 makedepends="bash flex bison gsed bc linux-dev openssl-dev findutils rsync ncurses-dev"
 options="!strip"
 source="https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/linux-$pkgver.tar.xz"
@@ -44,4 +43,4 @@ _make() {
 		"$@"
 }
 
-b2sums="3d3c4e64ddf53454c25a283287cfac2f8d9674e146c7fdf80d130cfa50252fc52c57ad187f47db09d134a2ea49e16bda5018c83cd7c38c6cec9bc2e27a18b751  linux-5.14.9.tar.xz"
+b2sums="8875ce37b6579e51de0ed3c059d99fe26b3a2ab3e795161fbb8de8476f2e3e26ebc1e0c98c3fb1b904b43e954ddb0f91b30248c91307d20912963f2f13fd9925  linux-5.14.10.tar.xz"

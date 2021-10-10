@@ -1,5 +1,5 @@
 pkgname=nano
-pkgver=5.8
+pkgver=5.9
 pkgrel=0
 pkgdesc="Enhanced clone of the Pico text editor"
 url="https://www.nano-editor.org"
@@ -38,4 +38,4 @@ package() {
 	rm -rf "$pkgdir"/usr/lib/charset.alias
 }
 
-b2sums="52b0eb33727b2f6422ea7f07af2797aad8fd0ecf24fac99836ee71de5565634ee31d77eb981f49ed787fc98ae8c70fe613b7ebebecad62736436900d013ebc76  nano-5.8.tar.xz"
+b2sums="8f229ac8f0071d1833122a71bd2b5892ea0ad503a7edcb106ee0352c16035152112ac00051e18c9e73aef961ab63289d0f9bc4eda0f14df01a271a206817d523  nano-5.9.tar.xz"

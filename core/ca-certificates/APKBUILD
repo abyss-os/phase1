@@ -1,6 +1,6 @@
 pkgname=ca-certificates
 pkgver=20210119
-pkgrel=0
+pkgrel=1
 pkgdesc="Common CA certificates PEM files"
 url="https://www.mozilla.org/en-US/about/governance/policies/security-group/certs/"
 arch="all"
@@ -16,6 +16,7 @@ package() {
     for crt in $pkgdir/etc/ssl/certs/*.crt; do
         cat $crt >> $pkgdir/etc/ssl/certs/ca-certificates.crt
     done
+    ln -sv certs/ca-certificates.crt $pkgdir/etc/ssl/cert.pem
 }
 
 b2sums="b743e362e95a6265e4bf7c357e5acb516fcbce91c9bf220d8759f44248b3ca4f1d929f68f6cf9d0d05166ae6e0df2c6bc441f5c4a00583b7742420e20f612994  blacklist.txt

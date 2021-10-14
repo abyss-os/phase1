@@ -1,0 +1,29 @@
+pkgname=gn
+pkgver=0_git20201222
+pkgrel=0
+pkgdesc="Meta-build system that generates build files for Ninja"
+arch="all"
+url="https://gn.googlesource.com/gn"
+license="BSD-3-Clause"
+depends="samurai"
+makedepends="python3"
+# FIXME: archive needs to include .git for the build script to be able to determine the version
+source="https://dev.alpinelinux.org/archive/gn/gn-$pkgver.tar.gz
+        python3.patch"
+builddir="$srcdir"
+
+build() {
+	./build/gen.py
+	ninja -C out
+}
+
+check() {
+	./out/gn_unittests
+}
+
+package() {
+	install -Dm755 out/gn "$pkgdir"/usr/bin/gn
+}
+
+b2sums="dd5efe377c90b51df85336ea9f9577150cc0a742ad72aa8cc08f07e9ae2c3cfe68ba4538099fe8521d89e170ac248c0143a5f0ec71b2be490c86091bf04f4330  gn-0_git20201222.tar.gz
+104744b8724ecc21b2a5bf39e05084623833c6dcf43ba886af6477927f2ecadd0daceae5c14c9b0ed5fa5bc6f0805a0cfb78ad875b4027c6cfa07696e0399b19  python3.patch"

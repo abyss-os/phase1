@@ -1,7 +1,0 @@
-#!/usr/bin/busybox ash
-
-# clean up broken symlinks and ca-certificates.crt store
-/usr/bin/busybox find -L /etc/ssl/certs -maxdepth 1 \( -type l -o -name ca-certificates.crt \) \
-	-delete
-/usr/bin/busybox rmdir /etc/ssl/certs 2>/dev/null || true
-

@@ -17,7 +17,6 @@ prepare() {
 	# force system libs
 	rm -r Modules/expat \
 		Modules/_ctypes/darwin* \
-		Modules/_ctypes/libffi*
 
 	case "${CARCH}" in
 		riscv64) _opts="--disable-optimizations --disable-profiling";;

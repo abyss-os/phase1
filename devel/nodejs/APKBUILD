@@ -1,12 +1,12 @@
 pkgname=nodejs
-pkgver=16.9.1
+pkgver=16.11.1
 pkgrel=0
 pkgdesc="JavaScript runtime built on V8 engine"
 url="https://nodejs.org/"
 arch="all !riscv64"
 license="MIT"
 depends="ca-certificates"
-makedepends="linux-dev python3 libuv-dev c-ares-dev nghttp2-dev openssl-dev icu-dev brotli-dev libatomic-dev samurai"
+makedepends="linux-dev python3 libuv-dev c-ares-dev nghttp2-dev openssl-dev icu-dev brotli-dev libatomic-dev samurai zlib-dev"
 subpackages="$pkgname-dev $pkgname-doc"
 source="https://nodejs.org/dist/v$pkgver/node-v$pkgver.tar.gz"
 builddir="$srcdir/node-v$pkgver"
@@ -35,4 +35,4 @@ package() {
 	make DESTDIR="$pkgdir" BUILDTYPE=Release install
 }
 
-b2sums="0c5725d7d1bbb6c6b237f03f5860f7a8a8ef4b589eb155c09c13a5e7d5e0dd577e8834f6640e2b7ad51883f26f18d7358794d3c9d56871e7cd6ff3c2d799138d  node-v16.9.1.tar.gz"
+b2sums="f348bb31ddf2c26d53b10bce2044f0642512937533efae8fce3581443d614fb77789c7c2dc2bea7b048e643004e4ce2210da0e25bf47cee77de674ab7be32cb3  node-v16.11.1.tar.gz"

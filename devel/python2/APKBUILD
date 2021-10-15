@@ -1,0 +1,64 @@
+pkgname=python2
+pkgver=2.7.18
+_basever="${pkgver%.*}"
+pkgrel=0
+pkgdesc="A high-level scripting language"
+url="https://www.python.org"
+arch="all"
+license="custom"
+subpackages="$pkgname-dev $pkgname-doc"
+makedepends="expat-dev openssl-dev zlib-dev ncurses-dev bzip2-dev xz-dev sqlite-dev libffi-dev tcl-dev linux-dev gdbm-dev readline-dev"
+source="https://www.python.org/ftp/python/$pkgver/Python-$pkgver.tar.xz"
+builddir="$srcdir/Python-$pkgver"
+
+prepare() {
+	default_prepare
+
+	# force system libs
+	rm -r Modules/expat \
+		Modules/_ctypes/darwin* \
+		Modules/_ctypes/libffi*
+
+	case "${CARCH}" in
+		riscv64) _opts="--disable-optimizations --disable-profiling";;
+		mips64*) _opts="--enable-optimizations";;
+		*) _opts="--enable-optimizations";;
+	esac
+
+	export CFLAGS="-fno-semantic-interposition"
+	./configure \
+        --build=$CTARGET \
+        --host=$CTARGET \
+        --target=$CTARGET \
+		--prefix=/usr \
+		--libdir=/usr/lib \
+		--enable-ipv6 \
+		--enable-shared \
+		--with-computed-gotos \
+		--with-dbmliborder=gdbm:ndbm \
+		--with-system-expat \
+		--without-ensurepip \
+		--with-libm="" \
+		$_opts
+}
+
+build() {
+
+	# set thread stack size to 1MB so we don't segfault before we hit
+	# sys.getrecursionlimit()
+	make EXTRA_CFLAGS="$CFLAGS -DTHREAD_STACK_SIZE=0x100000"
+}
+
+package() {
+	cd "$builddir"
+	mkdir -p $pkgdir/usr/lib
+	make -j1 DESTDIR="$pkgdir" EXTRA_CFLAGS="$CFLAGS" install maninstall
+	install -Dm644 LICENSE "$pkgdir"/usr/share/licenses/$pkgname/LICENSE
+	rm -rf $pkgdir/usr/bin/idle* $pkgdir/usr/lib/python*/idlelib \
+		$pkgdir/usr/lib/python*/tkinter $pkgdir/usr/lib/python*/*/test \
+		$pkgdir/usr/lib/python*/*/tests \
+		$pkgdir/usr/lib/python*/distutils/command/*.exe
+
+}
+
+b2sums="060a621c91dd8e3d321aec99d44c17aa67381998256a1a002d316b38288349884d5960de35c49352d03129ed0bae599e641ec2225898158ebce50a7a2fd74d2c  Python-2.7.18.tar.xz"

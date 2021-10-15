@@ -12,7 +12,7 @@ _isl=0.24
 _mpc=1.2.1
 makedepends="bison flex texinfo gawk zip zlib-dev linux-dev libucontext-dev binutils gcc-bootstrap"
 depends="binutils"
-subpackages="$pkgname-doc libgcc libstdc++:libcxx"
+subpackages="$pkgname-doc libgcc libstdc++:libcxx libatomic libatomic-dev:libatomicdev"
 provides="$pkgname-bootstrap=$pkgver-r$pkgrel"
 
 source="https://gcc.gnu.org/pub/gcc/releases/gcc-${_pkgbase:-$pkgver}/gcc-${_pkgbase:-$pkgver}.tar.xz
@@ -147,6 +147,24 @@ libgcc() {
 
 	mkdir -p "$subpkgdir"/usr/lib
 	mv "$pkgdir"/usr/lib/libgcc_s.so.* "$subpkgdir"/usr/lib/
+}
+
+libatomic() {
+	pkgdesc="GCC Atomic library"
+	depends=
+	replaces="gcc"
+
+	mkdir -p "$subpkgdir"/usr/lib
+	mv "$pkgdir"/usr/lib/libatomic.so.* "$subpkgdir"/usr/lib/
+}
+
+libatomicdev() {
+	pkgdesc="GCC Atomic library"
+	depends=
+	replaces="gcc"
+
+	mkdir -p "$subpkgdir"/usr/lib
+	mv "$pkgdir"/usr/lib/libatomic.so.* "$subpkgdir"/usr/lib/
 }
 
 b2sums="69b61234ac436edfea2933df68c434a2ce7aa4454ef4da573e82587e1a42dc420189e949cfdadaf4cb37fc0de9674822210a95b77ff03aca0dbedfe67df19cc6  gcc-11.2.0.tar.xz

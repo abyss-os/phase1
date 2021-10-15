@@ -1,0 +1,174 @@
+pkgname=gcc
+pkgver=11.2.0
+pkgrel=1
+pkgdesc="The GNU Compiler Collection"
+url="http://gcc.gnu.org"
+arch="all"
+license="GPL LGPL"
+_gccrel=$pkgver-r$pkgrel
+_gmp=6.2.1
+_mpfr=4.1.0
+_isl=0.24
+_mpc=1.2.1
+makedepends="bison flex texinfo gawk zip zlib-dev linux-dev libucontext-dev binutils gcc-bootstrap"
+depends="binutils"
+subpackages="$pkgname-doc libgcc libstdc++:libcxx libatomic libatomic-dev:libatomicdev"
+provides="$pkgname-bootstrap=$pkgver-r$pkgrel"
+
+source="https://gcc.gnu.org/pub/gcc/releases/gcc-${_pkgbase:-$pkgver}/gcc-${_pkgbase:-$pkgver}.tar.xz
+        https://ftp.gnu.org/gnu/mpc/mpc-$_mpc.tar.gz
+        https://ftp.gnu.org/gnu/gmp/gmp-$_gmp.tar.xz
+        https://ftp.gnu.org/gnu/mpfr/mpfr-$_mpfr.tar.xz
+        https://mirror.sobukus.de/files/src/isl/isl-$_isl.tar.xz"
+
+# we build out-of-tree
+_gccdir="$srcdir"/gcc-${_pkgbase:-$pkgver}
+_gcclibdir=/usr/lib/gcc/${CTARGET}/$pkgver
+_gcclibexec=/usr/libexec/gcc/${CTARGET}/$pkgver
+
+_builddir="$srcdir/build"
+
+prepare() {
+   cd "$_gccdir"
+
+    default_prepare
+
+   echo ${pkgver} > gcc/BASE-VER
+
+   msg "Linking sources..."
+   for i in gmp mpfr mpc; do
+      rm -f $srcdir/$i
+      ln -sfv $srcdir/$i-$(eval echo "\$_$i") $srcdir/gcc-$pkgver/$i
+   done
+
+   cd $srcdir
+   config_helper
+
+   local _arch_configure= _hash_style_configure=
+   case "$CARCH" in
+       aarch64)      _arch_configure="--with-arch=armv8-a --with-abi=lp64";;
+       mips64*)      _arch_configure="--with-arch=mips64 --with-tune=mips64 --with-mips-plt --with-float=soft --with-abi=64";;
+       ppc64le)      _arch_configure="--with-abi=elfv2 --enable-secureplt --enable-decimal-float=no --enable-targets=powerpcle-linux";;
+       riscv64)      _arch_configure="--with-arch=rv64gc --with-abi=lp64d";;
+   esac
+
+   case "$CARCH" in
+       *)   _hash_style_configure="--with-linker-hash-style=both" ;;
+   esac
+
+}
+
+build() {
+   mkdir -p "$_builddir"
+   cd "$_builddir"
+
+   env CC=gnu-gcc CXX=gnu-g++ LD=gnu-ld \
+   "$_gccdir"/configure \
+        --build=${CBUILD} \
+        --host=${CHOST} \
+        --target=${CTARGET} \
+        --program-prefix=gnu- \
+       --prefix=/usr \
+       --mandir=/usr/share/man \
+      --infodir=/usr/share/info \
+      --with-pkgversion="Abyss OS $pkgver" \
+      --disable-fixed-point \
+      --disable-libstdcxx-pch \
+      --disable-multilib \
+      --disable-nls \
+      --disable-werror \
+      --enable-__cxa_atexit \
+      --enable-default-pie \
+      --enable-default-ssp \
+      --enable-cloog-backend \
+      --enable-languages=c,c++ \
+      --enable-checking=release \
+      --with-system-zlib \
+      --enable-shared \
+      --enable-threads \
+      --enable-tls \
+      --disable-libmpx \
+      --disable-libmudflap \
+      --disable-libsanitizer \
+      --disable-symvers \
+        --with-as=/usr/bin/gnu-as \
+      --with-ld=/usr/bin/gnu-ld \
+      --disable-bootstrap \
+      $_arch_configure \
+      $_hash_style_configure
+
+   cd "$_builddir"
+   make
+}
+
+package() {
+   cd "$_builddir"
+   make -j1 DESTDIR="${pkgdir}" install
+
+   find "$pkgdir" -name libgtkpeer.a \
+      -o -name libgjsmalsa.a \
+      -o -name libgij.a \
+      | xargs rm -f
+
+   # strip debug info from some static libs
+   strip -g `find "$pkgdir" \( -name libgfortran.a -o -name libobjc.a -o -name libgomp.a \
+      -o -name libmudflap.a -o -name libmudflapth.a \
+      -o -name libgcc.a -o -name libgcov.a -o -name libquadmath.a \
+      -o -name libitm.a -o -name libgo.a -o -name libcaf\*.a \
+      -o -name libatomic.a -o -name libasan.a -o -name libtsan.a \) \
+      -a -type f`
+
+   mv -vf "$pkgdir"/usr/lib/*.spec "$pkgdir"/$_gcclibdir
+
+   # remove ffi
+   rm -f "$pkgdir"/usr/lib/libffi* "$pkgdir"/usr/share/man/man3/ffi*
+   find "$pkgdir" -name 'ffi*.h' | xargs rm -f
+
+   local gdblib=${_target:+$CTARGET/}lib
+   if [ -d "$pkgdir"/usr/$gdblib/ ]; then
+      for i in $(find "$pkgdir"/usr/$gdblib/ -type f -maxdepth 1 -name "*-gdb.py"); do
+         mkdir -p "$pkgdir"/usr/share/gdb/python/auto-load/usr/$gdblib
+         mv "$i" "$pkgdir"/usr/share/gdb/python/auto-load/usr/$gdblib/
+      done
+   fi
+}
+
+libcxx() {
+   pkgdesc="GNU C++ standard runtime library"
+   depends=
+
+   mkdir -p "$subpkgdir"/usr/lib
+   mv "$pkgdir"/usr/lib/libstdc++.so.* "$subpkgdir"/usr/lib/
+}
+
+libgcc() {
+   pkgdesc="GNU C compiler runtime libraries"
+   depends=
+
+   mkdir -p "$subpkgdir"/usr/lib
+   mv "$pkgdir"/usr/lib/libgcc_s.so.* "$subpkgdir"/usr/lib/
+}
+
+libatomic() {
+   pkgdesc="GCC Atomic library"
+   depends=
+   replaces="gcc"
+
+   mkdir -p "$subpkgdir"/usr/lib
+   mv "$pkgdir"/usr/lib/libatomic.so.* "$subpkgdir"/usr/lib/
+}
+
+libatomicdev() {
+   pkgdesc="GCC Atomic library"
+   depends=
+   replaces="gcc"
+
+   mkdir -p "$subpkgdir"/usr/lib
+   mv "$pkgdir"/usr/lib/libatomic.so.* "$subpkgdir"/usr/lib/
+}
+
+b2sums="69b61234ac436edfea2933df68c434a2ce7aa4454ef4da573e82587e1a42dc420189e949cfdadaf4cb37fc0de9674822210a95b77ff03aca0dbedfe67df19cc6  gcc-11.2.0.tar.xz
+9cd03c6a71839e4cdb3c1f18d718cc4d3097c3f8ec307a5c756bd5df27c68aa013755156b3b156efee1acabfee2269602c6a3a358092ef0d522271c9c56c133d  mpc-1.2.1.tar.gz
+c0d85f175392a50cfa01bc6b0a312b235946ad8b4f6f84f6dabd33d7a6f2cc75c9b0e1e33057be07750bfa0145b7c4cf3b6188a5be6ca9d7271ec2276c84ebcb  gmp-6.2.1.tar.xz
+41d1be0c4b557760f12a4525ad3a84b6e2cd6f0927c935fcfba577ac0490e582d1ae4b581dce58e21e705cf9d7c88373054d7fb7a94bb32c69b339f99a25dc68  mpfr-4.1.0.tar.xz
+39cbfd18ad05778e3a5a44429261b45e4abc3efe7730ee890674d968890fe5e52c73bc1f8d271c7c3bc72d5754e3f7fcb209bd139e823d19cb9ea4ce1440164d  isl-0.24.tar.xz"

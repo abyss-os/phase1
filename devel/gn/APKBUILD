@@ -1,11 +1,11 @@
 pkgname=gn
 pkgver=0_git20201222
-pkgrel=0
+pkgrel=1
 pkgdesc="Meta-build system that generates build files for Ninja"
 arch="all"
 url="https://gn.googlesource.com/gn"
 license="BSD-3-Clause"
-depends="samurai"
+depends="ninja"
 makedepends="python3"
 # FIXME: archive needs to include .git for the build script to be able to determine the version
 source="https://dev.alpinelinux.org/archive/gn/gn-$pkgver.tar.gz

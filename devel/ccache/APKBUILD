@@ -1,10 +1,11 @@
 pkgname=ccache
-pkgver=4.3
+pkgver=4.4.2
 pkgrel=0
 pkgdesc="A fast C/C++ compiler cache"
 url="https://ccache.dev/"
 arch="all"
 license="GPL-3.0-or-later"
+makedepends="cmake"
 source="https://github.com/ccache/ccache/releases/download/v$pkgver/ccache-$pkgver.tar.xz"
 options="!check"
 
@@ -13,7 +14,8 @@ build() {
 		-DCMAKE_BUILD_TYPE=Release \
 		-DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_INSTALL_SBINDIR=bin \
-		-DCMAKE_INSTALL_SYSCONFDIR=/etc
+		-DCMAKE_INSTALL_SYSCONFDIR=/etc \
+        -DREDIS_STORAGE_BACKEND=OFF
 	cmake --build build
 }
 
@@ -32,4 +34,4 @@ package() {
 	done
 }
 
-b2sums="6ab48aa587b4dc86020e3b0f722003dc5c03709626e143a1d38506b6072f9963fc76e89b6d18128dfc28035bf8d24e46ea44f219db69a1b3a294416f0b023090  ccache-4.3.tar.xz"
+b2sums="f0d8b9ac6e1972592ce5a51a392279a01f01c09e6bffc498ff0b20aa46acb6d7f949ae9f4c6006e20b15cdea9fa2fa057c78b69ef66c2e13b3ddee13367e91b1  ccache-4.4.2.tar.xz"

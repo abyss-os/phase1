@@ -1,7 +1,7 @@
 pkgname=libevent
 pkgver=2.1.12
 _pkgver=$pkgver-stable
-pkgrel=0
+pkgrel=1
 pkgdesc="An event notification library"
 url="http://libevent.org/"
 arch="all"
@@ -12,16 +12,7 @@ subpackages="$pkgname-dev"
 source="https://github.com/libevent/libevent/releases/download/release-$_pkgver/libevent-$_pkgver.tar.gz"
 builddir="$srcdir/$pkgname-$_pkgver"
 
-prepare() {
-	default_prepare
-
-	cd "$builddir"
-	# help provides tracing work out correctly
-	sed -i -e "s/@VERSION@/$pkgver-r$pkgrel/" *.pc.in
-}
-
 build() {
-	cd "$builddir"
 	./configure \
 		--build=$CBUILD \
 		--host=$CHOST \
@@ -31,26 +22,11 @@ build() {
 }
 
 check() {
-	cd "$builddir"
 	make -j1 check
 }
 
 package() {
-	cd "$builddir"
 	make -j1 DESTDIR=$pkgdir install
-}
-
-dev() {
-	replaces="libevent"
-	default_dev
-	mv "$pkgdir"/usr/bin "$subpkgdir"/usr/
-}
-
-static() {
-	depends=""
-	pkgdesc="$pkgdesc (static libraries)"
-	mkdir -p "$subpkgdir"/usr/lib
-	mv "$pkgdir"/usr/lib/*.a "$subpkgdir"/usr/lib
 }
 
 b2sums="bc1ace15f639ecef2e6b3f95976b8830c1d86f1d06606dd949e2978611fdf9859ed4eb9292d13e6e90e3835063edb94aae64a15c518d5dabe680f37d5a7f5290  libevent-2.1.12-stable.tar.gz"

@@ -1,5 +1,5 @@
 pkgname=linux-headers
-pkgver=5.14.11
+pkgver=5.14.13
 _pkgver=${pkgver/_/-}
 pkgrel=0
 pkgdesc="Linux kernel"

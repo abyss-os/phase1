@@ -3,7 +3,7 @@ pkgver=1.2.0
 pkgrel=0
 pkgdesc="The Crystal Programming Language"
 url="https://crystal-lang.org/"
-arch="aarch64"
+arch="x86_64 aarch64"
 license="Apache-2.0"
 makedepends="zlib-dev pcre-dev libevent-dev gc-dev crystal-bootstrap"
 subpackages="$pkgname-doc $pkgname-bash-completion:bashcomp:noarch $pkgname-zsh-completion:zshcomp:noarch"
@@ -67,4 +67,4 @@ zshcomp() {
 	install -D -m 644 etc/completion.zsh \
 		"$subpkgdir"/usr/share/zsh/site-functions/_$pkgname
 }
-b2sums="4e1b06c831a22447a4d1f065be64b12642ee4b4a75f24b0b73b990944afe6e2a6fca95189b46ea0656b8d13bd7c6a83a23452779b494822803a0264e02b9d4ce  crystal-1.1.1.tar.gz"
+b2sums="909aa0b489c8e7956a22f845ed36d17e90de90babb4c66b4b87cfe1ed552cef367c0254eab4735737f15e2e60248b53375d14b80194ebae3155cba33858062bc  crystal-1.2.0.tar.gz"

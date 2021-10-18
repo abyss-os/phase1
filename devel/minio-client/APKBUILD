@@ -1,6 +1,6 @@
 pkgname=minio-client
 _pkgname=mc
-_pkgver='RELEASE.2021-02-19T05-34-40Z'
+_pkgver='RELEASE.2021-10-07T04-19-58Z'
 pkgver=${_pkgver#*.}
 pkgver=${pkgver%T*}
 pkgver=0.${pkgver//-}
@@ -38,4 +38,4 @@ cleanup_srcdir() {
 	go clean -modcache
 	default_cleanup_srcdir
 }
-b2sums="b5634355c1e4e5422ef4ea8493304bf3771c91e524948552012bb4ca5f76cbfa1ad95ebd0ef193a43f686bbe8a0595e4f1a3559ab403146ffebb206d4dc07071  mc-RELEASE.2021-02-19T05-34-40Z.tar.gz"
+b2sums="c9cd4b66c3e0a9012a0ef6f3318f6f96916dfe5581922aa6cd24d06e9380faca2f7d33bbb8859490bbb4fc668d6b7acade1e6df60e4db955ecb8d83c3c8b101e  mc-RELEASE.2021-10-07T04-19-58Z.tar.gz"

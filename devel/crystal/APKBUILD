@@ -1,6 +1,6 @@
 pkgname=crystal
-pkgver=1.1.1
-pkgrel=1
+pkgver=1.2.0
+pkgrel=0
 pkgdesc="The Crystal Programming Language"
 url="https://crystal-lang.org/"
 arch="aarch64"

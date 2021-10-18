@@ -1,0 +1,698 @@
+From c86e97c85ec53d75f46233866b8ee73a05ec7410 Mon Sep 17 00:00:00 2001
+From: Max Fierke <max@maxfierke.com>
+Date: Sat, 9 Oct 2021 21:40:27 -0500
+Subject: [PATCH 1/7] Add Basic LLVM 13 support
+
+---
+ src/llvm/enums.cr              |  5 +++++
+ src/llvm/ext/llvm-versions.txt |  2 +-
+ src/llvm/ext/llvm_ext.cc       | 17 +++++++++++++++++
+ src/llvm/lib_llvm.cr           |  2 ++
+ 4 files changed, 25 insertions(+), 1 deletion(-)
+
+diff --git a/src/llvm/enums.cr b/src/llvm/enums.cr
+index a604d1d7d7c..0b6d0b035c2 100644
+--- a/src/llvm/enums.cr
++++ b/src/llvm/enums.cr
+@@ -147,6 +147,11 @@ module LLVM
+           typed_attrs << StructRet
+         end
+ 
++        unless LibLLVM::IS_LT_130
++          # LLVM 13 manadates type params for inalloca
++          typed_attrs << InAlloca
++        end
++
+         typed_attrs
+       end
+ 
+diff --git a/src/llvm/ext/llvm-versions.txt b/src/llvm/ext/llvm-versions.txt
+index 7a8af33aa8b..06ce7214188 100644
+--- a/src/llvm/ext/llvm-versions.txt
++++ b/src/llvm/ext/llvm-versions.txt
+@@ -1 +1 @@
+-12.0 11.1 11.0 10.0 9.0 8.0 7.1 6.0 5.0 4.0 3.9 3.8
++13.0 12.0 11.1 11.0 10.0 9.0 8.0 7.1 6.0 5.0 4.0 3.9 3.8
+diff --git a/src/llvm/ext/llvm_ext.cc b/src/llvm/ext/llvm_ext.cc
+index bd82f564a90..c6f5dd86bb1 100644
+--- a/src/llvm/ext/llvm_ext.cc
++++ b/src/llvm/ext/llvm_ext.cc
+@@ -384,8 +384,21 @@ LLVMAttributeRef LLVMExtCreateTypeAttribute(
+ LLVMValueRef LLVMExtBuildCmpxchg(
+     LLVMBuilderRef B, LLVMValueRef PTR, LLVMValueRef Cmp, LLVMValueRef New,
+     LLVMAtomicOrdering SuccessOrdering, LLVMAtomicOrdering FailureOrdering) {
++#if LLVM_VERSION_GE(13, 0)
++  return wrap(
++    unwrap(B)->CreateAtomicCmpXchg(
++      unwrap(PTR),
++      unwrap(Cmp),
++      unwrap(New),
++      llvm::MaybeAlign(),
++      (llvm::AtomicOrdering)SuccessOrdering,
++      (llvm::AtomicOrdering)FailureOrdering
++    )
++  );
++#else
+   return wrap(unwrap(B)->CreateAtomicCmpXchg(unwrap(PTR), unwrap(Cmp), unwrap(New),
+     (llvm::AtomicOrdering)SuccessOrdering, (llvm::AtomicOrdering)FailureOrdering));
++#endif
+ }
+ 
+ void LLVMExtSetOrdering(LLVMValueRef MemAccessInst, LLVMAtomicOrdering Ordering) {
+@@ -495,7 +508,11 @@ void LLVMExtWriteBitcodeWithSummaryToFile(LLVMModuleRef mref, const char *File)
+   Module *m = unwrap(mref);
+ 
+   std::error_code EC;
++#if LLVM_VERSION_GE(13, 0)
++  raw_fd_ostream OS(File, EC, sys::fs::OF_None);
++#else
+   raw_fd_ostream OS(File, EC, sys::fs::F_None);
++#endif
+   if (EC) return;
+ 
+   llvm::ModuleSummaryIndex moduleSummaryIndex = llvm::buildModuleSummaryIndex(*m, nullptr, nullptr);
+diff --git a/src/llvm/lib_llvm.cr b/src/llvm/lib_llvm.cr
+index aa258b1e065..433f0385ff0 100644
+--- a/src/llvm/lib_llvm.cr
++++ b/src/llvm/lib_llvm.cr
+@@ -19,6 +19,7 @@ end
+ 
+ {% begin %}
+   lib LibLLVM
++    IS_130 = {{LibLLVM::VERSION.starts_with?("13.0")}}
+     IS_120 = {{LibLLVM::VERSION.starts_with?("12.0")}}
+     IS_111 = {{LibLLVM::VERSION.starts_with?("11.1")}}
+     IS_110 = {{LibLLVM::VERSION.starts_with?("11.0")}}
+@@ -39,6 +40,7 @@ end
+     IS_LT_100 = IS_LT_90 || IS_90
+     IS_LT_110 = IS_LT_100 || IS_100
+     IS_LT_120 = IS_LT_110 || IS_110 || IS_111
++    IS_LT_130 = IS_LT_120 || IS_120
+   end
+ {% end %}
+ 
+
+From 0b6d0243e2792769d4250c669c2b11efd488bbf1 Mon Sep 17 00:00:00 2001
+From: Max Fierke <max@maxfierke.com>
+Date: Sat, 9 Oct 2021 21:41:46 -0500
+Subject: [PATCH 2/7] Fix mismatching context assertion in LLVM 13 for module
+ debug flags
+
+---
+ src/compiler/crystal/codegen/debug.cr | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/src/compiler/crystal/codegen/debug.cr b/src/compiler/crystal/codegen/debug.cr
+index 6a664ad461d..5c304d7c05b 100644
+--- a/src/compiler/crystal/codegen/debug.cr
++++ b/src/compiler/crystal/codegen/debug.cr
+@@ -33,11 +33,11 @@ module Crystal
+       # than OS X currently understands. Android has the same problem.
+       if @program.has_flag?("osx") || @program.has_flag?("android")
+         mod.add_named_metadata_operand("llvm.module.flags",
+-          metadata([LLVM::ModuleFlag::Warning.value, "Dwarf Version", 2]))
++          metadata([LLVM::ModuleFlag::Warning.value, "Dwarf Version", 2], context: mod.context))
+       end
+ 
+       mod.add_named_metadata_operand("llvm.module.flags",
+-        metadata([LLVM::ModuleFlag::Warning.value, "Debug Info Version", LLVM::DEBUG_METADATA_VERSION]))
++        metadata([LLVM::ModuleFlag::Warning.value, "Debug Info Version", LLVM::DEBUG_METADATA_VERSION], context: mod.context))
+     end
+ 
+     def fun_metadatas
+@@ -381,11 +381,11 @@ module Crystal
+       }
+     end
+ 
+-    def metadata(args)
++    def metadata(args, context = llvm_context)
+       values = args.map do |value|
+         case value
+-        when String         then llvm_context.md_string(value.to_s)
+-        when Symbol         then llvm_context.md_string(value.to_s)
++        when String         then context.md_string(value.to_s)
++        when Symbol         then context.md_string(value.to_s)
+         when Number         then int32(value)
+         when Bool           then int1(value ? 1 : 0)
+         when LLVM::Value    then value
+@@ -394,7 +394,7 @@ module Crystal
+         else                     raise "Unsupported value type: #{value.class}"
+         end
+       end
+-      llvm_context.md_node(values)
++      context.md_node(values)
+     end
+ 
+     def set_current_debug_location(node : ASTNode)
+
+From 5d83a6e1ae9974cececd04bf6829a76d37271307 Mon Sep 17 00:00:00 2001
+From: Max Fierke <max@maxfierke.com>
+Date: Sat, 9 Oct 2021 21:43:43 -0500
+Subject: [PATCH 3/7] Address breaking change in LLVM 13 for LLVMGetInlineAsm
+
+---
+ spec/compiler/parser/parser_spec.cr     |  1 +
+ spec/compiler/parser/to_s_spec.cr       |  1 +
+ src/compiler/crystal/codegen/asm.cr     |  2 +-
+ src/compiler/crystal/syntax/ast.cr      |  7 ++---
+ src/compiler/crystal/syntax/parser.cr   | 10 ++++---
+ src/compiler/crystal/syntax/to_s.cr     |  6 ++++-
+ src/compiler/crystal/tools/formatter.cr |  4 +--
+ src/llvm/lib_llvm.cr                    |  4 ++-
+ src/llvm/type.cr                        | 35 ++++++++++++++++++++++---
+ 9 files changed, 55 insertions(+), 15 deletions(-)
+
+diff --git a/spec/compiler/parser/parser_spec.cr b/spec/compiler/parser/parser_spec.cr
+index cb61eb6b907..172af3a720a 100644
+--- a/spec/compiler/parser/parser_spec.cr
++++ b/spec/compiler/parser/parser_spec.cr
+@@ -1595,6 +1595,7 @@ module Crystal
+     it_parses %(asm("nop" :: "b"(1), "c"(2) : "eax", "ebx" : "volatile", "alignstack", "intel")), Asm.new("nop", inputs: [AsmOperand.new("b", 1.int32), AsmOperand.new("c", 2.int32)], clobbers: %w(eax ebx), volatile: true, alignstack: true, intel: true)
+     it_parses %(asm("nop" :: "b"(1), "c"(2) : "eax", "ebx"\n: "volatile", "alignstack"\n,\n"intel"\n)), Asm.new("nop", inputs: [AsmOperand.new("b", 1.int32), AsmOperand.new("c", 2.int32)], clobbers: %w(eax ebx), volatile: true, alignstack: true, intel: true)
+     it_parses %(asm("nop" :::: "volatile")), Asm.new("nop", volatile: true)
++    it_parses %(asm("bl trap" :::: "unwind")), Asm.new("bl trap", can_throw: true)
+ 
+     assert_syntax_error %q(asm("nop" ::: "#{foo}")), "interpolation not allowed in asm clobber"
+     assert_syntax_error %q(asm("nop" :::: "#{volatile}")), "interpolation not allowed in asm option"
+diff --git a/spec/compiler/parser/to_s_spec.cr b/spec/compiler/parser/to_s_spec.cr
+index da652dec40d..689d2f49301 100644
+--- a/spec/compiler/parser/to_s_spec.cr
++++ b/spec/compiler/parser/to_s_spec.cr
+@@ -176,6 +176,7 @@ describe "ASTNode#to_s" do
+   expect_to_s %(asm("nop" :::: "volatile"))
+   expect_to_s %(asm("nop" :: "a"(1) :: "volatile"))
+   expect_to_s %(asm("nop" ::: "e" : "volatile"))
++  expect_to_s %(asm("bl trap" :::: "unwind"))
+   expect_to_s %[(1..)]
+   expect_to_s %[..3]
+   expect_to_s "offsetof(Foo, @bar)"
+diff --git a/src/compiler/crystal/codegen/asm.cr b/src/compiler/crystal/codegen/asm.cr
+index 0e030aad1a4..0d4945106fc 100644
+--- a/src/compiler/crystal/codegen/asm.cr
++++ b/src/compiler/crystal/codegen/asm.cr
+@@ -53,7 +53,7 @@ class Crystal::CodeGenVisitor
+     fun_type = LLVM::Type.function(input_types, output_type)
+     constraints = constraints.to_s
+ 
+-    value = fun_type.inline_asm(node.text, constraints, node.volatile?, node.alignstack?)
++    value = fun_type.inline_asm(node.text, constraints, node.volatile?, node.alignstack?, node.can_throw?)
+     value = LLVM::Function.from_value(value)
+     asm_value = call value, input_values
+ 
+diff --git a/src/compiler/crystal/syntax/ast.cr b/src/compiler/crystal/syntax/ast.cr
+index faf6ec9c34c..095a2eca5b2 100644
+--- a/src/compiler/crystal/syntax/ast.cr
++++ b/src/compiler/crystal/syntax/ast.cr
+@@ -2254,8 +2254,9 @@ module Crystal
+     property? volatile : Bool
+     property? alignstack : Bool
+     property? intel : Bool
++    property? can_throw : Bool
+ 
+-    def initialize(@text, @outputs = nil, @inputs = nil, @clobbers = nil, @volatile = false, @alignstack = false, @intel = false)
++    def initialize(@text, @outputs = nil, @inputs = nil, @clobbers = nil, @volatile = false, @alignstack = false, @intel = false, @can_throw = false)
+     end
+ 
+     def accept_children(visitor)
+@@ -2264,10 +2265,10 @@ module Crystal
+     end
+ 
+     def clone_without_location
+-      Asm.new(@text, @outputs.clone, @inputs.clone, @clobbers, @volatile, @alignstack, @intel)
++      Asm.new(@text, @outputs.clone, @inputs.clone, @clobbers, @volatile, @alignstack, @intel, @can_throw)
+     end
+ 
+-    def_equals_and_hash text, outputs, inputs, clobbers, volatile?, alignstack?, intel?
++    def_equals_and_hash text, outputs, inputs, clobbers, volatile?, alignstack?, intel?, can_throw?
+   end
+ 
+   class AsmOperand < ASTNode
+diff --git a/src/compiler/crystal/syntax/parser.cr b/src/compiler/crystal/syntax/parser.cr
+index 2694c36d4a1..3e0545a8e62 100644
+--- a/src/compiler/crystal/syntax/parser.cr
++++ b/src/compiler/crystal/syntax/parser.cr
+@@ -5202,6 +5202,7 @@ module Crystal
+       volatile = false
+       alignstack = false
+       intel = false
++      can_throw = false
+ 
+       part_index = 0
+       until @token.type == :")"
+@@ -5230,7 +5231,7 @@ module Crystal
+           end
+         when 4
+           if @token.type == :DELIMITER_START
+-            volatile, alignstack, intel = parse_asm_options
++            volatile, alignstack, intel, can_throw = parse_asm_options
+           end
+         else break
+         end
+@@ -5240,7 +5241,7 @@ module Crystal
+ 
+       next_token_skip_space
+ 
+-      Asm.new(text, outputs, inputs, clobbers, volatile, alignstack, intel)
++      Asm.new(text, outputs, inputs, clobbers, volatile, alignstack, intel, can_throw)
+     end
+ 
+     def parse_asm_operands
+@@ -5282,6 +5283,7 @@ module Crystal
+       volatile = false
+       alignstack = false
+       intel = false
++      can_throw = false
+       while true
+         location = @token.location
+         option = parse_string_without_interpolation("asm option")
+@@ -5293,6 +5295,8 @@ module Crystal
+           alignstack = true
+         when "intel"
+           intel = true
++        when "unwind"
++          can_throw = true
+         else
+           raise "unknown asm option: #{option}", location
+         end
+@@ -5302,7 +5306,7 @@ module Crystal
+         end
+         break unless @token.type == :DELIMITER_START
+       end
+-      {volatile, alignstack, intel}
++      {volatile, alignstack, intel, can_throw}
+     end
+ 
+     def parse_yield_with_scope
+diff --git a/src/compiler/crystal/syntax/to_s.cr b/src/compiler/crystal/syntax/to_s.cr
+index dc5d16bf36a..bec27938a6c 100644
+--- a/src/compiler/crystal/syntax/to_s.cr
++++ b/src/compiler/crystal/syntax/to_s.cr
+@@ -1492,7 +1492,7 @@ module Crystal
+         @str << ' '
+       end
+       @str << ":"
+-      if node.volatile? || node.alignstack? || node.intel?
++      if node.volatile? || node.alignstack? || node.intel? || node.can_throw?
+         @str << ' '
+         comma = false
+         if node.volatile?
+@@ -1509,6 +1509,10 @@ module Crystal
+           @str << %("intel")
+           comma = true
+         end
++        if node.can_throw?
++          @str << ", " if comma
++          @str << %("unwind")
++        end
+       end
+       @str << ')'
+       false
+diff --git a/src/compiler/crystal/tools/formatter.cr b/src/compiler/crystal/tools/formatter.cr
+index f3ada256843..b849449fb83 100644
+--- a/src/compiler/crystal/tools/formatter.cr
++++ b/src/compiler/crystal/tools/formatter.cr
+@@ -4269,7 +4269,7 @@ module Crystal
+ 
+       skip_space_or_newline
+ 
+-      if node.volatile? || node.alignstack? || node.intel?
++      if node.volatile? || node.alignstack? || node.intel? || node.can_throw?
+         expected_parts = 4
+       elsif node.clobbers
+         expected_parts = 3
+@@ -4315,7 +4315,7 @@ module Crystal
+             end
+           end
+         when 4
+-          parts = [node.volatile?, node.alignstack?, node.intel?].select(&.itself)
++          parts = [node.volatile?, node.alignstack?, node.intel?, node.can_throw?].select(&.itself)
+           visit_asm_parts parts, colon_column do
+             accept StringLiteral.new("")
+           end
+diff --git a/src/llvm/lib_llvm.cr b/src/llvm/lib_llvm.cr
+index 433f0385ff0..fca4bebc65e 100644
+--- a/src/llvm/lib_llvm.cr
++++ b/src/llvm/lib_llvm.cr
+@@ -307,7 +307,9 @@ lib LibLLVM
+   fun abi_alignment_of_type = LLVMABIAlignmentOfType(td : TargetDataRef, ty : TypeRef) : UInt32
+   fun get_target_machine_target = LLVMGetTargetMachineTarget(t : TargetMachineRef) : TargetRef
+   fun const_inline_asm = LLVMConstInlineAsm(t : TypeRef, asm_string : UInt8*, constraints : UInt8*, has_side_effects : Int32, is_align_stack : Int32) : ValueRef
+-  {% unless LibLLVM::IS_LT_70 %}
++  {% if !LibLLVM::IS_LT_130 %}
++    fun get_inline_asm = LLVMGetInlineAsm(t : TypeRef, asm_string : UInt8*, asm_string_len : LibC::SizeT, constraints : UInt8*, constraints_len : LibC::SizeT, has_side_effects : Int32, is_align_stack : Int32, dialect : InlineAsmDialect, can_throw : Int32) : ValueRef
++  {% elsif !LibLLVM::IS_LT_70 %}
+     fun get_inline_asm = LLVMGetInlineAsm(t : TypeRef, asm_string : UInt8*, asm_string_len : LibC::SizeT, constraints : UInt8*, constraints_len : LibC::SizeT, has_side_effects : Int32, is_align_stack : Int32, dialect : InlineAsmDialect) : ValueRef
+   {% end %}
+   fun create_context = LLVMContextCreate : ContextRef
+diff --git a/src/llvm/type.cr b/src/llvm/type.cr
+index 690f62bcc81..834394931f3 100644
+--- a/src/llvm/type.cr
++++ b/src/llvm/type.cr
+@@ -154,12 +154,39 @@ struct LLVM::Type
+     Value.new LibLLVM.const_array(self, (values.to_unsafe.as(LibLLVM::ValueRef*)), values.size)
+   end
+ 
+-  def inline_asm(asm_string, constraints, has_side_effects = false, is_align_stack = false)
++  def inline_asm(asm_string, constraints, has_side_effects = false, is_align_stack = false, can_throw = false)
+     value =
+-      {% unless LibLLVM::IS_LT_70 %}
+-        LibLLVM.get_inline_asm(self, asm_string, asm_string.size, constraints, constraints.size, (has_side_effects ? 1 : 0), (is_align_stack ? 1 : 0), LibLLVM::InlineAsmDialect::Intel)
++      {% if LibLLVM::IS_LT_70 %}
++        LibLLVM.const_inline_asm(
++          self,
++          asm_string,
++          constraints,
++          (has_side_effects ? 1 : 0),
++          (is_align_stack ? 1 : 0)
++        )
++      {% elsif LibLLVM::IS_LT_130 %}
++        LibLLVM.get_inline_asm(
++          self,
++          asm_string,
++          asm_string.size,
++          constraints,
++          constraints.size,
++          (has_side_effects ? 1 : 0),
++          (is_align_stack ? 1 : 0),
++          LibLLVM::InlineAsmDialect::Intel
++        )
+       {% else %}
+-        LibLLVM.const_inline_asm(self, asm_string, constraints, (has_side_effects ? 1 : 0), (is_align_stack ? 1 : 0))
++        LibLLVM.get_inline_asm(
++          self,
++          asm_string,
++          asm_string.size,
++          constraints,
++          constraints.size,
++          (has_side_effects ? 1 : 0),
++          (is_align_stack ? 1 : 0),
++          LibLLVM::InlineAsmDialect::Intel,
++          (can_throw ? 1 : 0)
++        )
+       {% end %}
+     Value.new value
+   end
+
+From 6469f42c36b9a56e14c02eca93a6236ef4564735 Mon Sep 17 00:00:00 2001
+From: Max Fierke <max@maxfierke.com>
+Date: Sat, 9 Oct 2021 23:00:56 -0500
+Subject: [PATCH 4/7] Fix use of mangled powi instrinsics under LLVM 13
+
+---
+ src/math/libm.cr | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/src/math/libm.cr b/src/math/libm.cr
+index 844e59f1052..f9c4b424643 100644
+--- a/src/math/libm.cr
++++ b/src/math/libm.cr
+@@ -29,8 +29,13 @@ lib LibM
+   fun pow_f32 = "llvm.pow.f32"(value : Float32, power : Float32) : Float32
+   fun pow_f64 = "llvm.pow.f64"(value : Float64, power : Float64) : Float64
+   {% unless flag?(:win32) %}
+-    fun powi_f32 = "llvm.powi.f32"(value : Float32, power : Int32) : Float32
+-    fun powi_f64 = "llvm.powi.f64"(value : Float64, power : Int32) : Float64
++    {% if compare_versions(Crystal::LLVM_VERSION, "13.0.0") < 0 %}
++      fun powi_f32 = "llvm.powi.f32"(value : Float32, power : Int32) : Float32
++      fun powi_f64 = "llvm.powi.f64"(value : Float64, power : Int32) : Float64
++    {% else %}
++      fun powi_f32 = "llvm.powi.f32.i32"(value : Float32, power : Int32) : Float32
++      fun powi_f64 = "llvm.powi.f64.i32"(value : Float64, power : Int32) : Float64
++    {% end %}
+   {% end %}
+   fun round_f32 = "llvm.round.f32"(value : Float32) : Float32
+   fun round_f64 = "llvm.round.f64"(value : Float64) : Float64
+
+From a52c21f398063d67e7c48f22c93f99b4999e068c Mon Sep 17 00:00:00 2001
+From: Max Fierke <max@maxfierke.com>
+Date: Sun, 10 Oct 2021 17:17:19 -0500
+Subject: [PATCH 5/7] Ensure DIFile are associated with the correct module
+ context
+
+Fixes mismatching context assertion on LLVM 13
+---
+ src/compiler/crystal/codegen/debug.cr | 41 ++++++++++++++++++---------
+ src/llvm/di_builder.cr                |  2 +-
+ 2 files changed, 28 insertions(+), 15 deletions(-)
+
+diff --git a/src/compiler/crystal/codegen/debug.cr b/src/compiler/crystal/codegen/debug.cr
+index 5c304d7c05b..df3f6dc82dc 100644
+--- a/src/compiler/crystal/codegen/debug.cr
++++ b/src/compiler/crystal/codegen/debug.cr
+@@ -11,9 +11,11 @@ module Crystal
+ 
+     record FunMetadata, filename : String, metadata : LibLLVMExt::Metadata
+ 
++    alias DebugFilename = Crystal::VirtualFile | String?
++
+     @current_debug_location : Location?
+-    @debug_files = {} of Crystal::VirtualFile | String? => LibLLVMExt::Metadata
+-    @current_debug_file : LibLLVMExt::Metadata?
++    @debug_files_per_module = {} of LLVM::Module => Hash(DebugFilename, LibLLVMExt::Metadata)
++    @debug_types_per_module = {} of LLVM::Module => Hash(Type, LibLLVMExt::Metadata?)
+ 
+     def di_builder(llvm_module = @llvm_mod || @main_mod)
+       di_builders = @di_builders ||= {} of LLVM::Module => LLVM::DIBuilder
+@@ -56,11 +58,22 @@ module Crystal
+     def debug_type_cache
+       # We must cache debug types per module so metadata of a type
+       # from one module isn't incorrectly used in another module.
+-      debug_types_per_module =
+-        @debug_types_per_module ||=
+-          {} of LLVM::Module => Hash(Type, LibLLVMExt::Metadata?)
++      @debug_types_per_module[@llvm_mod] ||= {} of Type => LibLLVMExt::Metadata?
++    end
++
++    def debug_files_cache
++      # We must cache debug files per module so metadata of a type
++      # from one module isn't incorrectly used in another module.
++      @debug_files_per_module[@llvm_mod] ||= {} of DebugFilename => LibLLVMExt::Metadata
++    end
+ 
+-      debug_types_per_module[@llvm_mod] ||= {} of Type => LibLLVMExt::Metadata?
++    def current_debug_file
++      if location = @current_debug_location
++        debug_files_cache[location.filename || "??"] ||= begin
++          file, dir = file_and_dir(location.filename)
++          di_builder.create_file(file, dir)
++        end
++      end
+     end
+ 
+     def get_debug_type(type, original_type : Type)
+@@ -115,7 +128,7 @@ module Crystal
+       element_types = [] of LibLLVMExt::Metadata
+       struct_type = llvm_struct_type(type)
+ 
+-      tmp_debug_type = di_builder.create_replaceable_composite_type(nil, original_type.to_s, nil, 1, llvm_context)
++      tmp_debug_type = di_builder.create_replaceable_composite_type(nil, original_type.to_s, nil, 1)
+       debug_type_cache[original_type] = tmp_debug_type
+ 
+       ivars.each_with_index do |(name, ivar), idx|
+@@ -153,7 +166,7 @@ module Crystal
+       struct_type_size = @program.target_machine.data_layout.size_in_bits(struct_type)
+       is_struct = struct_type.struct_element_types.size == 1
+ 
+-      tmp_debug_type = di_builder.create_replaceable_composite_type(nil, original_type.to_s, nil, 1, llvm_context)
++      tmp_debug_type = di_builder.create_replaceable_composite_type(nil, original_type.to_s, nil, 1)
+       debug_type_cache[original_type] = tmp_debug_type
+ 
+       type.expand_union_types.each do |ivar_type|
+@@ -169,7 +182,7 @@ module Crystal
+ 
+       size = @program.target_machine.data_layout.size_in_bits(struct_type.struct_element_types[is_struct ? 0 : 1])
+       offset = @program.target_machine.data_layout.offset_of_element(struct_type, 1) * 8u64
+-      debug_type = di_builder.create_union_type(nil, nil, @current_debug_file.not_nil!, 1, size, size, LLVM::DIFlags::Zero, di_builder.get_or_create_type_array(element_types))
++      debug_type = di_builder.create_union_type(nil, nil, current_debug_file.not_nil!, 1, size, size, LLVM::DIFlags::Zero, di_builder.get_or_create_type_array(element_types))
+       unless is_struct
+         element_types.clear
+         element_types << di_builder.create_member_type(nil, "type_id", nil, 1, 32, 32, 0, LLVM::DIFlags::Zero, get_debug_type(@program.uint32))
+@@ -183,7 +196,7 @@ module Crystal
+     def create_debug_type(type : NilableReferenceUnionType | ReferenceUnionType, original_type : Type)
+       element_types = [] of LibLLVMExt::Metadata
+       struct_type = llvm_type(type)
+-      tmp_debug_type = di_builder.create_replaceable_composite_type(nil, original_type.to_s, nil, 1, llvm_context)
++      tmp_debug_type = di_builder.create_replaceable_composite_type(nil, original_type.to_s, nil, 1)
+       debug_type_cache[original_type] = tmp_debug_type
+ 
+       type.expand_union_types.each do |ivar_type|
+@@ -197,7 +210,7 @@ module Crystal
+       end
+ 
+       size = @program.target_machine.data_layout.size_in_bits(struct_type)
+-      debug_type = di_builder.create_union_type(nil, original_type.to_s, @current_debug_file.not_nil!, 1, size, size, LLVM::DIFlags::Zero, di_builder.get_or_create_type_array(element_types))
++      debug_type = di_builder.create_union_type(nil, original_type.to_s, current_debug_file.not_nil!, 1, size, size, LLVM::DIFlags::Zero, di_builder.get_or_create_type_array(element_types))
+       di_builder.replace_temporary(tmp_debug_type, debug_type)
+       debug_type
+     end
+@@ -222,7 +235,7 @@ module Crystal
+       element_types = [] of LibLLVMExt::Metadata
+       struct_type = llvm_struct_type(type)
+ 
+-      tmp_debug_type = di_builder.create_replaceable_composite_type(nil, original_type.to_s, nil, 1, llvm_context)
++      tmp_debug_type = di_builder.create_replaceable_composite_type(nil, original_type.to_s, nil, 1)
+       debug_type_cache[original_type] = tmp_debug_type
+ 
+       ivars.each_with_index do |ivar_type, idx|
+@@ -250,7 +263,7 @@ module Crystal
+       element_types = [] of LibLLVMExt::Metadata
+       struct_type = llvm_struct_type(type)
+ 
+-      tmp_debug_type = di_builder.create_replaceable_composite_type(nil, original_type.to_s, nil, 1, llvm_context)
++      tmp_debug_type = di_builder.create_replaceable_composite_type(nil, original_type.to_s, nil, 1)
+       debug_type_cache[original_type] = tmp_debug_type
+ 
+       ivars.each_with_index do |ivar, idx|
+@@ -318,7 +331,7 @@ module Crystal
+       return false unless location
+ 
+       file, dir = file_and_dir(location.filename)
+-      @current_debug_file = file = @debug_files[location.filename] ||= di_builder.create_file(file, dir)
++      file = debug_files_cache[location.filename] ||= di_builder.create_file(file, dir)
+ 
+       debug_type = get_debug_type(type)
+       return false unless debug_type
+diff --git a/src/llvm/di_builder.cr b/src/llvm/di_builder.cr
+index cb0ce372074..8e71fcb0255 100644
+--- a/src/llvm/di_builder.cr
++++ b/src/llvm/di_builder.cr
+@@ -92,7 +92,7 @@ struct LLVM::DIBuilder
+     LibLLVMExt.di_builder_create_pointer_type(self, pointee, size_in_bits, align_in_bits, name)
+   end
+ 
+-  def create_replaceable_composite_type(scope, name, file, line, context : Context)
++  def create_replaceable_composite_type(scope, name, file, line)
+     LibLLVMExt.di_builder_create_replaceable_composite_type(self, scope, name, file, line)
+   end
+ 
+
+From 06abfac5f3b25ec2551e2568e449ac54757e786b Mon Sep 17 00:00:00 2001
+From: Max Fierke <max@maxfierke.com>
+Date: Sat, 16 Oct 2021 21:39:05 -0500
+Subject: [PATCH 6/7] Fix premature GC of metadata nodes for debug flags
+
+---
+ src/compiler/crystal/codegen/debug.cr   | 10 ++++++----
+ src/llvm/metadata_operand_collection.cr | 23 +++++++++++++++++++++++
+ src/llvm/module.cr                      |  8 ++++----
+ 3 files changed, 33 insertions(+), 8 deletions(-)
+ create mode 100644 src/llvm/metadata_operand_collection.cr
+
+diff --git a/src/compiler/crystal/codegen/debug.cr b/src/compiler/crystal/codegen/debug.cr
+index df3f6dc82dc..f65700c2135 100644
+--- a/src/compiler/crystal/codegen/debug.cr
++++ b/src/compiler/crystal/codegen/debug.cr
+@@ -14,6 +14,8 @@ module Crystal
+     alias DebugFilename = Crystal::VirtualFile | String?
+ 
+     @current_debug_location : Location?
++
++    # We cache these either for performance, memory use, or protection from the GC
+     @debug_files_per_module = {} of LLVM::Module => Hash(DebugFilename, LibLLVMExt::Metadata)
+     @debug_types_per_module = {} of LLVM::Module => Hash(Type, LibLLVMExt::Metadata?)
+ 
+@@ -34,12 +36,12 @@ module Crystal
+       # DebugInfo generation in LLVM by default uses a higher version of dwarf
+       # than OS X currently understands. Android has the same problem.
+       if @program.has_flag?("osx") || @program.has_flag?("android")
+-        mod.add_named_metadata_operand("llvm.module.flags",
+-          metadata([LLVM::ModuleFlag::Warning.value, "Dwarf Version", 2], context: mod.context))
++        dwarf_version = metadata([LLVM::ModuleFlag::Warning.value, "Dwarf Version", 2], context: mod.context)
++        mod.metadata_operands.add("llvm.module.flags", dwarf_version)
+       end
+ 
+-      mod.add_named_metadata_operand("llvm.module.flags",
+-        metadata([LLVM::ModuleFlag::Warning.value, "Debug Info Version", LLVM::DEBUG_METADATA_VERSION], context: mod.context))
++      di_info_version = metadata([LLVM::ModuleFlag::Warning.value, "Debug Info Version", LLVM::DEBUG_METADATA_VERSION], context: mod.context)
++      mod.metadata_operands.add("llvm.module.flags", di_info_version)
+     end
+ 
+     def fun_metadatas
+diff --git a/src/llvm/metadata_operand_collection.cr b/src/llvm/metadata_operand_collection.cr
+new file mode 100644
+index 00000000000..9ff41b5aa0d
+--- /dev/null
++++ b/src/llvm/metadata_operand_collection.cr
+@@ -0,0 +1,23 @@
++struct LLVM::MetadataOperandCollection
++  @operands = Array(Value).new
++
++  def initialize(@mod : Module)
++  end
++
++  def add(name : String, value : Value) : Value
++    # check_node_context(value)
++
++    LibLLVM.add_named_metadata_operand(@mod, name, value)
++    @operands << value
++    value
++  end
++
++  # The next lines are for ease debugging when metadata nodes
++  # are incorrectly used across contexts.
++
++  # private def check_node_context(node)
++  #   if @mod.context != node.context
++  #     Context.wrong(@mod.context, node.context, "wrong context for MDNode #{name} in #{@mod.name}")
++  #   end
++  # end
++end
+diff --git a/src/llvm/module.cr b/src/llvm/module.cr
+index 272cb256a93..58563d37574 100644
+--- a/src/llvm/module.cr
++++ b/src/llvm/module.cr
+@@ -55,6 +55,10 @@ class LLVM::Module
+     GlobalCollection.new(self)
+   end
+ 
++  def metadata_operands
++    MetadataOperandCollection.new(self)
++  end
++
+   def write_bitcode_to_file(filename : String)
+     LibLLVM.write_bitcode_to_file self, filename
+   end
+@@ -95,10 +99,6 @@ class LLVM::Module
+     FunctionPassManager.new LibLLVM.create_function_pass_manager_for_module(self)
+   end
+ 
+-  def add_named_metadata_operand(name : String, value : Value) : Nil
+-    LibLLVM.add_named_metadata_operand(self, name, value)
+-  end
+-
+   def ==(other : self)
+     @unwrap == other.@unwrap
+   end
+
+From d228a022484f23c58362209647e0d15145d6b265 Mon Sep 17 00:00:00 2001
+From: Max Fierke <max@maxfierke.com>
+Date: Sun, 17 Oct 2021 17:48:53 -0500
+Subject: [PATCH 7/7] Keep module metadata collection stable
+
+---
+ src/llvm/module.cr | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/src/llvm/module.cr b/src/llvm/module.cr
+index 58563d37574..ab1f7cc0b61 100644
+--- a/src/llvm/module.cr
++++ b/src/llvm/module.cr
+@@ -6,6 +6,9 @@ class LLVM::Module
+ 
+   getter context : Context
+ 
++  # Same deal with metadata
++  @metadata_operands : MetadataOperandCollection?
++
+   {% if LibLLVM::IS_38 %}
+     def initialize(@unwrap : LibLLVM::ModuleRef, @name : String, @context : Context)
+       @owned = false
+@@ -56,7 +59,7 @@ class LLVM::Module
+   end
+ 
+   def metadata_operands
+-    MetadataOperandCollection.new(self)
++    @metadata_operands ||= MetadataOperandCollection.new(self)
+   end
+ 
+   def write_bitcode_to_file(filename : String)

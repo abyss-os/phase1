@@ -1,0 +1,21 @@
+pkgname=sish
+pkgver=1.1.7
+pkgrel=0
+pkgdesc="sish"
+url="https://ssi.sh"
+license="AGPL"
+arch="all"
+makedepends="go"
+source="sish-$pkgver.tar.gz::https://github.com/antoniomika/sish/archive/refs/tags/v$pkgver.tar.gz"
+builddir="$srcdir/sish-$pkgver"
+options="!check"
+
+build() {
+    go build -v -o bin/sish ./main.go
+}
+
+package() {
+    install -Dm750 bin/sish $pkgdir/usr/bin/sish
+}
+
+b2sums="d8d461fa7f01ce1dbede26f9acb81ce98d6a92cfa110950b477484648ad65827ab1debbde3cfd596993909ccbea99cf84099f6cab45ef2c9eac1a45b56ea3525  sish-1.1.7.tar.gz"

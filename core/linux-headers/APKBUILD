@@ -1,5 +1,5 @@
 pkgname=linux-headers
-pkgver=5.14.13
+pkgver=5.14.15
 _pkgver=${pkgver/_/-}
 pkgrel=0
 pkgdesc="Linux kernel"
@@ -43,4 +43,4 @@ _make() {
 		"$@"
 }
 
-b2sums="b84afc268eaace7029d13b0e37b5366d042e96f1437b95b08a995d7717d6b6ed118e929c2d0e0929ddcc4dba772768d686d1c3a29a7c9ed60b9534797b006efa  linux-5.14.11.tar.xz"
+b2sums="68d89bba3c35062e4ba93b4304d238541ced462d839ca4f49641f457f542d27fd11ae4ffe9f5474a5701a26b89858b16c7e667823dddd6945180acc2ef44070d  linux-5.14.15.tar.xz"

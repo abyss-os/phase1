@@ -1,5 +1,5 @@
 pkgname=rust
-pkgver=1.56.0
+pkgver=1.56.1
 pkgrel=0
 pkgdesc="The Rust Programming Language"
 url="https://www.rust-lang.org"
@@ -78,4 +78,4 @@ cargo() {
 	mv $pkgdir/usr/bin/cargo $subpkgdir/usr/bin/
 }
 
-b2sums="451677777d01bef0a854ef45dae4322959501f7e3b824d757eb5acde79b249678bb08b39b570daf9f0158caca9dc6a1fbbb412712b794e2a0c87852240cad6d1  rustc-1.56.0-src.tar.gz"
+b2sums="35e37f4e3617e1c67d2ab0bad696befa89ea5a1d12ab0c9eca356a2f6c6a802be805c972f257fc7d53e48d04eecf7d706b4be7676a3c6d19d6da367a4b286b1b  rustc-1.56.1-src.tar.gz"

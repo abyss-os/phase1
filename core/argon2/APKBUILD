@@ -1,0 +1,25 @@
+pkgname=argon2
+_pkgname=phc-winner-argon2
+pkgver=20190702
+pkgrel=0
+pkgdesc="The password hash Argon2, winner of PHC"
+url="https://github.com/P-H-C/phc-winner-argon2"
+arch="all"
+license="Apache-2.0 CC0-1.0"
+subpackages="$pkgname-dev"
+source="$pkgname-$pkgver.tar.gz::https://github.com/P-H-C/$_pkgname/archive/$pkgver.tar.gz"
+builddir="$srcdir/$_pkgname-$pkgver"
+
+build() {
+	make OPTTARGET=none ARGON2_VERSION=$pkgver
+}
+
+check() {
+	make OPTTARGET=none test
+}
+
+package() {
+	make OPTTARGET=none LIBRARY_REL=lib DESTDIR="$pkgdir" install
+}
+
+b2sums="fa9c3dde7b39c8d797a3d6b52992ebfe35f5eba1c7d7b3aa02c440edc36a3f5186cacee2e39e27ed7c6356dc1970dac0e8198d6f2065eb63ff77f9dfb2937cf8  argon2-20190702.tar.gz"

@@ -1,0 +1,43 @@
+pkgname=cryptsetup
+pkgver=2.4.1
+pkgrel=0
+pkgdesc="Userspace setup tool for transparent encryption of block devices using the Linux 2.6 cryptoapi"
+url="https://gitlab.com/cryptsetup/cryptsetup"
+arch="all"
+license="GPL-2.0-or-later WITH OpenSSL-Exception"
+makedepends="lvm2-dev popt-dev util-linux-dev json-c-dev argon2-dev openssl-dev automake autoconf bash coreutils"
+subpackages="$pkgname-dev $pkgname-openrc"
+source="https://www.kernel.org/pub/linux/utils/cryptsetup/v${pkgver%.*}/cryptsetup-$pkgver.tar.gz
+	dmcrypt.initd
+	dmcrypt.confd"
+
+build() {
+	./configure \
+		--build="$CBUILD" \
+		--host="$CHOST" \
+		--prefix=/usr \
+		--libdir=/usr/lib \
+		--sbindir=/usr/bin \
+		--enable-libargon2 \
+		--with-crypto_backend=openssl \
+		--disable-external-tokens \
+		--disable-ssh-token \
+        --enable-static
+	make
+}
+
+package() {
+	make DESTDIR=$pkgdir install
+
+#	mkdir -p "$pkgdir"/usr/lib
+#	mv "$pkgdir"/lib/pkgconfig "$pkgdir"/usr/lib/
+
+	install -Dm644 "$srcdir"/dmcrypt.confd "$pkgdir"/etc/conf.d/dmcrypt
+	install -Dm755 "$srcdir"/dmcrypt.initd "$pkgdir"/etc/init.d/dmcrypt
+
+    rm -rf $pkgdir/usr/share/man
+}
+
+b2sums="7e10ddd727c11f983adab6231833f66578dafb3a5cfc36adda1b0673ff49c9c1f0c5584b20fb13350c74ad4ff61ca4c232d064f5df26be20e2ae1937c23dd7eb  cryptsetup-2.4.1.tar.gz
+f718c40524e90a996fe184ecca95a6b44e466b685c5ab18e18002580081d5fa43e51806ae3e2bb258fe84f40c5a86df5a6d472088f8a40e02df8f54a86691c8b  dmcrypt.initd
+99e81cfe932dda45062966ada065da418500e58499af0f5ed18b7367cb6bc1b3fae1d4a0d4094ebf36c00292a4d4e2606026a65df66d5a96d01a0b9d5f6aa5e5  dmcrypt.confd"

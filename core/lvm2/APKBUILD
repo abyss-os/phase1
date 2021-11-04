@@ -16,10 +16,6 @@ subpackages="$pkgname-dev $pkgname-doc $pkgname-openrc"
 builddir="$srcdir/LVM2.$pkgver"
 
 build () {
-	# during cross-compilation malloc test goes wrong
-	export ac_cv_func_malloc_0_nonnull=yes
-	export ac_cv_func_realloc_0_nonnull=yes
-
 	./configure \
 		--build=$CBUILD \
 		--host=$CHOST \
@@ -38,17 +34,16 @@ build () {
 		--with-thin-dump=/usr/bin/thin_dump \
 		--with-thin-repair=/usr/bin/thin_repair \
 		--with-dmeventd-path=/usr/bin/dmeventd \
-        --enable-static_link \
-		CLDFLAGS="$LDFLAGS"
+        --enable-static_link
 	make
 }
 
 package() {
-	make -j1 DESTDIR="$pkgdir" install
+	make -j${JOBS} DESTDIR="$pkgdir" install
+    rm -fr $pkgdir/usr/sbin
 	install -d "$pkgdir"/etc/lvm/archive "$pkgdir"/etc/lvm/backup
 	install -Dm755 "$srcdir"/lvm.initd "$pkgdir"/etc/init.d/lvm
 	install -Dm644 "$srcdir"/lvm.confd "$pkgdir"/etc/conf.d/lvm
-#	ln -s libdevmapper.so.1.02 "$pkgdir"/usr/lib/libdevmapper.so
 }
 
 b2sums="806f5e9cb76a05febef6f8ce8cfc42c92927b9538f62a21029c5ffc426a4fd7c3f32709be08dbd8028b53891b1075d1d13cb3b0d7b1815071ee8eb927d8f3ed3  LVM2.2.03.14.tgz

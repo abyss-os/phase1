@@ -1,0 +1,20 @@
+pkgname=mkinitfs
+pkgver=0.0.2
+pkgrel=0
+pkgdesc=mkinitfs
+url="https://github.com/abyss-os/mkinitfs"
+arch="all"
+license="GPL"
+source="https://mirror.abyss.run/sources/$pkgname-$pkgver.tgz"
+builddir="$srcdir/$pkgname-$pkgver"
+makedepends="cryptsetup-dev util-linux-dev kmod-dev"
+
+build() {
+    make VERSION=$pkgver
+}
+
+package() {
+    make VERSION=$pkgver DESTDIR=$pkgdir install
+}
+
+b2sums="47816e65e7422d7ae88a4a002a20c103c24eadf6d0386f968eb191ca35aa2bf1c3f6cf9da3c26b1dd6bdb06ec18d472b83a1110a97f15a5dcc6b3be696d5ecb1  mkinitfs-0.0.2.tgz"

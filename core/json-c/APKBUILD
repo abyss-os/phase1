@@ -16,11 +16,6 @@ build() {
 	cmake --build .
 }
 
-check() {
-	cd build
-	cmake --check .
-}
-
 package() {
 	cd build
 	DESTDIR=$pkgdir cmake --install .

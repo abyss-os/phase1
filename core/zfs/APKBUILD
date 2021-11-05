@@ -1,5 +1,5 @@
 pkgname=zfs
-pkgver=2.0.5
+pkgver=2.0.6
 pkgrel=0
 pkgdesc="ZFS for Linux"
 url="https://zfsonlinux.org"
@@ -38,4 +38,4 @@ package() {
     rmdir $pkgdir/sbin
 }
 
-b2sums="4505c43a3b9a6c2b925383d00bbd9f17505290ded83f9bd3f08211769fa39254742340bdda65efd53f87f1708138517f91f8a43c01f3ce4191de200c84c77754  zfs-2.0.5.tar.gz"
+b2sums="3a83303b016ec4259c286af8a9ceb281829d26508d411df91dd94193bca8c3155ef0ba63604e95f6add5f0c6cf6d100b0f567efc33b6c484c9ff811924da6ccd  zfs-2.0.6.tar.gz"

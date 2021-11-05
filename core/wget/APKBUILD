@@ -1,5 +1,5 @@
 pkgname=wget
-pkgver=1.21.1
+pkgver=1.21.2
 pkgrel=0
 pkgdesc="Network utility to retrieve files from the Web"
 url="https://www.gnu.org/software/wget/wget.html"
@@ -26,4 +26,4 @@ package() {
 	make DESTDIR="$pkgdir" install
 }
 
-b2sums="28a3044f33df1d24e13900e8018a38cabae21fb41dd2e089bdbfd759b4adee3771ab558b84f5a8b6f546bc84a3387c973903f9fe06562093d3566e22d1528587  wget-1.21.1.tar.gz"
+b2sums="e11c3a2b89ab26834dc4cbb445bcc6122d3a6b2a5b9c6de1ce9e8f062281f9e5aa1f80ca37a44791ba5aaf6a447015a26afef2199cdb75f1931d5e1ffb1f406b  wget-1.21.2.tar.gz"

@@ -7,7 +7,7 @@ arch="x86_64 ppc64le aarch64"
 license="GPL-3.0-or-later"
 #depends="mkinitfs"
 triggers="grub.trigger=/boot"
-makedepends="linux-header xz-dev lvm2-dev python3 freetype-dev gettext-tiny zfs-dev"
+makedepends="linux-headers xz-dev lvm2-dev python3 freetype-dev gettext-tiny zfs-dev zstd-dev"
 options="!check"
 subpackages="$pkgname-dev $pkgname-doc"
 

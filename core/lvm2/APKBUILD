@@ -1,6 +1,6 @@
 pkgname=lvm2
 pkgver=2.03.14
-pkgrel=0
+pkgrel=1
 pkgdesc="Logical Volume Manager 2 utilities"
 url="https://sourceware.org/lvm2/"
 arch="all"
@@ -33,8 +33,7 @@ build () {
 		--with-thin-check=/usr/bin/thin_check \
 		--with-thin-dump=/usr/bin/thin_dump \
 		--with-thin-repair=/usr/bin/thin_repair \
-		--with-dmeventd-path=/usr/bin/dmeventd \
-        --enable-static_link
+		--with-dmeventd-path=/usr/bin/dmeventd
 	make
 }
 

@@ -1,6 +1,6 @@
 pkgname=abuild
-pkgver=4.0.70
-pkgrel=2
+pkgver=4.0.71
+pkgrel=0
 pkgdesc="Script to build Abyss OS packages"
 url="https://github.com/abyss-os/abuild"
 arch="all"
@@ -13,9 +13,7 @@ depends="sudo pax-utils openssl apk-tools bsdtar
 makedepends="zlib-dev"
 subpackages="$pkgname-doc"
 options="suid !check"
-source="$pkgname-v$pkgver.tar.gz::https://github.com/abyss-os/abuild/archive/v$pkgver.tar.gz"
-
-builddir="$srcdir/$pkgname-$pkgver"
+source="https://mirror.abyss.run/sources/$pkgname-$pkgver.tgz"
 
 build() {
 	make VERSION="$pkgver-r$pkgrel" CC=$CC
@@ -28,4 +26,4 @@ package() {
 	install -d -m 775 -g abuild "$pkgdir"/var/cache/distfiles
 }
 
-b2sums="28eb0b372c0dc24792e171d456ab88b59d3fa781c37ca487f8f2a9dd98071101bbf8cf7e9f668fe156a8e0ac80a2685033de6f9b46201ca0514078eb1b96c975  abuild-v4.0.70.tar.gz"
+b2sums="0e1a22ed963a64285583e8f4d08f2ae39763b39f68081490057df20823fd6f048583140fe7d9229b0d821fc081f06f1453a814aac57330b613a76c540fa66563  abuild-4.0.71.tgz"

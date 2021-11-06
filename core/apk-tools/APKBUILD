@@ -1,12 +1,12 @@
 pkgname=apk-tools
-pkgver=4.0.1
-pkgrel=1
+pkgver=4.0.2
+pkgrel=0
 pkgdesc="apk"
-makedepends="zlib-dev openssl-dev linux-dev"
-url="https://git.alpinelinux.org/cgit/apk-tools/"
+makedepends="zlib-dev openssl-dev linux-headers"
+url="https://github.com/abyss-os/apk-tools"
 arch="all"
 license="GPL2"
-source="$pkgname-$pkgver.tar.gz::https://github.com/abyss-os/apk-tools/archive/refs/tags/v$pkgver.tar.gz
+source="https://mirror.abyss.run/sources/$pkgname-$pkgver.tgz
         repositories"
 
 build() {
@@ -27,5 +27,5 @@ package() {
 
 }
 
-b2sums="161e2d315eb4ab6ad83eee8499517f62b7c97267a4acba864343858e65aa3cb8dd7893676423eb566af303ec0340467d82872da4883c6b6344eab5a8a0c1853f  apk-tools-4.0.1.tar.gz
+b2sums="5533ba43174b8d651f2c05e514f2b73865f24c887e65574167ed8543f6268201ec19f283ef3dc9f05c666e8fe217821e5fcc063bceb956a0424c8d67f34bc5e5  apk-tools-4.0.2.tgz
 56d6b815a965db900551afebd8b1f7c44fc36fc09bf147599f5c9c31c1377792c732c22793c66ce2ca6470493ebec2e8b32f26044b5ca5c1d1f8a2d7a42929c5  repositories"

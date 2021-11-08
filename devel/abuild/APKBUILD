@@ -1,6 +1,6 @@
 pkgname=abuild
 pkgver=4.0.71
-pkgrel=0
+pkgrel=1
 pkgdesc="Script to build Abyss OS packages"
 url="https://github.com/abyss-os/abuild"
 arch="all"
@@ -9,7 +9,7 @@ depends="sudo pax-utils openssl apk-tools bsdtar
 	 attr pkgconf patch bzip2 xz lzip diffutils flex
 	 bison unzip gmake file musl-utils pigz gzip zstd-dev
 	 libcxx-dev llvm-dev libtool curl pkgconf
-	 openssl-dev musl-dev automake autoconf signify gtar"
+	 musl-dev automake autoconf signify gtar"
 makedepends="zlib-dev"
 subpackages="$pkgname-doc"
 options="suid !check"

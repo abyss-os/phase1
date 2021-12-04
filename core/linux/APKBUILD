@@ -1,5 +1,5 @@
 pkgname=linux
-pkgver=5.14.16
+pkgver=5.15.6
 _pkgver=${pkgver/_/-}
 pkgrel=0
 pkgdesc="Linux kernel"
@@ -87,12 +87,12 @@ _oldconfig() {
 }
 _menuconfig() {
 	cd "$_builddir"
-	[[ ! -f .config ]] && cp -v "$srcdir"/config."$CARCH" .config
+	cp -v "$srcdir"/config."$CARCH" .config
 	_make menuconfig
 	cp -v .config "$startdir"/config."$CARCH"
 }
 
-b2sums="e4935cb8e5cf04c100047ac85460c86bbcfd4202269d508c0c120bfc6169577e808e12f1a901b6b583b853df104abf76bb3501592c5b284a46aa0bd6ec24005c  linux-5.14.16.tar.xz
-ca5854832ab919be586b9c1d155d7f1d2c6085d07112eeb938e0ddbe1be9f50c07cfec2e05e7c278e5aaa6b0c6eeddeb530091617682c1167f6cca627ae9d8da  config.aarch64
-d5e62b64f7eb157026463e34055a94f70b07fe660b15d3e6bc98510e0b8abf8c49e82c5845db91df3e56d4499d4f8a928a6e7e98ab3a5dcb22218a09aeea67bd  config.x86_64
-1401196295273ae933b986a8b52276d678f58591c76b9626f96ffc414f889abcad08a6054bf92ed7395a774a48d3873794ed768658a028240c5271a7c4cf7363  config.ppc64le"
+b2sums="dedcff13b0829b9bdfc4998a9bedcf932dee48ade3bef722ccbd8fc7bef9832462ac2f1064b77926f86d93c7035634db8ba8f6c1e2d957ff749b34e218c565c7  linux-5.15.6.tar.xz
+e24b960e827a47fde02fab55c538d48ccbdfec543c28d21ce25a0af408c0ad0c777e6fd88244be021d2fa7970b1780e7745c6d4d7d46d26965df7f740f0425b4  config.aarch64
+bc18d05c5c180cb61aa4386b8f7853058f28141a170525728e712d93091e32104d0b40b7f9a06dfa57cca3c33a04ad01616a24fff293cf9a42c3b261a1cb70e3  config.x86_64
+ec5f13a4fe3ce399b472ee9c92d3de86213ebbb351c7e7a3258117e0ff5edfafeace318dad63d960beae7ff22cd6ac030d98d126f00bc235ffc931300ef7d3cd  config.ppc64le"

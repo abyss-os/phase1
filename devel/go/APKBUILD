@@ -1,5 +1,5 @@
 pkgname=go
-pkgver=1.17.3
+pkgver=1.17.4
 pkgrel=0
 pkgdesc="Go programming language compiler"
 url="https://golang.org/"
@@ -60,4 +60,4 @@ package() {
 	cp -a doc/* "$ddoc"
 }
 
-b2sums="1cb2960f67335f0022900cdab5dd70bcb52f15c2d311ea2dd99a0205af518741d9642741ea1bb5fea870239d6c971e6c69053a195e6a72e7440c8bdd3a0c085c  go1.17.3.src.tar.gz"
+b2sums="0458cd2a6465a6d38fd4c17ee4d02dc4a092e5606d02dcd599e566267c2033313bccba9e282e766ca0d7921d0c9e93c582f1feb3c5b49bb3b727f55badbc11c5  go1.17.4.src.tar.gz"

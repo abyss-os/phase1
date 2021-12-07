@@ -1,6 +1,6 @@
 pkgname=nim
-pkgver=1.4.8
-pkgrel=1
+pkgver=1.6.0
+pkgrel=0
 pkgdesc="A systems and applications programming language"
 url="https://nim-lang.org/"
 arch="all"
@@ -8,12 +8,13 @@ license="MIT"
 depends="pcre"
 makedepends="nim-bootstrap libucontext-dev"
 source="https://nim-lang.org/download/$pkgname-$pkgver.tar.xz"
-builddir="$srcdir/$pkgname-$pkgver"
 provides="nim-bootstrap=$pkgver-r$pkgel"
 
 build() {
+    msg csources
+    ./build.sh
 	msg koch
-	nim compile -d:release koch
+	./bin/nim compile -d:release koch
 	msg boot
 	./koch boot -d:release
 	msg tools
@@ -25,10 +26,10 @@ package() {
 	DESTDIR="$pkgdir" ./koch install /usr/bin
 	rm -rf $pkgdir/usr/share/doc
 	install -D -m755 tools/niminst/niminst $pkgdir/usr/bin/
-	for t in nim-gdb nim-gdb.bash nimble nimfind nimgrep nimpretty nimsuggest testament; do
+	for t in atlas nim-gdb nimble nimgrep nimpretty nimsuggest testament; do
 		install -D -m755 bin/$t $pkgdir/usr/bin/
 	done
 
 }
 
-b2sums="961b38275c4f9de87ac522c5b47368ce7f5543811a2dfd7b4f3fd79a104bcd0458caaaaab1705f99eb42c64735ca5f71d5018f8a8275a430d883233b28b1d412  nim-1.4.8.tar.xz"
+b2sums="2381108ee0661c2106c044cfc119bda4ea1c8eb2a642327bb29f3e23f16a4712ae1479913369ff3b62a073fa5f40b725259404acc21efb32d33cf9291f20e25b  nim-1.6.0.tar.xz"

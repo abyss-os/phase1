@@ -1,0 +1,33 @@
+pkgname=libsass
+pkgver=3.6.5
+pkgrel=0
+pkgdesc="C/C++ implementation of a Sass compiler"
+options="!check" # No tests are run when make check is run
+url="https://sass-lang.com/libsass"
+arch="all"
+license="MIT"
+makedepends="autoconf automake libtool"
+subpackages="$pkgname-dev"
+source="$pkgname-$pkgver.tar.gz::https://github.com/sass/libsass/archive/$pkgver.tar.gz
+	fix-pkgconfig-version.patch"
+
+prepare() {
+	default_prepare
+	autoreconf -vif
+}
+
+build() {
+	./configure \
+		--build=$CBUILD \
+		--host=$CHOST \
+		--prefix=/usr \
+	make
+}
+
+package() {
+	make install DESTDIR="$pkgdir"
+	rm -f "$pkgdir"/usr/lib/*.la
+}
+
+b2sums="8c6bb37da3f832dd462408a7ef4f80384e468295fc420b3d915899e65fb89a9d0b4c1cf0653b7288fedbf6a66daa2943c2911ad2c310f77a06deb84bec1d3abf  libsass-3.6.5.tar.gz
+da94ab4e8af4e39d9dd6263e3b96143bc9e2150febf969b80c31c24c34d41809fdab639b7fdab72aba2f0760567e9368ce1b3c7f0bf3dee09262a0ab349b87b0  fix-pkgconfig-version.patch"

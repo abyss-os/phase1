@@ -59,7 +59,7 @@ bashcomp() {
 	pkgdesc="Bash completions for $pkgname"
 	install_if="$pkgname=$pkgver-r$pkgrel bash-completion"
 	mkdir -p "$subpkgdir"/usr/share/bash-completion/completions
-	mv "$pkgdir"/etc/bash_completion.d/$pkgname "$subpkgdir"/usr/share/bash-completion/completions
+	mv "$pkgdir"/etc/bash_completion.d/* "$subpkgdir"/usr/share/bash-completion/completions
 	rmdir "$pkgdir"/etc/bash_completion.d
 }
 

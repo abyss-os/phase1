@@ -1,8 +1,8 @@
 pkgname=openssl
-pkgver=3.0.0
+pkgver=3.0.1
 _commit=0ce9b022cb421b564bed9ebc9469e96258ec175d
 _abiver=${pkgver%.*}
-pkgrel=1
+pkgrel=0
 pkgdesc="Toolkit for Transport Layer Security (TLS)"
 url="https://www.openssl.org"
 arch="all"
@@ -65,4 +65,4 @@ _libssl() {
 	mv "$pkgdir"/usr/lib/libssl* "$subpkgdir"/usr/lib/
 }
 
-b2sums="e586242bc34db3ca06ce3f563584eaf34d8c9db0df6ca1fd7ac0eb2214e4202ceb45436ee41f45963241014652eb8a977c5548bbe4b5c9fa2bd2740602060739  openssl-3.0.0.tar.gz"
+b2sums="e586242bc34db3ca06ce3f563584eaf34d8c9db0df6ca1fd7ac0eb2214e4202ceb45436ee41f45963241014652eb8a977c5548bbe4b5c9fa2bd2740602060739  openssl-3.0.1.tar.gz"

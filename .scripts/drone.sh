@@ -32,6 +32,8 @@ apk add git minio-client
 echo "=> nproc: $(nproc)"
 echo "=> mem: $(grep MemTotal /proc/meminfo|awk '{print $2/1024}')"
 
+rm -rf /var/cache/distfiles/*
+
 for PKG in $(git log ...${DRONE_COMMIT_BEFORE} --format=format: --name-only | grep -e 'APKBUILD$' | tac); do
 	if [ -f "${PKG}" ]; then
 		apk --force-refresh --force-overwrite -U upgrade -a
@@ -40,5 +42,3 @@ for PKG in $(git log ...${DRONE_COMMIT_BEFORE} --format=format: --name-only | gr
 		abuild -ri || exit 1
 	fi
 done
-
-rm -rf /var/cache/distfiles/*

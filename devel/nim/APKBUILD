@@ -1,5 +1,5 @@
 pkgname=nim
-pkgver=1.6.0
+pkgver=1.6.2
 pkgrel=0
 pkgdesc="A systems and applications programming language"
 url="https://nim-lang.org/"
@@ -32,4 +32,4 @@ package() {
 
 }
 
-b2sums="2381108ee0661c2106c044cfc119bda4ea1c8eb2a642327bb29f3e23f16a4712ae1479913369ff3b62a073fa5f40b725259404acc21efb32d33cf9291f20e25b  nim-1.6.0.tar.xz"
+b2sums="adedbcaad1b135b6f99459894856190103e2d2b678849e0418f77c02a54fde44224456ea13949f3fe9f5f020a90adde46593497895674bd9ae892b17708df292  nim-1.6.2.tar.xz"

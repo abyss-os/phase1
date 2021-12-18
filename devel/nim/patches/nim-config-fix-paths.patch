@@ -1,12 +1,14 @@
 diff --git a/config/nim.cfg b/config/nim.cfg
-index 894c525..7e9db2a 100644
+index 20384e0..3cebaea 100644
 --- a/config/nim.cfg
 +++ b/config/nim.cfg
-@@ -44,7 +44,7 @@ path="$lib/core"
+@@ -44,8 +44,8 @@ path="$lib/core"
  path="$lib/pure"
  
  @if not windows:
+-  nimblepath="/opt/nimble/pkgs2/"
 -  nimblepath="/opt/nimble/pkgs/"
++  nimblepath="/usr/share/nimble/pkgs2/"
 +  nimblepath="/usr/share/nimble/pkgs/"
  @else:
    # TODO:

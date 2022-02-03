@@ -1,5 +1,5 @@
 pkgname=llvm
-pkgver=13.0.0
+pkgver=13.0.1
 pkgrel=0
 pkgdesc="$pkgname"
 arch="all"
@@ -137,4 +137,4 @@ lld_aalt() {
 }
 
 
-b2sums="628f316b580e1edf3a58d4825b724df759e6ed2a4116802470c04562caefc392fa325c91f388036365a2e45a9595cca6d3557fab12984fc8bcfef29c9116d822  llvmorg-13.0.0.tar.gz"
+b2sums="2a44b012a672501761d0c27c6b3a315b69bfef0cd13b078a7e7d2fccc4a9c8c0f2bee0f164c4271c9106b0a99cb06e8b64986f66253b613336719fb86b82541b  llvmorg-13.0.1.tar.gz"

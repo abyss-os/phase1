@@ -1,5 +1,5 @@
 pkgname=abuild
-pkgver=4.0.72
+pkgver=4.0.74
 pkgrel=0
 pkgdesc="Script to build Abyss OS packages"
 url="https://github.com/abyss-os/abuild"
@@ -26,4 +26,4 @@ package() {
 	install -d -m 775 -g abuild "$pkgdir"/var/cache/distfiles
 }
 
-b2sums="c026da729251538b8866ade8ac322ab411193ea37a793339464843510cc122294d009963025b0abede077bb4f50a1f9d5e8a6c11d81f005abbb9dcfd169d6403  abuild-4.0.72.tgz"
+b2sums="6d10bf8f1c9a7fe6cf45db823a386f3f0c430816f4c41a5fe449d538babdeb8c862d7880767f8bf8df48f00977aef26db059df43d77051ab8c8fa78558a595d5  abuild-4.0.74.tgz"

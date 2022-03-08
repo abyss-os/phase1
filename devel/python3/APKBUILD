@@ -1,5 +1,5 @@
 pkgname=python3
-pkgver=3.9.7
+pkgver=3.9.10
 _basever="${pkgver%.*}"
 pkgrel=0
 pkgdesc="A high-level scripting language"
@@ -65,4 +65,4 @@ package() {
 	ln -sv /usr/bin/python3 $pkgdir/usr/bin/python
 }
 
-b2sums="69dfba6974c8c74de1b71977d28cad4d7c26615695f48a99444d2eb83d657b4bd8d22e7f6e94b1b2dcbcc5605c0aee08c609b9564e306f48588e2a7f471209b2  Python-3.9.7.tar.xz"
+b2sums="4acd2dc26506592c776f9ed9fac22e5a8741ab700ec11aca93566425ab2a957392e6284f0818198e20088463c047502a07d3f5dadc8ed8689c316f823fb2d444  Python-3.9.10.tar.xz"

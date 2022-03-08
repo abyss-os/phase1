@@ -21,7 +21,7 @@ fi
 OPWD=${PWD}
 
 # fix stupid
-export ABYSS_BUCKET=mirror.abyss.run
+export ABYSS_BUCKET=mirror.abyss.run/abyss
 
 # can't even remember why this was added in the first place
 case $DRONE_STAGE_ARCH in

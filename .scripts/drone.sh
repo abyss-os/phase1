@@ -20,6 +20,9 @@ fi
 
 OPWD=${PWD}
 
+# fix stupid
+export ABYSS_BUCKET=mirror.abyss.run
+
 # can't even remember why this was added in the first place
 case $DRONE_STAGE_ARCH in
 	amd64) buildarch=x86_64;;

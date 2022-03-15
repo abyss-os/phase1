@@ -27,6 +27,8 @@ steps:
         from_secret: AWS_ACCESS_KEY_ID
       AWS_SECRET_ACCESS_KEY:
         from_secret: AWS_SECRET_ACCESS_KEY
+      AWS_DEFAULT_REGION:
+        from_secret: AWS_DEFAULT_REGION
       ABYSS_NOTIFY:
         from_secret: ABYSS_NOTIFY
 
@@ -54,6 +56,16 @@ steps:
         from_secret: ABYSS_PRIVKEY
       ABYSS_PUBKEY:
         from_secret: ABYSS_PUBKEY
+      ABYSS_BUCKET:
+        from_secret: ABYSS_BUCKET
+      AWS_ACCESS_KEY_ID:
+        from_secret: AWS_ACCESS_KEY_ID
+      AWS_SECRET_ACCESS_KEY:
+        from_secret: AWS_SECRET_ACCESS_KEY
+      AWS_DEFAULT_REGION:
+        from_secret: AWS_DEFAULT_REGION
+      ABYSS_NOTIFY:
+        from_secret: ABYSS_NOTIFY
 
 ---
 kind: pipeline
@@ -79,3 +91,14 @@ steps:
         from_secret: ABYSS_PRIVKEY
       ABYSS_PUBKEY:
         from_secret: ABYSS_PUBKEY
+      ABYSS_BUCKET:
+        from_secret: ABYSS_BUCKET
+      AWS_ACCESS_KEY_ID:
+        from_secret: AWS_ACCESS_KEY_ID
+      AWS_SECRET_ACCESS_KEY:
+        from_secret: AWS_SECRET_ACCESS_KEY
+      AWS_DEFAULT_REGION:
+        from_secret: AWS_DEFAULT_REGION
+      ABYSS_NOTIFY:
+        from_secret: ABYSS_NOTIFY
+

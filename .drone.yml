@@ -1,3 +1,4 @@
+---
 kind: pipeline
 type: exec
 name: x86_64
@@ -101,4 +102,3 @@ steps:
         from_secret: AWS_DEFAULT_REGION
       ABYSS_NOTIFY:
         from_secret: ABYSS_NOTIFY
-
